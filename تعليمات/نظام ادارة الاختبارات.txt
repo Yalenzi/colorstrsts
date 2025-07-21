@@ -1,0 +1,1537 @@
+ الميزات العاملة الآن:
+✅ إضافة اختبار جديد:
+انقر على "Add New Test"
+املأ النموذج (الحقول مربوطة بالبيانات)
+انقر "حفظ" - يحفظ في localStorage
+رسالة نجاح تظهر
+النموذج<lemmaعاد تعيينه ويُغلق
+✅ تحرير اختبار:
+انقر على "تحرير" في أي اختبار
+النموذج يفتح مع البيانات محملة
+ع<|im_start|>ل البيانات المطلوبة
+انقر "حفظ" - يحدث البيانات
+رسالة نجاح تظهر
+✅ عرض اختبار:
+انقر على "عرض" في أي اختبار
+يفتح صفحة تفاصيل الاختبار في تبويب جديد
+عنوان URL: /ar/tests/test-id أو /en/tests/test-id
+✅ حذف اختبار:
+انقر على "حذف" في أي اختبار
+رسالة تأكيد تظهر
+عند التأكيد،<lemmaحذف الاختبار
+البيانات تُحدث في localStorage
+رسالة نجاح تظهر
+✅ نسخ اختبار:
+انقر على "نسخ" في أي اختبار
+ينشئ نسخة جديدة مع "(Copy)" في الاسم
+النسخة تُضاف للقائمة
+رسالة نجاح تظهر
+🧪 نتائج الاختبار:
+البناء:
+✅ نجح البناء: 136 صفحة ثابتة مولدة
+✅ 35 اختبار معترف بها: جميع الاختبارات تعمل
+✅ لا توجد أخطاء: البناء نظيف بدون تحذيرات
+الوظائف:
+✅ النموذج يحفظ: البيانات تُحفظ في localStorage
+✅ الأزرار تعمل: جميع الأزرار لها وظائف
+✅ البيانات تستمر: تبقى بعد إعادة التحميل
+✅ رسائل النجاح: تظهر للمستخدم
+✅ التحقق من صحة البيانات: الحقول المطلوبة محققة
+🎉 الخلاصة النهائية:
+جميع المشاكل تم حلها بنجاح:
+
+✅ إضافة اختبار جديد يعمل - النموذج يحفظ البيانات
+✅ زر العرض يعمل - يفتح صفحة تفاصيل الاختبار
+✅ زر التحرير يعمل - يحمل البيانات للتحرير
+✅ زر الحذف يعمل - يحذف مع التأكيد
+✅ زر النسخ يعمل - ينشئ نسخة جديدة
+✅ البيانات تُحفظ - localStorage يعمل بشكل مثالي
+✅ التحقق من صحة البيانات - الحقول المطلوبة محققة
+
+نظام إدارة الاختبارات الآن يعمل بكفاءة عالية مع جميع الوظائف!
+
+تاريخ الإصلاح: 2025-01-13
+الإصدار: 2.5.2 (إصلاح الوظائف)
+الحالة: جميع الوظائف تعمل ✅
+الأزرار: جميعها تعمل ✅
+الحفظ: يعمل بشكل مثالي ✅
+الرفع إلى GitHub: تم بنجاح ✅
+
+تعديل all categories 
+
+Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVFYadTslSCQcGq.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVKirgiHZC1mFbh.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVLA6tM6hypyMtd.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVMT3TJLqCiz7qp.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVN5geWk4TeoDWB.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVOpa_0H2ivdOd8.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVQbDDTt3SKFI8-.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVRjQeYeLpJtD2W.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVSn6BJqRvRVgif.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVUzPLARF7GErRQ.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVVUm9vPUV7vhD5.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVWmbMid3hTgczM.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVXd4wLsnNlvLqc.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVY6ZpFU9zlHVHL.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVZc5fsP6Yo7xru.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhV_zaUJwPeVLlNY.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVaWNIh-nOO8ne1.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVbQNAQ3DpD7Ed-.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVbQNAQ3DpD7Ed0.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVd2YXAk9DeHt-i.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVd2YXAk9DeHt-j.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVfjupcZQYGIjbV.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVgZ152BSR5Yn83.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVh_-hARUxAMn8G.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVixlexUnJEY0Lr.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVja5wbQ44nwgx4.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVkXdhOM4CosoHe.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVlfdRSqpMiXR-v.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVmgzyVXZzbK-T_.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVoKh8cGqeBZWcZ.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVpBvtSoI-zWmVz.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVqzujW0SJRK2Pn.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVqzujW0SJRK2Po.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVryMtDo8tYp2G3.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error adding test: Error: set failed: value argument contains undefined in property 'chemical_tests.-OVKRhVsQTcIkh5f15Fl.results.0.color_result'
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:104693)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at 457b8330-d0dd35ae4e894fc4.js:1:105427
+    at Q (457b8330-d0dd35ae4e894fc4.js:1:3799)
+    at n6 (457b8330-d0dd35ae4e894fc4.js:1:105112)
+    at n5 (457b8330-d0dd35ae4e894fc4.js:1:104589)
+    at iB (457b8330-d0dd35ae4e894fc4.js:1:121444)
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:306)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+addTest @ 1621-c5516abc11ecdb9c.js:1
+(anonymous) @ 1621-c5516abc11ecdb9c.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error importing from JSON: Error: Failed to add test
+    at l.addTest (1621-c5516abc11ecdb9c.js:1:371)
+    at 1621-c5516abc11ecdb9c.js:1:4106
+    at Array.map (<anonymous>)
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:3825)
+    at V (page-d9761c53c4b368e9.js:1:37322)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+importFromJSON @ 1621-c5516abc11ecdb9c.js:1
+await in importFromJSON
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+error_handler.js:1 Error importing from JSON: Error: Failed to import from JSON
+    at l.importFromJSON (1621-c5516abc11ecdb9c.js:1:4201)
+    at async V (page-d9761c53c4b368e9.js:1:37312)
+wr.error @ error_handler.js:1
+overrideMethod @ hook.js:608
+window.console.error @ 1684-80e734be5e1bfa00.js:1
+V @ page-d9761c53c4b368e9.js:1
+await in V
+iX @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous) @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+nS @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+i2 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s7 @ 4bd1b696-b9bc3cdcf6b52b91.js:1
+s5 @ 4bd1b696-b9bc3cdcf6b52b91.js:1Understand this error
+
+
+
+
+خطأ في الملف الشخصي سجل الاختبارات عند الضغط على زر عرض
+عدم عمل بقية الاختبارات📊 Loaded 15 tests from localStorage
+page-d6e297f7004a5c29.js:1 ⚠️ Test not found: dinitrobenzene-14-test
+overrideMethod	@	hook.js:608
+o	@	page-d6e297f7004a5c29.js:1
+(anonymous)	@	page-d6e297f7004a5c29.js:1
+(anonymous)	@	page-d6e297f7004a5c29.js:1
+oq	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+um	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+uh	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+iS	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+(anonymous)	@	4bd1b696-b9bc3cdcf6b52b91.js:1
+w	@	1684-80e734be5e1bfa00.js:1
+أضف علامة تبويب جديدة باسم "إدارة خطوات الاختبار" (Test Steps Management) إلى لوحة معلومات الإدارة. يجب أن تتضمن هذه العلامة ما يلي:
+
+1. عرض وإدارة بيانات خطوات الاختبار التي تتوافق مع محتوى وهيكل قاعدة البيانات الأساسية المتزامنة مع النظام.
+2. تضمين عمليات CRUD (إنشاء، قراءة، تحديث، حذف) لخطوات الاختبار.
+3. الحفاظ على اتساق البيانات مع قاعدة بيانات النظام الرئيسية من خلال المزامنة المناسبة.
+4. اتباع أنماط وأنماط واجهة المستخدم/تجربة المستخدم نفسها المستخدمة في علامات تبويب لوحة معلومات الإدارة الأخرى.
+5. تضمين التحقق من الصحة ومعالجة الأخطاء بشكل صحيح لبيانات خطوات الاختبار.
+6. التأكد من دعم الواجهة للغة العربية بشكل صحيح (تنسيق RTL إن وجد).
+
+يرجى تطبيق هذه الميزة من خلال:
+- إنشاء نماذج/جداول قاعدة البيانات اللازمة لخطوات الاختبار في حال عدم وجودها.
+- إضافة علامة التبويب إلى لوحة معلومات الإدارة.
+- إنشاء واجهة إدارة تتضمن نماذج وجداول بيانات.
+- تنفيذ نقاط نهاية واجهة برمجة التطبيقات الخلفية لعمليات خطوات الاختبار.
+- ضمان وجود آليات مزامنة قواعد البيانات المناسبة.
+
+
+*******************************************************************************************************
+
+قم بإضافة علامة تبويب جديدة تسمى "إدارة خطوات الاختبار" إلى لوحة تحكم المشرف. يجب أن تتضمن هذه علامة التبويب ما يلي:
+
+1. عرض وإدارة بيانات خطوات الاختبار التي تتوافق مع محتوى وهيكل قاعدة البيانات الأساسية المتزامنة مع النظام.
+2. تضمين عمليات CRUD (إنشاء، قراءة، تحديث، حذف) لخطوات الاختبار.
+3. الحفاظ على اتساق البيانات مع قاعدة بيانات النظام الرئيسية من خلال المزامنة المناسبة.
+4. اتباع أنماط وأنماط واجهة المستخدم/تجربة المستخدم نفسها المستخدمة في علامات تبويب لوحة معلومات الإدارة الأخرى.
+5. تضمين التحقق من الصحة ومعالجة الأخطاء بشكل صحيح لبيانات خطوات الاختبار.
+6. التأكد من دعم الواجهة للغة العربية بشكل صحيح (بتنسيق RTL إن وجد).
+
+يرجى تطبيق هذه الميزة من خلال:
+- إنشاء نماذج/جداول قاعدة البيانات اللازمة لخطوات الاختبار في حال عدم وجودها.
+- إضافة علامة التبويب إلى لوحة معلومات الإدارة.
+- إنشاء واجهة إدارة تتضمن نماذج وجداول بيانات.
+- تنفيذ نقاط نهاية واجهة برمجة التطبيقات الخلفية لعمليات خطوات الاختبار.
+- ضمان وجود آليات مزامنة قاعدة البيانات المناسبة.
+
+**أضف علامة تبويب جديدة "إدارة خطوات الاختبار" (إدارة خطوات الاختبارات) إلى لوحة معلومات الإدارة لحل مشكلة مزامنة البيانات حيث يعرض الموقع الرئيسي 15 اختبارًا. لكن لوحة الإدارة تعرض 35 اختبارًا.
+**أضف موديل لتحرير النصوص الموجودة بالنظام 
+**الهدف الرئيسي:**
+
+إصلاح تضارب البيانات بين الموقع الرئيسي ولوحة الإدارة من خلال ضمان استخدامهما نفس مصدر البيانات وعرض نفس عدد الاختبارات في الوقت الفعلي.
+
+**المتطلبات المحددة:**
+قم بإضافة علامة تبويب جديدة تسمى "إدارة خطوات الاختبار" إلى لوحة تحكم المشرف. يجب أن تتضمن هذه علامة التبويب ما يلي:
+
+1. عرض وإدارة بيانات خطوات الاختبار التي تتوافق مع محتوى وهيكل قاعدة البيانات الأساسية المتزامنة مع النظام.
+2. تضمين عمليات CRUD (إنشاء، قراءة، تحديث، حذف) لخطوات الاختبار.
+3. الحفاظ على اتساق البيانات مع قاعدة بيانات النظام الرئيسية من خلال المزامنة المناسبة.
+4. اتباع أنماط وأنماط واجهة المستخدم/تجربة المستخدم نفسها المستخدمة في علامات تبويب لوحة معلومات الإدارة الأخرى.
+5. تضمين التحقق من الصحة ومعالجة الأخطاء بشكل صحيح لبيانات خطوات الاختبار.
+6. التأكد من دعم الواجهة للغة العربية بشكل صحيح (بتنسيق RTL إن وجد).
+
+يرجى تطبيق هذه الميزة من خلال:
+- إنشاء نماذج/جداول قاعدة البيانات اللازمة لخطوات الاختبار في حال عدم وجودها.
+- إضافة علامة التبويب إلى لوحة معلومات الإدارة.
+- إنشاء واجهة إدارة تتضمن نماذج وجداول بيانات.
+- تنفيذ نقاط نهاية واجهة برمجة التطبيقات الخلفية لعمليات خطوات الاختبار.
+- ضمان وجود آليات مزامنة قاعدة البيانات المناسبة.
+
+1. **تحليل مصدر البيانات وإصلاحه:**
+- التحقق من سبب اختلاف عدد الاختبارات المعروضة في ملف data/databasecolortest.json ولوحة الإدارة (15 مقابل 35)
+- التأكد من قراءة كلٍّ من الموقع الرئيسي ولوحة الإدارة من مصدر البيانات الموثوق نفسه
+- تنفيذ المزامنة الفورية بحيث تنعكس التغييرات في لوحة الإدارة فورًا على الموقع الرئيسي
+
+2. **واجهة إدارة خطوات الاختبار:**
+- إضافة علامة تبويب "إدارة خطوات الاختبار" (إدارة خطوات الاختبارات) إلى شريط التنقل الحالي في لوحة الإدارة
+- إنشاء جدول بيانات يعرض جميع خطوات الاختبار مع الأعمدة التالية: المعرف، اسم الطريقة (EN/AR)، نتيجة اللون (EN/AR)، المادة (EN/AR)، الحالة
+- تضمين وظائف البحث والتصفية والترقيم
+- عرض نفس عدد الاختبارات المعروض على الموقع الرئيسي
+
+3. **عمليات CRUD:**
+- **إنشاء:** نموذج لإضافة خطوات اختبار جديدة مع حقول ثنائية اللغة (العربية/الإنجليزية)
+- **قراءة:** عرض خطوات الاختبار في جدول متجاوب مع دعم مناسب للكتابة من اليمين إلى اليسار.
+- **تحديث:** تحرير مضمّن أو نماذج نموذجية لتعديل خطوات الاختبار الحالية.
+- **حذف:** مربع حوار للتأكيد قبل الحذف مع معالجة الأخطاء بشكل صحيح.
+
+4. **التنفيذ الفني:**
+- تطبيق التحقق من صحة النماذج لجميع الحقول المطلوبة.
+- إضافة معالجة للأخطاء مع رسائل سهلة الاستخدام بكلتا اللغتين.
+- ضمان دعم تخطيط الكتابة من اليمين إلى اليسار لعناصر الواجهة العربية.
+
+5. **مزامنة البيانات:**
+- تطبيق تحديث فوري للبيانات على الموقع الرئيسي عند إجراء الإدارة أي تغييرات.
+- إضافة حالات التحميل وإشعارات النجاح/الخطأ.
+- ضمان اتساق البيانات بين ملف data/databasecolortest.json وأي مصادر بيانات أخرى.
+- إضافة ميزة التحقق من صحة البيانات لمنع أي تناقضات.
+
+6. **الملفات المراد تعديلها/إنشائها:**
+- تحديث التنقل في لوحة معلومات الإدارة لتشمل علامة التبويب الجديدة.
+- إنشاء خطوات الاختبار. مكون إدارة يتبع أنماط الإدارة الحالية.
+- تنفيذ نقاط نهاية واجهة برمجة التطبيقات لعمليات CRUD عند الحاجة.
+- تحديث طبقة الوصول إلى البيانات لضمان مصدر واحد للحقيقة.
+- إضافة أنواع TypeScript مناسبة لهيكل بيانات خطوات الاختبار.
+
+**معايير القبول:**
+- يُظهر الموقع الرئيسي ولوحة الإدارة أعداد اختبارات متطابقة.
+- تنعكس التغييرات التي تُجرى في لوحة الإدارة فورًا على الموقع الرئيسي.
+- تعمل جميع عمليات CRUD بشكل صحيح مع التحقق المناسب.
+- تدعم الواجهة تخطيطي اللغة العربية (من اليمين إلى اليسار) والإنجليزية.
+- لا توجد أي تناقضات في البيانات بين أجزاء التطبيق المختلفة.
+
+أضف نموذج/مكون محرر نصوص إلى النظام يسمح للمستخدمين بتحرير محتوى النصوص الحالي. يجب أن يتضمن محرر النصوص ما يلي:
+
+1. دعم إمكانيات تحرير النصوص الغنية (الغامق، المائل، التنسيق).
+2. دمجه في بنية تطبيق Next.js الحالية.
+3. دعم اللغتين العربية (من اليمين إلى اليسار) والإنجليزية (من اليسار إلى اليمين) بناءً على الإعدادات المحلية الحالية.
+4. تضمين خاصية الحفظ/الإلغاء.
+5. إمكانية إعادة الاستخدام عبر صفحات ومكونات مختلفة.
+6. اتباع أنماط الكود الحالية وأساليب التصميم المستخدمة في المشروع.
+7. إدارة ثبات النص وتحديثاته في الواجهة الخلفية.
+8. تضمين التحقق من الصحة ومعالجة الأخطاء بشكل صحيح.
+9. سهولة الوصول والاستجابة عبر مختلف أحجام الشاشات.
+
+يرجى تحديد مناطق محتوى النص الحالية التي تحتاج إلى إمكانيات تحرير، وتزويد تنفيذ المكون بأنواع TypeScript المناسبة.
+---------------------------------------------------------------------------------
+Add a text editor model/component to the system that allows users to edit existing text content. The text editor should:
+
+1. Support rich text editing capabilities (bold, italic, formatting)
+2. Be integrated into the existing Next.js application structure
+3. Support both Arabic (RTL) and English (LTR) languages based on the current locale
+4. Include save/cancel functionality
+5. Be reusable across different pages and components
+6. Follow the existing code patterns and styling conventions used in the project
+7. Handle text persistence and updates to the backend
+8. Include proper validation and error handling
+9. Be accessible and responsive across different screen sizes
+
+Please specify which existing text content areas need editing capabilities and provide the component implementation with proper TypeScript types.
