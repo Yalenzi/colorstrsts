@@ -1,24 +1,26 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { Language } from '@/types';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import {
-  StarIcon,
-  LockOpenIcon,
-  LockClosedIcon,
-  Cog6ToothIcon,
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  InformationCircleIcon
-} from '@heroicons/react/24/outline';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from 'react';
 import { useSubscriptionSettings } from '@/hooks/useSubscriptionSettings';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { 
+  LockOpenIcon, 
+  CheckCircleIcon, 
+  InformationCircleIcon,
+  CrownIcon,
+  StarIcon,
+  RefreshCwIcon
+} from 'lucide-react';
+import { toast } from 'sonner';
+
+interface Language {
+  code: string;
+  name: string;
+}
 
 interface SubscriptionSettingsProps {
   lang: Language;
@@ -33,129 +35,160 @@ interface TestAccessSettings {
 }
 
 export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps) {
-  // Safe destructuring with fallbacks
-  const subscriptionData = useSubscriptionSettings();
-
-  // Provide safe defaults if hook returns undefined
+  const isRTL = lang.code === 'ar';
+  
   const {
     settings,
-    loading = false,
+    loading,
     updateSettings,
     loadSettings
-  } = subscriptionData || {};
+  } = useSubscriptionSettings();
 
-  // Default settings to prevent undefined errors
-  const defaultSettings: TestAccessSettings = {
-    freeTestsEnabled: true,
-    freeTestsCount: 5,
-    premiumRequired: true,
-    globalFreeAccess: false,
-    specificPremiumTests: []
-  };
-
-  const [localSettings, setLocalSettings] = useState<TestAccessSettings>(defaultSettings);
+  const [localSettings, setLocalSettings] = useState<TestAccessSettings>(settings);
   const [saving, setSaving] = useState(false);
-  const [premiumTestInput, setPremiumTestInput] = useState('');
+  const [hasChanges, setHasChanges] = useState(false);
 
-  const isRTL = lang === 'ar';
-
-  // Early return if subscription data is not available
-  if (!subscriptionData) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="text-lg font-medium text-red-600 mb-2">
-            {lang === 'ar' ? 'خطأ في تحميل إعدادات الاشتراك' : 'Error loading subscription settings'}
-          </div>
-          <p className="text-gray-500 mb-4">
-            {lang === 'ar' ? 'يرجى إعادة تحميل الصفحة' : 'Please reload the page'}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-          >
-            {lang === 'ar' ? 'إعادة تحميل' : 'Reload'}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Update local settings when Firebase settings change
+  // تحديث الإعدادات المحلية عند تغيير الإعدادات الأساسية
   useEffect(() => {
-    if (settings) {
-      setLocalSettings(settings);
-    }
+    setLocalSettings(settings);
+    setHasChanges(false);
   }, [settings]);
 
-  const saveSettings = async () => {
-    setSaving(true);
-    try {
-      // Save to Firebase Realtime Database
-      await updateSettings(localSettings);
+  // تتبع التغييرات
+  useEffect(() => {
+    const hasChanged = JSON.stringify(localSettings) !== JSON.stringify(settings);
+    setHasChanges(hasChanged);
+  }, [localSettings, settings]);
 
-      toast.success(
-        isRTL ? 'تم حفظ إعدادات الاشتراكات بنجاح في Firebase' : 'Subscription settings saved successfully to Firebase'
-      );
+  // حفظ الإعدادات
+  const handleSaveSettings = async () => {
+    try {
+      setSaving(true);
+      console.log('💾 Saving subscription settings:', localSettings);
+      
+      const success = await updateSettings(localSettings);
+      
+      if (success) {
+        toast.success(
+          isRTL ? 'تم حفظ الإعدادات بنجاح!' : 'Settings saved successfully!'
+        );
+        setHasChanges(false);
+        
+        // إرسال تحديث فوري لجميع المكونات
+        window.dispatchEvent(new CustomEvent('subscriptionSettingsUpdated', {
+          detail: localSettings
+        }));
+        
+        console.log('✅ Settings saved and broadcasted');
+      } else {
+        throw new Error('Failed to save settings');
+      }
     } catch (error) {
-      console.error('Error saving settings to Firebase:', error);
+      console.error('❌ Error saving settings:', error);
       toast.error(
-        isRTL ? 'خطأ في حفظ الإعدادات في Firebase' : 'Error saving settings to Firebase'
+        isRTL ? 'فشل في حفظ الإعدادات' : 'Failed to save settings'
       );
     } finally {
       setSaving(false);
     }
   };
 
-  const handleAddPremiumTest = () => {
-    const testNumber = parseInt(premiumTestInput);
-    if (testNumber && !(localSettings.specificPremiumTests || []).includes(testNumber)) {
-      setLocalSettings(prev => ({
-        ...prev,
-        specificPremiumTests: [...(prev.specificPremiumTests || []), testNumber].sort((a, b) => a - b)
-      }));
-      setPremiumTestInput('');
+  // إعادة تحميل الإعدادات
+  const handleRefreshSettings = async () => {
+    try {
+      console.log('🔄 Refreshing settings...');
+      await loadSettings();
+      toast.success(
+        isRTL ? 'تم تحديث الإعدادات' : 'Settings refreshed'
+      );
+    } catch (error) {
+      console.error('❌ Error refreshing settings:', error);
+      toast.error(
+        isRTL ? 'فشل في تحديث الإعدادات' : 'Failed to refresh settings'
+      );
     }
   };
 
-  const handleRemovePremiumTest = (testNumber: number) => {
+  // تفعيل الوصول المجاني العام
+  const handleGlobalFreeAccess = async (enabled: boolean) => {
+    const newSettings = { ...localSettings, globalFreeAccess: enabled };
+    setLocalSettings(newSettings);
+    
+    // حفظ فوري للوصول المجاني العام
+    try {
+      setSaving(true);
+      const success = await updateSettings(newSettings);
+      
+      if (success) {
+        toast.success(
+          enabled 
+            ? (isRTL ? 'تم تفعيل الوصول المجاني لجميع الاختبارات!' : 'All tests are now free!')
+            : (isRTL ? 'تم إلغاء الوصول المجاني العام' : 'Global free access disabled')
+        );
+        
+        // إرسال تحديث فوري
+        window.dispatchEvent(new CustomEvent('subscriptionSettingsUpdated', {
+          detail: newSettings
+        }));
+        
+        console.log(`✅ Global free access ${enabled ? 'enabled' : 'disabled'}`);
+      }
+    } catch (error) {
+      console.error('❌ Error updating global free access:', error);
+      toast.error(
+        isRTL ? 'فشل في تحديث الإعدادات' : 'Failed to update settings'
+      );
+      // إعادة الإعدادات للحالة السابقة
+      setLocalSettings(settings);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // إضافة/إزالة اختبار من القائمة المميزة
+  const togglePremiumTest = (testNumber: number) => {
+    const newPremiumTests = localSettings.specificPremiumTests.includes(testNumber)
+      ? localSettings.specificPremiumTests.filter(t => t !== testNumber)
+      : [...localSettings.specificPremiumTests, testNumber];
+    
     setLocalSettings(prev => ({
       ...prev,
-      specificPremiumTests: (prev.specificPremiumTests || []).filter(t => t !== testNumber)
+      specificPremiumTests: newPremiumTests.sort((a, b) => a - b)
     }));
   };
 
-  const resetToDefaults = () => {
-    setLocalSettings({
-      freeTestsEnabled: true,
-      freeTestsCount: 5,
-      premiumRequired: true,
-      globalFreeAccess: false,
-      specificPremiumTests: []
-    });
-  };
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span className="mr-2 text-gray-600">
+          {isRTL ? 'جاري تحميل الإعدادات...' : 'Loading settings...'}
+        </span>
+      </div>
+    );
+  }
 
   return (
-    <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className={`space-y-6 ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {isRTL ? 'إعدادات الاشتراكات والوصول' : 'Subscription & Access Settings'}
+          <h2 className="text-2xl font-bold text-gray-900">
+            {isRTL ? 'إعدادات الاشتراكات' : 'Subscription Settings'}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
-            {isRTL ? 'تحكم في إعدادات الوصول للاختبارات والاشتراكات' : 'Control test access and subscription settings'}
+          <p className="text-gray-600 mt-1">
+            {isRTL ? 'إدارة الوصول للاختبارات والاشتراكات' : 'Manage test access and subscriptions'}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={resetToDefaults}>
-            {isRTL ? 'إعادة تعيين' : 'Reset'}
-          </Button>
-          <Button onClick={saveSettings} loading={saving}>
-            <Cog6ToothIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-            {saving ? (isRTL ? 'جاري الحفظ...' : 'Saving...') : (isRTL ? 'حفظ الإعدادات' : 'Save Settings')}
-          </Button>
-        </div>
+        <Button
+          onClick={handleRefreshSettings}
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2"
+        >
+          <RefreshCwIcon className="h-4 w-4" />
+          {isRTL ? 'تحديث' : 'Refresh'}
+        </Button>
       </div>
 
       {/* Global Access Control */}
@@ -171,65 +204,75 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Global Free Access */}
-          <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border-2 border-green-200">
             <div className="flex-1">
               <Label className="text-base font-medium text-green-800 dark:text-green-200">
-                {isRTL ? 'فتح جميع الاختبارات مجاناً' : 'Make All Tests Free'}
+                {isRTL ? 'فتح جميع الاختبارات مجانٍ' : 'Make All Tests Free'}
               </Label>
               <p className="text-sm text-green-600 dark:text-green-300 mt-1">
                 {isRTL ? 'تمكين الوصول المجاني لجميع الاختبارات لكل المستخدمين' : 'Enable free access to all tests for everyone'}
               </p>
+              {localSettings.globalFreeAccess && (
+                <Badge variant="secondary" className="mt-2 bg-green-100 text-green-800">
+                  {isRTL ? 'مفعل - جميع الاختبارات مجانية' : 'Active - All tests are free'}
+                </Badge>
+              )}
             </div>
             <Switch
               checked={localSettings.globalFreeAccess}
-              onCheckedChange={(checked) => setLocalSettings(prev => ({ ...prev, globalFreeAccess: checked }))}
+              onCheckedChange={handleGlobalFreeAccess}
+              disabled={saving}
             />
           </div>
 
+          {/* Free Tests Settings - مخفي عند تفعيل الوصول العام */}
           {!localSettings.globalFreeAccess && (
             <>
-              {/* Free Tests Settings */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label className="text-base font-medium">
-                      {isRTL ? 'تمكين الاختبارات المجانية' : 'Enable Free Tests'}
-                    </Label>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {isRTL ? 'السماح بعدد محدود من الاختبارات المجانية' : 'Allow limited number of free tests'}
-                    </p>
-                  </div>
-                  <Switch
-                    checked={localSettings.freeTestsEnabled}
-                    onCheckedChange={(checked) => setLocalSettings(prev => ({ ...prev, freeTestsEnabled: checked }))}
-                  />
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <Label className="text-base font-medium">
+                    {isRTL ? 'تفعيل الاختبارات المجانية' : 'Enable Free Tests'}
+                  </Label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {isRTL ? 'السماح بعدد محدود من الاختبارات المجانية' : 'Allow limited number of free tests'}
+                  </p>
                 </div>
-
-                {localSettings.freeTestsEnabled && (
-                  <div className="flex items-center gap-4">
-                    <Label className="text-sm font-medium">
-                      {isRTL ? 'عدد الاختبارات المجانية:' : 'Number of free tests:'}
-                    </Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="50"
-                      value={localSettings.freeTestsCount}
-                      onChange={(e) => setLocalSettings(prev => ({ ...prev, freeTestsCount: parseInt(e.target.value) || 0 }))}
-                      className="w-20"
-                    />
-                  </div>
-                )}
+                <Switch
+                  checked={localSettings.freeTestsEnabled}
+                  onCheckedChange={(checked) => setLocalSettings(prev => ({ ...prev, freeTestsEnabled: checked }))}
+                />
               </div>
 
-              {/* Premium Requirements */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="text-base font-medium">
-                    {isRTL ? 'طلب اشتراك مميز' : 'Require Premium Subscription'}
+              {localSettings.freeTestsEnabled && (
+                <div className="space-y-2">
+                  <Label htmlFor="freeTestsCount">
+                    {isRTL ? 'عدد الاختبارات المجانية' : 'Number of Free Tests'}
                   </Label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {isRTL ? 'طلب اشتراك مميز للاختبارات المتقدمة' : 'Require premium subscription for advanced tests'}
+                  <Input
+                    id="freeTestsCount"
+                    type="number"
+                    min="0"
+                    max="20"
+                    value={localSettings.freeTestsCount}
+                    onChange={(e) => setLocalSettings(prev => ({ 
+                      ...prev, 
+                      freeTestsCount: parseInt(e.target.value) || 0 
+                    }))}
+                    className="w-32"
+                  />
+                  <p className="text-sm text-gray-600">
+                    {isRTL ? 'عدد الاختبارات المجانية المتاحة لكل مستخدم' : 'Number of free tests available per user'}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <Label className="text-base font-medium">
+                    {isRTL ? 'الاختبارات المتقدمة تتطلب اشتراك' : 'Advanced Tests Require Subscription'}
+                  </Label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {isRTL ? 'الاختبارات بعد الحد المجاني تتطلب اشتراك مميز' : 'Tests beyond free limit require premium subscription'}
                   </p>
                 </div>
                 <Switch
@@ -242,58 +285,46 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
         </CardContent>
       </Card>
 
-      {/* Specific Premium Tests */}
-      {!localSettings.globalFreeAccess && localSettings.premiumRequired && (
+      {/* Specific Premium Tests - مخفي عند تفعيل الوصول العام */}
+      {!localSettings.globalFreeAccess && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <StarIcon className="h-5 w-5 text-yellow-600" />
-              {isRTL ? 'الاختبارات المميزة المحددة' : 'Specific Premium Tests'}
+              <CrownIcon className="h-5 w-5 text-yellow-600" />
+              {isRTL ? 'اختبارات مميزة محددة' : 'Specific Premium Tests'}
             </CardTitle>
             <CardDescription>
-              {isRTL ? 'تحديد أرقام الاختبارات التي تتطلب اشتراك مميز' : 'Specify which test numbers require premium subscription'}
+              {isRTL ? 'تحديد اختبارات معينة تتطلب اشتراك مميز' : 'Specify individual tests that require premium subscription'}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Add Premium Test */}
-            <div className="flex gap-2">
-              <Input
-                type="number"
-                placeholder={isRTL ? 'رقم الاختبار' : 'Test number'}
-                value={premiumTestInput}
-                onChange={(e) => setPremiumTestInput(e.target.value)}
-                className="flex-1"
-              />
-              <Button onClick={handleAddPremiumTest} disabled={!premiumTestInput}>
-                {isRTL ? 'إضافة' : 'Add'}
-              </Button>
-            </div>
-
-            {/* Premium Tests List */}
-            {(localSettings.specificPremiumTests?.length || 0) > 0 && (
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">
-                  {isRTL ? 'الاختبارات المميزة الحالية:' : 'Current premium tests:'}
-                </Label>
-                <div className="flex flex-wrap gap-2">
-                  {(localSettings.specificPremiumTests || []).map(testNumber => (
-                    <div
-                      key={testNumber}
-                      className="flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-sm"
-                    >
-                      <StarIcon className="h-3 w-3" />
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {Array.from({ length: 20 }, (_, i) => i + 1).map(testNumber => (
+                <div
+                  key={testNumber}
+                  className={`
+                    p-3 rounded-lg border-2 cursor-pointer transition-all
+                    ${localSettings.specificPremiumTests.includes(testNumber)
+                      ? 'border-yellow-300 bg-yellow-50 text-yellow-800'
+                      : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
+                    }
+                  `}
+                  onClick={() => togglePremiumTest(testNumber)}
+                >
+                  <div className="text-center">
+                    <div className="font-semibold">
                       {isRTL ? `اختبار ${testNumber}` : `Test ${testNumber}`}
-                      <button
-                        onClick={() => handleRemovePremiumTest(testNumber)}
-                        className="ml-1 rtl:mr-1 rtl:ml-0 text-yellow-600 hover:text-yellow-800 dark:text-yellow-300 dark:hover:text-yellow-100"
-                      >
-                        ×
-                      </button>
                     </div>
-                  ))}
+                    {localSettings.specificPremiumTests.includes(testNumber) && (
+                      <CrownIcon className="h-4 w-4 mx-auto mt-1 text-yellow-600" />
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
+            <p className="text-sm text-gray-600 mt-4">
+              {isRTL ? 'اضغط على الاختبارات لتحديدها كمميزة' : 'Click on tests to mark them as premium'}
+            </p>
           </CardContent>
         </Card>
       )}
@@ -321,21 +352,40 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
                       : `${localSettings.freeTestsCount} free tests available`
                     }
                   </li>
-                  {(localSettings.specificPremiumTests?.length || 0) > 0 && (
-                    <li className="flex items-center gap-2">
-                      <StarIcon className="h-4 w-4 text-yellow-600" />
-                      {isRTL
-                        ? `${localSettings.specificPremiumTests?.length || 0} اختبارات تتطلب اشتراك مميز`
-                        : `${localSettings.specificPremiumTests?.length || 0} tests require premium subscription`
-                      }
-                    </li>
-                  )}
+                  <li className="flex items-center gap-2">
+                    <StarIcon className="h-4 w-4 text-yellow-600" />
+                    {isRTL
+                      ? `${localSettings.specificPremiumTests.length} اختبارات تتطلب اشتراك مميز`
+                      : `${localSettings.specificPremiumTests.length} tests require premium subscription`
+                    }
+                  </li>
                 </>
               )}
             </ul>
           </div>
         </AlertDescription>
       </Alert>
+
+      {/* Save Button */}
+      {hasChanges && !localSettings.globalFreeAccess && (
+        <div className="flex justify-end">
+          <Button
+            onClick={handleSaveSettings}
+            disabled={saving}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            {saving ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                {isRTL ? 'جاري الحفظ...' : 'Saving...'}
+              </>
+            ) : (
+              isRTL ? 'حفظ الإعدادات' : 'Save Settings'
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
+

@@ -1,207 +1,198 @@
-'use client';
+import { useState, useEffect, useCallback } from 'react';
+import { getSubscriptionSettingsAsync, saveSubscriptionSettings } from '@/lib/subscription-service';
 
-import { useState, useEffect } from 'react';
-import {
-  getSubscriptionSettings,
-  saveSubscriptionSettings,
-  listenToSubscriptionSettings,
-  SubscriptionSettings
-} from '@/lib/firebase-realtime';
-import {
-  getSubscriptionSettingsLocal,
-  saveSubscriptionSettingsLocal,
-  initializeLocalStorage
-} from '@/lib/local-data-service';
+export interface SubscriptionSettings {
+  freeTestsEnabled: boolean;
+  freeTestsCount: number;
+  premiumRequired: boolean;
+  globalFreeAccess: boolean;
+  specificPremiumTests: number[];
+}
 
-const defaultSettings: SubscriptionSettings = {
-  freeTestsEnabled: true,
-  freeTestsCount: 5,
-  premiumRequired: true,
-  globalFreeAccess: false,
-  specificPremiumTests: []
-};
+// إنشاء event emitter للتحديثات الفورية
+class SettingsEventEmitter {
+  private listeners: ((settings: SubscriptionSettings) => void)[] = [];
 
-/**
- * Hook to manage subscription settings
- * Hook لإدارة إعدادات الاشتراكات
- */
+  subscribe(listener: (settings: SubscriptionSettings) => void) {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== listener);
+    };
+  }
+
+  emit(settings: SubscriptionSettings) {
+    this.listeners.forEach(listener => listener(settings));
+  }
+}
+
+const settingsEmitter = new SettingsEventEmitter();
+
+// متغير عام لحفظ الإعدادات الحالية
+let globalSettings: SubscriptionSettings | null = null;
+
 export function useSubscriptionSettings() {
-  const [settings, setSettings] = useState<SubscriptionSettings>(defaultSettings);
+  const [settings, setSettings] = useState<SubscriptionSettings>({
+    freeTestsEnabled: true,
+    freeTestsCount: 5,
+    premiumRequired: true,
+    globalFreeAccess: false,
+    specificPremiumTests: []
+  });
   const [loading, setLoading] = useState(true);
 
-  // Load settings from localStorage first, then Firebase as fallback
-  const loadSettings = async () => {
-    // Check if we're in browser environment
-    if (typeof window === 'undefined') {
-      setLoading(false);
-      return;
-    }
-
+  // تحميل الإعدادات من Firebase
+  const loadSettings = useCallback(async () => {
     try {
       setLoading(true);
-
-      // Try localStorage first
-      try {
-        initializeLocalStorage();
-        const localSettings = getSubscriptionSettingsLocal();
-        setSettings(localSettings);
-
-        // Set global settings for immediate access
-        (window as any).subscriptionSettings = localSettings;
-
-        console.log('✅ Loaded subscription settings from localStorage');
-        return;
-
-      } catch (localError) {
-        console.warn('Failed to load from localStorage, trying Firebase:', localError);
-      }
-
-      // Fallback to Firebase
-      const firebaseSettings = await getSubscriptionSettings();
+      console.log('🔄 Loading subscription settings...');
+      
+      const firebaseSettings = await getSubscriptionSettingsAsync();
+      console.log('📥 Settings loaded from Firebase:', firebaseSettings);
+      
+      // تحديث الإعدادات العامة
+      globalSettings = firebaseSettings;
+      
+      // حفظ في localStorage للوصول السريع
+      localStorage.setItem('subscription_settings', JSON.stringify(firebaseSettings));
+      
+      // تحديث الحالة المحلية
       setSettings(firebaseSettings);
-
-      // Also set global settings for immediate access
-      (window as any).subscriptionSettings = firebaseSettings;
-
-      console.log('✅ Loaded subscription settings from Firebase');
-
+      
+      // إرسال تحديث لجميع المكونات
+      settingsEmitter.emit(firebaseSettings);
+      
+      // إرسال custom event للمكونات الأخرى
+      window.dispatchEvent(new CustomEvent('subscriptionSettingsUpdated', {
+        detail: firebaseSettings
+      }));
+      
+      console.log('✅ Settings updated successfully');
     } catch (error) {
-      console.error('Error loading subscription settings:', error);
-      setSettings(defaultSettings);
-
-      // Set default settings in global object as fallback
-      if (typeof window !== 'undefined') {
-        (window as any).subscriptionSettings = defaultSettings;
-      }
+      console.error('❌ Error loading settings:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  // Listen for settings changes from Firebase
-  useEffect(() => {
-    // Only run in browser environment
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    loadSettings();
-
-    // Set up real-time listener for Firebase changes
-    let unsubscribe: (() => void) | null = null;
-
-    try {
-      unsubscribe = listenToSubscriptionSettings((newSettings) => {
-        setSettings(newSettings);
-
-        // Update global settings for immediate access
-        (window as any).subscriptionSettings = newSettings;
-
-        // Dispatch custom event to notify other components
-        window.dispatchEvent(new CustomEvent('subscriptionSettingsUpdated', {
-          detail: newSettings
-        }));
-      });
-    } catch (error) {
-      console.error('Error setting up Firebase listener:', error);
-    }
-
-    // Listen for custom events (for immediate updates in same tab)
-    const handleSettingsUpdate = (e: CustomEvent) => {
-      if (e.detail) {
-        setSettings(e.detail);
-        (window as any).subscriptionSettings = e.detail;
-      }
-    };
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('subscriptionSettingsUpdated', handleSettingsUpdate as EventListener);
-    }
-
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('subscriptionSettingsUpdated', handleSettingsUpdate as EventListener);
-      }
-    };
   }, []);
 
-  // Function to update settings (for admin use)
-  const updateSettings = async (newSettings: SubscriptionSettings) => {
+  // حفظ الإعدادات في Firebase
+  const updateSettings = useCallback(async (newSettings: SubscriptionSettings) => {
     try {
+      console.log('💾 Saving settings to Firebase:', newSettings);
+      
+      // حفظ في Firebase
+      await saveSubscriptionSettings(newSettings);
+      
+      // تحديث الإعدادات العامة فورا
+      globalSettings = newSettings;
+      
+      // حفظ في localStorage
+      localStorage.setItem('subscription_settings', JSON.stringify(newSettings));
+      
+      // تحديث الحالة المحلية
       setSettings(newSettings);
-
-      // Save to localStorage first
-      try {
-        saveSubscriptionSettingsLocal(newSettings);
-        console.log('✅ Saved subscription settings to localStorage');
-      } catch (localError) {
-        console.warn('Failed to save to localStorage:', localError);
-      }
-
-      // Also save to Firebase as backup
-      try {
-        await saveSubscriptionSettings(newSettings);
-        console.log('✅ Saved subscription settings to Firebase');
-      } catch (firebaseError) {
-        console.warn('Failed to save to Firebase:', firebaseError);
-      }
-
-      if (typeof window !== 'undefined') {
-        // Set global settings for immediate access
-        (window as any).subscriptionSettings = newSettings;
-
-        // Dispatch custom event to notify other components immediately
-        window.dispatchEvent(new CustomEvent('subscriptionSettingsUpdated', {
-          detail: newSettings
-        }));
-      }
+      
+      // إرسال تحديث فوري لجميع المكونات
+      settingsEmitter.emit(newSettings);
+      
+      // إرسال custom event
+      window.dispatchEvent(new CustomEvent('subscriptionSettingsUpdated', {
+        detail: newSettings
+      }));
+      
+      // إرسال storage event للتبويبات الأخرى
+      window.dispatchEvent(new StorageEvent('storage', {
+        key: 'subscription_settings',
+        newValue: JSON.stringify(newSettings),
+        oldValue: localStorage.getItem('subscription_settings')
+      }));
+      
+      console.log('✅ Settings saved and broadcasted successfully');
+      
+      return true;
     } catch (error) {
-      console.error('Error updating subscription settings:', error);
-      throw error;
+      console.error('❌ Error saving settings:', error);
+      return false;
     }
-  };
+  }, []);
 
-  // Function to check if a test is accessible based on current settings
-  const isTestAccessible = (testIndex: number, userHasPremium: boolean = false): boolean => {
-    // If global free access is enabled, all tests are accessible
-    if (settings.globalFreeAccess) {
+  // الاستماع للتحديثات من المكونات الأخرى
+  useEffect(() => {
+    // تحميل الإعدادات عند البداية
+    loadSettings();
+
+    // الاستماع للتحديثات من event emitter
+    const unsubscribe = settingsEmitter.subscribe((newSettings) => {
+      setSettings(newSettings);
+    });
+
+    // الاستماع للتحديثات من localStorage
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'subscription_settings' && e.newValue) {
+        try {
+          const newSettings = JSON.parse(e.newValue);
+          setSettings(newSettings);
+          globalSettings = newSettings;
+        } catch (error) {
+          console.error('Error parsing storage settings:', error);
+        }
+      }
+    };
+
+    // الاستماع للأحداث المخصصة
+    const handleCustomEvent = (e: CustomEvent) => {
+      setSettings(e.detail);
+      globalSettings = e.detail;
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('subscriptionSettingsUpdated', handleCustomEvent as EventListener);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('subscriptionSettingsUpdated', handleCustomEvent as EventListener);
+    };
+  }, [loadSettings]);
+
+  // دوال مساعدة للتحقق من الوصول
+  const isTestAccessible = useCallback((testIndex: number, userHasPremium: boolean = false): boolean => {
+    const currentSettings = globalSettings || settings;
+    
+    // إذا كان الوصول المجاني العام مفعل
+    if (currentSettings.globalFreeAccess) {
       return true;
     }
 
-    // Check if this specific test requires premium
-    if (settings.specificPremiumTests.includes(testIndex + 1)) {
+    // فحص الاختبارات المحددة التي تتطلب اشتراك
+    if (currentSettings.specificPremiumTests.includes(testIndex + 1)) {
       return userHasPremium;
     }
 
-    // Check free tests limit
-    if (settings.freeTestsEnabled && testIndex < settings.freeTestsCount) {
+    // فحص حد الاختبارات المجانية
+    if (currentSettings.freeTestsEnabled && testIndex < currentSettings.freeTestsCount) {
       return true;
     }
 
-    // Check if premium is required for advanced tests
-    if (settings.premiumRequired && testIndex >= settings.freeTestsCount) {
+    // فحص إذا كانت الاختبارات المتقدمة تتطلب اشتراك
+    if (currentSettings.premiumRequired && testIndex >= currentSettings.freeTestsCount) {
       return userHasPremium;
     }
 
-    // Default allow access
     return true;
-  };
+  }, [settings]);
 
-  // Function to get access status for a test
-  const getTestAccessStatus = (testIndex: number, userHasPremium: boolean = false) => {
+  const getTestAccessStatus = useCallback((testIndex: number, userHasPremium: boolean = false) => {
+    const currentSettings = globalSettings || settings;
     const isAccessible = isTestAccessible(testIndex, userHasPremium);
     
     if (isAccessible) {
       return {
         canAccess: true,
-        reason: settings.globalFreeAccess ? 'Global free access enabled' : 'Test is accessible'
+        reason: currentSettings.globalFreeAccess ? 'Global free access enabled' : 'Test is accessible'
       };
     }
 
-    if (settings.specificPremiumTests.includes(testIndex + 1)) {
+    if (currentSettings.specificPremiumTests.includes(testIndex + 1)) {
       return {
         canAccess: false,
         reason: 'Premium subscription required for this specific test',
@@ -209,7 +200,7 @@ export function useSubscriptionSettings() {
       };
     }
 
-    if (testIndex >= settings.freeTestsCount) {
+    if (testIndex >= currentSettings.freeTestsCount) {
       return {
         canAccess: false,
         reason: 'Premium subscription required for advanced tests',
@@ -221,17 +212,41 @@ export function useSubscriptionSettings() {
       canAccess: false,
       reason: 'Access denied'
     };
-  };
+  }, [settings, isTestAccessible]);
 
-  // Always return an object, never undefined
   return {
-    settings: settings || defaultSettings,
-    loading: loading || false,
-    updateSettings: updateSettings || (() => Promise.resolve()),
-    loadSettings: loadSettings || (() => Promise.resolve()),
-    isTestAccessible: isTestAccessible || (() => true),
-    getTestAccessStatus: getTestAccessStatus || (() => ({ canAccess: true, reason: 'Default access' }))
+    settings,
+    loading,
+    updateSettings,
+    loadSettings,
+    isTestAccessible,
+    getTestAccessStatus
   };
 }
 
-export default useSubscriptionSettings;
+// دالة للحصول على الإعدادات الحالية بشكل متزامن
+export function getCurrentSettings(): SubscriptionSettings {
+  if (globalSettings) {
+    return globalSettings;
+  }
+  
+  // محاولة قراءة من localStorage
+  try {
+    const stored = localStorage.getItem('subscription_settings');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (error) {
+    console.error('Error reading settings from localStorage:', error);
+  }
+  
+  // إعدادات افتراضية
+  return {
+    freeTestsEnabled: true,
+    freeTestsCount: 5,
+    premiumRequired: true,
+    globalFreeAccess: false,
+    specificPremiumTests: []
+  };
+}
+

@@ -1,13 +1,11 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
+import { getCurrentSettings } from '@/hooks/useSubscriptionSettings';
 import { canAccessTest, recordTestUsage } from '@/lib/subscription-service';
-import { useSubscriptionSettings } from '@/hooks/useSubscriptionSettings';
-import { LoginModal } from '@/components/auth/LoginModal';
-import { SignupModal } from '@/components/auth/SignupModal';
-import { SubscriptionModal } from './SubscriptionModal';
-import { Lock, Star, Crown } from 'lucide-react';
+import { Crown, Star, Lock } from 'lucide-react';
+import LoginModal from '@/components/auth/LoginModal';
+import SignupModal from '@/components/auth/SignupModal';
+import SubscriptionModal from '@/components/subscription/SubscriptionModal';
 
 interface TestAccessGuardProps {
   testIndex: number;
@@ -25,7 +23,6 @@ export function TestAccessGuard({
   onAccessGranted
 }: TestAccessGuardProps) {
   const { user, userProfile } = useAuth();
-  const { settings, loading: settingsLoading } = useSubscriptionSettings();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
@@ -35,48 +32,89 @@ export function TestAccessGuard({
     requiresSubscription?: boolean;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState(getCurrentSettings());
 
   // التحقق من إمكانية الوصول
-  useEffect(() => {
-    const checkAccess = async () => {
-      // Wait for settings to load
-      if (settingsLoading) {
-        return;
-      }
+  const checkAccess = async () => {
+    try {
+      console.log('🔍 Checking access for test:', testIndex);
+      
+      // الحصول على أحدث الإعدادات
+      const currentSettings = getCurrentSettings();
+      setSettings(currentSettings);
+      
+      console.log('📋 Current settings:', currentSettings);
 
-      // If global free access is enabled, allow all tests immediately
-      if (settings.globalFreeAccess) {
-        setAccessStatus({ canAccess: true, reason: 'Global free access enabled' });
+      // إذا كان الوصول المجاني العام مفعل، السماح فور
+      if (currentSettings.globalFreeAccess) {
+        console.log('✅ Global free access enabled - granting access');
+        setAccessStatus({ 
+          canAccess: true, 
+          reason: 'Global free access enabled' 
+        });
         setLoading(false);
         return;
       }
 
+      // إذا لم يكن المستخدم مسجل دخول
       if (!user) {
-        setAccessStatus({ canAccess: false, reason: 'Login required' });
+        console.log('❌ User not logged in');
+        setAccessStatus({ 
+          canAccess: false, 
+          reason: 'Login required' 
+        });
         setLoading(false);
         return;
       }
 
-      try {
-        const access = await canAccessTest(user.uid, testIndex);
-        setAccessStatus(access);
-      } catch (error) {
-        console.error('Error checking test access:', error);
-        setAccessStatus({ canAccess: false, reason: 'Error checking access' });
-      } finally {
-        setLoading(false);
+      // فحص الوصول عبر النظام العادي
+      const access = await canAccessTest(user.uid, testIndex);
+      console.log('🎯 Access result:', access);
+      setAccessStatus(access);
+    } catch (error) {
+      console.error('❌ Error checking test access:', error);
+      setAccessStatus({ 
+        canAccess: false, 
+        reason: 'Error checking access' 
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // تحديث الوصول عند تغيير الإعدادات
+  useEffect(() => {
+    checkAccess();
+
+    // الاستماع للتحديثات الفورية
+    const handleSettingsUpdate = (e: CustomEvent) => {
+      console.log('🔄 Settings updated, rechecking access');
+      setSettings(e.detail);
+      checkAccess();
+    };
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'subscription_settings') {
+        console.log('🔄 Storage updated, rechecking access');
+        checkAccess();
       }
     };
 
-    checkAccess();
-  }, [user, testIndex, userProfile, settings, settingsLoading]);
+    window.addEventListener('subscriptionSettingsUpdated', handleSettingsUpdate as EventListener);
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('subscriptionSettingsUpdated', handleSettingsUpdate as EventListener);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [user, testIndex, userProfile]);
 
   // تسجيل استخدام الاختبار عند الوصول
   const handleAccessTest = async () => {
     if (!user || !accessStatus?.canAccess) return;
 
     try {
-      const isFreeTest = testIndex < 5;
+      const isFreeTest = testIndex < settings.freeTestsCount;
       await recordTestUsage(user.uid, testId, testName, isFreeTest);
       onAccessGranted?.();
     } catch (error) {
@@ -94,39 +132,30 @@ export function TestAccessGuard({
     );
   }
 
-  // إذا كان المستخدم يمكنه الوصول للاختبار
-  if (accessStatus?.canAccess) {
-    return (
-      <div onClick={handleAccessTest}>
-        {children}
-      </div>
-    );
-  }
-
-  // إذا لم يكن المستخدم مسجل دخول
-  if (!user) {
+  // إذا كان المستخدم غير مسجل دخول
+  if (!user && !settings.globalFreeAccess) {
     return (
       <>
         <div className="relative">
-          <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex items-center justify-center z-10 rounded-lg">
-            <div className="text-center p-6 bg-white rounded-lg shadow-lg max-w-sm">
-              <Lock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 bg-opacity-95 flex items-center justify-center z-10 rounded-lg">
+            <div className="text-center p-6 bg-white rounded-lg shadow-lg max-w-sm border-2 border-blue-200">
+              <Lock className="w-12 h-12 text-blue-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 تسجيل الدخول مطلوب
               </h3>
               <p className="text-gray-600 mb-4">
-                يجب تسجيل الدخول للوصول إلى الاختبارات
+                يجب تسجيل الدخول للوصول إلى هذا الاختبار
               </p>
               <div className="space-y-2">
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-semibold"
                 >
                   تسجيل الدخول
                 </button>
                 <button
                   onClick={() => setShowSignupModal(true)}
-                  className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
+                  className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 font-semibold"
                 >
                   إنشاء حساب جديد
                 </button>
@@ -141,19 +170,10 @@ export function TestAccessGuard({
         <LoginModal
           isOpen={showLoginModal}
           onClose={() => setShowLoginModal(false)}
-          onSwitchToSignup={() => {
-            setShowLoginModal(false);
-            setShowSignupModal(true);
-          }}
         />
-
         <SignupModal
           isOpen={showSignupModal}
           onClose={() => setShowSignupModal(false)}
-          onSwitchToLogin={() => {
-            setShowSignupModal(false);
-            setShowLoginModal(true);
-          }}
         />
       </>
     );
@@ -161,19 +181,6 @@ export function TestAccessGuard({
 
   // إذا كان الاختبار يتطلب اشتراك مميز
   if (accessStatus?.requiresSubscription) {
-    // Get current settings to show accurate information
-    const settings = typeof window !== 'undefined' ?
-      (() => {
-        try {
-          const saved = localStorage.getItem('subscription_settings');
-          return saved ? JSON.parse(saved) : { freeTestsCount: 5 };
-        } catch {
-          return { freeTestsCount: 5 };
-        }
-      })() : { freeTestsCount: 5 };
-
-    const isFreeTest = testIndex < settings.freeTestsCount;
-    
     return (
       <>
         <div className="relative">
@@ -217,29 +224,35 @@ export function TestAccessGuard({
     );
   }
 
-  // حالة خطأ عامة
-  return (
-    <div className="relative">
-      <div className="absolute inset-0 bg-red-50 bg-opacity-75 flex items-center justify-center z-10 rounded-lg">
-        <div className="text-center p-6 bg-white rounded-lg shadow-lg max-w-sm border-2 border-red-200">
-          <Lock className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            غير متاح
-          </h3>
-          <p className="text-gray-600 mb-4">
-            {accessStatus?.reason || 'لا يمكن الوصول إلى هذا الاختبار حالياً'}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="w-full bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700"
-          >
-            إعادة المحاولة
-          </button>
+  // إذا كان الوصول مرفوض لأسباب أخرى
+  if (!accessStatus?.canAccess) {
+    return (
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-pink-50 bg-opacity-95 flex items-center justify-center z-10 rounded-lg">
+          <div className="text-center p-6 bg-white rounded-lg shadow-lg max-w-sm border-2 border-red-200">
+            <Lock className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              الوصول مرفوض
+            </h3>
+            <p className="text-gray-600 mb-4">
+              {accessStatus?.reason || 'لا يمكن الوصول إلى هذا الاختبار'}
+            </p>
+          </div>
+        </div>
+        <div className="filter blur-sm pointer-events-none">
+          {children}
         </div>
       </div>
-      <div className="filter blur-sm pointer-events-none">
-        {children}
-      </div>
+    );
+  }
+
+  // إذا كان الوصول مسموح، عرض المحتوى مع تسجيل الاستخدام
+  return (
+    <div onClick={handleAccessTest}>
+      {children}
     </div>
   );
 }
+
+export default TestAccessGuard;
+
