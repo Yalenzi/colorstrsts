@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/components/auth/AuthProvider';
 import { getCurrentSettings } from '@/hooks/useSubscriptionSettings';
 import { canAccessTest, recordTestUsage } from '@/lib/subscription-service';
 import { Crown, Star, Lock } from 'lucide-react';
