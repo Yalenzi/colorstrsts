@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Admin Theme */
+@import '../styles/admin-theme.css';
+
 /* CSS Variables for themes */
 :root {
   --color-primary: 14 165 233;

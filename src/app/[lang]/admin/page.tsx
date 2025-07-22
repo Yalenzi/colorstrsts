@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { Language } from '@/types';
-import { AdminPage } from '@/components/pages/admin-page';
+import { SimpleAdminDashboard } from '@/components/admin/SimpleAdminDashboard';
 import { getTranslations } from '@/lib/translations';
 
 // Generate static params for supported languages
@@ -31,5 +31,5 @@ export async function generateMetadata({
 
 export default async function AdminPageRoute({ params }: AdminPageProps) {
   const { lang } = await params;
-  return <AdminPage lang={lang} />;
+  return <SimpleAdminDashboard lang={lang} />;
 }
