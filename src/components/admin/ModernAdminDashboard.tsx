@@ -29,6 +29,14 @@ import {
   CogIcon
 } from '@heroicons/react/24/outline';
 import { EnhancedCharts } from './charts/EnhancedCharts';
+import ColorResultsManagement from './ColorResultsManagement';
+import { TestStepsManagement } from './TestStepsManagement';
+import { SubscriptionManagement } from './SubscriptionManagement';
+import { SubscriptionPlansManagement } from './SubscriptionPlansManagement';
+import { TextEditorManagement } from './TextEditorManagement';
+import { DataImportExport } from './DataImportExport';
+import { SystemStatistics } from './SystemStatistics';
+import { EnhancedTestsManagement } from './EnhancedTestsManagement';
 
 interface ModernAdminDashboardProps {
   lang: Language;
@@ -184,7 +192,13 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
     { id: 'dashboard', label: texts.dashboard, icon: HomeIcon },
     { id: 'users', label: texts.users, icon: UsersIcon },
     { id: 'tests', label: texts.tests, icon: BeakerIcon },
-    { id: 'reports', label: texts.reports, icon: DocumentTextIcon },
+    { id: 'color-results', label: isRTL ? 'النتائج اللونية' : 'Color Results', icon: BeakerIcon },
+    { id: 'test-steps', label: isRTL ? 'خطوات الاختبار' : 'Test Steps', icon: DocumentTextIcon },
+    { id: 'subscriptions', label: isRTL ? 'الاشتراكات' : 'Subscriptions', icon: CreditCardIcon },
+    { id: 'subscription-plans', label: isRTL ? 'خطط الاشتراك' : 'Subscription Plans', icon: CreditCardIcon },
+    { id: 'content', label: isRTL ? 'إدارة المحتوى' : 'Content Management', icon: DocumentTextIcon },
+    { id: 'database', label: isRTL ? 'إدارة البيانات' : 'Database Management', icon: ShieldCheckIcon },
+    { id: 'reports', label: texts.reports, icon: ChartBarIcon },
     { id: 'settings', label: texts.settings, icon: CogIcon }
   ];
 
@@ -558,12 +572,43 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
             </div>
           )}
 
+          {activeTab === 'tests' && (
+            <EnhancedTestsManagement lang={lang} />
+          )}
+
+          {activeTab === 'color-results' && (
+            <ColorResultsManagement isRTL={isRTL} lang={lang} />
+          )}
+
+          {activeTab === 'test-steps' && (
+            <TestStepsManagement lang={lang} />
+          )}
+
+          {activeTab === 'subscriptions' && (
+            <SubscriptionManagement isRTL={isRTL} lang={lang} />
+          )}
+
+          {activeTab === 'subscription-plans' && (
+            <SubscriptionPlansManagement isRTL={isRTL} lang={lang} />
+          )}
+
+          {activeTab === 'content' && (
+            <TextEditorManagement isRTL={isRTL} lang={lang} />
+          )}
+
+          {activeTab === 'database' && (
+            <DataImportExport isRTL={isRTL} lang={lang} />
+          )}
+
           {activeTab === 'reports' && (
-            <EnhancedCharts lang={lang} />
+            <div className="space-y-6">
+              <EnhancedCharts lang={lang} />
+              <SystemStatistics isRTL={isRTL} lang={lang} />
+            </div>
           )}
 
           {/* Other tabs content */}
-          {activeTab !== 'dashboard' && activeTab !== 'users' && activeTab !== 'reports' && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
