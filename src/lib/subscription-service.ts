@@ -142,7 +142,7 @@ export async function recordTestUsage(
 }
 
 // Get admin subscription settings
-async function getSubscriptionSettingsAsync() {
+export async function getSubscriptionSettingsAsync() {
   try {
     // Check global settings first for immediate access
     if (typeof window !== 'undefined' && (window as any).subscriptionSettings) {
@@ -170,6 +170,23 @@ async function getSubscriptionSettingsAsync() {
       globalFreeAccess: false,
       specificPremiumTests: []
     };
+  }
+}
+
+// Save admin subscription settings
+export async function saveSubscriptionSettings(settings: any): Promise<void> {
+  try {
+    // Import Firebase function dynamically to avoid SSR issues
+    const { saveSubscriptionSettings: saveFirebaseSettings } = await import('@/lib/firebase-realtime');
+    await saveFirebaseSettings(settings);
+
+    // Update cached settings
+    if (typeof window !== 'undefined') {
+      (window as any).subscriptionSettings = settings;
+    }
+  } catch (error) {
+    console.error('Error saving subscription settings to Firebase:', error);
+    throw new Error('Failed to save subscription settings');
   }
 }
 

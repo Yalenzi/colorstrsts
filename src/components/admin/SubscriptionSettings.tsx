@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { 
-  LockOpenIcon, 
-  CheckCircleIcon, 
-  InformationCircleIcon,
-  CrownIcon,
-  StarIcon,
-  RefreshCwIcon
+import {
+  Unlock,
+  CheckCircle,
+  Info,
+  Crown,
+  Star,
+  RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -186,7 +186,7 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
           size="sm"
           className="flex items-center gap-2"
         >
-          <RefreshCwIcon className="h-4 w-4" />
+          <RefreshCw className="h-4 w-4" />
           {isRTL ? 'تحديث' : 'Refresh'}
         </Button>
       </div>
@@ -195,7 +195,7 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <LockOpenIcon className="h-5 w-5 text-green-600" />
+            <Unlock className="h-5 w-5 text-green-600" />
             {isRTL ? 'التحكم العام في الوصول' : 'Global Access Control'}
           </CardTitle>
           <CardDescription>
@@ -290,7 +290,7 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CrownIcon className="h-5 w-5 text-yellow-600" />
+              <Crown className="h-5 w-5 text-yellow-600" />
               {isRTL ? 'اختبارات مميزة محددة' : 'Specific Premium Tests'}
             </CardTitle>
             <CardDescription>
@@ -316,7 +316,7 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
                       {isRTL ? `اختبار ${testNumber}` : `Test ${testNumber}`}
                     </div>
                     {localSettings.specificPremiumTests.includes(testNumber) && (
-                      <CrownIcon className="h-4 w-4 mx-auto mt-1 text-yellow-600" />
+                      <Crown className="h-4 w-4 mx-auto mt-1 text-yellow-600" />
                     )}
                   </div>
                 </div>
@@ -331,7 +331,7 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
 
       {/* Current Status */}
       <Alert>
-        <InformationCircleIcon className="h-4 w-4" />
+        <Info className="h-4 w-4" />
         <AlertDescription>
           <div className="space-y-2">
             <p className="font-medium">
@@ -340,20 +340,20 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
             <ul className="text-sm space-y-1">
               {localSettings.globalFreeAccess ? (
                 <li className="flex items-center gap-2 text-green-600">
-                  <CheckCircleIcon className="h-4 w-4" />
+                  <CheckCircle className="h-4 w-4" />
                   {isRTL ? 'جميع الاختبارات مجانية للجميع' : 'All tests are free for everyone'}
                 </li>
               ) : (
                 <>
                   <li className="flex items-center gap-2">
-                    <CheckCircleIcon className="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600" />
                     {isRTL
                       ? `${localSettings.freeTestsCount} اختبارات مجانية متاحة`
                       : `${localSettings.freeTestsCount} free tests available`
                     }
                   </li>
                   <li className="flex items-center gap-2">
-                    <StarIcon className="h-4 w-4 text-yellow-600" />
+                    <Star className="h-4 w-4 text-yellow-600" />
                     {isRTL
                       ? `${localSettings.specificPremiumTests.length} اختبارات تتطلب اشتراك مميز`
                       : `${localSettings.specificPremiumTests.length} tests require premium subscription`

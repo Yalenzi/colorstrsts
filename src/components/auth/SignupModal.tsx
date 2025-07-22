@@ -261,3 +261,5 @@ export function SignupModal({ isOpen, onClose, onSwitchToLogin }: SignupModalPro
     </div>
   );
 }
+
+export default SignupModal;
