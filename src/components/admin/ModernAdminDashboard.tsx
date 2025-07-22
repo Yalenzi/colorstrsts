@@ -28,6 +28,7 @@ import {
   UserGroupIcon,
   CogIcon
 } from '@heroicons/react/24/outline';
+import { EnhancedCharts } from './charts/EnhancedCharts';
 
 interface ModernAdminDashboardProps {
   lang: Language;
@@ -557,8 +558,12 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
             </div>
           )}
 
-          {/* Other tabs content can be added here */}
-          {activeTab !== 'dashboard' && activeTab !== 'users' && (
+          {activeTab === 'reports' && (
+            <EnhancedCharts lang={lang} />
+          )}
+
+          {/* Other tabs content */}
+          {activeTab !== 'dashboard' && activeTab !== 'users' && activeTab !== 'reports' && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
