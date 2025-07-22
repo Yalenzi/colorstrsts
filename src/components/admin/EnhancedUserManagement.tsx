@@ -54,6 +54,7 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('joinDate');
 
@@ -155,22 +156,48 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
     setShowEditModal(true);
   };
 
+  // عرض تفاصيل المستخدم
+  const handleViewUser = (user: User) => {
+    setSelectedUser(user);
+    setShowViewModal(true);
+  };
+
   // حذف مستخدم
   const handleDeleteUser = (userId: string) => {
     if (confirm(isRTL ? 'هل أنت متأكد من حذف هذا المستخدم؟' : 'Are you sure you want to delete this user?')) {
       setUsers(users.filter(user => user.id !== userId));
       toast.success(isRTL ? 'تم حذف المستخدم بنجاح' : 'User deleted successfully');
+
+      // حفظ في localStorage
+      const updatedUsers = users.filter(user => user.id !== userId);
+      localStorage.setItem('admin_users', JSON.stringify(updatedUsers));
     }
   };
 
   // تغيير حالة المستخدم
   const handleToggleUserStatus = (userId: string) => {
-    setUsers(users.map(user => 
-      user.id === userId 
+    const updatedUsers = users.map(user =>
+      user.id === userId
         ? { ...user, status: user.status === 'active' ? 'inactive' : 'active' }
         : user
-    ));
+    );
+    setUsers(updatedUsers);
+
+    // حفظ في localStorage
+    localStorage.setItem('admin_users', JSON.stringify(updatedUsers));
+
     toast.success(isRTL ? 'تم تغيير حالة المستخدم' : 'User status changed');
+  };
+
+  // تحديث قائمة المستخدمين
+  const handleRefreshUsers = () => {
+    setLoading(true);
+    // محاكاة تحديث البيانات
+    setTimeout(() => {
+      loadUsers();
+      setLoading(false);
+      toast.success(isRTL ? 'تم تحديث قائمة المستخدمين' : 'Users list refreshed');
+    }, 1000);
   };
 
   // رندر شارة الحالة
@@ -240,6 +267,15 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
           <Button onClick={handleAddUser} className="bg-blue-600 hover:bg-blue-700">
             <Plus className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
             {isRTL ? 'إضافة مستخدم' : 'Add User'}
+          </Button>
+          <Button
+            onClick={handleRefreshUsers}
+            variant="outline"
+            disabled={loading}
+            className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+          >
+            <UserCheck className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
+            {isRTL ? 'تحديث' : 'Refresh'}
           </Button>
           <Button variant="outline">
             <Upload className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
@@ -446,12 +482,22 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
                         </div>
                       </td>
                       <td className="py-4 px-4">
-                        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                        <div className="flex items-center space-x-1 rtl:space-x-reverse">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleViewUser(user)}
+                            className="text-gray-600 hover:text-gray-700 hover:bg-gray-50"
+                            title={isRTL ? 'عرض التفاصيل' : 'View Details'}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleEditUser(user)}
                             className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            title={isRTL ? 'تعديل' : 'Edit'}
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
@@ -460,6 +506,7 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
                             size="sm"
                             onClick={() => handleToggleUserStatus(user.id)}
                             className={user.status === 'active' ? 'text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50' : 'text-green-600 hover:text-green-700 hover:bg-green-50'}
+                            title={user.status === 'active' ? (isRTL ? 'إلغاء التفعيل' : 'Deactivate') : (isRTL ? 'تفعيل' : 'Activate')}
                           >
                             {user.status === 'active' ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                           </Button>
@@ -468,6 +515,7 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
                             size="sm"
                             onClick={() => handleDeleteUser(user.id)}
                             className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            title={isRTL ? 'حذف' : 'Delete'}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -484,8 +532,8 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
 
       {/* Modals will be added here */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-white bg-opacity-95 dark:bg-gray-900 dark:bg-opacity-95 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md shadow-2xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 {isRTL ? 'إضافة مستخدم جديد' : 'Add New User'}
@@ -573,6 +621,143 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
                   className="flex-1"
                 >
                   {isRTL ? 'إلغاء' : 'Cancel'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View User Modal */}
+      {showViewModal && selectedUser && (
+        <div className="fixed inset-0 bg-white bg-opacity-95 dark:bg-gray-900 dark:bg-opacity-95 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                {isRTL ? 'تفاصيل المستخدم' : 'User Details'}
+              </h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowViewModal(false);
+                  setSelectedUser(null);
+                }}
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <div className="space-y-6">
+              {/* User Avatar and Basic Info */}
+              <div className="flex items-center space-x-4 rtl:space-x-reverse p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                  <span className="text-blue-600 dark:text-blue-400 font-bold text-xl">
+                    {selectedUser.name?.charAt(0) || selectedUser.email.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    {selectedUser.name || (isRTL ? 'غير محدد' : 'Not specified')}
+                  </h4>
+                  <p className="text-gray-600 dark:text-gray-400">{selectedUser.email}</p>
+                  <div className="flex items-center space-x-2 rtl:space-x-reverse mt-2">
+                    {renderStatusBadge(selectedUser.status)}
+                    {renderSubscriptionBadge(selectedUser.subscriptionStatus)}
+                    {renderRoleBadge(selectedUser.role)}
+                  </div>
+                </div>
+              </div>
+
+              {/* Detailed Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {isRTL ? 'تاريخ الانضمام' : 'Join Date'}
+                    </label>
+                    <p className="text-gray-900 dark:text-gray-100">
+                      {new Date(selectedUser.joinDate).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {isRTL ? 'آخر نشاط' : 'Last Active'}
+                    </label>
+                    <p className="text-gray-900 dark:text-gray-100">
+                      {new Date(selectedUser.lastActive).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {isRTL ? 'عدد الاختبارات' : 'Tests Count'}
+                    </label>
+                    <p className="text-gray-900 dark:text-gray-100 flex items-center">
+                      <TestTube className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0 text-gray-400" />
+                      {selectedUser.testsCount}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {isRTL ? 'حالة الحساب' : 'Account Status'}
+                    </label>
+                    <p className="text-gray-900 dark:text-gray-100">
+                      {renderStatusBadge(selectedUser.status)}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {isRTL ? 'نوع الاشتراك' : 'Subscription Type'}
+                    </label>
+                    <p className="text-gray-900 dark:text-gray-100">
+                      {renderSubscriptionBadge(selectedUser.subscriptionStatus)}
+                    </p>
+                  </div>
+                  {selectedUser.subscriptionExpiry && (
+                    <div>
+                      <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        {isRTL ? 'انتهاء الاشتراك' : 'Subscription Expiry'}
+                      </label>
+                      <p className="text-gray-900 dark:text-gray-100">
+                        {new Date(selectedUser.subscriptionExpiry).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}
+                      </p>
+                    </div>
+                  )}
+                  <div>
+                    <label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {isRTL ? 'الدور' : 'Role'}
+                    </label>
+                    <p className="text-gray-900 dark:text-gray-100">
+                      {renderRoleBadge(selectedUser.role)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex space-x-2 rtl:space-x-reverse pt-4 border-t">
+                <Button
+                  onClick={() => {
+                    setShowViewModal(false);
+                    handleEditUser(selectedUser);
+                  }}
+                  className="flex-1"
+                >
+                  <Edit className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                  {isRTL ? 'تعديل المستخدم' : 'Edit User'}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowViewModal(false);
+                    setSelectedUser(null);
+                  }}
+                  className="flex-1"
+                >
+                  {isRTL ? 'إغلاق' : 'Close'}
                 </Button>
               </div>
             </div>

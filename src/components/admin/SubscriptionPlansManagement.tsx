@@ -675,16 +675,21 @@ export function SubscriptionPlansManagement({ lang }: SubscriptionPlansManagemen
                     variant="ghost"
                     size="sm"
                     onClick={() => setEditingPlan(plan)}
+                    className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                    title={isRTL ? 'تعديل الخطة' : 'Edit Plan'}
                   >
-                    <PencilIcon className="h-4 w-4" />
+                    <PencilIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                    <span className="text-sm">{isRTL ? 'تعديل' : 'Edit'}</span>
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setDeleteConfirm(plan.id)}
-                    className="text-red-600 hover:text-red-700"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    title={isRTL ? 'حذف الخطة' : 'Delete Plan'}
                   >
-                    <TrashIcon className="h-4 w-4" />
+                    <TrashIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                    <span className="text-sm">{isRTL ? 'حذف' : 'Delete'}</span>
                   </Button>
                 </div>
               </div>
@@ -693,10 +698,164 @@ export function SubscriptionPlansManagement({ lang }: SubscriptionPlansManagemen
         ))}
       </div>
 
+      {/* Edit Plan Modal */}
+      {editingPlan && (
+        <div className="fixed inset-0 bg-white bg-opacity-95 dark:bg-gray-900 dark:bg-opacity-95 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 dark:border-gray-700">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse">
+                <PencilIcon className="h-5 w-5 text-blue-600" />
+                <span>{lang === 'ar' ? 'تعديل الخطة' : 'Edit Plan'}</span>
+              </CardTitle>
+              <CardDescription>
+                {lang === 'ar' ? 'تعديل تفاصيل خطة الاشتراك' : 'Edit subscription plan details'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Plan Names */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'اسم الخطة (إنجليزي)' : 'Plan Name (English)'}
+                  </label>
+                  <Input
+                    value={editingPlan.name_en}
+                    onChange={(e) => setEditingPlan({...editingPlan, name_en: e.target.value})}
+                    placeholder="Professional Plan"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'اسم الخطة (عربي)' : 'Plan Name (Arabic)'}
+                  </label>
+                  <Input
+                    value={editingPlan.name_ar}
+                    onChange={(e) => setEditingPlan({...editingPlan, name_ar: e.target.value})}
+                    placeholder="الخطة المهنية"
+                  />
+                </div>
+              </div>
+
+              {/* Descriptions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'الوصف (إنجليزي)' : 'Description (English)'}
+                  </label>
+                  <Textarea
+                    value={editingPlan.description_en}
+                    onChange={(e) => setEditingPlan({...editingPlan, description_en: e.target.value})}
+                    placeholder="Perfect for professional use"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'الوصف (عربي)' : 'Description (Arabic)'}
+                  </label>
+                  <Textarea
+                    value={editingPlan.description_ar}
+                    onChange={(e) => setEditingPlan({...editingPlan, description_ar: e.target.value})}
+                    placeholder="مثالية للاستخدام المهني"
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              {/* Pricing */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'السعر الشهري' : 'Monthly Price'}
+                  </label>
+                  <Input
+                    type="number"
+                    value={editingPlan.monthly_price}
+                    onChange={(e) => setEditingPlan({...editingPlan, monthly_price: Number(e.target.value)})}
+                    placeholder="199"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'السعر السنوي' : 'Yearly Price'}
+                  </label>
+                  <Input
+                    type="number"
+                    value={editingPlan.yearly_price}
+                    onChange={(e) => setEditingPlan({...editingPlan, yearly_price: Number(e.target.value)})}
+                    placeholder="1999"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'العملة' : 'Currency'}
+                  </label>
+                  <select
+                    value={editingPlan.currency}
+                    onChange={(e) => setEditingPlan({...editingPlan, currency: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="SAR">SAR</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Settings */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {lang === 'ar' ? 'عدد الاختبارات الشهرية' : 'Monthly Tests Limit'}
+                  </label>
+                  <Input
+                    type="number"
+                    value={editingPlan.max_tests_per_month === -1 ? '' : editingPlan.max_tests_per_month}
+                    onChange={(e) => setEditingPlan({...editingPlan, max_tests_per_month: e.target.value === '' ? -1 : Number(e.target.value)})}
+                    placeholder="200 (leave empty for unlimited)"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2 rtl:space-x-reverse">
+                    <input
+                      type="checkbox"
+                      checked={editingPlan.is_popular}
+                      onChange={(e) => setEditingPlan({...editingPlan, is_popular: e.target.checked})}
+                      className="rounded"
+                    />
+                    <span className="text-sm">{lang === 'ar' ? 'خطة شائعة' : 'Popular Plan'}</span>
+                  </label>
+                  <label className="flex items-center space-x-2 rtl:space-x-reverse">
+                    <input
+                      type="checkbox"
+                      checked={editingPlan.is_active}
+                      onChange={(e) => setEditingPlan({...editingPlan, is_active: e.target.checked})}
+                      className="rounded"
+                    />
+                    <span className="text-sm">{lang === 'ar' ? 'خطة نشطة' : 'Active Plan'}</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-2 rtl:space-x-reverse pt-4 border-t">
+                <Button variant="outline" onClick={() => setEditingPlan(null)}>
+                  {lang === 'ar' ? 'إلغاء' : 'Cancel'}
+                </Button>
+                <Button onClick={() => handleEditPlan(editingPlan)}>
+                  <CheckIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                  {lang === 'ar' ? 'حفظ التغييرات' : 'Save Changes'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Delete Confirmation Dialog */}
       {deleteConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-md">
+        <div className="fixed inset-0 bg-white bg-opacity-95 dark:bg-gray-900 dark:bg-opacity-95 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-md shadow-2xl border border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse text-red-600">
                 <ExclamationTriangleIcon className="h-5 w-5" />

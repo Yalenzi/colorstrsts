@@ -129,10 +129,15 @@ export function ReportsSystem({ lang }: ReportsSystemProps) {
   };
 
   const exportToPDF = async () => {
-    if (!reportData) return;
+    if (!reportData) {
+      alert(lang === 'ar' ? 'لا توجد بيانات للتصدير' : 'No data to export');
+      return;
+    }
 
     setGenerating(true);
     try {
+      console.log('🔄 Starting PDF export...');
+
       const reportTitle = lang === 'ar'
         ? `تقرير ${reportTypes.find(t => t.id === filters.reportType)?.name || 'عام'}`
         : `${reportTypes.find(t => t.id === filters.reportType)?.name || 'General'} Report`;
@@ -148,12 +153,96 @@ export function ReportsSystem({ lang }: ReportsSystemProps) {
         orientation: 'portrait'
       });
 
+      console.log('✅ PDF export completed successfully');
+
+      // Show success message
+      setTimeout(() => {
+        alert(lang === 'ar' ? 'تم تصدير التقرير بنجاح!' : 'Report exported successfully!');
+      }, 500);
+
     } catch (error) {
-      console.error('Error exporting PDF:', error);
-      alert(lang === 'ar' ? 'خطأ في تصدير PDF' : 'Error exporting PDF');
+      console.error('❌ Error exporting PDF:', error);
+
+      // Provide more helpful error messages
+      let errorMessage = lang === 'ar' ? 'خطأ في تصدير PDF' : 'Error exporting PDF';
+
+      if (error instanceof Error) {
+        if (error.message.includes('jsPDF')) {
+          errorMessage = lang === 'ar'
+            ? 'مكتبة PDF غير متاحة. سيتم استخدام طريقة بديلة.'
+            : 'PDF library unavailable. Using fallback method.';
+        } else if (error.message.includes('browser')) {
+          errorMessage = lang === 'ar'
+            ? 'يتطلب تصدير PDF متصفح ويب'
+            : 'PDF export requires a web browser';
+        }
+      }
+
+      alert(errorMessage);
+
+      // Try fallback method
+      try {
+        console.log('🔄 Attempting fallback export method...');
+        // Create simple HTML report as fallback
+        const htmlContent = createSimpleHTMLReport(reportData, reportTitle, lang);
+        downloadHTMLReport(htmlContent, reportTitle);
+      } catch (fallbackError) {
+        console.error('❌ Fallback method also failed:', fallbackError);
+        alert(lang === 'ar' ? 'فشل في جميع طرق التصدير' : 'All export methods failed');
+      }
     } finally {
       setGenerating(false);
     }
+  };
+
+  // Helper function to create simple HTML report
+  const createSimpleHTMLReport = (data: any, title: string, language: string) => {
+    const isRTL = language === 'ar';
+    return `
+      <!DOCTYPE html>
+      <html dir="${isRTL ? 'rtl' : 'ltr'}">
+      <head>
+        <meta charset="UTF-8">
+        <title>${title}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; direction: ${isRTL ? 'rtl' : 'ltr'}; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+          .stat-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+          .stat-number { font-size: 24px; font-weight: bold; color: #2563eb; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>${title}</h1>
+          <p>${isRTL ? 'تاريخ التقرير:' : 'Report Date:'} ${new Date().toLocaleDateString()}</p>
+        </div>
+        <div class="stats">
+          <div class="stat-card">
+            <h3>${isRTL ? 'إجمالي الاختبارات' : 'Total Tests'}</h3>
+            <div class="stat-number">${data.totalTests}</div>
+          </div>
+          <div class="stat-card">
+            <h3>${isRTL ? 'أنواع الاختبارات' : 'Test Types'}</h3>
+            <div class="stat-number">${Object.keys(data.testsByType).length}</div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  };
+
+  // Helper function to download HTML report
+  const downloadHTMLReport = (htmlContent: string, title: string) => {
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${title.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (

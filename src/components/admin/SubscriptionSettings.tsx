@@ -17,10 +17,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-interface Language {
-  code: string;
-  name: string;
-}
+import { Language } from '@/types';
 
 interface SubscriptionSettingsProps {
   lang: Language;
@@ -35,7 +32,7 @@ interface TestAccessSettings {
 }
 
 export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps) {
-  const isRTL = lang.code === 'ar';
+  const isRTL = lang === 'ar';
   
   const {
     settings,
@@ -85,19 +82,38 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
       setSaving(true);
       console.log('💾 Saving subscription settings:', localSettings);
       
-      const success = await updateSettings(localSettings);
-      
-      if (success) {
-        toast.success(
-          isRTL ? 'تم حفظ الإعدادات بنجاح!' : 'Settings saved successfully!'
-        );
-        setHasChanges(false);
-        
-        // إرسال تحديث فوري لجميع المكونات
+      // محاولة الحفظ في Firebase أولاً
+      let success = false;
+      try {
+        success = await updateSettings(localSettings);
+      } catch (firebaseError) {
+        console.warn('⚠️ Firebase save failed, using localStorage fallback:', firebaseError);
+
+        // حفظ في localStorage كبديل
+        localStorage.setItem('subscription_settings', JSON.stringify(localSettings));
+
+        // إرسال تحديث فوري للمكونات الأخرى
         window.dispatchEvent(new CustomEvent('subscriptionSettingsUpdated', {
           detail: localSettings
         }));
-        
+
+        success = true;
+
+        toast.success(
+          isRTL
+            ? 'تم حفظ الإعدادات محلياً (Firebase غير متاح)'
+            : 'Settings saved locally (Firebase unavailable)'
+        );
+      }
+
+      if (success) {
+        if (!localStorage.getItem('firebase_warning_shown')) {
+          toast.success(
+            isRTL ? 'تم حفظ الإعدادات بنجاح!' : 'Settings saved successfully!'
+          );
+        }
+        setHasChanges(false);
+
         console.log('✅ Settings saved and broadcasted');
       } else {
         throw new Error('Failed to save settings');
@@ -387,8 +403,16 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
       </Alert>
 
       {/* Save Button */}
-      {hasChanges && !localSettings.globalFreeAccess && (
-        <div className="flex justify-end">
+      {hasChanges && (
+        <div className="flex justify-end space-x-2 rtl:space-x-reverse">
+          <Button
+            variant="outline"
+            onClick={handleRefreshSettings}
+            disabled={saving}
+          >
+            <RefreshCw className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+            {isRTL ? 'إعادة تحميل' : 'Refresh'}
+          </Button>
           <Button
             onClick={handleSaveSettings}
             disabled={saving}
@@ -396,11 +420,14 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
           >
             {saving ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 rtl:ml-2 rtl:mr-0"></div>
                 {isRTL ? 'جاري الحفظ...' : 'Saving...'}
               </>
             ) : (
-              isRTL ? 'حفظ الإعدادات' : 'Save Settings'
+              <>
+                <CheckCircle className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                {isRTL ? 'حفظ التغييرات' : 'Save Changes'}
+              </>
             )}
           </Button>
         </div>

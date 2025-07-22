@@ -49,6 +49,12 @@ export async function generatePDFReport(
       throw new Error('Report data is required');
     }
 
+    // Check if jsPDF is available
+    if (typeof jsPDF === 'undefined') {
+      console.warn('jsPDF not available, using fallback method');
+      return generateFallbackReport(data, options);
+    }
+
     // Clean and validate data to prevent undefined values
     const cleanData: ReportData = {
       totalTests: data.totalTests || 0,
@@ -454,5 +460,265 @@ export function generateDataExportPDF(
   } catch (error) {
     console.error('Error generating data export PDF:', error);
     throw error;
+  }
+}
+
+/**
+ * Fallback method for PDF generation when jsPDF is not available
+ */
+async function generateFallbackReport(data: ReportData, options: PDFOptions): Promise<void> {
+  try {
+    const isRTL = options.language === 'ar';
+
+    // Create HTML content for the report
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html dir="${isRTL ? 'rtl' : 'ltr'}" lang="${options.language}">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${options.title}</title>
+        <style>
+          body {
+            font-family: ${isRTL ? 'Tahoma, Arial' : 'Arial, sans-serif'};
+            margin: 20px;
+            line-height: 1.6;
+            color: #333;
+            direction: ${isRTL ? 'rtl' : 'ltr'};
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 20px;
+          }
+          .header h1 {
+            color: #2563eb;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+          }
+          .header p {
+            color: #666;
+            margin: 5px 0;
+          }
+          .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+          }
+          .stat-card {
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9fafb;
+            text-align: center;
+          }
+          .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 10px 0;
+          }
+          .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+          }
+          .table th,
+          .table td {
+            padding: 12px 15px;
+            text-align: ${isRTL ? 'right' : 'left'};
+            border-bottom: 1px solid #e5e7eb;
+          }
+          .table th {
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
+          }
+          .table tr:hover {
+            background: #f9fafb;
+          }
+          .section {
+            margin: 40px 0;
+          }
+          .section h2 {
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+          }
+          @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+          }
+          .print-button {
+            position: fixed;
+            top: 20px;
+            ${isRTL ? 'left' : 'right'}: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1000;
+          }
+          .print-button:hover {
+            background: #1d4ed8;
+          }
+        </style>
+      </head>
+      <body>
+        <button class="print-button no-print" onclick="window.print()">
+          ${isRTL ? '🖨️ طباعة' : '🖨️ Print'}
+        </button>
+
+        <div class="header">
+          <h1>${options.title}</h1>
+          ${options.subtitle ? `<p>${options.subtitle}</p>` : ''}
+          <p>${isRTL ? 'تاريخ التقرير:' : 'Report Date:'} ${new Date().toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">${isRTL ? 'إجمالي الاختبارات' : 'Total Tests'}</div>
+            <div class="stat-number">${data.totalTests}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">${isRTL ? 'أنواع الاختبارات' : 'Test Types'}</div>
+            <div class="stat-number">${Object.keys(data.testsByType).length}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">${isRTL ? 'الاختبارات الشائعة' : 'Popular Tests'}</div>
+            <div class="stat-number">${data.popularTests.length}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">${isRTL ? 'الاستخدام اليومي' : 'Daily Usage'}</div>
+            <div class="stat-number">${data.dailyUsage.reduce((sum, day) => sum + day.count, 0)}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>${isRTL ? 'الاختبارات حسب النوع' : 'Tests by Type'}</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>${isRTL ? 'نوع الاختبار' : 'Test Type'}</th>
+                <th>${isRTL ? 'عدد الاستخدامات' : 'Usage Count'}</th>
+                <th>${isRTL ? 'النسبة المئوية' : 'Percentage'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Object.entries(data.testsByType).map(([testType, count]) => {
+                const percentage = ((count / data.totalTests) * 100).toFixed(1);
+                return `
+                  <tr>
+                    <td>${testType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</td>
+                    <td>${count}</td>
+                    <td>${percentage}%</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        ${data.popularTests.length > 0 ? `
+        <div class="section">
+          <h2>${isRTL ? 'الاختبارات الأكثر شيوعاً' : 'Most Popular Tests'}</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>${isRTL ? 'اسم الاختبار' : 'Test Name'}</th>
+                <th>${isRTL ? 'عدد الاستخدامات' : 'Usage Count'}</th>
+                <th>${isRTL ? 'النسبة المئوية' : 'Percentage'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.popularTests.map(test => {
+                const percentage = ((test.count / data.totalTests) * 100).toFixed(1);
+                return `
+                  <tr>
+                    <td>${test.name}</td>
+                    <td>${test.count}</td>
+                    <td>${percentage}%</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        ${data.dailyUsage.length > 0 ? `
+        <div class="section">
+          <h2>${isRTL ? 'الاستخدام اليومي' : 'Daily Usage'}</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>${isRTL ? 'التاريخ' : 'Date'}</th>
+                <th>${isRTL ? 'عدد الاختبارات' : 'Test Count'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.dailyUsage.map(day => `
+                <tr>
+                  <td>${new Date(day.date).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</td>
+                  <td>${day.count}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        ` : ''}
+
+        <div class="section" style="margin-top: 50px; text-align: center; color: #6b7280; font-size: 12px;">
+          <p>${isRTL ? 'تم إنشاء هذا التقرير بواسطة نظام إدارة الاختبارات الكيميائية' : 'Generated by Chemical Tests Management System'}</p>
+          <p>${new Date().toLocaleString(isRTL ? 'ar-SA' : 'en-US')}</p>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // Open in new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+
+      // Wait for content to load then focus for printing
+      printWindow.onload = () => {
+        printWindow.focus();
+      };
+    } else {
+      // Fallback: download as HTML file
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${options.title.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    console.log('✅ Fallback report generated successfully');
+
+  } catch (error) {
+    console.error('Error in fallback report generation:', error);
+    throw new Error('Failed to generate report using fallback method');
   }
 }
