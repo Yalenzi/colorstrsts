@@ -39,6 +39,11 @@ export async function generatePDFReport(
   options: PDFOptions
 ): Promise<void> {
   try {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined') {
+      throw new Error('PDF generation is only available in browser environment');
+    }
+
     // Validate input data
     if (!data) {
       throw new Error('Report data is required');
@@ -306,11 +311,38 @@ export async function generatePDFReport(
 
     // Save the PDF
     const fileName = `${options.title.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`;
-    doc.save(fileName);
+
+    // Try to save the PDF with error handling
+    try {
+      doc.save(fileName);
+      console.log('✅ PDF saved successfully:', fileName);
+    } catch (saveError) {
+      console.error('Error saving PDF:', saveError);
+      // Fallback: try to download as blob
+      const pdfBlob = doc.output('blob');
+      const url = URL.createObjectURL(pdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
 
   } catch (error) {
     console.error('Error generating PDF report:', error);
-    throw error;
+
+    // Provide more specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('jsPDF')) {
+        throw new Error('PDF library not available. Please refresh the page and try again.');
+      } else if (error.message.includes('browser')) {
+        throw new Error('PDF generation requires a browser environment.');
+      }
+    }
+
+    throw new Error('Failed to generate PDF report. Please try again.');
   }
 }
 

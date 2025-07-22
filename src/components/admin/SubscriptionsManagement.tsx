@@ -16,6 +16,7 @@ interface Subscription {
   endDate: string;
   amount: number;
   paymentMethod: 'stc_pay';
+  updatedAt?: string;
 }
 
 export function SubscriptionsManagement({ lang }: { lang: string }) {
@@ -32,6 +33,45 @@ export function SubscriptionsManagement({ lang }: { lang: string }) {
       const stored = localStorage.getItem('subscriptions');
       if (stored) {
         setSubscriptions(JSON.parse(stored));
+      } else {
+        // إضافة بيانات تجريبية
+        const mockSubscriptions: Subscription[] = [
+          {
+            id: 'sub_1',
+            userId: 'user_1',
+            userEmail: 'user1@example.com',
+            plan: 'monthly',
+            status: 'active',
+            startDate: '2024-01-01',
+            endDate: '2024-02-01',
+            amount: 29.99,
+            paymentMethod: 'stc_pay'
+          },
+          {
+            id: 'sub_2',
+            userId: 'user_2',
+            userEmail: 'user2@example.com',
+            plan: 'yearly',
+            status: 'active',
+            startDate: '2024-01-01',
+            endDate: '2025-01-01',
+            amount: 299.99,
+            paymentMethod: 'stc_pay'
+          },
+          {
+            id: 'sub_3',
+            userId: 'user_3',
+            userEmail: 'user3@example.com',
+            plan: 'monthly',
+            status: 'expired',
+            startDate: '2023-12-01',
+            endDate: '2024-01-01',
+            amount: 29.99,
+            paymentMethod: 'stc_pay'
+          }
+        ];
+        setSubscriptions(mockSubscriptions);
+        localStorage.setItem('subscriptions', JSON.stringify(mockSubscriptions));
       }
     } catch (error) {
       console.error('Error loading subscriptions:', error);
@@ -40,16 +80,24 @@ export function SubscriptionsManagement({ lang }: { lang: string }) {
     }
   };
 
-  const updateSubscriptionStatus = async (id: string, status: string) => {
+  const updateSubscriptionStatus = async (id: string, newStatus: 'active' | 'cancelled' | 'expired') => {
     try {
-      const updated = subscriptions.map(sub => 
-        sub.id === id ? { ...sub, status } : sub
+      setLoading(true);
+      const updated = subscriptions.map(sub =>
+        sub.id === id ? { ...sub, status: newStatus, updatedAt: new Date().toISOString() } : sub
       );
       setSubscriptions(updated);
       localStorage.setItem('subscriptions', JSON.stringify(updated));
+
+      // محاكاة API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       toast.success(isRTL ? 'تم تحديث الاشتراك بنجاح' : 'Subscription updated successfully');
     } catch (error) {
+      console.error('Error updating subscription:', error);
       toast.error(isRTL ? 'خطأ في تحديث الاشتراك' : 'Error updating subscription');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,8 +115,19 @@ export function SubscriptionsManagement({ lang }: { lang: string }) {
         <CardTitle>{isRTL ? 'إدارة الاشتراكات' : 'Subscriptions Management'}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {subscriptions.map((subscription) => (
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="ml-2">{isRTL ? 'جاري التحميل...' : 'Loading...'}</span>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {subscriptions.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                {isRTL ? 'لا توجد اشتراكات' : 'No subscriptions found'}
+              </div>
+            ) : (
+              subscriptions.map((subscription) => (
             <div key={subscription.id} className="border rounded-lg p-4">
               <div className="flex justify-between items-center">
                 <div>
@@ -101,8 +160,10 @@ export function SubscriptionsManagement({ lang }: { lang: string }) {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+              ))
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

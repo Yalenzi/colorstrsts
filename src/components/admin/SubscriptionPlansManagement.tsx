@@ -73,8 +73,16 @@ export function SubscriptionPlansManagement({ lang }: SubscriptionPlansManagemen
   const loadPlans = async () => {
     try {
       setLoading(true);
-      
-      // Mock data for subscription plans
+
+      // تحميل الخطط من localStorage أولاً
+      const storedPlans = localStorage.getItem('subscription_plans');
+      if (storedPlans) {
+        setPlans(JSON.parse(storedPlans));
+        setLoading(false);
+        return;
+      }
+
+      // إذا لم توجد خطط محفوظة، استخدم البيانات الافتراضية
       const mockPlans: SubscriptionPlan[] = [
         {
           id: 'basic-plan',
@@ -164,8 +172,10 @@ export function SubscriptionPlansManagement({ lang }: SubscriptionPlansManagemen
       ];
 
       setPlans(mockPlans);
+      // حفظ البيانات الافتراضية في localStorage
+      localStorage.setItem('subscription_plans', JSON.stringify(mockPlans));
       console.log(`💳 Loaded ${mockPlans.length} subscription plans`);
-      
+
     } catch (error) {
       console.error('Error loading subscription plans:', error);
       toast.error(lang === 'ar' ? 'خطأ في تحميل خطط الاشتراك' : 'Error loading subscription plans');
@@ -199,8 +209,10 @@ export function SubscriptionPlansManagement({ lang }: SubscriptionPlansManagemen
         updated_at: new Date().toISOString()
       };
 
-      setPlans(prev => [...prev, newPlan]);
-      
+      const updatedPlans = [...plans, newPlan];
+      setPlans(updatedPlans);
+      localStorage.setItem('subscription_plans', JSON.stringify(updatedPlans));
+
       // Reset form
       setFormData({
         name_en: '',
@@ -235,6 +247,7 @@ export function SubscriptionPlansManagement({ lang }: SubscriptionPlansManagemen
       );
       
       setPlans(updatedPlans);
+      localStorage.setItem('subscription_plans', JSON.stringify(updatedPlans));
       setEditingPlan(null);
       toast.success(lang === 'ar' ? 'تم تحديث الخطة بنجاح' : 'Plan updated successfully');
       
@@ -246,7 +259,9 @@ export function SubscriptionPlansManagement({ lang }: SubscriptionPlansManagemen
 
   const handleDeletePlan = async (planId: string) => {
     try {
-      setPlans(prev => prev.filter(p => p.id !== planId));
+      const updatedPlans = plans.filter(p => p.id !== planId);
+      setPlans(updatedPlans);
+      localStorage.setItem('subscription_plans', JSON.stringify(updatedPlans));
       setDeleteConfirm(null);
       toast.success(lang === 'ar' ? 'تم حذف الخطة بنجاح' : 'Plan deleted successfully');
       

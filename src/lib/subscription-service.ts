@@ -196,13 +196,27 @@ export async function canAccessTest(uid: string, testIndex: number): Promise<{
   reason?: string;
   requiresSubscription?: boolean;
 }> {
-  // Get admin settings from Firebase
-  const settings = await getSubscriptionSettingsAsync();
+  try {
+    // Get admin settings from Firebase
+    const settings = await getSubscriptionSettingsAsync();
 
-  // If global free access is enabled, allow all tests
-  if (settings.globalFreeAccess) {
-    return { canAccess: true };
-  }
+    // If global free access is enabled, allow all tests
+    if (settings.globalFreeAccess) {
+      return { canAccess: true };
+    }
+
+    // إذا لم يكن هناك uid (مستخدم غير مسجل)
+    if (!uid) {
+      // السماح بالاختبارات المجانية فقط
+      if (settings.freeTestsEnabled && testIndex < settings.freeTestsCount) {
+        return { canAccess: true };
+      }
+      return {
+        canAccess: false,
+        reason: 'Login required for advanced tests',
+        requiresSubscription: false
+      };
+    }
 
   let userProfile = await getUserProfile(uid);
 
@@ -234,9 +248,9 @@ export async function canAccessTest(uid: string, testIndex: number): Promise<{
   }
 
   // Check if this specific test requires premium
-  if (settings.specificPremiumTests && settings.specificPremiumTests.includes(testIndex + 1)) {
+  if (settings.specificPremiumTests && Array.isArray(settings.specificPremiumTests) && settings.specificPremiumTests.includes(testIndex + 1)) {
     // This test specifically requires premium
-    if (userProfile.subscription?.status === 'active' && userProfile.subscription?.plan === 'premium') {
+    if (userProfile?.subscription?.status === 'active' && userProfile?.subscription?.plan === 'premium') {
       return { canAccess: true };
     }
     return {
@@ -265,6 +279,15 @@ export async function canAccessTest(uid: string, testIndex: number): Promise<{
 
   // Default allow access
   return { canAccess: true };
+
+  } catch (error) {
+    console.error('Error checking test access:', error);
+    // في حالة الخطأ، السماح بالوصول للاختبارات الأساسية
+    return {
+      canAccess: testIndex < 5, // أول 5 اختبارات متاحة دائماً
+      reason: error instanceof Error ? error.message : 'Unknown error'
+    };
+  }
 }
 
 // الحصول على إحصائيات الاستخدام

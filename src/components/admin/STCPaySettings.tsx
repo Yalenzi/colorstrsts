@@ -40,11 +40,11 @@ export function STCPaySettings({ lang }: STCPaySettingsProps) {
     merchantId: process.env.NEXT_PUBLIC_STC_PAY_MERCHANT_ID || '',
     apiKey: '',
     webhookSecret: '',
-    environment: 'sandbox',
-    baseUrl: process.env.NEXT_PUBLIC_STC_PAY_BASE_URL || 'https://api.stcpay.com.sa',
+    environment: 'production',
+    baseUrl: 'https://api.stcpay.com.sa',
     enabledPlans: ['monthly', 'yearly'],
-    autoRenew: false,
-    testMode: true
+    autoRenew: true,
+    testMode: false
   });
 
   const [showSecrets, setShowSecrets] = useState({
@@ -63,16 +63,22 @@ export function STCPaySettings({ lang }: STCPaySettingsProps) {
   }, []);
 
   const loadSettings = () => {
-    // في التطبيق الحقيقي، ستجلب هذه الإعدادات من قاعدة البيانات
-    // هنا سنستخدم القيم من متغيرات البيئة والإعدادات الافتراضية
-    const savedSettings = localStorage.getItem('stc_pay_settings');
-    if (savedSettings) {
-      try {
+    try {
+      // في التطبيق الحقيقي، ستجلب هذه الإعدادات من قاعدة البيانات
+      const savedSettings = localStorage.getItem('stc_pay_settings');
+      if (savedSettings) {
         const parsed = JSON.parse(savedSettings);
-        setSettings({ ...settings, ...parsed });
-      } catch (error) {
-        console.error('Error parsing saved settings:', error);
+        setSettings(prevSettings => ({
+          ...prevSettings,
+          ...parsed
+        }));
       }
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      setMessage({
+        type: 'error',
+        text: isRTL ? 'خطأ في تحميل الإعدادات' : 'Error loading settings'
+      });
     }
   };
 

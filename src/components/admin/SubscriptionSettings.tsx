@@ -44,9 +44,28 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
     loadSettings
   } = useSubscriptionSettings();
 
-  const [localSettings, setLocalSettings] = useState<TestAccessSettings>(settings);
+  const [localSettings, setLocalSettings] = useState<TestAccessSettings>({
+    freeTestsEnabled: settings?.freeTestsEnabled ?? true,
+    freeTestsCount: settings?.freeTestsCount ?? 5,
+    premiumRequired: settings?.premiumRequired ?? false,
+    globalFreeAccess: settings?.globalFreeAccess ?? false,
+    specificPremiumTests: settings?.specificPremiumTests ?? []
+  });
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+
+  // تحديث الإعدادات المحلية عند تغيير الإعدادات الأساسية
+  useEffect(() => {
+    if (settings) {
+      setLocalSettings({
+        freeTestsEnabled: settings.freeTestsEnabled ?? true,
+        freeTestsCount: settings.freeTestsCount ?? 5,
+        premiumRequired: settings.premiumRequired ?? false,
+        globalFreeAccess: settings.globalFreeAccess ?? false,
+        specificPremiumTests: settings.specificPremiumTests ?? []
+      });
+    }
+  }, [settings]);
 
   // تحديث الإعدادات المحلية عند تغيير الإعدادات الأساسية
   useEffect(() => {
@@ -147,10 +166,11 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
 
   // إضافة/إزالة اختبار من القائمة المميزة
   const togglePremiumTest = (testNumber: number) => {
-    const newPremiumTests = localSettings.specificPremiumTests.includes(testNumber)
-      ? localSettings.specificPremiumTests.filter(t => t !== testNumber)
-      : [...localSettings.specificPremiumTests, testNumber];
-    
+    const currentTests = localSettings.specificPremiumTests || [];
+    const newPremiumTests = currentTests.includes(testNumber)
+      ? currentTests.filter(t => t !== testNumber)
+      : [...currentTests, testNumber];
+
     setLocalSettings(prev => ({
       ...prev,
       specificPremiumTests: newPremiumTests.sort((a, b) => a - b)
@@ -304,7 +324,7 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
                   key={testNumber}
                   className={`
                     p-3 rounded-lg border-2 cursor-pointer transition-all
-                    ${localSettings.specificPremiumTests.includes(testNumber)
+                    ${(localSettings.specificPremiumTests || []).includes(testNumber)
                       ? 'border-yellow-300 bg-yellow-50 text-yellow-800'
                       : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
                     }
@@ -315,7 +335,7 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
                     <div className="font-semibold">
                       {isRTL ? `اختبار ${testNumber}` : `Test ${testNumber}`}
                     </div>
-                    {localSettings.specificPremiumTests.includes(testNumber) && (
+                    {(localSettings.specificPremiumTests || []).includes(testNumber) && (
                       <Crown className="h-4 w-4 mx-auto mt-1 text-yellow-600" />
                     )}
                   </div>
@@ -355,8 +375,8 @@ export default function SubscriptionSettings({ lang }: SubscriptionSettingsProps
                   <li className="flex items-center gap-2">
                     <Star className="h-4 w-4 text-yellow-600" />
                     {isRTL
-                      ? `${localSettings.specificPremiumTests.length} اختبارات تتطلب اشتراك مميز`
-                      : `${localSettings.specificPremiumTests.length} tests require premium subscription`
+                      ? `${(localSettings.specificPremiumTests || []).length} اختبارات تتطلب اشتراك مميز`
+                      : `${(localSettings.specificPremiumTests || []).length} tests require premium subscription`
                     }
                   </li>
                 </>

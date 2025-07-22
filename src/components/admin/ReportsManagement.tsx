@@ -13,6 +13,11 @@ export function ReportsManagement({ lang }: { lang: string }) {
   const generatePDFReport = async () => {
     setLoading(true);
     try {
+      // التحقق من وجود البيئة المناسبة
+      if (typeof window === 'undefined') {
+        throw new Error('PDF generation requires browser environment');
+      }
+
       // إنشاء محتوى التقرير
       const reportData = {
         title: isRTL ? 'تقرير إحصائيات الموقع' : 'Website Statistics Report',
@@ -67,24 +72,34 @@ export function ReportsManagement({ lang }: { lang: string }) {
         </html>
       `;
 
-      // إنشاء ملف PDF باستخدام window.print
+      // إنشاء ملف PDF باستخدام طريقة محسنة
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+
+      // إنشاء رابط تحميل
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `report-${new Date().toISOString().split('T')[0]}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      // أو فتح في نافذة جديدة للطباعة
       const printWindow = window.open('', '_blank');
       if (printWindow) {
-        printWindow.document.write(htmlContent);
-        printWindow.document.close();
-        
+        // استخدام innerHTML بدلاً من write
+        printWindow.document.documentElement.innerHTML = htmlContent;
+
         // انتظار تحميل المحتوى ثم طباعة
-        printWindow.onload = () => {
+        printWindow.addEventListener('load', () => {
           setTimeout(() => {
             printWindow.print();
-            printWindow.close();
           }, 500);
-        };
-        
-        toast.success(isRTL ? 'تم إنشاء التقرير بنجاح' : 'Report generated successfully');
-      } else {
-        throw new Error('Unable to open print window');
+        });
       }
+
+      toast.success(isRTL ? 'تم إنشاء التقرير بنجاح' : 'Report generated successfully');
     } catch (error) {
       console.error('PDF export error:', error);
       toast.error(isRTL ? 'خطأ في تصدير PDF' : 'PDF export error');

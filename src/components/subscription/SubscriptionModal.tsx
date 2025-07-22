@@ -27,6 +27,11 @@ export function SubscriptionModal({ isOpen, onClose }: SubscriptionModalProps) {
     setError('');
 
     try {
+      // التحقق من وجود البيانات المطلوبة
+      if (!user.email) {
+        throw new Error('البريد الإلكتروني مطلوب للاشتراك');
+      }
+
       const response = await fetch('/api/tap/create-checkout', {
         method: 'POST',
         headers: {
@@ -36,21 +41,34 @@ export function SubscriptionModal({ isOpen, onClose }: SubscriptionModalProps) {
           userId: user.uid,
           userEmail: user.email,
           planId: 'premium_monthly',
-          userName: user.displayName || 'مستخدم'
+          userName: user.displayName || user.email?.split('@')[0] || 'مستخدم'
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'فشل في إنشاء جلسة الدفع');
       }
 
-      const { url } = await response.json();
+      const { url, sessionId } = await response.json();
+
+      if (!url) {
+        throw new Error('لم يتم الحصول على رابط الدفع');
+      }
+
+      // حفظ معلومات الجلسة للمتابعة لاحقاً
+      localStorage.setItem('pending_subscription', JSON.stringify({
+        sessionId,
+        planId: 'premium_monthly',
+        userId: user.uid,
+        timestamp: Date.now()
+      }));
 
       // توجيه المستخدم لصفحة الدفع
       window.location.href = url;
     } catch (error: any) {
       console.error('Subscription error:', error);
-      setError('حدث خطأ أثناء معالجة الاشتراك. حاول مرة أخرى.');
+      setError(error.message || 'حدث خطأ أثناء معالجة الاشتراك. حاول مرة أخرى.');
     } finally {
       setLoading(false);
     }
