@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,28 +8,96 @@ import { UserManagement } from './UserManagement';
 import { ReportsManagement } from './ReportsManagement';
 import { SystemSettings } from './SystemSettings';
 import { ExcelManagement } from './excel-management';
-import { 
-  Users, 
-  BarChart3, 
-  Settings, 
+import { TestsManagement } from './tests-management';
+import { ColorResultsManagement } from './color-results-management';
+import { SubscriptionManagement } from './SubscriptionManagement';
+import { UsageChart } from './UsageChart';
+import { toast } from 'sonner';
+import {
+  Users,
+  BarChart3,
+  Settings,
   FileSpreadsheet,
   TestTube,
   Crown,
   TrendingUp,
-  DollarSign
+  DollarSign,
+  Palette,
+  CreditCard,
+  Shield,
+  Activity,
+  Database,
+  Bell,
+  Menu,
+  X,
+  Home,
+  ChevronDown,
+  Search,
+  Moon,
+  Sun
 } from 'lucide-react';
 
-export function AdminDashboard({ lang }: { lang: string }) {
+interface AdminDashboardProps {
+  lang: string;
+}
+
+interface DashboardStats {
+  totalUsers: number;
+  premiumUsers: number;
+  totalTests: number;
+  monthlyRevenue: number;
+  growthRate: number;
+  activeUsers: number;
+  totalSessions: number;
+  systemHealth: 'excellent' | 'good' | 'warning' | 'error';
+}
+
+export function AdminDashboard({ lang }: AdminDashboardProps) {
   const isRTL = lang === 'ar';
   const [activeTab, setActiveTab] = useState('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    premiumUsers: 0,
+    totalTests: 0,
+    monthlyRevenue: 0,
+    growthRate: 0,
+    activeUsers: 0,
+    totalSessions: 0,
+    systemHealth: 'good'
+  });
 
-  // إحصائيات وهمية للعرض
-  const stats = {
-    totalUsers: 156,
-    premiumUsers: 34,
-    totalTests: 1247,
-    monthlyRevenue: 12450,
-    growthRate: 15.3
+  // تحميل البيانات
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    setLoading(true);
+    try {
+      // محاكاة تحميل البيانات من قاعدة البيانات
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      setStats({
+        totalUsers: 156,
+        premiumUsers: 34,
+        totalTests: 1247,
+        monthlyRevenue: 12450,
+        growthRate: 15.3,
+        activeUsers: 89,
+        totalSessions: 2341,
+        systemHealth: 'excellent'
+      });
+
+      toast.success(isRTL ? 'تم تحميل البيانات بنجاح' : 'Data loaded successfully');
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      toast.error(isRTL ? 'خطأ في تحميل البيانات' : 'Error loading data');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
