@@ -1,6 +1,6 @@
 /**
- * Admin Dashboard Theme - Professional Color System
- * Chemical Tests Management System
+ * Enhanced Admin Dashboard Theme - Professional Color System
+ * Chemical Tests Management System v2.0
  */
 
 /* ===== ROOT VARIABLES ===== */
@@ -12,10 +12,10 @@
   --admin-primary-300: #93c5fd;
   --admin-primary-400: #60a5fa;
   --admin-primary-500: #3b82f6;
-  --admin-primary-600: #1d4ed8;
-  --admin-primary-700: #1e40af;
-  --admin-primary-800: #1e3a8a;
-  --admin-primary-900: #1e293b;
+  --admin-primary-600: #2563eb;
+  --admin-primary-700: #1d4ed8;
+  --admin-primary-800: #1e40af;
+  --admin-primary-900: #1e3a8a;
 
   /* Secondary Colors - Pure White & Grays */
   --admin-white: #ffffff;

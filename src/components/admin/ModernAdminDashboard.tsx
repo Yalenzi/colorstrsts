@@ -1,0 +1,577 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { Language } from '@/types';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  UsersIcon,
+  BeakerIcon,
+  CreditCardIcon,
+  ChartBarIcon,
+  EyeIcon,
+  PlusIcon,
+  ArrowPathIcon,
+  BellIcon,
+  SunIcon,
+  MoonIcon,
+  Cog6ToothIcon,
+  MagnifyingGlassIcon,
+  Bars3Icon,
+  XMarkIcon,
+  HomeIcon,
+  DocumentTextIcon,
+  ShieldCheckIcon,
+  UserGroupIcon,
+  CogIcon
+} from '@heroicons/react/24/outline';
+
+interface ModernAdminDashboardProps {
+  lang: Language;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  status: 'active' | 'inactive' | 'pending';
+  role: 'admin' | 'user' | 'moderator';
+  joinDate: string;
+  testsCount: number;
+}
+
+export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
+  const [darkMode, setDarkMode] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const isRTL = lang === 'ar';
+
+  const texts = {
+    dashboard: isRTL ? 'لوحة التحكم' : 'Dashboard',
+    users: isRTL ? 'المستخدمون' : 'Users',
+    tests: isRTL ? 'الاختبارات' : 'Tests',
+    reports: isRTL ? 'التقارير' : 'Reports',
+    settings: isRTL ? 'الإعدادات' : 'Settings',
+    totalUsers: isRTL ? 'إجمالي المستخدمين' : 'Total Users',
+    activeUsers: isRTL ? 'المستخدمون النشطون' : 'Active Users',
+    totalTests: isRTL ? 'إجمالي الاختبارات' : 'Total Tests',
+    monthlyRevenue: isRTL ? 'الإيرادات الشهرية' : 'Monthly Revenue',
+    search: isRTL ? 'البحث...' : 'Search...',
+    addUser: isRTL ? 'إضافة مستخدم' : 'Add User',
+    refresh: isRTL ? 'تحديث' : 'Refresh',
+    active: isRTL ? 'نشط' : 'Active',
+    inactive: isRTL ? 'غير نشط' : 'Inactive',
+    pending: isRTL ? 'معلق' : 'Pending',
+    admin: isRTL ? 'مدير' : 'Admin',
+    user: isRTL ? 'مستخدم' : 'User',
+    moderator: isRTL ? 'مشرف' : 'Moderator',
+    name: isRTL ? 'الاسم' : 'Name',
+    email: isRTL ? 'البريد الإلكتروني' : 'Email',
+    status: isRTL ? 'الحالة' : 'Status',
+    role: isRTL ? 'الدور' : 'Role',
+    actions: isRTL ? 'الإجراءات' : 'Actions',
+    view: isRTL ? 'عرض' : 'View',
+    edit: isRTL ? 'تعديل' : 'Edit',
+    delete: isRTL ? 'حذف' : 'Delete'
+  };
+
+  // Mock data
+  const mockUsers: User[] = [
+    {
+      id: '1',
+      name: 'أحمد محمد علي',
+      email: 'ahmed@example.com',
+      status: 'active',
+      role: 'user',
+      joinDate: '2024-01-15',
+      testsCount: 25
+    },
+    {
+      id: '2',
+      name: 'Sarah Johnson',
+      email: 'sarah@example.com',
+      status: 'active',
+      role: 'admin',
+      joinDate: '2024-01-10',
+      testsCount: 45
+    },
+    {
+      id: '3',
+      name: 'محمد عبدالله',
+      email: 'mohammed@example.com',
+      status: 'pending',
+      role: 'user',
+      joinDate: '2024-01-20',
+      testsCount: 5
+    },
+    {
+      id: '4',
+      name: 'Emily Chen',
+      email: 'emily@example.com',
+      status: 'inactive',
+      role: 'moderator',
+      joinDate: '2024-01-05',
+      testsCount: 30
+    }
+  ];
+
+  const stats = {
+    totalUsers: 1247,
+    activeUsers: 1089,
+    totalTests: 35,
+    monthlyRevenue: 12450
+  };
+
+  useEffect(() => {
+    setUsers(mockUsers);
+  }, []);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('admin-dark-mode', (!darkMode).toString());
+  };
+
+  const handleRefresh = async () => {
+    setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setUsers(mockUsers);
+    setLoading(false);
+  };
+
+  const getStatusBadge = (status: User['status']) => {
+    const variants = {
+      active: 'default',
+      inactive: 'secondary',
+      pending: 'outline'
+    } as const;
+
+    return (
+      <Badge variant={variants[status]}>
+        {status === 'active' ? texts.active : status === 'inactive' ? texts.inactive : texts.pending}
+      </Badge>
+    );
+  };
+
+  const getRoleBadge = (role: User['role']) => {
+    const variants = {
+      admin: 'destructive',
+      moderator: 'default',
+      user: 'secondary'
+    } as const;
+
+    return (
+      <Badge variant={variants[role]}>
+        {role === 'admin' ? texts.admin : role === 'moderator' ? texts.moderator : texts.user}
+      </Badge>
+    );
+  };
+
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const sidebarItems = [
+    { id: 'dashboard', label: texts.dashboard, icon: HomeIcon },
+    { id: 'users', label: texts.users, icon: UsersIcon },
+    { id: 'tests', label: texts.tests, icon: BeakerIcon },
+    { id: 'reports', label: texts.reports, icon: DocumentTextIcon },
+    { id: 'settings', label: texts.settings, icon: CogIcon }
+  ];
+
+  return (
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 transition-all duration-300 ${darkMode ? 'dark' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Sidebar */}
+      <aside className={`
+        fixed top-0 ${isRTL ? 'right-0' : 'left-0'} h-full bg-white dark:bg-gray-800 shadow-xl border-r border-gray-200 dark:border-gray-700
+        transition-all duration-300 z-30
+        ${sidebarOpen ? 'w-64' : 'w-16'}
+      `}>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          {sidebarOpen && (
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                <BeakerIcon className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h1 className="font-bold text-gray-900 dark:text-white text-sm">
+                  {isRTL ? 'إدارة الاختبارات' : 'Chemical Tests'}
+                </h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {isRTL ? 'لوحة التحكم' : 'Admin Panel'}
+                </p>
+              </div>
+            </div>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2"
+          >
+            {sidebarOpen ? <XMarkIcon className="h-4 w-4" /> : <Bars3Icon className="h-4 w-4" />}
+          </Button>
+        </div>
+
+        <nav className="p-2">
+          {sidebarItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`
+                w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 mb-1
+                ${activeTab === item.id 
+                  ? 'bg-blue-600 text-white shadow-lg' 
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }
+              `}
+            >
+              <item.icon className="h-5 w-5 flex-shrink-0" />
+              {sidebarOpen && (
+                <span className="font-medium text-sm">{item.label}</span>
+              )}
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className={`
+        transition-all duration-300
+        ${sidebarOpen ? (isRTL ? 'mr-64' : 'ml-64') : (isRTL ? 'mr-16' : 'ml-16')}
+      `}>
+        {/* Header */}
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                {sidebarItems.find(item => item.id === activeTab)?.label}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                {isRTL ? 'إدارة وتحكم شامل في النظام' : 'Comprehensive system management and control'}
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleDarkMode}
+                className="p-2"
+              >
+                {darkMode ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+              </Button>
+              
+              <Button variant="ghost" size="sm" className="p-2">
+                <BellIcon className="h-5 w-5" />
+              </Button>
+              
+              <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                A
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Content */}
+        <div className="p-6">
+          {activeTab === 'dashboard' && (
+            <div className="space-y-6">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          {texts.totalUsers}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                          {stats.totalUsers.toLocaleString()}
+                        </p>
+                        <p className="text-sm text-green-600 mt-1">+12.5%</p>
+                      </div>
+                      <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                        <UsersIcon className="h-6 w-6 text-blue-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          {texts.activeUsers}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                          {stats.activeUsers.toLocaleString()}
+                        </p>
+                        <p className="text-sm text-green-600 mt-1">+8.2%</p>
+                      </div>
+                      <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                        <UserGroupIcon className="h-6 w-6 text-green-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          {texts.totalTests}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                          {stats.totalTests}
+                        </p>
+                        <p className="text-sm text-green-600 mt-1">+3</p>
+                      </div>
+                      <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                        <BeakerIcon className="h-6 w-6 text-purple-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          {texts.monthlyRevenue}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                          ${stats.monthlyRevenue.toLocaleString()}
+                        </p>
+                        <p className="text-sm text-green-600 mt-1">+15.3%</p>
+                      </div>
+                      <div className="p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg">
+                        <ChartBarIcon className="h-6 w-6 text-yellow-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Recent Activity */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>{isRTL ? 'النشاط الحديث' : 'Recent Activity'}</CardTitle>
+                  <CardDescription>
+                    {isRTL ? 'آخر الأنشطة في النظام' : 'Latest system activities'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((item) => (
+                      <div key={item} className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                          U
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-900 dark:text-white">
+                            {isRTL ? 'مستخدم جديد انضم للنظام' : 'New user joined the system'}
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {isRTL ? 'منذ 5 دقائق' : '5 minutes ago'}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === 'users' && (
+            <div className="space-y-6">
+              {/* Users Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          {texts.totalUsers}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                          {stats.totalUsers}
+                        </p>
+                      </div>
+                      <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                        <UsersIcon className="h-6 w-6 text-blue-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          {texts.activeUsers}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                          {stats.activeUsers}
+                        </p>
+                      </div>
+                      <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                        <UserGroupIcon className="h-6 w-6 text-green-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          {isRTL ? 'مستخدمون جدد' : 'New Users'}
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                          {users.filter(u => new Date(u.joinDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length}
+                        </p>
+                      </div>
+                      <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                        <UserGroupIcon className="h-6 w-6 text-purple-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Users Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="relative flex-1 max-w-md">
+                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder={texts.search}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleRefresh}
+                    disabled={loading}
+                  >
+                    <ArrowPathIcon className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                    {texts.refresh}
+                  </Button>
+                  <Button size="sm">
+                    <PlusIcon className="h-4 w-4 mr-2" />
+                    {texts.addUser}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Users Table */}
+              <Card>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50 dark:bg-gray-800">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            {texts.name}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            {texts.email}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            {texts.status}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            {texts.role}
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            {texts.actions}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                        {filteredUsers.map((user) => (
+                          <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center gap-3">
+                                <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                  {user.name.charAt(0)}
+                                </div>
+                                <div>
+                                  <div className="font-medium text-gray-900 dark:text-white">
+                                    {user.name}
+                                  </div>
+                                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    {user.testsCount} {isRTL ? 'اختبار' : 'tests'}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                              {user.email}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {getStatusBadge(user.status)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {getRoleBadge(user.role)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm">
+                                  <EyeIcon className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm">
+                                  {texts.edit}
+                                </Button>
+                                <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                                  {texts.delete}
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Other tabs content can be added here */}
+          {activeTab !== 'dashboard' && activeTab !== 'users' && (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  {sidebarItems.find(item => item.id === activeTab)?.label}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {isRTL ? 'هذا القسم قيد التطوير' : 'This section is under development'}
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}
