@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { aiColorAnalyzer, ColorData, AnalysisResult } from '@/lib/ai-color-analysis';
 import {
   PhotoIcon,
   EyeDropperIcon,
@@ -21,49 +22,35 @@ import {
   ShareIcon,
   ArrowDownTrayIcon,
   CameraIcon,
-  AdjustmentsHorizontalIcon
+  AdjustmentsHorizontalIcon,
+  SparklesIcon,
+  LightBulbIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline';
 
 interface ImageAnalyzerPageProps {
   lang: Language;
 }
 
-interface ColorAnalysis {
-  hex: string;
-  rgb: { r: number; g: number; b: number };
-  hsl: { h: number; s: number; l: number };
-  percentage: number;
-  name: string;
-  chemicalMatch?: string[];
+// Using enhanced interfaces from ai-color-analysis.ts
+interface ImageInfo {
+  width: number;
+  height: number;
+  size: number;
+  format: string;
 }
 
-interface ChemicalMatch {
-  substance: string;
-  confidence: number;
-  testMethod: string;
-  colorRange: string[];
-  description: string;
-}
-
-interface AnalysisResult {
-  colors: ColorAnalysis[];
-  chemicals: ChemicalMatch[];
-  dominantColor: ColorAnalysis;
-  analysisTime: number;
-  imageInfo: {
-    width: number;
-    height: number;
-    size: number;
-    format: string;
-  };
+interface EnhancedAnalysisResult extends AnalysisResult {
+  imageInfo: ImageInfo;
 }
 
 export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<EnhancedAnalysisResult | null>(null);
   const [activeTab, setActiveTab] = useState('colors');
+  const [aiAnalysisEnabled, setAiAnalysisEnabled] = useState(true);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -198,62 +185,24 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
       const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const pixels = imageDataObj.data;
 
-      setAnalysisProgress(40);
+      setAnalysisProgress(50);
 
-      // Analyze colors
-      const colorMap = new Map<string, number>();
-      const step = 4; // Sample every 4th pixel for performance
+      // Use AI-enhanced color analysis
+      let analysisResult: AnalysisResult;
 
-      for (let i = 0; i < pixels.length; i += step * 4) {
-        const r = pixels[i];
-        const g = pixels[i + 1];
-        const b = pixels[i + 2];
-        const alpha = pixels[i + 3];
-
-        if (alpha > 128) { // Only consider non-transparent pixels
-          const hex = rgbToHex(r, g, b);
-          colorMap.set(hex, (colorMap.get(hex) || 0) + 1);
-        }
+      if (aiAnalysisEnabled) {
+        console.log('🤖 Using AI-enhanced color analysis...');
+        analysisResult = aiColorAnalyzer.analyzeImage(imageDataObj, canvas.width, canvas.height);
+      } else {
+        console.log('📊 Using basic color analysis...');
+        analysisResult = await basicColorAnalysis(imageDataObj, canvas.width, canvas.height);
       }
-
-      setAnalysisProgress(60);
-
-      // Get top colors
-      const sortedColors = Array.from(colorMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10);
-
-      const totalPixels = sortedColors.reduce((sum, [, count]) => sum + count, 0);
-
-      const colors: ColorAnalysis[] = sortedColors.map(([hex, count]) => {
-        const rgb = hexToRgb(hex)!;
-        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-        const percentage = (count / totalPixels) * 100;
-
-        return {
-          hex,
-          rgb,
-          hsl,
-          percentage,
-          name: getColorName(hex),
-          chemicalMatch: getChemicalMatches(hex)
-        };
-      });
-
-      setAnalysisProgress(80);
-
-      // Identify potential chemicals
-      const chemicals = identifyChemicals(colors);
 
       setAnalysisProgress(90);
 
-      const analysisTime = Date.now() - startTime;
-
-      const result: AnalysisResult = {
-        colors,
-        chemicals,
-        dominantColor: colors[0],
-        analysisTime,
+      // Create enhanced result with image info
+      const result: EnhancedAnalysisResult = {
+        ...analysisResult,
         imageInfo: {
           width: img.width,
           height: img.height,
@@ -275,21 +224,59 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
     }
   };
 
-  const getChemicalMatches = (hex: string): string[] => {
-    const chemicalDatabase: { [key: string]: string[] } = {
-      '#FF0000': ['Iron Oxide', 'Hemoglobin', 'Red Dye'],
-      '#00FF00': ['Copper Carbonate', 'Chlorophyll', 'Green Dye'],
-      '#0000FF': ['Copper Sulfate', 'Methylene Blue', 'Blue Dye'],
-      '#FFFF00': ['Sulfur', 'Yellow Dye', 'Turmeric'],
-      '#FF00FF': ['Potassium Permanganate', 'Purple Dye'],
-      '#00FFFF': ['Copper Compounds', 'Cyan Dye'],
-      '#FFA500': ['Orange Dye', 'Beta Carotene'],
-      '#800080': ['Iodine', 'Purple Compounds'],
-      '#000000': ['Carbon', 'Iron Oxide', 'Charcoal'],
-      '#FFFFFF': ['Titanium Dioxide', 'Calcium Carbonate']
-    };
+  // Basic color analysis as fallback
+  const basicColorAnalysis = async (imageData: ImageData, width: number, height: number): Promise<AnalysisResult> => {
+    const data = imageData.data;
+    const colorMap = new Map<string, number>();
+    const step = 4; // Sample every 4th pixel for performance
 
-    return chemicalDatabase[hex] || [];
+    for (let i = 0; i < data.length; i += step * 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const alpha = data[i + 3];
+
+      if (alpha > 128) { // Only consider non-transparent pixels
+        const hex = rgbToHex(r, g, b);
+        colorMap.set(hex, (colorMap.get(hex) || 0) + 1);
+      }
+    }
+
+    // Get top colors
+    const sortedColors = Array.from(colorMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6);
+
+    const totalPixels = sortedColors.reduce((sum, [, count]) => sum + count, 0);
+
+    const colors: ColorData[] = sortedColors.map(([hex, count], index) => {
+      const rgb = hexToRgb(hex)!;
+      const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+      const dominance = (count / totalPixels) * 100;
+
+      return {
+        hex,
+        rgb,
+        hsl,
+        lab: { l: 0, a: 0, b: 0 }, // Basic analysis doesn't calculate LAB
+        position: { x: 0, y: 0 }, // Basic analysis doesn't track positions
+        confidence: Math.min(95, 60 + dominance),
+        dominance,
+        colorName: getColorName(hex),
+        chemicalMatches: []
+      };
+    });
+
+    return {
+      colors,
+      dominantColor: colors[0],
+      colorDistribution: {},
+      lightingCondition: 'normal',
+      imageQuality: 'good',
+      recommendations: ['Consider using AI analysis for better results'],
+      recommendations_ar: ['فكر في استخدام التحليل بالذكاء الاصطناعي للحصول على نتائج أفضل'],
+      processingTime: 0
+    };
   };
 
   const identifyChemicals = (colors: ColorAnalysis[]): ChemicalMatch[] => {
@@ -337,6 +324,26 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
     };
 
     return descriptions[substance] || (lang === 'ar' ? 'مادة كيميائية' : 'Chemical substance');
+  };
+
+  const getQualityLabel = (quality: string): string => {
+    const labels: { [key: string]: string } = {
+      'excellent': lang === 'ar' ? 'ممتازة' : 'Excellent',
+      'good': lang === 'ar' ? 'جيدة' : 'Good',
+      'fair': lang === 'ar' ? 'مقبولة' : 'Fair',
+      'poor': lang === 'ar' ? 'ضعيفة' : 'Poor'
+    };
+    return labels[quality] || quality;
+  };
+
+  const getLightingLabel = (lighting: string): string => {
+    const labels: { [key: string]: string } = {
+      'bright': lang === 'ar' ? 'ساطعة' : 'Bright',
+      'normal': lang === 'ar' ? 'عادية' : 'Normal',
+      'dim': lang === 'ar' ? 'خافتة' : 'Dim',
+      'mixed': lang === 'ar' ? 'مختلطة' : 'Mixed'
+    };
+    return labels[lighting] || lighting;
   };
 
   const downloadResults = () => {
@@ -391,8 +398,46 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
                 <ChartBarIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
                 {lang === 'ar' ? 'تحليل إحصائي' : 'Statistical Analysis'}
               </Badge>
+              <Badge variant={aiAnalysisEnabled ? "default" : "secondary"} className="flex items-center">
+                <CpuChipIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                {lang === 'ar' ? 'ذكاء اصطناعي' : 'AI Enhanced'}
+              </Badge>
             </div>
           </div>
+
+          {/* AI Analysis Toggle */}
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                  <SparklesIcon className="h-5 w-5 text-primary-600" />
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-gray-100">
+                      {lang === 'ar' ? 'التحليل بالذكاء الاصطناعي' : 'AI-Enhanced Analysis'}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {lang === 'ar'
+                        ? 'تحليل متقدم للألوان مع دقة أعلى وتحديد أفضل للمواد الكيميائية'
+                        : 'Advanced color analysis with higher accuracy and better chemical identification'
+                      }
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setAiAnalysisEnabled(!aiAnalysisEnabled)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    aiAnalysisEnabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      aiAnalysisEnabled ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Upload Section */}
           <Card className="mb-8">
@@ -497,17 +542,45 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
                     </div>
                   </div>
                   <CardDescription>
-                    {lang === 'ar'
-                      ? `تم تحليل ${analysisResult.colors.length} لون في ${analysisResult.analysisTime}ms`
-                      : `Analyzed ${analysisResult.colors.length} colors in ${analysisResult.analysisTime}ms`
-                    }
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <span>
+                        {lang === 'ar'
+                          ? `${analysisResult.colors.length} لون مكتشف`
+                          : `${analysisResult.colors.length} colors detected`
+                        }
+                      </span>
+                      <span>
+                        {lang === 'ar'
+                          ? `وقت المعالجة: ${analysisResult.processingTime}ms`
+                          : `Processing time: ${analysisResult.processingTime}ms`
+                        }
+                      </span>
+                      <span>
+                        {lang === 'ar'
+                          ? `جودة الصورة: ${getQualityLabel(analysisResult.imageQuality)}`
+                          : `Image quality: ${analysisResult.imageQuality}`
+                        }
+                      </span>
+                      <span>
+                        {lang === 'ar'
+                          ? `الإضاءة: ${getLightingLabel(analysisResult.lightingCondition)}`
+                          : `Lighting: ${analysisResult.lightingCondition}`
+                        }
+                      </span>
+                      {aiAnalysisEnabled && (
+                        <Badge variant="secondary" className="text-xs">
+                          <SparklesIcon className="h-3 w-3 mr-1" />
+                          AI Enhanced
+                        </Badge>
+                      )}
+                    </div>
                   </CardDescription>
                 </CardHeader>
               </Card>
 
               {/* Tabs for different views */}
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="colors">
                     <EyeDropperIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
                     {lang === 'ar' ? 'الألوان' : 'Colors'}
@@ -520,6 +593,10 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
                     <ChartBarIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
                     {lang === 'ar' ? 'الإحصائيات' : 'Statistics'}
                   </TabsTrigger>
+                  <TabsTrigger value="insights">
+                    <LightBulbIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                    {lang === 'ar' ? 'التوصيات' : 'Insights'}
+                  </TabsTrigger>
                 </TabsList>
 
                 {/* Colors Tab */}
@@ -531,21 +608,71 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {analysisResult.colors.map((color, index) => (
-                          <div key={index} className="border rounded-lg p-4">
+                          <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                             <div className="flex items-center space-x-3 rtl:space-x-reverse mb-3">
                               <div
-                                className="w-12 h-12 rounded-lg border-2 border-gray-300"
+                                className="w-12 h-12 rounded-lg border-2 border-gray-300 shadow-sm"
                                 style={{ backgroundColor: color.hex }}
                               />
-                              <div>
-                                <p className="font-medium">{color.name}</p>
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between">
+                                  <p className="font-medium">{color.colorName}</p>
+                                  <Badge variant="secondary" className="text-xs">
+                                    #{index + 1}
+                                  </Badge>
+                                </div>
                                 <p className="text-sm text-gray-500">{color.hex}</p>
                               </div>
                             </div>
-                            <div className="space-y-1 text-sm">
-                              <p><span className="font-medium">RGB:</span> {color.rgb.r}, {color.rgb.g}, {color.rgb.b}</p>
-                              <p><span className="font-medium">HSL:</span> {color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%</p>
-                              <p><span className="font-medium">{lang === 'ar' ? 'النسبة:' : 'Percentage:'}</span> {color.percentage.toFixed(1)}%</p>
+
+                            <div className="space-y-2 text-sm">
+                              <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                  <p className="font-medium text-gray-700 dark:text-gray-300">RGB:</p>
+                                  <p className="text-gray-600 dark:text-gray-400">{color.rgb.r}, {color.rgb.g}, {color.rgb.b}</p>
+                                </div>
+                                <div>
+                                  <p className="font-medium text-gray-700 dark:text-gray-300">HSL:</p>
+                                  <p className="text-gray-600 dark:text-gray-400">{color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between pt-2 border-t">
+                                <div>
+                                  <p className="font-medium text-gray-700 dark:text-gray-300">
+                                    {lang === 'ar' ? 'الهيمنة:' : 'Dominance:'}
+                                  </p>
+                                  <p className="text-gray-600 dark:text-gray-400">{color.dominance.toFixed(1)}%</p>
+                                </div>
+                                <div>
+                                  <p className="font-medium text-gray-700 dark:text-gray-300">
+                                    {lang === 'ar' ? 'الثقة:' : 'Confidence:'}
+                                  </p>
+                                  <Badge variant={color.confidence > 80 ? 'default' : 'secondary'}>
+                                    {color.confidence.toFixed(0)}%
+                                  </Badge>
+                                </div>
+                              </div>
+
+                              {aiAnalysisEnabled && color.chemicalMatches && color.chemicalMatches.length > 0 && (
+                                <div className="pt-2 border-t">
+                                  <p className="font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    {lang === 'ar' ? 'تطابقات كيميائية:' : 'Chemical Matches:'}
+                                  </p>
+                                  <div className="space-y-1">
+                                    {color.chemicalMatches.slice(0, 2).map((match, matchIndex) => (
+                                      <div key={matchIndex} className="flex items-center justify-between text-xs">
+                                        <span className="text-gray-600 dark:text-gray-400">
+                                          {lang === 'ar' ? match.substance_ar : match.substance}
+                                        </span>
+                                        <Badge variant="outline" className="text-xs">
+                                          {(match.confidence * 100).toFixed(0)}%
+                                        </Badge>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -621,6 +748,105 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
                       </div>
                     </CardContent>
                   </Card>
+                </TabsContent>
+
+                {/* Insights Tab */}
+                <TabsContent value="insights">
+                  <div className="space-y-6">
+                    {/* Analysis Quality */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <LightBulbIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                          {lang === 'ar' ? 'جودة التحليل' : 'Analysis Quality'}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                              {lang === 'ar' ? 'جودة الصورة' : 'Image Quality'}
+                            </p>
+                            <p className="text-lg font-semibold">
+                              {getQualityLabel(analysisResult.imageQuality)}
+                            </p>
+                          </div>
+                          <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                              {lang === 'ar' ? 'ظروف الإضاءة' : 'Lighting Condition'}
+                            </p>
+                            <p className="text-lg font-semibold">
+                              {getLightingLabel(analysisResult.lightingCondition)}
+                            </p>
+                          </div>
+                          <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                              {lang === 'ar' ? 'وقت المعالجة' : 'Processing Time'}
+                            </p>
+                            <p className="text-lg font-semibold">
+                              {analysisResult.processingTime}ms
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Recommendations */}
+                    {(analysisResult.recommendations.length > 0 || analysisResult.recommendations_ar.length > 0) && (
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center">
+                            <ExclamationTriangleIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0 text-amber-500" />
+                            {lang === 'ar' ? 'التوصيات والاقتراحات' : 'Recommendations & Suggestions'}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            {(lang === 'ar' ? analysisResult.recommendations_ar : analysisResult.recommendations).map((recommendation, index) => (
+                              <div key={index} className="flex items-start space-x-3 rtl:space-x-reverse p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                                <LightBulbIcon className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                                <p className="text-sm text-amber-800 dark:text-amber-200">
+                                  {recommendation}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Color Distribution */}
+                    {aiAnalysisEnabled && Object.keys(analysisResult.colorDistribution).length > 0 && (
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center">
+                            <ChartBarIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                            {lang === 'ar' ? 'توزيع الألوان' : 'Color Distribution'}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            {Object.entries(analysisResult.colorDistribution).map(([colorName, percentage], index) => (
+                              <div key={index} className="flex items-center justify-between">
+                                <span className="text-sm font-medium">{colorName}</span>
+                                <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                                  <div className="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div
+                                      className="bg-primary-600 h-2 rounded-full"
+                                      style={{ width: `${percentage}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-sm text-gray-600 dark:text-gray-400 w-12 text-right">
+                                    {percentage.toFixed(1)}%
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
                 </TabsContent>
               </Tabs>
             </div>

@@ -4,13 +4,17 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
 import { Button } from '@/components/ui/button';
-import { 
+import { Badge } from '@/components/ui/badge';
+import { aiColorAnalyzer, ColorData } from '@/lib/ai-color-analysis';
+import {
   PhotoIcon,
   CloudArrowUpIcon,
   EyeDropperIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
-  XMarkIcon
+  XMarkIcon,
+  SparklesIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline';
 
 interface DetectedColor {
@@ -35,6 +39,7 @@ export function GlobalImageAnalyzer({ isOpen, onClose, onColorSelected, lang }: 
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [analysisProgress, setAnalysisProgress] = useState<string>('');
+  const [aiAnalysisEnabled, setAiAnalysisEnabled] = useState(true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -151,8 +156,27 @@ export function GlobalImageAnalyzer({ isOpen, onClose, onColorSelected, lang }: 
         console.log('🔬 Extracting colors...');
         setAnalysisProgress(lang === 'ar' ? 'جاري استخراج الألوان...' : 'Extracting colors...');
 
-        // Extract dominant colors with error handling
-        const colors = extractDominantColors(ctx, width, height);
+        // Extract dominant colors with AI enhancement
+        let colors: DetectedColor[];
+
+        if (aiAnalysisEnabled) {
+          console.log('🤖 Using AI-enhanced color analysis...');
+          setAnalysisProgress(lang === 'ar' ? 'تحليل بالذكاء الاصطناعي...' : 'AI analysis...');
+
+          const imageData = ctx.getImageData(0, 0, width, height);
+          const aiResult = aiColorAnalyzer.analyzeImage(imageData, width, height);
+
+          // Convert AI result to DetectedColor format
+          colors = aiResult.colors.map(color => ({
+            hex: color.hex,
+            rgb: color.rgb,
+            position: color.position,
+            confidence: color.confidence
+          }));
+        } else {
+          console.log('📊 Using basic color analysis...');
+          colors = extractDominantColors(ctx, width, height);
+        }
 
         console.log('✅ Analysis complete! Found', colors.length, 'colors');
         console.log('⏱️ Analysis took:', Date.now() - analysisStartTime.current, 'ms');
@@ -401,6 +425,46 @@ export function GlobalImageAnalyzer({ isOpen, onClose, onColorSelected, lang }: 
               <li>• {t('image_analysis.center_sample')}</li>
               <li>• {t('image_analysis.avoid_shadows')}</li>
             </ul>
+          </div>
+
+          {/* AI Analysis Toggle */}
+          <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <CpuChipIcon className="h-5 w-5 text-primary-600" />
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-gray-100">
+                    {lang === 'ar' ? 'التحليل بالذكاء الاصطناعي' : 'AI-Enhanced Analysis'}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {lang === 'ar'
+                      ? 'تحليل متقدم للألوان مع دقة أعلى'
+                      : 'Advanced color analysis with higher accuracy'
+                    }
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAiAnalysisEnabled(!aiAnalysisEnabled)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  aiAnalysisEnabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    aiAnalysisEnabled ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+            {aiAnalysisEnabled && (
+              <div className="mt-2 flex items-center space-x-2 rtl:space-x-reverse">
+                <SparklesIcon className="h-4 w-4 text-primary-600" />
+                <span className="text-sm text-primary-600 font-medium">
+                  {lang === 'ar' ? 'مُفعل' : 'Enabled'}
+                </span>
+              </div>
+            )}
           </div>
 
           {!uploadedImage ? (
