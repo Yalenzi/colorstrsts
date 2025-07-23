@@ -1,0 +1,26 @@
+خطوات التفعيل:
+أنشئ ملف .env.local:
+NEXT_PUBLIC_STC_PAY_MERCHANT_ID=your_merchant_id
+STC_PAY_API_KEY=your_api_key
+STC_PAY_WEBHOOK_SECRET=your_webhook_secret
+للاختبار :
+NEXT_PUBLIC_STC_PAY_BASE_URL=https://api-sandbox.stcpay.com.sa
+NEXT_PUBLIC_STC_PAY_MERCHANT_ID=test_merchant
+STC_PAY_API_KEY=test_key
+
+
+احصل على حساب STC Pay:
+سجل في https://stcpay.com.sa
+احصل على MERCHANT_ID و API_KEY
+أنشئ ملف .env.local:
+NEXT_PUBLIC_STC_PAY_MERCHANT_ID=your_merchant_id
+STC_PAY_API_KEY=your_api_key
+STC_PAY_WEBHOOK_SECRET=your_webhook_secret
+للاختبار أولاً:
+الآن عند الضغط على "اشترك الآن":
+
+✅ ينشئ طلب دفع حقيقي
+✅ يحول لموقع STC Pay الرسمي
+✅ المستخدم يدفع بالفيزا/مدى/STC Pay
+✅ يعود لموقعك بعد الدفع
+هل تريد مساعدة في الحصول على بيانات STC Pay؟

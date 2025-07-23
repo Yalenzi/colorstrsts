@@ -88,6 +88,7 @@ interface EnhancedTestsManagementProps {
 export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) {
   const isRTL = lang === 'ar';
   const [tests, setTests] = useState<ChemicalTest[]>([]);
+  const [filteredTests, setFilteredTests] = useState<ChemicalTest[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTest, setSelectedTest] = useState<ChemicalTest | null>(null);
@@ -101,6 +102,19 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
     loadTests();
   }, []);
 
+  // Filter tests when search term or filters change
+  useEffect(() => {
+    const filtered = tests.filter(test => {
+      const matchesSearch = test.method_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           test.method_name_ar.includes(searchTerm) ||
+                           test.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = filterCategory === 'all' || test.category === filterCategory;
+      const matchesStatus = filterStatus === 'all' || test.status === filterStatus;
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+    setFilteredTests(filtered);
+  }, [tests, searchTerm, filterCategory, filterStatus]);
+
   const loadTests = async () => {
     setLoading(true);
     try {
@@ -113,6 +127,7 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
       }));
 
       setTests(realTests);
+      setFilteredTests(realTests);
       toast.success(isRTL ? 'تم تحميل الاختبارات بنجاح' : 'Tests loaded successfully');
     } catch (error) {
       console.error('Error loading tests:', error);
@@ -122,15 +137,7 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
     }
   };
 
-  // تصفية الاختبارات
-  const filteredTestsData = tests.filter(test => {
-    const matchesSearch = test.method_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         test.method_name_ar.includes(searchTerm) ||
-                         test.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || test.category === filterCategory;
-    const matchesStatus = filterStatus === 'all' || test.status === filterStatus;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+
 
   // إضافة اختبار جديد
   const handleAddTest = () => {
@@ -365,7 +372,7 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTestsData.map((test) => (
+              {filteredTests.map((test) => (
                 <Card key={test.id} className="hover:shadow-lg transition-shadow duration-200">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">

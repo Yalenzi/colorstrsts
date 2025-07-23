@@ -176,6 +176,53 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
     await fetchUsers();
   };
 
+  // User management handlers
+  const handleViewUser = (userId: string) => {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      const userInfo = `
+${isRTL ? 'معلومات المستخدم:' : 'User Information:'}
+${isRTL ? 'الاسم:' : 'Name:'} ${user.name || user.displayName || 'غير محدد'}
+${isRTL ? 'البريد الإلكتروني:' : 'Email:'} ${user.email}
+${isRTL ? 'الدور:' : 'Role:'} ${user.role || 'user'}
+${isRTL ? 'الحالة:' : 'Status:'} ${user.status || 'pending'}
+${isRTL ? 'تاريخ الانضمام:' : 'Join Date:'} ${user.joinDate || 'غير محدد'}
+${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 0}
+      `;
+      alert(userInfo);
+      // TODO: Implement user details modal
+    }
+  };
+
+  const handleEditUser = (userId: string) => {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      const newName = prompt(
+        `${isRTL ? 'تعديل اسم المستخدم:' : 'Edit user name:'}`,
+        user.name || user.displayName || ''
+      );
+
+      if (newName && newName.trim()) {
+        alert(`${isRTL ? 'سيتم تحديث الاسم إلى:' : 'Name will be updated to:'} ${newName}`);
+        // TODO: Implement user update functionality
+      }
+    }
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      const confirmMessage = isRTL
+        ? `⚠️ تحذير: هل أنت متأكد من حذف المستخدم؟\n\nالاسم: ${user.name || user.displayName || user.email}\nالبريد الإلكتروني: ${user.email}\n\nهذا الإجراء لا يمكن التراجع عنه!`
+        : `⚠️ Warning: Are you sure you want to delete this user?\n\nName: ${user.name || user.displayName || user.email}\nEmail: ${user.email}\n\nThis action cannot be undone!`;
+
+      if (confirm(confirmMessage)) {
+        alert(`${isRTL ? '✅ سيتم حذف المستخدم:' : '✅ User will be deleted:'} ${user.name || user.displayName || user.email}`);
+        // TODO: Implement user deletion with Firebase
+      }
+    }
+  };
+
   const getStatusBadge = (status?: User['status']) => {
     const currentStatus = status || 'pending';
     const variants = {
@@ -591,13 +638,29 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                               <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="sm">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleViewUser(user.id)}
+                                  title={isRTL ? 'عرض المستخدم' : 'View User'}
+                                >
                                   <EyeIcon className="h-4 w-4" />
                                 </Button>
-                                <Button variant="ghost" size="sm">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleEditUser(user.id)}
+                                  title={isRTL ? 'تعديل المستخدم' : 'Edit User'}
+                                >
                                   {texts.edit}
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-red-600 hover:text-red-700"
+                                  onClick={() => handleDeleteUser(user.id)}
+                                  title={isRTL ? 'حذف المستخدم' : 'Delete User'}
+                                >
                                   {texts.delete}
                                 </Button>
                               </div>
