@@ -8,10 +8,10 @@ import { Download, Upload, FileSpreadsheet, Database, AlertCircle, CheckCircle }
 import { safeLocalStorage } from '@/hooks/useLocalStorage';
 
 interface DataImportExportProps {
-  isRTL: boolean;
+  isRTL?: boolean;
 }
 
-export default function DataImportExport({ isRTL }: DataImportExportProps) {
+export default function DataImportExport({ isRTL = false }: DataImportExportProps) {
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);

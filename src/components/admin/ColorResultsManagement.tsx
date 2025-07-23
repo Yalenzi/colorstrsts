@@ -32,22 +32,18 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import toast from 'react-hot-toast';
+import colorResultsData from '@/data/color-results.json';
+import chemicalTestsData from '@/data/chemical-tests.json';
 
 interface ColorResult {
   id: string;
   test_id: string;
-  test_name: string;
-  test_name_ar: string;
   color_result: string;
   color_result_ar: string;
   color_hex: string;
   possible_substance: string;
   possible_substance_ar: string;
-  confidence_level: number;
-  category: string;
-  reference: string;
-  created_at: string;
-  updated_at: string;
+  confidence_level: string;
 }
 
 interface ColorResultsManagementProps {
@@ -118,11 +114,31 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
   ];
 
   useEffect(() => {
-    // محاكاة تحميل البيانات
-    setTimeout(() => {
-      setResults(sampleResults);
-      setLoading(false);
-    }, 1000);
+    // تحميل البيانات الحقيقية
+    const loadRealData = () => {
+      try {
+        // دمج بيانات النتائج اللونية مع بيانات الاختبارات
+        const enrichedResults = colorResultsData.map((result: any) => {
+          const test = chemicalTestsData.find((t: any) => t.id === result.test_id);
+          return {
+            ...result,
+            test_name: test?.method_name || 'Unknown Test',
+            test_name_ar: test?.method_name_ar || 'اختبار غير معروف'
+          };
+        });
+
+        setResults(enrichedResults);
+        setLoading(false);
+        toast.success(`تم تحميل ${enrichedResults.length} نتيجة لونية`);
+      } catch (error) {
+        console.error('Error loading color results:', error);
+        setResults([]);
+        setLoading(false);
+        toast.error('خطأ في تحميل النتائج اللونية');
+      }
+    };
+
+    loadRealData();
   }, []);
 
   const filteredResults = results.filter(result => {
@@ -187,10 +203,13 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
     }
   };
 
-  const getConfidenceBadgeColor = (confidence: number) => {
-    if (confidence >= 90) return 'bg-green-100 text-green-800';
-    if (confidence >= 70) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-red-100 text-red-800';
+  const getConfidenceBadgeColor = (confidence: string) => {
+    switch (confidence.toLowerCase()) {
+      case 'high': return 'bg-green-100 text-green-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
   };
 
   if (loading) {
@@ -288,7 +307,7 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
                   <TableHead>{lang === 'ar' ? 'النتيجة اللونية' : 'Color Result'}</TableHead>
                   <TableHead>{lang === 'ar' ? 'المادة المحتملة' : 'Possible Substance'}</TableHead>
                   <TableHead>{lang === 'ar' ? 'مستوى الثقة' : 'Confidence'}</TableHead>
-                  <TableHead>{lang === 'ar' ? 'الفئة' : 'Category'}</TableHead>
+
                   <TableHead>{lang === 'ar' ? 'الإجراءات' : 'Actions'}</TableHead>
                 </TableRow>
               </TableHeader>
@@ -300,7 +319,7 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
                         <div className="font-medium">
                           {isRTL ? result.test_name_ar : result.test_name}
                         </div>
-                        <div className="text-sm text-gray-500">{result.reference}</div>
+                        <div className="text-sm text-gray-500">{result.test_id}</div>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -317,14 +336,10 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
                     </TableCell>
                     <TableCell>
                       <Badge className={getConfidenceBadgeColor(result.confidence_level)}>
-                        {result.confidence_level}%
+                        {result.confidence_level}
                       </Badge>
                     </TableCell>
-                    <TableCell>
-                      <Badge className={getCategoryBadgeColor(result.category)}>
-                        {result.category}
-                      </Badge>
-                    </TableCell>
+
                     <TableCell>
                       <div className="flex gap-1">
                         <Button

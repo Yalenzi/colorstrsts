@@ -178,21 +178,29 @@ service cloud.firestore {
         request.auth.token.admin == true;
     }
     
-    // TEMPORARY DEVELOPMENT RULES - قواعد التطوير المؤقتة
-    // WARNING: These rules are for development only and should be restricted in production
-    // تحذير: هذه القواعد للتطوير فقط ويجب تقييدها في الإنتاج
+    // SECURE PRODUCTION RULES - قواعد الإنتاج الآمنة
+    // Enhanced security rules for production environment
+    // قواعد أمان محسنة لبيئة الإنتاج
 
-    // Allow read access to all collections for authenticated users (DEVELOPMENT ONLY)
-    // السماح بالقراءة لجميع المجموعات للمستخدمين المصادق عليهم (للتطوير فقط)
-    match /{collection}/{document} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null &&
-        (request.auth.token.admin == true ||
-         request.auth.token.email in [
-           'aburakan4551@gmail.com',
-           'admin@example.com'
-         ] ||
-         request.auth.uid == 'development-user');
+    // Helper functions for enhanced security
+    function isValidUserRole(role) {
+      return role in ['user', 'moderator', 'admin', 'super_admin'];
+    }
+
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserRole() == role;
+    }
+
+    function hasMinimumRole(minRole) {
+      let userRole = getUserRole();
+      return (minRole == 'user' && userRole in ['user', 'moderator', 'admin', 'super_admin']) ||
+             (minRole == 'moderator' && userRole in ['moderator', 'admin', 'super_admin']) ||
+             (minRole == 'admin' && userRole in ['admin', 'super_admin']) ||
+             (minRole == 'super_admin' && userRole == 'super_admin');
     }
 
     // Default deny rule for unmatched paths - قاعدة الرفض الافتراضية للمسارات غير المطابقة
