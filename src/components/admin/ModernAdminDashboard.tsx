@@ -34,9 +34,11 @@ import { TestStepsManagement } from './TestStepsManagement';
 import { SubscriptionManagement } from './SubscriptionManagement';
 import { SubscriptionPlansManagement } from './SubscriptionPlansManagement';
 import { TextEditorManagement } from './TextEditorManagement';
-import { DataImportExport } from './DataImportExport';
-import { SystemStatistics } from './SystemStatistics';
+import DataImportExport from './DataImportExport';
+import SystemStatistics from './SystemStatistics';
 import { EnhancedTestsManagement } from './EnhancedTestsManagement';
+import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 interface ModernAdminDashboardProps {
   lang: Language;
@@ -44,12 +46,22 @@ interface ModernAdminDashboardProps {
 
 interface User {
   id: string;
-  name: string;
+  name?: string;
+  displayName?: string;
   email: string;
-  status: 'active' | 'inactive' | 'pending';
-  role: 'admin' | 'user' | 'moderator';
-  joinDate: string;
-  testsCount: number;
+  status?: 'active' | 'inactive' | 'pending';
+  role?: 'admin' | 'user' | 'moderator';
+  joinDate?: string;
+  createdAt?: any;
+  testsCount?: number;
+  photoURL?: string;
+  emailVerified?: boolean;
+  lastLoginAt?: any;
+  subscription?: {
+    plan: string;
+    status: string;
+    expiresAt?: any;
+  };
 }
 
 export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
@@ -91,55 +103,67 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
     delete: isRTL ? 'حذف' : 'Delete'
   };
 
-  // Mock data
-  const mockUsers: User[] = [
-    {
-      id: '1',
-      name: 'أحمد محمد علي',
-      email: 'ahmed@example.com',
-      status: 'active',
-      role: 'user',
-      joinDate: '2024-01-15',
-      testsCount: 25
-    },
-    {
-      id: '2',
-      name: 'Sarah Johnson',
-      email: 'sarah@example.com',
-      status: 'active',
-      role: 'admin',
-      joinDate: '2024-01-10',
-      testsCount: 45
-    },
-    {
-      id: '3',
-      name: 'محمد عبدالله',
-      email: 'mohammed@example.com',
-      status: 'pending',
-      role: 'user',
-      joinDate: '2024-01-20',
-      testsCount: 5
-    },
-    {
-      id: '4',
-      name: 'Emily Chen',
-      email: 'emily@example.com',
-      status: 'inactive',
-      role: 'moderator',
-      joinDate: '2024-01-05',
-      testsCount: 30
+  // Firebase data fetching
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, orderBy('createdAt', 'desc'));
+
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const usersData: User[] = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          usersData.push({
+            id: doc.id,
+            name: data.displayName || data.name || 'مستخدم غير محدد',
+            displayName: data.displayName,
+            email: data.email,
+            status: data.status || (data.emailVerified ? 'active' : 'pending'),
+            role: data.role || 'user',
+            joinDate: data.createdAt?.toDate?.()?.toISOString?.()?.split('T')[0] || new Date().toISOString().split('T')[0],
+            createdAt: data.createdAt,
+            testsCount: data.testsCount || 0,
+            photoURL: data.photoURL,
+            emailVerified: data.emailVerified,
+            lastLoginAt: data.lastLoginAt,
+            subscription: data.subscription
+          });
+        });
+        setUsers(usersData);
+        setLoading(false);
+      });
+
+      return unsubscribe;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      setLoading(false);
+      // Fallback to empty array if Firebase fails
+      setUsers([]);
     }
-  ];
+  };
 
   const stats = {
-    totalUsers: 1247,
-    activeUsers: 1089,
-    totalTests: 35,
-    monthlyRevenue: 12450
+    totalUsers: users.length,
+    activeUsers: users.filter(u => u.status === 'active').length,
+    totalTests: 35, // This could be fetched from tests collection
+    monthlyRevenue: 12450 // This could be calculated from subscriptions
   };
 
   useEffect(() => {
-    setUsers(mockUsers);
+    let unsubscribe: (() => void) | undefined;
+
+    const initializeUsers = async () => {
+      unsubscribe = await fetchUsers();
+    };
+
+    initializeUsers();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const toggleDarkMode = () => {
@@ -149,13 +173,11 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
   };
 
   const handleRefresh = async () => {
-    setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setUsers(mockUsers);
-    setLoading(false);
+    await fetchUsers();
   };
 
-  const getStatusBadge = (status: User['status']) => {
+  const getStatusBadge = (status?: User['status']) => {
+    const currentStatus = status || 'pending';
     const variants = {
       active: 'default',
       inactive: 'secondary',
@@ -163,13 +185,14 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
     } as const;
 
     return (
-      <Badge variant={variants[status]}>
-        {status === 'active' ? texts.active : status === 'inactive' ? texts.inactive : texts.pending}
+      <Badge variant={variants[currentStatus]}>
+        {currentStatus === 'active' ? texts.active : currentStatus === 'inactive' ? texts.inactive : texts.pending}
       </Badge>
     );
   };
 
-  const getRoleBadge = (role: User['role']) => {
+  const getRoleBadge = (role?: User['role']) => {
+    const currentRole = role || 'user';
     const variants = {
       admin: 'destructive',
       moderator: 'default',
@@ -177,16 +200,20 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
     } as const;
 
     return (
-      <Badge variant={variants[role]}>
-        {role === 'admin' ? texts.admin : role === 'moderator' ? texts.moderator : texts.user}
+      <Badge variant={variants[currentRole]}>
+        {currentRole === 'admin' ? texts.admin : currentRole === 'moderator' ? texts.moderator : texts.user}
       </Badge>
     );
   };
 
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredUsers = users.filter(user => {
+    const name = user.name || user.displayName || '';
+    const email = user.email || '';
+    const searchLower = searchQuery.toLowerCase();
+
+    return name.toLowerCase().includes(searchLower) ||
+           email.toLowerCase().includes(searchLower);
+  });
 
   const sidebarItems = [
     { id: 'dashboard', label: texts.dashboard, icon: HomeIcon },
@@ -527,15 +554,28 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
                           <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-3">
-                                <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                  {user.name.charAt(0)}
-                                </div>
+                                {user.photoURL ? (
+                                  <img
+                                    src={user.photoURL}
+                                    alt={user.name || user.displayName || 'User'}
+                                    className="h-10 w-10 rounded-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                    {(user.name || user.displayName || user.email)?.charAt(0)?.toUpperCase()}
+                                  </div>
+                                )}
                                 <div>
                                   <div className="font-medium text-gray-900 dark:text-white">
-                                    {user.name}
+                                    {user.name || user.displayName || user.email?.split('@')[0]}
                                   </div>
                                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                                    {user.testsCount} {isRTL ? 'اختبار' : 'tests'}
+                                    {user.testsCount || 0} {isRTL ? 'اختبار' : 'tests'}
+                                    {user.subscription && (
+                                      <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                                        {user.subscription.plan}
+                                      </span>
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -597,13 +637,13 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
           )}
 
           {activeTab === 'database' && (
-            <DataImportExport isRTL={isRTL} lang={lang} />
+            <DataImportExport />
           )}
 
           {activeTab === 'reports' && (
             <div className="space-y-6">
               <EnhancedCharts lang={lang} />
-              <SystemStatistics isRTL={isRTL} lang={lang} />
+              <SystemStatistics />
             </div>
           )}
 
