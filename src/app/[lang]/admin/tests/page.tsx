@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Language } from '@/types';
 import TestsManagementClient from './TestsManagementClient';
+import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
 
 interface PageProps {
   params: Promise<{
@@ -26,5 +27,9 @@ export default async function TestsManagementPage({ params }: PageProps) {
     notFound();
   }
 
-  return <TestsManagementClient lang={lang} />;
+  return (
+    <AdminAuthGuard lang={lang}>
+      <TestsManagementClient lang={lang} />
+    </AdminAuthGuard>
+  );
 }

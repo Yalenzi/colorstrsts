@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Language } from '@/types';
 import SubscribersManagement from '@/components/admin/SubscribersManagement';
+import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
 
 interface PageProps {
   params: Promise<{
@@ -29,12 +30,14 @@ export default async function SubscribersManagementPage({ params }: PageProps) {
   const isRTL = lang === 'ar';
   
   return (
-    <div className={`min-h-screen bg-gray-50 ${isRTL ? 'rtl' : 'ltr'}`}>
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <SubscribersManagement isRTL={isRTL} />
+    <AdminAuthGuard lang={lang}>
+      <div className={`min-h-screen bg-gray-50 ${isRTL ? 'rtl' : 'ltr'}`}>
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            <SubscribersManagement isRTL={isRTL} />
+          </div>
         </div>
       </div>
-    </div>
+    </AdminAuthGuard>
   );
 }

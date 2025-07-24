@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Language } from '@/types';
 import { SubscriptionManagement } from '@/components/admin/SubscriptionManagement';
-import { AdminGuard } from '@/components/auth/AdminGuard';
+import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
 
 interface AdminSubscriptionsPageProps {
   params: Promise<{
@@ -22,12 +22,12 @@ export default async function AdminSubscriptionsPage({ params }: AdminSubscripti
   const { lang } = await params;
 
   return (
-    <AdminGuard lang={lang}>
+    <AdminAuthGuard lang={lang}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <SubscriptionManagement lang={lang} />
         </div>
       </div>
-    </AdminGuard>
+    </AdminAuthGuard>
   );
 }
