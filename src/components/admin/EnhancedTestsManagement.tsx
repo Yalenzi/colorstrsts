@@ -141,26 +141,143 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
 
   // إضافة اختبار جديد
   const handleAddTest = () => {
-    setShowAddModal(true);
+    const testName = prompt(
+      isRTL ? 'أدخل اسم الاختبار الجديد:' : 'Enter new test name:',
+      isRTL ? 'اختبار جديد' : 'New Test'
+    );
+
+    if (testName && testName.trim()) {
+      const newTest: ChemicalTest = {
+        id: `test-${Date.now()}`,
+        method_name: testName.trim(),
+        method_name_ar: isRTL ? testName.trim() : `اختبار ${testName.trim()}`,
+        description: isRTL ? 'وصف الاختبار الجديد' : 'New test description',
+        description_ar: isRTL ? 'وصف الاختبار الجديد' : 'وصف الاختبار الجديد',
+        category: 'general',
+        safety_level: 'medium',
+        preparation_time: 10,
+        icon: 'test-tube',
+        color_primary: '#3B82F6',
+        created_at: new Date().toISOString(),
+        status: 'active',
+        usageCount: 0,
+        successRate: 100
+      };
+
+      const updatedTests = [...tests, newTest];
+      setTests(updatedTests);
+
+      // Save to localStorage
+      localStorage.setItem('chemical_tests_admin', JSON.stringify(updatedTests));
+
+      toast.success(isRTL ? 'تم إضافة الاختبار بنجاح' : 'Test added successfully');
+    }
   };
 
   // تعديل اختبار
   const handleEditTest = (test: ChemicalTest) => {
-    setSelectedTest(test);
-    setShowEditModal(true);
+    const newName = prompt(
+      isRTL ? 'تعديل اسم الاختبار:' : 'Edit test name:',
+      test.method_name
+    );
+
+    if (newName && newName.trim()) {
+      const updatedTests = tests.map(t =>
+        t.id === test.id
+          ? { ...t, method_name: newName.trim(), method_name_ar: isRTL ? newName.trim() : t.method_name_ar }
+          : t
+      );
+      setTests(updatedTests);
+      localStorage.setItem('chemical_tests_admin', JSON.stringify(updatedTests));
+      toast.success(isRTL ? 'تم تحديث الاختبار بنجاح' : 'Test updated successfully');
+    }
   };
 
   // عرض تفاصيل الاختبار
   const handleViewTest = (test: ChemicalTest) => {
-    setSelectedTest(test);
-    setShowViewModal(true);
+    const testInfo = `
+${isRTL ? 'تفاصيل الاختبار:' : 'Test Details:'}
+
+${isRTL ? 'الاسم:' : 'Name:'} ${test.method_name}
+${isRTL ? 'الاسم بالعربية:' : 'Arabic Name:'} ${test.method_name_ar}
+${isRTL ? 'الوصف:' : 'Description:'} ${test.description}
+${isRTL ? 'الفئة:' : 'Category:'} ${test.category}
+${isRTL ? 'مستوى الأمان:' : 'Safety Level:'} ${test.safety_level}
+${isRTL ? 'وقت التحضير:' : 'Preparation Time:'} ${test.preparation_time} ${isRTL ? 'دقيقة' : 'minutes'}
+${isRTL ? 'عدد الاستخدامات:' : 'Usage Count:'} ${test.usageCount || 0}
+${isRTL ? 'معدل النجاح:' : 'Success Rate:'} ${test.successRate || 0}%
+${isRTL ? 'الحالة:' : 'Status:'} ${test.status}
+${isRTL ? 'تاريخ الإنشاء:' : 'Created:'} ${new Date(test.created_at).toLocaleDateString()}
+    `;
+
+    alert(testInfo);
   };
 
   // حذف اختبار
   const handleDeleteTest = (testId: string) => {
-    if (confirm(isRTL ? 'هل أنت متأكد من حذف هذا الاختبار؟' : 'Are you sure you want to delete this test?')) {
-      setTests(tests.filter(test => test.id !== testId));
+    const test = tests.find(t => t.id === testId);
+    const confirmMessage = isRTL
+      ? `⚠️ تحذير: هل أنت متأكد من حذف الاختبار؟\n\nالاسم: ${test?.method_name}\nالفئة: ${test?.category}\n\nهذا الإجراء لا يمكن التراجع عنه!`
+      : `⚠️ Warning: Are you sure you want to delete this test?\n\nName: ${test?.method_name}\nCategory: ${test?.category}\n\nThis action cannot be undone!`;
+
+    if (confirm(confirmMessage)) {
+      const updatedTests = tests.filter(test => test.id !== testId);
+      setTests(updatedTests);
+      localStorage.setItem('chemical_tests_admin', JSON.stringify(updatedTests));
       toast.success(isRTL ? 'تم حذف الاختبار بنجاح' : 'Test deleted successfully');
+    }
+  };
+
+  // Import tests handler
+  const handleImportTests = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const importedTests = JSON.parse(event.target?.result as string);
+            if (Array.isArray(importedTests)) {
+              const mergedTests = [...tests, ...importedTests];
+              setTests(mergedTests);
+              localStorage.setItem('chemical_tests_admin', JSON.stringify(mergedTests));
+              toast.success(isRTL ? `تم استيراد ${importedTests.length} اختبار` : `Imported ${importedTests.length} tests`);
+            } else {
+              toast.error(isRTL ? 'تنسيق الملف غير صحيح' : 'Invalid file format');
+            }
+          } catch (error) {
+            toast.error(isRTL ? 'خطأ في قراءة الملف' : 'Error reading file');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+
+    input.click();
+  };
+
+  // Export tests handler
+  const handleExportTests = () => {
+    try {
+      const dataStr = JSON.stringify(tests, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `chemical-tests-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast.success(isRTL ? 'تم تصدير الاختبارات بنجاح' : 'Tests exported successfully');
+    } catch (error) {
+      toast.error(isRTL ? 'خطأ في تصدير الاختبارات' : 'Error exporting tests');
     }
   };
 
@@ -226,11 +343,11 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
             <Plus className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
             {isRTL ? 'إضافة اختبار' : 'Add Test'}
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleImportTests}>
             <Upload className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
             {isRTL ? 'استيراد' : 'Import'}
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleExportTests}>
             <Download className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
             {isRTL ? 'تصدير' : 'Export'}
           </Button>
