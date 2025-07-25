@@ -31,10 +31,10 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
         if (!currentUser) {
-          // No user logged in - redirect to login
+          // No user logged in - redirect to admin login
           setError(isRTL ? 'يجب تسجيل الدخول أولاً' : 'Please login first');
           setTimeout(() => {
-            router.push(`/${lang}/auth/login?redirect=admin`);
+            router.push(`/${lang}/admin/login`);
           }, 2000);
           setIsLoading(false);
           return;
@@ -70,7 +70,7 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
         if (!adminRoles.includes(userProfile.role)) {
           setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
           setTimeout(() => {
-            router.push(`/${lang}/dashboard`);
+            router.push(`/${lang}/admin/login`);
           }, 2000);
           setIsLoading(false);
           return;
@@ -86,7 +86,7 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
         if (!adminEmails.includes(currentUser.email || '')) {
           setError(isRTL ? 'البريد الإلكتروني غير مصرح له بالوصول للإدارة' : 'Email not authorized for admin access');
           setTimeout(() => {
-            router.push(`/${lang}/dashboard`);
+            router.push(`/${lang}/admin/login`);
           }, 2000);
           setIsLoading(false);
           return;
@@ -145,17 +145,17 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
           
           <div className="space-y-3">
             <button
-              onClick={() => router.push(`/${lang}/auth/login`)}
+              onClick={() => router.push(`/${lang}/admin/login`)}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >
-              {isRTL ? 'تسجيل الدخول' : 'Login'}
+              {isRTL ? 'دخول الأدمن' : 'Admin Login'}
             </button>
-            
+
             <button
-              onClick={() => router.push(`/${lang}/dashboard`)}
+              onClick={() => router.push(`/${lang}/`)}
               className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >
-              {isRTL ? 'العودة للوحة التحكم' : 'Go to Dashboard'}
+              {isRTL ? 'العودة للرئيسية' : 'Go to Home'}
             </button>
           </div>
           

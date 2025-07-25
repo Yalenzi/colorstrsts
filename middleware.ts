@@ -77,16 +77,18 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(route) || pathname.includes('/admin/')
   );
 
-  if (isAdminRoute) {
+  if (isAdminRoute && !pathname.includes('/admin/login')) {
     // Log security attempt
     console.warn(`[SECURITY] Admin route access attempt: ${pathname} from IP: ${getClientIP(request)}`);
 
-    // Block all admin access at middleware level
-    const loginUrl = new URL('/en/auth/login', request.url);
-    loginUrl.searchParams.set('redirect', 'admin');
-    loginUrl.searchParams.set('error', 'admin_auth_required');
+    // Extract language from pathname
+    const lang = pathname.startsWith('/ar') ? 'ar' : 'en';
 
-    return NextResponse.redirect(loginUrl);
+    // Redirect to admin login page
+    const adminLoginUrl = new URL(`/${lang}/admin/login`, request.url);
+    adminLoginUrl.searchParams.set('redirect', pathname);
+
+    return NextResponse.redirect(adminLoginUrl);
   }
 
   // Check if pathname already has a locale
