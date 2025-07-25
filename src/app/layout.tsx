@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Noto_Sans_Arabic } from 'next/font/google';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { Toaster } from 'react-hot-toast';
+import { AnalyticsProvider } from '@/components/analytics/AnalyticsProvider';
 import './globals.css';
 import '../styles/print.css';
 
@@ -133,12 +134,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          <div id="root">
-            {children}
-          </div>
-          <div id="modal-root" />
-          <div id="toast-root" />
-          <Toaster />
+          <AnalyticsProvider>
+            <div id="root">
+              {children}
+            </div>
+            <div id="modal-root" />
+            <div id="toast-root" />
+            <Toaster />
+          </AnalyticsProvider>
         </AuthProvider>
       </body>
     </html>

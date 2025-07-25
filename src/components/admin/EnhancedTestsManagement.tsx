@@ -182,7 +182,7 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
       high: { color: 'bg-red-100 text-red-800', text: isRTL ? 'أمان عالي' : 'High Risk' }
     };
 
-    const config = difficultyConfig[difficulty as keyof typeof difficultyConfig];
+    const config = difficultyConfig[difficulty as keyof typeof difficultyConfig] || difficultyConfig.medium;
     return (
       <Badge className={config.color}>
         {config.text}
@@ -198,9 +198,9 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
       draft: { color: 'bg-yellow-100 text-yellow-800', text: isRTL ? 'مسودة' : 'Draft', icon: Edit }
     };
 
-    const config = statusConfig[status as keyof typeof statusConfig];
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
     const IconComponent = config.icon;
-    
+
     return (
       <Badge className={`${config.color} flex items-center space-x-1 rtl:space-x-reverse`}>
         <IconComponent className="w-3 h-3" />

@@ -68,12 +68,14 @@ export function EnhancedCharts({ lang }: EnhancedChartsProps) {
       <div className="space-y-4">
         <h4 className="font-medium text-gray-900 dark:text-white">{title}</h4>
         <div className="space-y-3">
-          {data.map((item, index) => (
+          {data && data.length > 0 ? data.map((item, index) => {
+            if (!item || typeof item !== 'object') return null;
+            return (
             <div key={index} className="space-y-1">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-400">{item.name}</span>
+                <span className="text-gray-600 dark:text-gray-400">{item.name || 'Unknown'}</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-900 dark:text-white">{item.value}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{item.value || 0}</span>
                   {item.change !== undefined && (
                     <span className={`text-xs flex items-center gap-1 ${
                       item.change > 0 ? 'text-green-600' : 'text-red-600'
@@ -92,13 +94,18 @@ export function EnhancedCharts({ lang }: EnhancedChartsProps) {
                 <div
                   className="h-2 rounded-full transition-all duration-500"
                   style={{
-                    width: `${(item.value / maxValue) * 100}%`,
-                    backgroundColor: item.color || color
+                    width: `${((item.value || 0) / (maxValue || 1)) * 100}%`,
+                    backgroundColor: (item && item.color) ? item.color : (color || '#3B82F6')
                   }}
                 />
               </div>
             </div>
-          ))}
+            );
+          }) : (
+            <div className="text-center text-gray-500 dark:text-gray-400 py-4">
+              No data available
+            </div>
+          )}
         </div>
       </div>
     );
