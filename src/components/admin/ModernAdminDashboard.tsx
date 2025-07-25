@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Language } from '@/types';
+import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -70,9 +72,36 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const isRTL = lang === 'ar';
+
+  // Additional security check
+  useEffect(() => {
+    const checkAuth = () => {
+      const currentUser = auth.currentUser;
+      console.log('[ADMIN DASHBOARD] Security check:', { currentUser: !!currentUser });
+
+      if (!currentUser) {
+        console.warn('[ADMIN DASHBOARD] No authenticated user, redirecting to login');
+        router.push(`/${lang}/admin/login`);
+        return;
+      }
+
+      // Check admin email whitelist
+      const adminEmails = ['aburakan4551@gmail.com', 'admin@colorstest.com'];
+      if (!adminEmails.includes(currentUser.email || '')) {
+        console.warn('[ADMIN DASHBOARD] Email not in admin whitelist:', currentUser.email);
+        router.push(`/${lang}/admin/login`);
+        return;
+      }
+
+      console.log('[ADMIN DASHBOARD] Security check passed');
+    };
+
+    checkAuth();
+  }, [lang, router]);
 
   const texts = {
     dashboard: isRTL ? 'لوحة التحكم' : 'Dashboard',
