@@ -40,6 +40,8 @@ import DataImportExport from './DataImportExport';
 import SystemStatistics from './SystemStatistics';
 import { EnhancedTestsManagement } from './EnhancedTestsManagement';
 import { ContentManagement } from './ContentManagement';
+import { ComprehensiveUserManagement } from './ComprehensiveUserManagement';
+import { AdminRoleFixer } from './AdminRoleFixer';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -302,6 +304,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'subscription-plans', label: isRTL ? 'خطط الاشتراك' : 'Subscription Plans', icon: CreditCardIcon },
     { id: 'content', label: isRTL ? 'إدارة المحتوى' : 'Content Management', icon: DocumentTextIcon },
     { id: 'content-management', label: isRTL ? 'إدارة الاشتراكات والدفع' : 'Subscription & Payment Management', icon: CreditCardIcon },
+    { id: 'admin-roles', label: isRTL ? 'إصلاح أدوار المديرين' : 'Fix Admin Roles', icon: ShieldCheckIcon },
     { id: 'database', label: isRTL ? 'إدارة البيانات' : 'Database Management', icon: ShieldCheckIcon },
     { id: 'reports', label: texts.reports, icon: ChartBarIcon },
     { id: 'settings', label: texts.settings, icon: CogIcon }
@@ -516,6 +519,14 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
           )}
 
           {activeTab === 'users' && (
+            <ComprehensiveUserManagement lang={lang} />
+          )}
+
+          {activeTab === 'admin-roles' && (
+            <AdminRoleFixer lang={lang} />
+          )}
+
+          {activeTab === 'users-old' && (
             <div className="space-y-6">
               {/* Users Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
