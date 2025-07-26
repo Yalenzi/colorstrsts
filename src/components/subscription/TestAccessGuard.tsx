@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { getCurrentSettings } from '@/hooks/useSubscriptionSettings';
-import { canAccessTest, recordTestUsage } from '@/lib/subscription-service';
+import { canAccessTest, recordTestUsage } from '@/lib/content-management';
 import { Crown, Star, Lock } from 'lucide-react';
 import LoginModal from '@/components/auth/LoginModal';
 import SignupModal from '@/components/auth/SignupModal';
 import SubscriptionModal from '@/components/subscription/SubscriptionModal';
+import { PaymentModal } from '@/components/payment/PaymentModal';
 
 interface TestAccessGuardProps {
   testIndex: number;
@@ -26,6 +27,7 @@ export function TestAccessGuard({
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [accessStatus, setAccessStatus] = useState<{
     canAccess: boolean;
     reason?: string;
@@ -82,19 +84,31 @@ export function TestAccessGuard({
     }
   };
 
-  // تحديث الوصول عند تغيير الإعدادات
+  // تحديث الوصول عند تغيير المستخدم أو الاختبار فقط
   useEffect(() => {
-    checkAccess();
+    if (user) {
+      checkAccess();
+    } else {
+      setAccessStatus({
+        canAccess: false,
+        reason: 'Login required'
+      });
+      setLoading(false);
+    }
+  }, [user?.uid, testIndex]); // Remove userProfile to prevent infinite loop
 
-    // الاستماع للتحديثات الفورية
+  // Listen for settings updates separately
+  useEffect(() => {
     const handleSettingsUpdate = (e: CustomEvent) => {
       console.log('🔄 Settings updated, rechecking access');
       setSettings(e.detail);
-      checkAccess();
+      if (user) {
+        checkAccess();
+      }
     };
 
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'subscription_settings') {
+      if (e.key === 'subscription_settings' && user) {
         console.log('🔄 Storage updated, rechecking access');
         checkAccess();
       }
@@ -107,7 +121,7 @@ export function TestAccessGuard({
       window.removeEventListener('subscriptionSettingsUpdated', handleSettingsUpdate as EventListener);
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [user, testIndex, userProfile]);
+  }, [user?.uid]);
 
   // تسجيل استخدام الاختبار عند الوصول
   const handleAccessTest = async () => {
@@ -203,12 +217,22 @@ export function TestAccessGuard({
                   الاختبارات المتقدمة تتطلب اشتراك (29 ريال/شهر)
                 </p>
               </div>
-              <button
-                onClick={() => setShowSubscriptionModal(true)}
-                className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-4 rounded-md hover:from-yellow-600 hover:to-orange-600 font-semibold"
-              >
-                اشترك الآن - 29 ريال/شهر
-              </button>
+              <div className="space-y-2">
+                {accessStatus?.requiresPayment && (
+                  <button
+                    onClick={() => setShowPaymentModal(true)}
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 px-4 rounded-md hover:from-blue-600 hover:to-blue-700 font-semibold"
+                  >
+                    ادفع للاختبار - {accessStatus.price} {accessStatus.currency}
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowSubscriptionModal(true)}
+                  className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-4 rounded-md hover:from-yellow-600 hover:to-orange-600 font-semibold"
+                >
+                  اشترك الآن - 29 ريال/شهر
+                </button>
+              </div>
             </div>
           </div>
           <div className="filter blur-sm pointer-events-none">
@@ -219,6 +243,26 @@ export function TestAccessGuard({
         <SubscriptionModal
           isOpen={showSubscriptionModal}
           onClose={() => setShowSubscriptionModal(false)}
+        />
+
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          lang="ar" // You can make this dynamic based on your app's language
+          paymentType="test"
+          testId={testId}
+          testName={testName}
+          amount={accessStatus?.price || 10}
+          currency={accessStatus?.currency as 'SAR' | 'USD' || 'SAR'}
+          onSuccess={(paymentId) => {
+            console.log('Payment successful:', paymentId);
+            setShowPaymentModal(false);
+            // Refresh access status
+            checkAccess();
+          }}
+          onError={(error) => {
+            console.error('Payment error:', error);
+          }}
         />
       </>
     );

@@ -580,9 +580,11 @@ export function EnhancedSystemSettings({ lang }: EnhancedSystemSettingsProps) {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse">
-                  {tabs.find(tab => tab.id === activeTab)?.icon && (
-                    <tabs.find(tab => tab.id === activeTab)!.icon className="w-5 h-5" />
-                  )}
+                  {(() => {
+                    const tab = tabs.find(tab => tab.id === activeTab);
+                    const IconComponent = tab?.icon;
+                    return IconComponent ? <IconComponent className="w-5 h-5" /> : null;
+                  })()}
                   <span>{tabs.find(tab => tab.id === activeTab)?.name}</span>
                 </CardTitle>
               </CardHeader>

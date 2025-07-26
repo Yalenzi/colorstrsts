@@ -39,6 +39,7 @@ import { TextEditorManagement } from './TextEditorManagement';
 import DataImportExport from './DataImportExport';
 import SystemStatistics from './SystemStatistics';
 import { EnhancedTestsManagement } from './EnhancedTestsManagement';
+import { ContentManagement } from './ContentManagement';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -300,6 +301,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'subscriptions', label: isRTL ? 'الاشتراكات' : 'Subscriptions', icon: CreditCardIcon },
     { id: 'subscription-plans', label: isRTL ? 'خطط الاشتراك' : 'Subscription Plans', icon: CreditCardIcon },
     { id: 'content', label: isRTL ? 'إدارة المحتوى' : 'Content Management', icon: DocumentTextIcon },
+    { id: 'content-management', label: isRTL ? 'إدارة الاشتراكات والدفع' : 'Subscription & Payment Management', icon: CreditCardIcon },
     { id: 'database', label: isRTL ? 'إدارة البيانات' : 'Database Management', icon: ShieldCheckIcon },
     { id: 'reports', label: texts.reports, icon: ChartBarIcon },
     { id: 'settings', label: texts.settings, icon: CogIcon }
@@ -726,6 +728,10 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
 
           {activeTab === 'content' && (
             <TextEditorManagement isRTL={isRTL} lang={lang} />
+          )}
+
+          {activeTab === 'content-management' && (
+            <ContentManagement lang={lang} />
           )}
 
           {activeTab === 'database' && (
