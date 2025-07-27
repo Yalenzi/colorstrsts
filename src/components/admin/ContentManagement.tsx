@@ -22,7 +22,9 @@ import {
   ChartBarIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
-  XMarkIcon
+  XMarkIcon,
+  BanknotesIcon as CreditCardIcon,
+  DevicePhoneMobileIcon
 } from '@heroicons/react/24/outline';
 
 interface ContentManagementProps {

@@ -342,9 +342,11 @@ export function ComprehensiveUserManagement({ lang }: ComprehensiveUserManagemen
       admin: { variant: 'default' as const, icon: ShieldCheckIcon, text: texts.admin },
       super_admin: { variant: 'destructive' as const, icon: ShieldCheckIcon, text: texts.superAdmin }
     };
-    
-    const { variant, icon: Icon, text } = config[role];
-    
+
+    // إضافة فحص للتأكد من وجود الدور في config
+    const roleConfig = config[role] || config.user; // استخدام user كافتراضي
+    const { variant, icon: Icon, text } = roleConfig;
+
     return (
       <Badge variant={variant} className="flex items-center space-x-1 rtl:space-x-reverse">
         <Icon className="h-3 w-3" />

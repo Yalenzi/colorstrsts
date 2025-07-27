@@ -42,6 +42,8 @@ import { EnhancedTestsManagement } from './EnhancedTestsManagement';
 import { ContentManagement } from './ContentManagement';
 import { ComprehensiveUserManagement } from './ComprehensiveUserManagement';
 import { AdminRoleFixer } from './AdminRoleFixer';
+import { EnhancedAdminRoleFixer } from './EnhancedAdminRoleFixer';
+import { EnhancedSystemSettings } from './EnhancedSystemSettings';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -523,7 +525,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
           )}
 
           {activeTab === 'admin-roles' && (
-            <AdminRoleFixer lang={lang} />
+            <EnhancedAdminRoleFixer lang={lang} />
           )}
 
           {activeTab === 'users-old' && (
@@ -756,8 +758,16 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             </div>
           )}
 
+          {activeTab === 'settings' && (
+            <EnhancedSystemSettings lang={lang} />
+          )}
+
+          {activeTab === 'admin-roles' && (
+            <EnhancedAdminRoleFixer lang={lang} />
+          )}
+
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
