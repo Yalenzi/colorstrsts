@@ -44,6 +44,10 @@ import { ComprehensiveUserManagement } from './ComprehensiveUserManagement';
 import { AdminRoleFixer } from './AdminRoleFixer';
 import { EnhancedAdminRoleFixer } from './EnhancedAdminRoleFixer';
 import { EnhancedSystemSettings } from './EnhancedSystemSettings';
+import { PerformanceSettings } from './PerformanceSettings';
+import { NotificationSettings } from './NotificationSettings';
+import { DatabaseSettings } from './DatabaseSettings';
+import { SecuritySettings } from './SecuritySettings';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -265,8 +269,11 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
       pending: 'outline'
     } as const;
 
+    // إضافة حماية من undefined
+    const variant = variants[currentStatus as keyof typeof variants] || 'outline';
+
     return (
-      <Badge variant={variants[currentStatus]}>
+      <Badge variant={variant}>
         {currentStatus === 'active' ? texts.active : currentStatus === 'inactive' ? texts.inactive : texts.pending}
       </Badge>
     );
@@ -277,12 +284,18 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     const variants = {
       admin: 'destructive',
       moderator: 'default',
-      user: 'secondary'
+      user: 'secondary',
+      super_admin: 'destructive' // إضافة super_admin
     } as const;
 
+    // إضافة حماية من undefined
+    const variant = variants[currentRole as keyof typeof variants] || 'secondary';
+
     return (
-      <Badge variant={variants[currentRole]}>
-        {currentRole === 'admin' ? texts.admin : currentRole === 'moderator' ? texts.moderator : texts.user}
+      <Badge variant={variant}>
+        {currentRole === 'admin' ? texts.admin :
+         currentRole === 'super_admin' ? (isRTL ? 'مدير عام' : 'Super Admin') :
+         currentRole === 'moderator' ? texts.moderator : texts.user}
       </Badge>
     );
   };
@@ -766,8 +779,24 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             <EnhancedAdminRoleFixer lang={lang} />
           )}
 
+          {activeTab === 'performance' && (
+            <PerformanceSettings lang={lang} />
+          )}
+
+          {activeTab === 'notifications' && (
+            <NotificationSettings lang={lang} />
+          )}
+
+          {activeTab === 'database' && (
+            <DatabaseSettings lang={lang} />
+          )}
+
+          {activeTab === 'security' && (
+            <SecuritySettings lang={lang} />
+          )}
+
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">

@@ -235,7 +235,7 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
     );
   };
 
-  // رندر شارة الدور
+  // رندر شارة الدور مع حماية من undefined
   const renderRoleBadge = (role: string) => {
     const roleConfig = {
       user: { color: 'bg-blue-100 text-blue-800', text: isRTL ? 'مستخدم' : 'User' },
@@ -243,7 +243,18 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
       super_admin: { color: 'bg-red-100 text-red-800', text: isRTL ? 'مدير عام' : 'Super Admin' }
     };
 
-    const config = roleConfig[role as keyof typeof roleConfig];
+    // إضافة حماية من undefined مع قيمة افتراضية
+    const config = roleConfig[role as keyof typeof roleConfig] || roleConfig.user;
+
+    if (!config) {
+      // fallback إضافي في حالة عدم وجود أي config
+      return (
+        <Badge className="bg-gray-100 text-gray-800">
+          {isRTL ? 'غير محدد' : 'Unknown'}
+        </Badge>
+      );
+    }
+
     return (
       <Badge className={config.color}>
         {config.text}

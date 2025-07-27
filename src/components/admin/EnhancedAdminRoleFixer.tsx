@@ -281,15 +281,33 @@ export function EnhancedAdminRoleFixer({ lang }: EnhancedAdminRoleFixerProps) {
       if (!confirm(texts.deleteConfirm)) return;
 
       setLoading(true);
+      console.log('🗑️ Attempting to delete admin:', email);
+
       const userDocId = email.replace('@', '_').replace(/\./g, '_');
       const userRef = doc(db, 'users', userDocId);
 
+      // التحقق من وجود المستند قبل الحذف
+      const userDoc = await getDoc(userRef);
+      if (!userDoc.exists()) {
+        console.warn('⚠️ User document does not exist:', userDocId);
+        toast.error(isRTL ? 'المستخدم غير موجود' : 'User not found');
+        return;
+      }
+
+      // حذف المستند من Firestore
       await deleteDoc(userRef);
-      toast.success(texts.success);
+      console.log('✅ Admin document deleted successfully');
+
+      // تحديث القائمة المحلية فوراً
+      setAdminUsers(prev => prev.filter(admin => admin.email !== email));
+
+      toast.success(isRTL ? 'تم حذف المدير بنجاح' : 'Admin deleted successfully');
+
+      // إعادة تحميل القائمة للتأكد من التحديث
       await loadAdminUsers();
-    } catch (error) {
-      console.error('Error deleting admin:', error);
-      toast.error(texts.error);
+    } catch (error: any) {
+      console.error('❌ Error deleting admin:', error);
+      toast.error(error.message || (isRTL ? 'خطأ في حذف المدير' : 'Error deleting admin'));
     } finally {
       setLoading(false);
     }

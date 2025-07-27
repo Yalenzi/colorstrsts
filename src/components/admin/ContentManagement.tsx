@@ -10,7 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import toast from 'react-hot-toast';
 import {
@@ -38,6 +38,8 @@ interface ContentSettings {
   premiumPrice: number;
   currency: 'SAR' | 'USD';
   freeTestsList: number[];
+  globalFreeAccess: boolean; // ميزة جديدة: تفعيل جميع الاختبارات مجاناً
+  enableAllTests: boolean; // ميزة جديدة: إلغاء قفل جميع الاختبارات
   subscriptionPlans: {
     monthly: {
       enabled: boolean;
@@ -68,6 +70,8 @@ const defaultSettings: ContentSettings = {
   premiumPrice: 10,
   currency: 'SAR',
   freeTestsList: [0, 1, 2], // First 3 tests are free
+  globalFreeAccess: false, // افتراضياً معطل
+  enableAllTests: false, // افتراضياً معطل
   subscriptionPlans: {
     monthly: {
       enabled: true,
@@ -138,6 +142,12 @@ export function ContentManagement({ lang }: ContentManagementProps) {
     active: isRTL ? 'نشط' : 'Active',
     inactive: isRTL ? 'غير نشط' : 'Inactive',
     
+    // Global Access
+    globalFreeAccess: isRTL ? 'وصول مجاني شامل' : 'Global Free Access',
+    enableAllTests: isRTL ? 'تفعيل جميع الاختبارات' : 'Enable All Tests',
+    globalFreeAccessDesc: isRTL ? 'السماح لجميع المستخدمين بالوصول لجميع الاختبارات مجاناً' : 'Allow all users to access all tests for free',
+    enableAllTestsDesc: isRTL ? 'إلغاء قفل جميع الاختبارات للمستخدمين المسجلين' : 'Unlock all tests for registered users',
+
     // Warnings
     warning: isRTL ? 'تحذير' : 'Warning',
     disableFreeTestsWarning: isRTL ? 'تعطيل الاختبارات المجانية سيتطلب من جميع المستخدمين الاشتراك' : 'Disabling free tests will require all users to subscribe',
@@ -165,20 +175,24 @@ export function ContentManagement({ lang }: ContentManagementProps) {
   const saveSettings = async () => {
     setSaving(true);
     try {
-      await updateDoc(doc(db, 'settings', 'content'), {
+      // استخدام setDoc مع merge: true بدلاً من updateDoc لتجنب خطأ "No document to update"
+      const settingsRef = doc(db, 'settings', 'content');
+      await setDoc(settingsRef, {
         ...settings,
-        updatedAt: new Date().toISOString()
-      });
-      
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+      }, { merge: true });
+
       // Update localStorage for immediate access
       localStorage.setItem('content_settings', JSON.stringify(settings));
-      
+
       // Dispatch event for real-time updates
       window.dispatchEvent(new CustomEvent('contentSettingsUpdated', { detail: settings }));
-      
+
       toast.success(isRTL ? 'تم حفظ الإعدادات بنجاح' : 'Settings saved successfully');
+      console.log('✅ Content settings saved successfully to Firestore');
     } catch (error) {
-      console.error('Error saving content settings:', error);
+      console.error('❌ Error saving content settings:', error);
       toast.error(isRTL ? 'خطأ في حفظ الإعدادات' : 'Error saving settings');
     } finally {
       setSaving(false);
@@ -268,6 +282,53 @@ export function ContentManagement({ lang }: ContentManagementProps) {
                 />
               </div>
             )}
+
+            {/* Global Access Controls */}
+            <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="text-base font-medium">{texts.globalFreeAccess}</Label>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {texts.globalFreeAccessDesc}
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.globalFreeAccess}
+                  onCheckedChange={(checked) =>
+                    setSettings(prev => ({ ...prev, globalFreeAccess: checked }))
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="text-base font-medium">{texts.enableAllTests}</Label>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {texts.enableAllTestsDesc}
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.enableAllTests}
+                  onCheckedChange={(checked) =>
+                    setSettings(prev => ({ ...prev, enableAllTests: checked }))
+                  }
+                />
+              </div>
+
+              {(settings.globalFreeAccess || settings.enableAllTests) && (
+                <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                    <CheckCircleIcon className="h-4 w-4 text-green-600" />
+                    <p className="text-sm text-green-800 dark:text-green-200">
+                      {settings.globalFreeAccess
+                        ? (isRTL ? 'جميع الاختبارات متاحة مجاناً لجميع المستخدمين' : 'All tests are free for all users')
+                        : (isRTL ? 'جميع الاختبارات متاحة للمستخدمين المسجلين' : 'All tests are available for registered users')
+                      }
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
 
