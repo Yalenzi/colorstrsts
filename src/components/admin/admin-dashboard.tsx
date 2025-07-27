@@ -34,7 +34,7 @@ import {
   CircleStackIcon,
   TableCellsIcon,
   DocumentTextIcon,
-  CreditCardIcon,
+  BanknotesIcon as CreditCardIcon,
   Cog6ToothIcon,
   LockOpenIcon,
   ListBulletIcon,

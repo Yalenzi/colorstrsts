@@ -9,7 +9,7 @@ import { SUBSCRIPTION_PLANS } from '@/types/subscription';
 import { stcPayService } from '@/lib/stc-pay';
 import {
   Cog6ToothIcon,
-  CreditCardIcon,
+  BanknotesIcon as CreditCardIcon,
   ShieldCheckIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,

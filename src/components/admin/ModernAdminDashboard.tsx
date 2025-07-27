@@ -315,7 +315,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
       {/* Sidebar */}
       <aside className={`
         fixed top-0 ${isRTL ? 'right-0' : 'left-0'} h-full bg-white dark:bg-gray-800 shadow-xl border-r border-gray-200 dark:border-gray-700
-        transition-all duration-300 z-30
+        transition-all duration-300 z-30 flex flex-col
         ${sidebarOpen ? 'w-64' : 'w-16'}
       `}>
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
@@ -344,7 +344,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
           </Button>
         </div>
 
-        <nav className="p-2">
+        <nav className="p-2 flex-1 overflow-y-auto">
           {sidebarItems.map((item) => (
             <button
               key={item.id}
@@ -368,7 +368,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
 
       {/* Main Content */}
       <main className={`
-        transition-all duration-300
+        transition-all duration-300 min-h-screen overflow-y-auto
         ${sidebarOpen ? (isRTL ? 'mr-64' : 'ml-64') : (isRTL ? 'mr-16' : 'ml-16')}
       `}>
         {/* Header */}
@@ -405,7 +405,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
         </header>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-6 max-h-screen overflow-y-auto">
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
               {/* Stats Grid */}

@@ -15,7 +15,7 @@ import { UserSubscription, PaymentHistory, SUBSCRIPTION_PLANS } from '@/types/su
 import { stcPayService } from '@/lib/stc-pay';
 import {
   UsersIcon,
-  CreditCardIcon,
+  BanknotesIcon as CreditCardIcon,
   ChartBarIcon,
   Cog6ToothIcon,
   CheckCircleIcon,

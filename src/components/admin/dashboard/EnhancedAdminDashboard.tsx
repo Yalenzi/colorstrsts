@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   UsersIcon,
   BeakerIcon,
-  CreditCardIcon,
+  BanknotesIcon as CreditCardIcon,
   ChartBarIcon,
   TrendingUpIcon,
   TrendingDownIcon,

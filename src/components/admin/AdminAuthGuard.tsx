@@ -24,31 +24,40 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string>('');
+  const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
   const isRTL = lang === 'ar';
 
-  // Immediate check on mount
   useEffect(() => {
-    console.log('[ADMIN AUTH] AdminAuthGuard mounted, checking initial auth state');
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      console.warn('[ADMIN AUTH] No current user on mount, redirecting immediately');
-      setIsLoading(false);
-      router.push(`/${lang}/admin/login`);
-    }
-  }, []);
+    let isMounted = true;
 
-  useEffect(() => {
+    console.log('[ADMIN AUTH] AdminAuthGuard mounted, setting up auth listener');
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      // منع الحلقة اللا نهائية - فحص إذا كان المكون ما زال مثبت
+      if (!isMounted) {
+        console.log('[ADMIN AUTH] Component unmounted, skipping auth check');
+        return;
+      }
+
+      // منع فحص متعدد في نفس الوقت
+      if (authChecked) {
+        console.log('[ADMIN AUTH] Auth already checked, skipping');
+        return;
+      }
+
       try {
         console.log('[ADMIN AUTH] Checking authentication...', { currentUser: !!currentUser });
+        setAuthChecked(true);
 
         if (!currentUser) {
           // No user logged in - redirect immediately
           console.warn('[ADMIN AUTH] No user logged in, redirecting to login');
-          setError(isRTL ? 'يجب تسجيل الدخول أولاً' : 'Please login first');
-          setIsLoading(false);
-          router.push(`/${lang}/admin/login`);
+          if (isMounted) {
+            setError(isRTL ? 'يجب تسجيل الدخول أولاً' : 'Please login first');
+            setIsLoading(false);
+            router.push(`/${lang}/admin/login`);
+          }
           return;
         }
 
@@ -56,9 +65,11 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
         console.log('[ADMIN AUTH] Email verified:', currentUser.emailVerified);
         if (!currentUser.emailVerified) {
           console.warn('[ADMIN AUTH] Email not verified');
-          setError(isRTL ? 'يجب تأكيد البريد الإلكتروني أولاً' : 'Email verification required');
-          setIsLoading(false);
-          router.push(`/${lang}/admin/login`);
+          if (isMounted) {
+            setError(isRTL ? 'يجب تأكيد البريد الإلكتروني أولاً' : 'Email verification required');
+            setIsLoading(false);
+            router.push(`/${lang}/admin/login`);
+          }
           return;
         }
 
@@ -68,9 +79,11 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
 
         if (!userDoc.exists()) {
           console.warn('[ADMIN AUTH] User profile not found in Firestore');
-          setError(isRTL ? 'ملف المستخدم غير موجود' : 'User profile not found');
-          setIsLoading(false);
-          router.push(`/${lang}/admin/login`);
+          if (isMounted) {
+            setError(isRTL ? 'ملف المستخدم غير موجود' : 'User profile not found');
+            setIsLoading(false);
+            router.push(`/${lang}/admin/login`);
+          }
           return;
         }
 
@@ -80,9 +93,11 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
         // Check if user is active
         if (!userProfile.isActive) {
           console.warn('[ADMIN AUTH] Account is disabled');
-          setError(isRTL ? 'الحساب معطل' : 'Account is disabled');
-          setIsLoading(false);
-          router.push(`/${lang}/admin/login`);
+          if (isMounted) {
+            setError(isRTL ? 'الحساب معطل' : 'Account is disabled');
+            setIsLoading(false);
+            router.push(`/${lang}/admin/login`);
+          }
           return;
         }
 
@@ -90,9 +105,11 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
         const adminRoles = ['admin', 'super_admin'];
         if (!adminRoles.includes(userProfile.role)) {
           console.warn('[ADMIN AUTH] User does not have admin role:', userProfile.role);
-          setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
-          setIsLoading(false);
-          router.push(`/${lang}/admin/login`);
+          if (isMounted) {
+            setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
+            setIsLoading(false);
+            router.push(`/${lang}/admin/login`);
+          }
           return;
         }
 
@@ -105,26 +122,35 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
 
         if (!adminEmails.includes(currentUser.email || '')) {
           console.warn('[ADMIN AUTH] Email not in admin whitelist:', currentUser.email);
-          setError(isRTL ? 'البريد الإلكتروني غير مصرح له بالوصول للإدارة' : 'Email not authorized for admin access');
-          setIsLoading(false);
-          router.push(`/${lang}/admin/login`);
+          if (isMounted) {
+            setError(isRTL ? 'البريد الإلكتروني غير مصرح له بالوصول للإدارة' : 'Email not authorized for admin access');
+            setIsLoading(false);
+            router.push(`/${lang}/admin/login`);
+          }
           return;
         }
 
         // All checks passed
         console.log('[ADMIN AUTH] All checks passed, granting access');
-        setUser(currentUser);
-        setIsAuthorized(true);
-        setIsLoading(false);
+        if (isMounted) {
+          setUser(currentUser);
+          setIsAuthorized(true);
+          setIsLoading(false);
+        }
 
       } catch (error) {
         console.error('Admin auth check error:', error);
-        setError(isRTL ? 'خطأ في التحقق من الصلاحيات' : 'Authorization check failed');
-        setIsLoading(false);
+        if (isMounted) {
+          setError(isRTL ? 'خطأ في التحقق من الصلاحيات' : 'Authorization check failed');
+          setIsLoading(false);
+        }
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, [lang, router, isRTL]);
 
   // Loading state
