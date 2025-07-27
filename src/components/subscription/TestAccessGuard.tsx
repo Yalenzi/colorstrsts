@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { getCurrentSettings } from '@/hooks/useSubscriptionSettings';
-import { canAccessTest, recordTestUsage } from '@/lib/content-management';
+import { canAccessTest, recordTestUsage, getCurrentSettings } from '@/lib/content-management';
 import { Crown, Star, Lock } from 'lucide-react';
 import LoginModal from '@/components/auth/LoginModal';
 import SignupModal from '@/components/auth/SignupModal';
@@ -38,90 +38,99 @@ export function TestAccessGuard({
 
   // التحقق من إمكانية الوصول
   const checkAccess = async () => {
-    try {
-      console.log('🔍 Checking access for test:', testIndex);
-      
-      // الحصول على أحدث الإعدادات
-      const currentSettings = getCurrentSettings();
-      setSettings(currentSettings);
-      
-      console.log('📋 Current settings:', currentSettings);
+    // منع الحلقة اللا نهائية - فحص إذا كان التحقق جاري بالفعل
+    if (loading) {
+      console.log('⏳ Access check already in progress, skipping...');
+      return;
+    }
 
-      // إذا كان الوصول المجاني العام مفعل، السماح فور
-      if (currentSettings.globalFreeAccess) {
-        console.log('✅ Global free access enabled - granting access');
-        setAccessStatus({ 
-          canAccess: true, 
-          reason: 'Global free access enabled' 
-        });
-        setLoading(false);
-        return;
-      }
+    try {
+      setLoading(true);
+      console.log('🔍 Checking access for test:', testIndex, 'user:', user?.uid);
 
       // إذا لم يكن المستخدم مسجل دخول
-      if (!user) {
+      if (!user?.uid) {
         console.log('❌ User not logged in');
-        setAccessStatus({ 
-          canAccess: false, 
-          reason: 'Login required' 
+        setAccessStatus({
+          canAccess: false,
+          reason: 'Login required'
         });
-        setLoading(false);
         return;
       }
 
-      // فحص الوصول عبر النظام العادي
+      // فحص الوصول عبر النظام الجديد
       const access = await canAccessTest(user.uid, testIndex);
       console.log('🎯 Access result:', access);
       setAccessStatus(access);
+
     } catch (error) {
       console.error('❌ Error checking test access:', error);
-      setAccessStatus({ 
-        canAccess: false, 
-        reason: 'Error checking access' 
+      setAccessStatus({
+        canAccess: false,
+        reason: 'Error checking access'
       });
     } finally {
       setLoading(false);
     }
   };
 
-  // تحديث الوصول عند تغيير المستخدم أو الاختبار فقط
+  // تحديث الوصول عند تغيير المستخدم أو الاختبار فقط - مع منع الحلقة اللا نهائية
   useEffect(() => {
-    if (user) {
-      checkAccess();
-    } else {
-      setAccessStatus({
-        canAccess: false,
-        reason: 'Login required'
-      });
-      setLoading(false);
-    }
-  }, [user?.uid, testIndex]); // Remove userProfile to prevent infinite loop
+    let isMounted = true;
 
-  // Listen for settings updates separately
-  useEffect(() => {
-    const handleSettingsUpdate = (e: CustomEvent) => {
-      console.log('🔄 Settings updated, rechecking access');
-      setSettings(e.detail);
-      if (user) {
-        checkAccess();
+    const performAccessCheck = async () => {
+      if (!isMounted) return;
+
+      if (user?.uid) {
+        console.log('🔍 Checking access for user:', user.uid, 'test:', testIndex);
+        await checkAccess();
+      } else {
+        console.log('🚫 No user, denying access');
+        if (isMounted) {
+          setAccessStatus({
+            canAccess: false,
+            reason: 'Login required'
+          });
+          setLoading(false);
+        }
       }
     };
 
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'subscription_settings' && user) {
-        console.log('🔄 Storage updated, rechecking access');
-        checkAccess();
-      }
+    performAccessCheck();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.uid, testIndex]); // Only depend on user ID and test index
+
+  // Listen for settings updates separately - مع منع الحلقة اللا نهائية
+  useEffect(() => {
+    let isMounted = true;
+
+    const handleSettingsUpdate = async (e: CustomEvent) => {
+      if (!isMounted || !user?.uid) return;
+
+      console.log('🔄 Settings updated, rechecking access');
+      setSettings(e.detail);
+      await checkAccess();
+    };
+
+    const handleStorageChange = async (e: StorageEvent) => {
+      if (!isMounted || !user?.uid || e.key !== 'subscription_settings') return;
+
+      console.log('🔄 Storage updated, rechecking access');
+      await checkAccess();
     };
 
     window.addEventListener('subscriptionSettingsUpdated', handleSettingsUpdate as EventListener);
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
+      isMounted = false;
       window.removeEventListener('subscriptionSettingsUpdated', handleSettingsUpdate as EventListener);
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [user?.uid]);
+  }, [user?.uid]); // Only depend on user ID
 
   // تسجيل استخدام الاختبار عند الوصول
   const handleAccessTest = async () => {

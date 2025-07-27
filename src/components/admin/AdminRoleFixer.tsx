@@ -19,9 +19,8 @@ import {
 import toast from 'react-hot-toast';
 import {
   ShieldCheckIcon,
-  CrownIcon,
   UserIcon,
-  RefreshCwIcon,
+  ArrowPathIcon as RefreshCwIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
@@ -186,7 +185,7 @@ export function AdminRoleFixer({ lang }: AdminRoleFixerProps) {
   const getRoleIcon = (role: string | null) => {
     switch (role) {
       case 'super_admin':
-        return <CrownIcon className="h-4 w-4 text-red-600" />;
+        return <ShieldCheckIcon className="h-4 w-4 text-red-600" />;
       case 'admin':
         return <ShieldCheckIcon className="h-4 w-4 text-orange-600" />;
       case 'user':
@@ -280,7 +279,7 @@ export function AdminRoleFixer({ lang }: AdminRoleFixerProps) {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                  <CrownIcon className="h-5 w-5 text-red-600" />
+                  <ShieldCheckIcon className="h-5 w-5 text-red-600" />
                   <span className="text-sm font-medium">{texts.superAdmin}</span>
                 </div>
               </div>

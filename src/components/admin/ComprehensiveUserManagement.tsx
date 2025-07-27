@@ -27,14 +27,13 @@ import toast from 'react-hot-toast';
 import {
   UsersIcon,
   PlusIcon,
-  SearchIcon,
+  MagnifyingGlassIcon as SearchIcon,
   EyeIcon,
   PencilIcon,
   TrashIcon,
   ShieldCheckIcon,
   UserIcon,
-  CrownIcon,
-  RefreshCwIcon,
+  ArrowPathIcon as RefreshCwIcon,
   XMarkIcon,
   CheckIcon
 } from '@heroicons/react/24/outline';
@@ -341,7 +340,7 @@ export function ComprehensiveUserManagement({ lang }: ComprehensiveUserManagemen
     const config = {
       user: { variant: 'secondary' as const, icon: UserIcon, text: texts.user },
       admin: { variant: 'default' as const, icon: ShieldCheckIcon, text: texts.admin },
-      super_admin: { variant: 'destructive' as const, icon: CrownIcon, text: texts.superAdmin }
+      super_admin: { variant: 'destructive' as const, icon: ShieldCheckIcon, text: texts.superAdmin }
     };
     
     const { variant, icon: Icon, text } = config[role];

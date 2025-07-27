@@ -10,7 +10,7 @@ import { databaseColorTestService } from '@/lib/database-color-test-service';
 import { Button } from '@/components/ui/button';
 import { TestCard } from '@/components/ui/test-card';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { TestAccessGuard } from '@/components/subscription/TestAccessGuard';
+import { SimpleTestAccessGuard } from '@/components/tests/SimpleTestAccessGuard';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import {
   BeakerIcon,
@@ -352,22 +352,11 @@ function TestsPageContent({ lang }: TestsPageProps) {
 
               return (
                 <div key={test.id} className="relative">
-                  <TestAccessGuard
+                  <SimpleTestAccessGuard
                     testIndex={index}
                     testId={test.id}
                     testName={lang === 'ar' ? test.method_name_ar : test.method_name}
-                    onAccessGranted={() => {
-                      const testUrl = `/${lang}/tests/${test.id}`;
-                      console.log('Test access granted, navigating to:', testUrl);
-
-                      // Try router.push first, fallback to window.location if needed
-                      try {
-                        router.push(testUrl);
-                      } catch (error) {
-                        console.warn('Router.push failed, using window.location:', error);
-                        window.location.href = testUrl;
-                      }
-                    }}
+                    lang={lang}
                   >
                     <div className="relative">
                       {/* Free/Premium Badge */}
@@ -394,7 +383,7 @@ function TestsPageContent({ lang }: TestsPageProps) {
                         }}
                       />
                     </div>
-                  </TestAccessGuard>
+                  </SimpleTestAccessGuard>
                 </div>
               );
             })}
