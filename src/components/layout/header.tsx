@@ -96,6 +96,7 @@ export function Header({ lang }: HeaderProps) {
     { name: t('navigation.home'), href: `/${lang}` },
     { name: t('navigation.tests'), href: `/${lang}/tests` },
     { name: t('navigation.results'), href: `/${lang}/results` },
+    { name: lang === 'ar' ? 'محلل الألوان' : 'Color Analyzer', href: `/${lang}/image-analysis` },
   ];
 
   const isActive = (href: string) => pathname === href;
