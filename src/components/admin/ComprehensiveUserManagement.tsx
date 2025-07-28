@@ -11,14 +11,15 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { auth, db } from '@/lib/firebase';
-import { 
-  collection, 
-  getDocs, 
-  doc, 
-  updateDoc, 
-  addDoc, 
-  deleteDoc, 
-  query, 
+import {
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  updateDoc,
+  addDoc,
+  deleteDoc,
+  query,
   orderBy,
   serverTimestamp
 } from 'firebase/firestore';
@@ -168,20 +169,42 @@ export function ComprehensiveUserManagement({ lang }: ComprehensiveUserManagemen
   const loadUsers = async () => {
     try {
       setLoading(true);
+      console.log('🔄 بدء تحميل المستخدمين...');
+
       const usersQuery = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
       const snapshot = await getDocs(usersQuery);
-      
-      const usersData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
-        lastLoginAt: doc.data().lastLoginAt?.toDate?.()?.toISOString(),
-      })) as User[];
-      
+
+      const usersData = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          email: data.email || '',
+          displayName: data.displayName || data.name || 'مستخدم غير محدد',
+          name: data.name || data.displayName || 'مستخدم غير محدد',
+          role: data.role || 'user',
+          status: data.status || 'active',
+          joinDate: data.createdAt?.toDate?.()?.toISOString?.()?.split('T')[0] || new Date().toISOString().split('T')[0],
+          createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+          lastLoginAt: data.lastLoginAt?.toDate?.()?.toISOString(),
+          testsCount: data.testsCount || 0,
+          photoURL: data.photoURL,
+          emailVerified: data.emailVerified || false,
+          subscription: data.subscription,
+          profile: data.profile || {}
+        };
+      }) as User[];
+
+      console.log(`✅ تم تحميل ${usersData.length} مستخدم بنجاح`);
       setUsers(usersData);
-    } catch (error) {
-      console.error('Error loading users:', error);
-      toast.error(isRTL ? 'خطأ في تحميل المستخدمين' : 'Error loading users');
+    } catch (error: any) {
+      console.error('❌ خطأ في تحميل المستخدمين:', error);
+
+      let errorMessage = isRTL ? 'خطأ في تحميل المستخدمين' : 'Error loading users';
+      if (error.code === 'permission-denied') {
+        errorMessage = isRTL ? 'ليس لديك صلاحية لعرض المستخدمين' : 'Permission denied to view users';
+      }
+
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -235,33 +258,81 @@ export function ComprehensiveUserManagement({ lang }: ComprehensiveUserManagemen
   };
 
   const handleEditUser = async () => {
-    if (!selectedUser) return;
+    if (!selectedUser) {
+      toast.error(isRTL ? 'لم يتم تحديد مستخدم للتعديل' : 'No user selected for editing');
+      return;
+    }
+
+    // التحقق من صحة البيانات
+    if (!formData.displayName.trim()) {
+      toast.error(isRTL ? 'اسم المستخدم مطلوب' : 'Display name is required');
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      toast.error(isRTL ? 'البريد الإلكتروني مطلوب' : 'Email is required');
+      return;
+    }
 
     setSaving(true);
     try {
+      console.log('🔄 بدء تحديث المستخدم:', selectedUser.id);
+      console.log('📝 البيانات المرسلة:', formData);
+
       const userRef = doc(db, 'users', selectedUser.id);
-      await updateDoc(userRef, {
-        displayName: formData.displayName,
+
+      // التحقق من وجود المستخدم أولاً
+      const userDoc = await getDoc(userRef);
+      if (!userDoc.exists()) {
+        throw new Error('المستخدم غير موجود في قاعدة البيانات');
+      }
+
+      // إعداد البيانات للتحديث
+      const updateData: any = {
+        displayName: formData.displayName.trim(),
         role: formData.role,
         status: formData.status,
-        profile: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phoneNumber: formData.phoneNumber,
-          country: formData.country,
-          city: formData.city,
-        },
         updatedAt: serverTimestamp()
-      });
+      };
 
+      // إضافة بيانات الملف الشخصي إذا كانت موجودة
+      if (formData.firstName || formData.lastName || formData.phoneNumber || formData.country || formData.city) {
+        updateData.profile = {
+          ...selectedUser.profile, // الحفاظ على البيانات الموجودة
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          phoneNumber: formData.phoneNumber.trim(),
+          country: formData.country.trim(),
+          city: formData.city.trim(),
+        };
+      }
+
+      console.log('📤 البيانات النهائية للتحديث:', updateData);
+
+      await updateDoc(userRef, updateData);
+
+      console.log('✅ تم تحديث المستخدم بنجاح');
       toast.success(texts.userUpdated);
       setShowEditModal(false);
       setSelectedUser(null);
       resetForm();
-      loadUsers();
-    } catch (error) {
-      console.error('Error updating user:', error);
-      toast.error(isRTL ? 'خطأ في تحديث المستخدم' : 'Error updating user');
+      await loadUsers(); // إعادة تحميل البيانات
+    } catch (error: any) {
+      console.error('❌ خطأ في تحديث المستخدم:', error);
+
+      let errorMessage = isRTL ? 'خطأ في تحديث المستخدم' : 'Error updating user';
+
+      if (error.code === 'permission-denied') {
+        errorMessage = isRTL ? 'ليس لديك صلاحية لتحديث هذا المستخدم' : 'Permission denied to update this user';
+      } else if (error.code === 'not-found') {
+        errorMessage = isRTL ? 'المستخدم غير موجود' : 'User not found';
+      } else if (error.code === 'unavailable') {
+        errorMessage = isRTL ? 'الخدمة غير متاحة حالياً، يرجى المحاولة لاحقاً' : 'Service unavailable, please try again later';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage);
     } finally {
       setSaving(false);
     }
@@ -297,12 +368,15 @@ export function ComprehensiveUserManagement({ lang }: ComprehensiveUserManagemen
   };
 
   const openEditModal = (user: User) => {
+    console.log('🔧 فتح modal التعديل للمستخدم:', user);
     setSelectedUser(user);
-    setFormData({
-      email: user.email,
-      displayName: user.displayName || '',
-      role: user.role,
-      status: user.status,
+
+    // التأكد من تعيين البيانات بشكل صحيح
+    const userData = {
+      email: user.email || '',
+      displayName: user.displayName || user.name || '',
+      role: user.role || 'user',
+      status: user.status || 'active',
       firstName: user.profile?.firstName || '',
       lastName: user.profile?.lastName || '',
       phoneNumber: user.profile?.phoneNumber || '',
@@ -310,7 +384,10 @@ export function ComprehensiveUserManagement({ lang }: ComprehensiveUserManagemen
       city: user.profile?.city || '',
       password: '',
       sendWelcomeEmail: false
-    });
+    };
+
+    console.log('📝 بيانات النموذج المعينة:', userData);
+    setFormData(userData);
     setShowEditModal(true);
   };
 
