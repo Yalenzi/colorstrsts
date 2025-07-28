@@ -244,8 +244,10 @@ export function AdminPanelTest({ lang }: AdminPanelTestProps) {
       warning: { color: 'bg-yellow-100 text-yellow-800', text: isRTL ? 'تحذير' : 'Warning' },
       pending: { color: 'bg-gray-100 text-gray-800', text: isRTL ? 'قيد الانتظار' : 'Pending' }
     };
-    
-    const { color, text } = config[status];
+
+    // إضافة حماية من undefined مع قيمة افتراضية
+    const statusConfig = config[status] || config.pending;
+    const { color, text } = statusConfig;
     return <Badge className={color}>{text}</Badge>;
   };
 

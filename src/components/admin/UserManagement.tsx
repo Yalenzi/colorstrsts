@@ -88,8 +88,9 @@ export function UserManagement({ lang }: { lang: string }) {
       premium: { color: 'bg-green-500', text: isRTL ? 'مميز' : 'Premium' },
       expired: { color: 'bg-red-500', text: isRTL ? 'منتهي' : 'Expired' }
     };
-    
-    const variant = variants[status];
+
+    // إضافة حماية من undefined مع قيمة افتراضية
+    const variant = variants[status] || variants.free;
     return (
       <Badge className={`${variant.color} text-white`}>
         {variant.text}

@@ -361,9 +361,11 @@ export function ComprehensiveUserManagement({ lang }: ComprehensiveUserManagemen
       inactive: { variant: 'secondary' as const, text: texts.inactive },
       pending: { variant: 'outline' as const, text: texts.pending }
     };
-    
-    const { variant, text } = config[status];
-    
+
+    // إضافة حماية من undefined مع قيمة افتراضية
+    const statusConfig = config[status] || config.pending;
+    const { variant, text } = statusConfig;
+
     return <Badge variant={variant}>{text}</Badge>;
   };
 

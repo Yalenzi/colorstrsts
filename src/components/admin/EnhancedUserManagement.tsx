@@ -200,7 +200,7 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
     }, 1000);
   };
 
-  // رندر شارة الحالة
+  // رندر شارة الحالة مع حماية من undefined
   const renderStatusBadge = (status: string) => {
     const statusConfig = {
       active: { color: 'bg-green-100 text-green-800', text: isRTL ? 'نشط' : 'Active' },
@@ -208,7 +208,18 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
       banned: { color: 'bg-red-100 text-red-800', text: isRTL ? 'محظور' : 'Banned' }
     };
 
-    const config = statusConfig[status as keyof typeof statusConfig];
+    // إضافة حماية من undefined مع قيمة افتراضية
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.inactive;
+
+    if (!config) {
+      // fallback إضافي في حالة عدم وجود أي config
+      return (
+        <Badge className="bg-gray-100 text-gray-800">
+          {isRTL ? 'غير محدد' : 'Unknown'}
+        </Badge>
+      );
+    }
+
     return (
       <Badge className={config.color}>
         {config.text}
@@ -216,7 +227,7 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
     );
   };
 
-  // رندر شارة الاشتراك
+  // رندر شارة الاشتراك مع حماية من undefined
   const renderSubscriptionBadge = (status: string) => {
     const statusConfig = {
       premium: { color: 'bg-purple-100 text-purple-800', text: isRTL ? 'مميز' : 'Premium', icon: Crown },
@@ -224,9 +235,21 @@ export function EnhancedUserManagement({ lang }: EnhancedUserManagementProps) {
       expired: { color: 'bg-red-100 text-red-800', text: isRTL ? 'منتهي' : 'Expired', icon: X }
     };
 
-    const config = statusConfig[status as keyof typeof statusConfig];
+    // إضافة حماية من undefined مع قيمة افتراضية
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.free;
+
+    if (!config) {
+      // fallback إضافي في حالة عدم وجود أي config
+      return (
+        <Badge className="bg-gray-100 text-gray-800 flex items-center space-x-1 rtl:space-x-reverse">
+          <Users className="w-3 h-3" />
+          <span>{isRTL ? 'غير محدد' : 'Unknown'}</span>
+        </Badge>
+      );
+    }
+
     const IconComponent = config.icon;
-    
+
     return (
       <Badge className={`${config.color} flex items-center space-x-1 rtl:space-x-reverse`}>
         <IconComponent className="w-3 h-3" />
