@@ -28,7 +28,8 @@ import {
   DocumentTextIcon,
   ShieldCheckIcon,
   UserGroupIcon,
-  CogIcon
+  CogIcon,
+  BanknotesIcon
 } from '@heroicons/react/24/outline';
 import { EnhancedCharts } from './charts/EnhancedCharts';
 import ColorResultsManagement from './ColorResultsManagement';
@@ -48,6 +49,8 @@ import { PerformanceSettings } from './PerformanceSettings';
 import { NotificationSettings } from './NotificationSettings';
 import { DatabaseSettings } from './DatabaseSettings';
 import { SecuritySettings } from './SecuritySettings';
+import { PaymentGatewaysManagement } from './PaymentGatewaysManagement';
+import { EnhancedPaymentManagement } from './EnhancedPaymentManagement';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -317,6 +320,8 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'test-steps', label: isRTL ? 'خطوات الاختبار' : 'Test Steps', icon: DocumentTextIcon },
     { id: 'subscriptions', label: isRTL ? 'الاشتراكات' : 'Subscriptions', icon: CreditCardIcon },
     { id: 'subscription-plans', label: isRTL ? 'خطط الاشتراك' : 'Subscription Plans', icon: CreditCardIcon },
+    { id: 'payment-gateways', label: isRTL ? 'بوابات الدفع' : 'Payment Gateways', icon: CreditCardIcon },
+    { id: 'enhanced-payments', label: isRTL ? 'إدارة المدفوعات المتقدمة' : 'Enhanced Payments', icon: BanknotesIcon },
     { id: 'content', label: isRTL ? 'إدارة المحتوى' : 'Content Management', icon: DocumentTextIcon },
     { id: 'content-management', label: isRTL ? 'إدارة الاشتراكات والدفع' : 'Subscription & Payment Management', icon: CreditCardIcon },
     { id: 'admin-roles', label: isRTL ? 'إصلاح أدوار المديرين' : 'Fix Admin Roles', icon: ShieldCheckIcon },
@@ -795,8 +800,16 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             <SecuritySettings lang={lang} />
           )}
 
+          {activeTab === 'payment-gateways' && (
+            <PaymentGatewaysManagement lang={lang} />
+          )}
+
+          {activeTab === 'enhanced-payments' && (
+            <EnhancedPaymentManagement lang={lang} />
+          )}
+
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
