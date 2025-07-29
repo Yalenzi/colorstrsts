@@ -29,7 +29,8 @@ import {
   ShieldCheckIcon,
   UserGroupIcon,
   CogIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  LockClosedIcon
 } from '@heroicons/react/24/outline';
 import { EnhancedCharts } from './charts/EnhancedCharts';
 import ColorResultsManagement from './ColorResultsManagement';
@@ -52,6 +53,9 @@ import { SecuritySettings } from './SecuritySettings';
 import { PaymentGatewaysManagement } from './PaymentGatewaysManagement';
 import { EnhancedPaymentManagement } from './EnhancedPaymentManagement';
 import { UserUpdateDiagnostic } from './UserUpdateDiagnostic';
+import { ChemicalTestsManagement } from './ChemicalTestsManagement';
+import { AdvancedSubscriptionManagement } from './AdvancedSubscriptionManagement';
+import { AccessControlManagement } from './AccessControlManagement';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -324,6 +328,9 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'payment-gateways', label: isRTL ? 'بوابات الدفع' : 'Payment Gateways', icon: CreditCardIcon },
     { id: 'enhanced-payments', label: isRTL ? 'إدارة المدفوعات المتقدمة' : 'Enhanced Payments', icon: BanknotesIcon },
     { id: 'user-diagnostic', label: isRTL ? 'تشخيص مشاكل المستخدمين' : 'User Diagnostic', icon: CogIcon },
+    { id: 'chemical-tests', label: isRTL ? 'إدارة الاختبارات الكيميائية' : 'Chemical Tests Management', icon: BeakerIcon },
+    { id: 'advanced-subscriptions', label: isRTL ? 'إدارة الاشتراكات المتقدمة' : 'Advanced Subscriptions', icon: StarIcon },
+    { id: 'access-control', label: isRTL ? 'إدارة التحكم في الوصول' : 'Access Control', icon: LockClosedIcon },
     { id: 'content', label: isRTL ? 'إدارة المحتوى' : 'Content Management', icon: DocumentTextIcon },
     { id: 'content-management', label: isRTL ? 'إدارة الاشتراكات والدفع' : 'Subscription & Payment Management', icon: CreditCardIcon },
     { id: 'admin-roles', label: isRTL ? 'إصلاح أدوار المديرين' : 'Fix Admin Roles', icon: ShieldCheckIcon },
@@ -814,8 +821,20 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             <UserUpdateDiagnostic lang={lang} />
           )}
 
+          {activeTab === 'chemical-tests' && (
+            <ChemicalTestsManagement lang={lang} />
+          )}
+
+          {activeTab === 'advanced-subscriptions' && (
+            <AdvancedSubscriptionManagement lang={lang} />
+          )}
+
+          {activeTab === 'access-control' && (
+            <AccessControlManagement lang={lang} />
+          )}
+
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'user-diagnostic'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">

@@ -1,31 +1,118 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Language } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { db } from '@/lib/firebase';
+import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, query, orderBy, setDoc, getDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import {
-  CogIcon,
+  DocumentTextIcon,
+  BeakerIcon,
+  PhotoIcon,
+  LanguageIcon,
+  TagIcon,
+  PlusIcon,
+  PencilIcon,
+  TrashIcon,
+  EyeIcon,
   StarIcon,
   LockClosedIcon,
+  GiftIcon,
+  ArrowPathIcon,
+  InformationCircleIcon,
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  CogIcon,
   CurrencyDollarIcon,
   UserGroupIcon,
   ChartBarIcon,
-  ExclamationTriangleIcon,
-  CheckCircleIcon,
-  XMarkIcon,
   BanknotesIcon as CreditCardIcon,
   DevicePhoneMobileIcon
 } from '@heroicons/react/24/outline';
+
+interface ChemicalTest {
+  id: string;
+  name: string;
+  nameAr: string;
+  slug: string;
+  description: string;
+  descriptionAr: string;
+  category: string;
+  categoryAr: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  subscriptionLevel: 'free' | 'basic' | 'premium' | 'pro';
+  price?: number;
+  estimatedTime: number;
+  safetyLevel: 'low' | 'medium' | 'high';
+  equipment: string[];
+  equipmentAr: string[];
+  chemicals: string[];
+  chemicalsAr: string[];
+  steps: TestStep[];
+  expectedResults: ExpectedResult[];
+  images: TestImage[];
+  videos?: string[];
+  tags: string[];
+  tagsAr: string[];
+  isActive: boolean;
+  isFeatured: boolean;
+  createdAt: string;
+  updatedAt: string;
+  viewCount: number;
+  completionCount: number;
+  rating: number;
+  ratingCount: number;
+}
+
+interface TestStep {
+  id: string;
+  stepNumber: number;
+  title: string;
+  titleAr: string;
+  description: string;
+  descriptionAr: string;
+  image?: string;
+  video?: string;
+  duration: number;
+  safetyNotes: string;
+  safetyNotesAr: string;
+  tips: string;
+  tipsAr: string;
+}
+
+interface ExpectedResult {
+  id: string;
+  condition: string;
+  conditionAr: string;
+  result: string;
+  resultAr: string;
+  color?: string;
+  image?: string;
+  interpretation: string;
+  interpretationAr: string;
+  confidence: number;
+}
+
+interface TestImage {
+  id: string;
+  url: string;
+  alt: string;
+  altAr: string;
+  type: 'equipment' | 'step' | 'result' | 'safety';
+  stepId?: string;
+  resultId?: string;
+}
 
 interface ContentManagementProps {
   lang: Language;
@@ -38,8 +125,8 @@ interface ContentSettings {
   premiumPrice: number;
   currency: 'SAR' | 'USD';
   freeTestsList: number[];
-  globalFreeAccess: boolean; // ميزة جديدة: تفعيل جميع الاختبارات مجاناً
-  enableAllTests: boolean; // ميزة جديدة: إلغاء قفل جميع الاختبارات
+  globalFreeAccess: boolean;
+  enableAllTests: boolean;
   subscriptionPlans: {
     monthly: {
       enabled: boolean;
