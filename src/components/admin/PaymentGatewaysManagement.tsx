@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Language } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -266,6 +266,8 @@ export function PaymentGatewaysManagement({ lang }: PaymentGatewaysManagementPro
       lastTransaction: ''
     }
   };
+
+
 
   useEffect(() => {
     loadGateways();
@@ -679,6 +681,88 @@ export function PaymentGatewaysManagement({ lang }: PaymentGatewaysManagementPro
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Add Gateway Dialog */}
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent className={`max-w-4xl ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2 rtl:space-x-reverse">
+              <PlusIcon className="h-5 w-5" />
+              <span>{texts.addGateway}</span>
+            </DialogTitle>
+            <DialogDescription>
+              {isRTL ? 'إضافة بوابة دفع جديدة للنظام' : 'Add a new payment gateway to the system'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>{texts.gatewayName}</Label>
+                <Input placeholder={isRTL ? 'أدخل اسم البوابة' : 'Enter gateway name'} />
+              </div>
+              <div className="space-y-2">
+                <Label>{texts.gatewayType}</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder={isRTL ? 'اختر نوع البوابة' : 'Select gateway type'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="stc_pay">{texts.stc_pay}</SelectItem>
+                    <SelectItem value="visa">{texts.visa}</SelectItem>
+                    <SelectItem value="mastercard">{texts.mastercard}</SelectItem>
+                    <SelectItem value="mada">{texts.mada}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+                {texts.cancel}
+              </Button>
+              <Button onClick={() => {
+                toast.success(isRTL ? 'سيتم إضافة البوابة قريباً' : 'Gateway will be added soon');
+                setShowAddDialog(false);
+              }}>
+                {texts.save}
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Gateway Dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className={`max-w-4xl ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2 rtl:space-x-reverse">
+              <PencilIcon className="h-5 w-5" />
+              <span>{texts.editGateway}</span>
+            </DialogTitle>
+            <DialogDescription>
+              {isRTL ? 'تعديل إعدادات بوابة الدفع' : 'Edit payment gateway settings'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Alert>
+              <InformationCircleIcon className="h-4 w-4" />
+              <AlertDescription>
+                {isRTL
+                  ? 'نموذج تعديل البوابة سيكون متاحاً قريباً'
+                  : 'Gateway edit form will be available soon'
+                }
+              </AlertDescription>
+            </Alert>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => {
+                setShowEditDialog(false);
+                setEditingGateway(null);
+              }}>
+                {texts.cancel}
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

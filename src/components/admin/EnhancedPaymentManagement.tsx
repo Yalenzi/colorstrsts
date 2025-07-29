@@ -988,6 +988,71 @@ export function EnhancedPaymentManagement({ lang }: EnhancedPaymentManagementPro
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Add Gateway Dialog */}
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent className={`max-w-4xl ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2 rtl:space-x-reverse">
+              <PlusIcon className="h-5 w-5" />
+              <span>{texts.addGateway}</span>
+            </DialogTitle>
+            <DialogDescription>
+              {isRTL ? 'إضافة بوابة دفع جديدة للنظام' : 'Add a new payment gateway to the system'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-4">
+            <Alert className="mb-4">
+              <InformationCircleIcon className="h-4 w-4" />
+              <AlertDescription>
+                {isRTL
+                  ? 'نموذج إضافة البوابة سيكون متاحاً قريباً. يمكنك استخدام "بوابات الدفع" من القائمة الجانبية.'
+                  : 'Gateway form will be available soon. You can use "Payment Gateways" from the sidebar.'
+                }
+              </AlertDescription>
+            </Alert>
+            <div className="flex justify-end space-x-2 rtl:space-x-reverse">
+              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+                {texts.cancel}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Gateway Dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className={`max-w-4xl ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2 rtl:space-x-reverse">
+              <PencilIcon className="h-5 w-5" />
+              <span>{texts.editGateway}</span>
+            </DialogTitle>
+            <DialogDescription>
+              {isRTL ? 'تعديل إعدادات بوابة الدفع' : 'Edit payment gateway settings'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-4">
+            <Alert className="mb-4">
+              <InformationCircleIcon className="h-4 w-4" />
+              <AlertDescription>
+                {isRTL
+                  ? 'نموذج تعديل البوابة سيكون متاحاً قريباً. يمكنك استخدام "بوابات الدفع" من القائمة الجانبية.'
+                  : 'Gateway edit form will be available soon. You can use "Payment Gateways" from the sidebar.'
+                }
+              </AlertDescription>
+            </Alert>
+            <div className="flex justify-end space-x-2 rtl:space-x-reverse">
+              <Button variant="outline" onClick={() => {
+                setShowEditDialog(false);
+                setEditingGateway(null);
+              }}>
+                {texts.cancel}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
