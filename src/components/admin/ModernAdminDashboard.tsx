@@ -30,7 +30,10 @@ import {
   UserGroupIcon,
   CogIcon,
   BanknotesIcon,
-  LockClosedIcon
+  LockClosedIcon,
+  ServerIcon,
+  StarIcon,
+  CircleStackIcon
 } from '@heroicons/react/24/outline';
 import { EnhancedCharts } from './charts/EnhancedCharts';
 import ColorResultsManagement from './ColorResultsManagement';
@@ -56,6 +59,9 @@ import { UserUpdateDiagnostic } from './UserUpdateDiagnostic';
 import { ChemicalTestsManagement } from './ChemicalTestsManagement';
 import { AdvancedSubscriptionManagement } from './AdvancedSubscriptionManagement';
 import { AccessControlManagement } from './AccessControlManagement';
+import { DatabaseDiagnostics } from './DatabaseDiagnostics';
+import { AdvancedDataManagement } from './AdvancedDataManagement';
+import { AuditLogSystem } from './AuditLogSystem';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -332,6 +338,9 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'advanced-subscriptions', label: isRTL ? 'إدارة الاشتراكات المتقدمة' : 'Advanced Subscriptions', icon: StarIcon },
     { id: 'access-control', label: isRTL ? 'إدارة التحكم في الوصول' : 'Access Control', icon: LockClosedIcon },
     { id: 'content', label: isRTL ? 'إدارة المحتوى' : 'Content Management', icon: DocumentTextIcon },
+    { id: 'database-diagnostics', label: isRTL ? 'تشخيص قاعدة البيانات' : 'Database Diagnostics', icon: CircleStackIcon },
+    { id: 'data-management', label: isRTL ? 'إدارة البيانات المتقدمة' : 'Advanced Data Management', icon: ServerIcon },
+    { id: 'audit-logs', label: isRTL ? 'سجل المراجعة' : 'Audit Logs', icon: DocumentTextIcon },
     { id: 'content-management', label: isRTL ? 'إدارة الاشتراكات والدفع' : 'Subscription & Payment Management', icon: CreditCardIcon },
     { id: 'admin-roles', label: isRTL ? 'إصلاح أدوار المديرين' : 'Fix Admin Roles', icon: ShieldCheckIcon },
     { id: 'database', label: isRTL ? 'إدارة البيانات' : 'Database Management', icon: ShieldCheckIcon },
@@ -833,8 +842,20 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             <AccessControlManagement lang={lang} />
           )}
 
+          {activeTab === 'database-diagnostics' && (
+            <DatabaseDiagnostics lang={lang} />
+          )}
+
+          {activeTab === 'data-management' && (
+            <AdvancedDataManagement lang={lang} />
+          )}
+
+          {activeTab === 'audit-logs' && (
+            <AuditLogSystem lang={lang} />
+          )}
+
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control', 'database-diagnostics', 'data-management', 'audit-logs'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
