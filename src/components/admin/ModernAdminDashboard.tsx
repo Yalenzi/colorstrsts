@@ -62,6 +62,7 @@ import { AccessControlManagement } from './AccessControlManagement';
 import { DatabaseDiagnostics } from './DatabaseDiagnostics';
 import { AdvancedDataManagement } from './AdvancedDataManagement';
 import { AuditLogSystem } from './AuditLogSystem';
+import { GlobalPaymentSettings } from './GlobalPaymentSettings';
 import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -333,6 +334,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'subscription-plans', label: isRTL ? 'خطط الاشتراك' : 'Subscription Plans', icon: CreditCardIcon },
     { id: 'payment-gateways', label: isRTL ? 'بوابات الدفع' : 'Payment Gateways', icon: CreditCardIcon },
     { id: 'enhanced-payments', label: isRTL ? 'إدارة المدفوعات المتقدمة' : 'Enhanced Payments', icon: BanknotesIcon },
+    { id: 'global-payment-settings', label: isRTL ? 'إعدادات الدفع العامة' : 'Global Payment Settings', icon: CogIcon },
     { id: 'user-diagnostic', label: isRTL ? 'تشخيص مشاكل المستخدمين' : 'User Diagnostic', icon: CogIcon },
     { id: 'chemical-tests', label: isRTL ? 'إدارة الاختبارات الكيميائية' : 'Chemical Tests Management', icon: BeakerIcon },
     { id: 'advanced-subscriptions', label: isRTL ? 'إدارة الاشتراكات المتقدمة' : 'Advanced Subscriptions', icon: StarIcon },
@@ -826,6 +828,10 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             <EnhancedPaymentManagement lang={lang} />
           )}
 
+          {activeTab === 'global-payment-settings' && (
+            <GlobalPaymentSettings lang={lang} />
+          )}
+
           {activeTab === 'user-diagnostic' && (
             <UserUpdateDiagnostic lang={lang} />
           )}
@@ -855,7 +861,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
           )}
 
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control', 'database-diagnostics', 'data-management', 'audit-logs'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'global-payment-settings', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control', 'database-diagnostics', 'data-management', 'audit-logs'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
