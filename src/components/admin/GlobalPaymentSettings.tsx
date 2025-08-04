@@ -235,7 +235,7 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
 
   const texts = {
     title: isRTL ? 'إعدادات الدفع العامة' : 'Global Payment Settings',
-    subtitle: isRTL ? 'إدارة شاملة لجميع إعدادات وطرق الدفع والأمان' : 'Comprehensive management of all payment settings, methods and security',
+    subtitle: isRTL ? 'إدارة شاملة لجميع إعدادات وطرق الدفع والأمان - للإدارة الكاملة استخدم "بوابات الدفع" من القائمة' : 'Comprehensive management of all payment settings, methods and security - Use "Payment Gateways" from sidebar for full management',
 
     // Tabs
     gateways: isRTL ? 'بوابات الدفع' : 'Payment Gateways',
@@ -410,6 +410,10 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
     test: isRTL ? 'اختبار' : 'Test',
     refresh: isRTL ? 'تحديث' : 'Refresh',
     configure: isRTL ? 'تكوين' : 'Configure',
+    comingSoon: isRTL ? 'قريباً' : 'Coming Soon',
+    viewOnly: isRTL ? 'عرض فقط' : 'View Only',
+    fullManagement: isRTL ? 'الإدارة الكاملة' : 'Full Management',
+    usePaymentGateways: isRTL ? 'استخدم بوابات الدفع' : 'Use Payment Gateways',
 
     // Messages
     saving: isRTL ? 'جاري الحفظ...' : 'Saving...',
@@ -960,6 +964,36 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         </div>
       </div>
 
+      {/* Info Alert */}
+      <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950/20">
+        <InformationCircleIcon className="h-4 w-4 text-blue-600" />
+        <AlertDescription className="text-blue-800 dark:text-blue-200">
+          <div className="flex items-center justify-between">
+            <span>
+              {isRTL
+                ? 'لإدارة بوابات الدفع بالكامل، يمكنك استخدام قسم "بوابات الدفع" من القائمة الجانبية'
+                : 'For full payment gateway management, you can use the "Payment Gateways" section from the sidebar'
+              }
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-4 rtl:mr-4 rtl:ml-0 border-blue-300 text-blue-700 hover:bg-blue-100"
+              onClick={() => {
+                toast.success(
+                  isRTL
+                    ? 'ابحث عن "بوابات الدفع" في القائمة الجانبية'
+                    : 'Look for "Payment Gateways" in the sidebar'
+                );
+              }}
+            >
+              <CreditCardIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+              {isRTL ? 'بوابات الدفع' : 'Payment Gateways'}
+            </Button>
+          </div>
+        </AlertDescription>
+      </Alert>
+
       {/* Payment Settings Tabs */}
       <Tabs defaultValue="gateways" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
@@ -976,12 +1010,90 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         {/* Payment Gateways Tab */}
         <TabsContent value="gateways">
           <div className="space-y-6">
+            {/* Gateway Management Info Card */}
+            <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950/20">
+              <CardContent className="p-4">
+                <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                  <InformationCircleIcon className="h-5 w-5 text-amber-600 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">
+                      {isRTL ? 'إدارة بوابات الدفع الكاملة' : 'Complete Payment Gateway Management'}
+                    </h4>
+                    <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
+                      {isRTL
+                        ? 'للحصول على إدارة كاملة لبوابات الدفع مع إمكانية الإضافة والتعديل والحذف، يرجى استخدام قسم "بوابات الدفع" المخصص من القائمة الجانبية.'
+                        : 'For complete payment gateway management with add, edit, and delete capabilities, please use the dedicated "Payment Gateways" section from the sidebar.'
+                      }
+                    </p>
+                    <div className="flex space-x-2 rtl:space-x-reverse">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-amber-300 text-amber-700 hover:bg-amber-100 dark:border-amber-600 dark:text-amber-300"
+                        onClick={() => {
+                          toast.success(
+                            isRTL
+                              ? 'ابحث عن "بوابات الدفع" في القائمة الجانبية للإدارة الكاملة'
+                              : 'Look for "Payment Gateways" in the sidebar for full management'
+                          );
+                        }}
+                      >
+                        <CreditCardIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'انتقل لبوابات الدفع' : 'Go to Payment Gateways'}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-amber-600 hover:bg-amber-100 dark:text-amber-400"
+                        onClick={() => {
+                          toast.info(
+                            isRTL
+                              ? 'هذا القسم للعرض والمراقبة فقط'
+                              : 'This section is for viewing and monitoring only'
+                          );
+                        }}
+                      >
+                        <EyeIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'عرض فقط' : 'View Only'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium">{texts.gateways}</h3>
-              <Button onClick={() => setShowGatewayDialog(true)}>
-                <PlusIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                {texts.addGateway}
-              </Button>
+              <div className="flex space-x-2 rtl:space-x-reverse">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    toast.success(
+                      isRTL
+                        ? 'يمكنك استخدام "بوابات الدفع" من القائمة الجانبية لإدارة البوابات'
+                        : 'You can use "Payment Gateways" from the sidebar to manage gateways'
+                    );
+                  }}
+                >
+                  <InformationCircleIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                  {isRTL ? 'بوابات الدفع' : 'Payment Gateways'}
+                </Button>
+                <Button
+                  onClick={() => {
+                    toast.info(
+                      isRTL
+                        ? 'نموذج إضافة البوابة سيكون متاحاً قريباً'
+                        : 'Add Gateway form will be available soon'
+                    );
+                  }}
+                  disabled
+                >
+                  <PlusIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                  {texts.addGateway}
+                  <span className="ml-2 rtl:mr-2 rtl:ml-0 text-xs opacity-75">
+                    ({isRTL ? 'قريباً' : 'Soon'})
+                  </span>
+                </Button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1075,9 +1187,13 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setEditingGateway(gateway);
-                            setShowGatewayDialog(true);
+                            toast.info(
+                              isRTL
+                                ? 'تعديل البوابة سيكون متاحاً قريباً. استخدم "بوابات الدفع" من القائمة الجانبية'
+                                : 'Gateway editing will be available soon. Use "Payment Gateways" from sidebar'
+                            );
                           }}
+                          disabled
                         >
                           <PencilIcon className="h-4 w-4" />
                         </Button>
@@ -1102,11 +1218,74 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         {/* Payment Methods Tab */}
         <TabsContent value="methods">
           <div className="space-y-6">
+            {/* Payment Methods Info Card */}
+            <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/20">
+              <CardContent className="p-4">
+                <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                  <InformationCircleIcon className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">
+                      {isRTL ? 'إدارة طرق الدفع' : 'Payment Methods Management'}
+                    </h4>
+                    <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                      {isRTL
+                        ? 'هذا القسم يعرض طرق الدفع المتاحة حالياً. إدارة طرق الدفع الكاملة (إضافة، تعديل، حذف) ستكون متاحة قريباً.'
+                        : 'This section displays currently available payment methods. Full payment method management (add, edit, delete) will be available soon.'
+                      }
+                    </p>
+                    <div className="flex space-x-2 rtl:space-x-reverse">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-600 dark:text-blue-300"
+                        onClick={() => {
+                          toast.info(
+                            isRTL
+                              ? 'إدارة طرق الدفع الكاملة ستكون متاحة قريباً'
+                              : 'Full payment methods management coming soon'
+                          );
+                        }}
+                      >
+                        <ClockIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'قريباً' : 'Coming Soon'}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-blue-600 hover:bg-blue-100 dark:text-blue-400"
+                        onClick={() => {
+                          toast.info(
+                            isRTL
+                              ? 'يمكنك عرض ومراقبة طرق الدفع الحالية'
+                              : 'You can view and monitor current payment methods'
+                          );
+                        }}
+                      >
+                        <EyeIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'عرض ومراقبة' : 'View & Monitor'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium">{texts.methods}</h3>
-              <Button onClick={() => setShowMethodDialog(true)}>
+              <Button
+                onClick={() => {
+                  toast.info(
+                    isRTL
+                      ? 'نموذج إضافة طريقة الدفع سيكون متاحاً قريباً'
+                      : 'Add Payment Method form will be available soon'
+                  );
+                }}
+                disabled
+              >
                 <PlusIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
                 {texts.addMethod}
+                <span className="ml-2 rtl:mr-2 rtl:ml-0 text-xs opacity-75">
+                  ({isRTL ? 'قريباً' : 'Soon'})
+                </span>
               </Button>
             </div>
 
@@ -1165,13 +1344,28 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setEditingMethod(method);
-                            setShowMethodDialog(true);
+                            toast.info(
+                              isRTL
+                                ? 'تعديل طريقة الدفع سيكون متاحاً قريباً'
+                                : 'Payment method editing will be available soon'
+                            );
                           }}
+                          disabled
                         >
                           <PencilIcon className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            toast.info(
+                              isRTL
+                                ? 'عرض تفاصيل طريقة الدفع سيكون متاحاً قريباً'
+                                : 'Payment method details view will be available soon'
+                            );
+                          }}
+                          disabled
+                        >
                           <EyeIcon className="h-4 w-4" />
                         </Button>
                       </div>
