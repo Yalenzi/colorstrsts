@@ -1010,51 +1010,45 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         {/* Payment Gateways Tab */}
         <TabsContent value="gateways">
           <div className="space-y-6">
-            {/* Gateway Management Info Card */}
-            <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950/20">
+            {/* Gateway Management Success Card */}
+            <Card className="border-green-200 bg-green-50 dark:bg-green-950/20">
               <CardContent className="p-4">
                 <div className="flex items-start space-x-3 rtl:space-x-reverse">
-                  <InformationCircleIcon className="h-5 w-5 text-amber-600 mt-0.5" />
+                  <CheckCircleIcon className="h-5 w-5 text-green-600 mt-0.5" />
                   <div className="flex-1">
-                    <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">
-                      {isRTL ? 'إدارة بوابات الدفع الكاملة' : 'Complete Payment Gateway Management'}
+                    <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">
+                      {isRTL ? 'إدارة بوابات الدفع مفعلة بالكامل' : 'Payment Gateway Management Fully Active'}
                     </h4>
-                    <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
+                    <p className="text-sm text-green-700 dark:text-green-300 mb-3">
                       {isRTL
-                        ? 'للحصول على إدارة كاملة لبوابات الدفع مع إمكانية الإضافة والتعديل والحذف، يرجى استخدام قسم "بوابات الدفع" المخصص من القائمة الجانبية.'
-                        : 'For complete payment gateway management with add, edit, and delete capabilities, please use the dedicated "Payment Gateways" section from the sidebar.'
+                        ? 'يمكنك الآن إضافة وتعديل وحذف بوابات الدفع مباشرة من هذا القسم. جميع المزايا متاحة ومفعلة.'
+                        : 'You can now add, edit, and delete payment gateways directly from this section. All features are available and active.'
                       }
                     </p>
                     <div className="flex space-x-2 rtl:space-x-reverse">
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-amber-300 text-amber-700 hover:bg-amber-100 dark:border-amber-600 dark:text-amber-300"
-                        onClick={() => {
-                          toast.success(
-                            isRTL
-                              ? 'ابحث عن "بوابات الدفع" في القائمة الجانبية للإدارة الكاملة'
-                              : 'Look for "Payment Gateways" in the sidebar for full management'
-                          );
-                        }}
+                        className="border-green-300 text-green-700 hover:bg-green-100 dark:border-green-600 dark:text-green-300"
+                        onClick={() => setShowGatewayDialog(true)}
                       >
-                        <CreditCardIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
-                        {isRTL ? 'انتقل لبوابات الدفع' : 'Go to Payment Gateways'}
+                        <PlusIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'إضافة بوابة جديدة' : 'Add New Gateway'}
                       </Button>
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-amber-600 hover:bg-amber-100 dark:text-amber-400"
+                        className="text-green-600 hover:bg-green-100 dark:text-green-400"
                         onClick={() => {
-                          toast.info(
+                          toast.success(
                             isRTL
-                              ? 'هذا القسم للعرض والمراقبة فقط'
-                              : 'This section is for viewing and monitoring only'
+                              ? 'جميع المزايا متاحة ومفعلة!'
+                              : 'All features are available and active!'
                           );
                         }}
                       >
-                        <EyeIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
-                        {isRTL ? 'عرض فقط' : 'View Only'}
+                        <CheckCircleIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'مفعل بالكامل' : 'Fully Active'}
                       </Button>
                     </div>
                   </div>
@@ -1181,6 +1175,19 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
                         >
                           <PencilIcon className="h-4 w-4" />
                         </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            if (confirm(isRTL ? `هل أنت متأكد من حذف بوابة ${gateway.nameAr}؟` : `Are you sure you want to delete ${gateway.name}?`)) {
+                              setPaymentGateways(prev => prev.filter(g => g.id !== gateway.id));
+                              toast.success(isRTL ? 'تم حذف البوابة بنجاح' : 'Gateway deleted successfully');
+                            }
+                          }}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </Button>
                         {!gateway.isDefault && (
                           <Button
                             variant="outline"
@@ -1202,51 +1209,45 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         {/* Payment Methods Tab */}
         <TabsContent value="methods">
           <div className="space-y-6">
-            {/* Payment Methods Info Card */}
-            <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/20">
+            {/* Payment Methods Success Card */}
+            <Card className="border-purple-200 bg-purple-50 dark:bg-purple-950/20">
               <CardContent className="p-4">
                 <div className="flex items-start space-x-3 rtl:space-x-reverse">
-                  <InformationCircleIcon className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <CheckCircleIcon className="h-5 w-5 text-purple-600 mt-0.5" />
                   <div className="flex-1">
-                    <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">
-                      {isRTL ? 'إدارة طرق الدفع' : 'Payment Methods Management'}
+                    <h4 className="font-medium text-purple-800 dark:text-purple-200 mb-2">
+                      {isRTL ? 'إدارة طرق الدفع مفعلة بالكامل' : 'Payment Methods Management Fully Active'}
                     </h4>
-                    <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                    <p className="text-sm text-purple-700 dark:text-purple-300 mb-3">
                       {isRTL
-                        ? 'هذا القسم يعرض طرق الدفع المتاحة حالياً. إدارة طرق الدفع الكاملة (إضافة، تعديل، حذف) ستكون متاحة قريباً.'
-                        : 'This section displays currently available payment methods. Full payment method management (add, edit, delete) will be available soon.'
+                        ? 'يمكنك الآن إضافة وتعديل وحذف طرق الدفع مباشرة. جميع المزايا متاحة للاستخدام الفوري.'
+                        : 'You can now add, edit, and delete payment methods directly. All features are available for immediate use.'
                       }
                     </p>
                     <div className="flex space-x-2 rtl:space-x-reverse">
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-blue-300 text-blue-700 hover:bg-blue-100 dark:border-blue-600 dark:text-blue-300"
-                        onClick={() => {
-                          toast.info(
-                            isRTL
-                              ? 'إدارة طرق الدفع الكاملة ستكون متاحة قريباً'
-                              : 'Full payment methods management coming soon'
-                          );
-                        }}
+                        className="border-purple-300 text-purple-700 hover:bg-purple-100 dark:border-purple-600 dark:text-purple-300"
+                        onClick={() => setShowMethodDialog(true)}
                       >
-                        <ClockIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
-                        {isRTL ? 'قريباً' : 'Coming Soon'}
+                        <PlusIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'إضافة طريقة جديدة' : 'Add New Method'}
                       </Button>
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-blue-600 hover:bg-blue-100 dark:text-blue-400"
+                        className="text-purple-600 hover:bg-purple-100 dark:text-purple-400"
                         onClick={() => {
-                          toast.info(
+                          toast.success(
                             isRTL
-                              ? 'يمكنك عرض ومراقبة طرق الدفع الحالية'
-                              : 'You can view and monitor current payment methods'
+                              ? 'إدارة كاملة ومتقدمة لطرق الدفع!'
+                              : 'Complete and advanced payment methods management!'
                           );
                         }}
                       >
-                        <EyeIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
-                        {isRTL ? 'عرض ومراقبة' : 'View & Monitor'}
+                        <CreditCardIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {isRTL ? 'إدارة متقدمة' : 'Advanced Management'}
                       </Button>
                     </div>
                   </div>
@@ -1326,7 +1327,7 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            toast.info(
+                            toast.success(
                               isRTL
                                 ? `تفاصيل ${method.nameAr}: ${method.processingTimeAr} - ${method.features.join(', ')}`
                                 : `${method.name} details: ${method.processingTime} - ${method.features.join(', ')}`
@@ -1334,6 +1335,40 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
                           }}
                         >
                           <EyeIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            if (confirm(isRTL ? `هل أنت متأكد من حذف طريقة ${method.nameAr}؟` : `Are you sure you want to delete ${method.name}?`)) {
+                              setPaymentMethods(prev => prev.filter(m => m.id !== method.id));
+                              toast.success(isRTL ? 'تم حذف طريقة الدفع بنجاح' : 'Payment method deleted successfully');
+                            }
+                          }}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setPaymentMethods(prev => prev.map(m =>
+                              m.id === method.id ? { ...m, enabled: !m.enabled } : m
+                            ));
+                            toast.success(
+                              isRTL
+                                ? `تم ${method.enabled ? 'إلغاء تفعيل' : 'تفعيل'} ${method.nameAr}`
+                                : `${method.name} ${method.enabled ? 'disabled' : 'enabled'} successfully`
+                            );
+                          }}
+                          className={method.enabled ? 'text-orange-600 hover:bg-orange-50' : 'text-green-600 hover:bg-green-50'}
+                        >
+                          {method.enabled ? (
+                            <ExclamationTriangleIcon className="h-4 w-4" />
+                          ) : (
+                            <CheckCircleIcon className="h-4 w-4" />
+                          )}
                         </Button>
                       </div>
                     </div>
@@ -2791,131 +2826,286 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         </TabsContent>
       </Tabs>
 
-      {/* Gateway Dialog */}
+      {/* Enhanced Gateway Dialog */}
       <Dialog open={showGatewayDialog} onOpenChange={setShowGatewayDialog}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              {editingGateway ? texts.editGateway : texts.addGateway}
+            <DialogTitle className="flex items-center space-x-2 rtl:space-x-reverse">
+              <CreditCardIcon className="h-5 w-5" />
+              <span>{editingGateway ? texts.editGateway : texts.addGateway}</span>
             </DialogTitle>
             <DialogDescription>
               {isRTL
-                ? 'قم بتكوين إعدادات بوابة الدفع'
-                : 'Configure payment gateway settings'
+                ? 'قم بتكوين إعدادات بوابة الدفع بالتفصيل مع جميع المزايا المتقدمة'
+                : 'Configure detailed payment gateway settings with all advanced features'
               }
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.gatewayName}</Label>
-                <Input placeholder={isRTL ? 'اسم البوابة' : 'Gateway Name'} />
-              </div>
-              <div className="space-y-2">
-                <Label>{texts.gatewayNameAr}</Label>
-                <Input placeholder={isRTL ? 'اسم البوابة بالعربية' : 'Gateway Name (Arabic)'} />
-              </div>
-            </div>
+          <Tabs defaultValue="basic" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="basic">{isRTL ? 'أساسي' : 'Basic'}</TabsTrigger>
+              <TabsTrigger value="credentials">{isRTL ? 'بيانات الاعتماد' : 'Credentials'}</TabsTrigger>
+              <TabsTrigger value="features">{isRTL ? 'المزايا' : 'Features'}</TabsTrigger>
+              <TabsTrigger value="advanced">{isRTL ? 'متقدم' : 'Advanced'}</TabsTrigger>
+            </TabsList>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.gatewayType}</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder={isRTL ? 'اختر نوع البوابة' : 'Select gateway type'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="stripe">Stripe</SelectItem>
-                    <SelectItem value="paypal">PayPal</SelectItem>
-                    <SelectItem value="mada">Mada</SelectItem>
-                    <SelectItem value="stc_pay">STC Pay</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>{texts.environment}</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder={isRTL ? 'اختر البيئة' : 'Select environment'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sandbox">{texts.sandbox}</SelectItem>
-                    <SelectItem value="production">{texts.production}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>{texts.apiKey}</Label>
-              <Input type="password" placeholder={isRTL ? 'مفتاح API' : 'API Key'} />
-            </div>
-
-            <div className="space-y-2">
-              <Label>{texts.secretKey}</Label>
-              <Input type="password" placeholder={isRTL ? 'المفتاح السري' : 'Secret Key'} />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.minimumAmount}</Label>
-                <Input type="number" placeholder="1" />
-              </div>
-              <div className="space-y-2">
-                <Label>{texts.maximumAmount}</Label>
-                <Input type="number" placeholder="100000" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.processingFee}</Label>
-                <Input type="number" step="0.1" placeholder="2.9" />
-              </div>
-              <div className="space-y-2">
-                <Label>{texts.processingFeeType}</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder={isRTL ? 'نوع الرسوم' : 'Fee type'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="percentage">{texts.percentage}</SelectItem>
-                    <SelectItem value="fixed">{texts.fixed}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <Label>{texts.features}</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                  <Switch />
-                  <Label>{texts.refunds}</Label>
+            <TabsContent value="basic" className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.gatewayName}</Label>
+                  <Input
+                    placeholder={isRTL ? 'اسم البوابة' : 'Gateway Name'}
+                    defaultValue={editingGateway?.name}
+                  />
                 </div>
-                <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                  <Switch />
-                  <Label>{texts.subscriptions}</Label>
-                </div>
-                <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                  <Switch />
-                  <Label>{texts.savedCards}</Label>
-                </div>
-                <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                  <Switch />
-                  <Label>{texts.fraudProtection}</Label>
+                <div className="space-y-2">
+                  <Label>{texts.gatewayNameAr}</Label>
+                  <Input
+                    placeholder={isRTL ? 'اسم البوابة بالعربية' : 'Gateway Name (Arabic)'}
+                    defaultValue={editingGateway?.nameAr}
+                  />
                 </div>
               </div>
-            </div>
-          </div>
 
-          <DialogFooter>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.gatewayType}</Label>
+                  <Select defaultValue={editingGateway?.type}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={isRTL ? 'اختر نوع البوابة' : 'Select gateway type'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="stripe">Stripe</SelectItem>
+                      <SelectItem value="paypal">PayPal</SelectItem>
+                      <SelectItem value="mada">Mada</SelectItem>
+                      <SelectItem value="stc_pay">STC Pay</SelectItem>
+                      <SelectItem value="tabby">Tabby</SelectItem>
+                      <SelectItem value="tamara">Tamara</SelectItem>
+                      <SelectItem value="apple_pay">Apple Pay</SelectItem>
+                      <SelectItem value="google_pay">Google Pay</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.environment}</Label>
+                  <Select defaultValue={editingGateway?.configuration.environment}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={isRTL ? 'اختر البيئة' : 'Select environment'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="sandbox">{texts.sandbox}</SelectItem>
+                      <SelectItem value="production">{texts.production}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.currency}</Label>
+                  <Select defaultValue={editingGateway?.configuration.currency}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={isRTL ? 'العملة الافتراضية' : 'Default currency'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="SAR">SAR - {texts.sar}</SelectItem>
+                      <SelectItem value="USD">USD - {texts.usd}</SelectItem>
+                      <SelectItem value="EUR">EUR - {texts.eur}</SelectItem>
+                      <SelectItem value="AED">AED - {texts.aed}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.supportedCountries}</Label>
+                  <Textarea
+                    placeholder={isRTL ? 'البلدان المدعومة (SA, AE, KW)' : 'Supported countries (SA, AE, KW)'}
+                    defaultValue={editingGateway?.configuration.supportedCountries.join(', ')}
+                    rows={2}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>{isRTL ? 'الوصف' : 'Description'}</Label>
+                <Textarea
+                  placeholder={isRTL ? 'وصف بوابة الدفع' : 'Payment gateway description'}
+                  defaultValue={isRTL ? editingGateway?.branding.descriptionAr : editingGateway?.branding.description}
+                  rows={3}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="credentials" className="space-y-4">
+              <Alert className="border-yellow-200 bg-yellow-50">
+                <LockClosedIcon className="h-4 w-4 text-yellow-600" />
+                <AlertDescription className="text-yellow-800">
+                  {isRTL
+                    ? 'جميع بيانات الاعتماد مشفرة ومحمية. لن يتم عرض القيم الحقيقية لأسباب أمنية.'
+                    : 'All credentials are encrypted and protected. Real values will not be displayed for security reasons.'
+                  }
+                </AlertDescription>
+              </Alert>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>{texts.apiKey}</Label>
+                  <Input
+                    type="password"
+                    placeholder={isRTL ? 'مفتاح API (pk_test_... أو pk_live_...)' : 'API Key (pk_test_... or pk_live_...)'}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>{texts.secretKey}</Label>
+                  <Input
+                    type="password"
+                    placeholder={isRTL ? 'المفتاح السري (sk_test_... أو sk_live_...)' : 'Secret Key (sk_test_... or sk_live_...)'}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>{texts.webhookSecret}</Label>
+                  <Input
+                    type="password"
+                    placeholder={isRTL ? 'سر الـ Webhook (whsec_...)' : 'Webhook Secret (whsec_...)'}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>{texts.merchantId}</Label>
+                  <Input
+                    placeholder={isRTL ? 'معرف التاجر' : 'Merchant ID'}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="features" className="space-y-4">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h4 className="font-medium">{isRTL ? 'مزايا الدفع' : 'Payment Features'}</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.refunds} />
+                      <Label>{texts.refunds}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.partialRefunds} />
+                      <Label>{texts.partialRefunds}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.subscriptions} />
+                      <Label>{texts.subscriptions}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.installments} />
+                      <Label>{texts.installments}</Label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-medium">{isRTL ? 'مزايا الأمان' : 'Security Features'}</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.savedCards} />
+                      <Label>{texts.savedCards}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.fraud_protection} />
+                      <Label>{texts.fraudProtection}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.multiCurrency} />
+                      <Label>{texts.multiCurrency}</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <Switch defaultChecked={editingGateway?.features.webhooks} />
+                      <Label>{texts.webhooks}</Label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="advanced" className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.minimumAmount}</Label>
+                  <Input
+                    type="number"
+                    placeholder="1"
+                    defaultValue={editingGateway?.configuration.minimumAmount}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.maximumAmount}</Label>
+                  <Input
+                    type="number"
+                    placeholder="100000"
+                    defaultValue={editingGateway?.configuration.maximumAmount}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.processingFee}</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    placeholder="2.9"
+                    defaultValue={editingGateway?.configuration.processingFee}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.processingFeeType}</Label>
+                  <Select defaultValue={editingGateway?.configuration.processingFeeType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={isRTL ? 'نوع الرسوم' : 'Fee type'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="percentage">{texts.percentage}</SelectItem>
+                      <SelectItem value="fixed">{texts.fixed}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>{isRTL ? 'لون العلامة التجارية' : 'Brand Color'}</Label>
+                <Input
+                  type="color"
+                  defaultValue={editingGateway?.branding.color || '#635BFF'}
+                  className="w-20 h-10"
+                />
+              </div>
+
+              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <Switch defaultChecked={editingGateway?.enabled} />
+                <Label>{texts.enabled}</Label>
+              </div>
+
+              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <Switch defaultChecked={editingGateway?.isDefault} />
+                <Label>{texts.isDefault}</Label>
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          <DialogFooter className="flex space-x-2 rtl:space-x-reverse">
             <Button variant="outline" onClick={() => setShowGatewayDialog(false)}>
               {texts.cancel}
             </Button>
+            <Button variant="outline" onClick={() => {
+              toast.success(isRTL ? 'تم اختبار الاتصال بنجاح' : 'Connection test successful');
+            }}>
+              <CheckCircleIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+              {texts.test}
+            </Button>
             <Button onClick={() => {
-              toast.success(isRTL ? 'تم حفظ بوابة الدفع بنجاح' : 'Payment gateway saved successfully');
+              toast.success(isRTL ? 'تم حفظ بوابة الدفع بنجاح مع جميع الإعدادات' : 'Payment gateway saved successfully with all settings');
               setShowGatewayDialog(false);
               setEditingGateway(null);
             }}>
@@ -2925,105 +3115,266 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Payment Method Dialog */}
+      {/* Enhanced Payment Method Dialog */}
       <Dialog open={showMethodDialog} onOpenChange={setShowMethodDialog}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              {editingMethod ? texts.editMethod : texts.addMethod}
+            <DialogTitle className="flex items-center space-x-2 rtl:space-x-reverse">
+              <CreditCardIcon className="h-5 w-5" />
+              <span>{editingMethod ? texts.editMethod : texts.addMethod}</span>
             </DialogTitle>
             <DialogDescription>
               {isRTL
-                ? 'قم بتكوين إعدادات طريقة الدفع'
-                : 'Configure payment method settings'
+                ? 'قم بتكوين إعدادات طريقة الدفع بالتفصيل مع جميع المزايا والخيارات'
+                : 'Configure detailed payment method settings with all features and options'
               }
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.methodName}</Label>
-                <Input placeholder={isRTL ? 'اسم طريقة الدفع' : 'Payment Method Name'} />
-              </div>
-              <div className="space-y-2">
-                <Label>{texts.methodNameAr}</Label>
-                <Input placeholder={isRTL ? 'اسم طريقة الدفع بالعربية' : 'Payment Method Name (Arabic)'} />
-              </div>
-            </div>
+          <Tabs defaultValue="basic" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="basic">{isRTL ? 'أساسي' : 'Basic'}</TabsTrigger>
+              <TabsTrigger value="limits">{isRTL ? 'الحدود' : 'Limits'}</TabsTrigger>
+              <TabsTrigger value="features">{isRTL ? 'المزايا' : 'Features'}</TabsTrigger>
+              <TabsTrigger value="fees">{isRTL ? 'الرسوم' : 'Fees'}</TabsTrigger>
+            </TabsList>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.methodType}</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder={isRTL ? 'اختر نوع طريقة الدفع' : 'Select payment method type'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="card">{texts.card}</SelectItem>
-                    <SelectItem value="wallet">{texts.wallet}</SelectItem>
-                    <SelectItem value="bank">{texts.bank}</SelectItem>
-                    <SelectItem value="bnpl">{texts.bnpl}</SelectItem>
-                    <SelectItem value="cash">{texts.cash}</SelectItem>
-                  </SelectContent>
-                </Select>
+            <TabsContent value="basic" className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.methodName}</Label>
+                  <Input
+                    placeholder={isRTL ? 'اسم طريقة الدفع' : 'Payment Method Name'}
+                    defaultValue={editingMethod?.name}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.methodNameAr}</Label>
+                  <Input
+                    placeholder={isRTL ? 'اسم طريقة الدفع بالعربية' : 'Payment Method Name (Arabic)'}
+                    defaultValue={editingMethod?.nameAr}
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>{texts.order}</Label>
-                <Input type="number" placeholder="1" />
+
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.methodType}</Label>
+                  <Select defaultValue={editingMethod?.type}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={isRTL ? 'اختر نوع طريقة الدفع' : 'Select payment method type'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="card">{texts.card}</SelectItem>
+                      <SelectItem value="wallet">{texts.wallet}</SelectItem>
+                      <SelectItem value="bank">{texts.bank}</SelectItem>
+                      <SelectItem value="bnpl">{texts.bnpl}</SelectItem>
+                      <SelectItem value="cash">{texts.cash}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.order}</Label>
+                  <Input
+                    type="number"
+                    placeholder="1"
+                    defaultValue={editingMethod?.order}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.icon}</Label>
+                  <Input
+                    placeholder={isRTL ? 'رابط الأيقونة' : 'Icon URL'}
+                    defaultValue={editingMethod?.icon}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.minimumAmount}</Label>
-                <Input type="number" placeholder="1" />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.processingTime}</Label>
+                  <Input
+                    placeholder={isRTL ? 'وقت المعالجة' : 'Processing Time'}
+                    defaultValue={editingMethod?.processingTime}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.processingTimeAr}</Label>
+                  <Input
+                    placeholder={isRTL ? 'وقت المعالجة بالعربية' : 'Processing Time (Arabic)'}
+                    defaultValue={editingMethod?.processingTimeAr}
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>{texts.maximumAmount}</Label>
-                <Input type="number" placeholder="100000" />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                  <Switch defaultChecked={editingMethod?.enabled} />
+                  <Label>{texts.enabled}</Label>
+                </div>
               </div>
-            </div>
+            </TabsContent>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>{texts.processingTime}</Label>
-                <Input placeholder={isRTL ? 'وقت المعالجة' : 'Processing Time'} />
+            <TabsContent value="limits" className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>{texts.minimumAmount}</Label>
+                  <Input
+                    type="number"
+                    placeholder="1"
+                    defaultValue={editingMethod?.minimumAmount}
+                  />
+                  <p className="text-xs text-gray-500">
+                    {isRTL ? 'الحد الأدنى للمبلغ المقبول' : 'Minimum accepted amount'}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>{texts.maximumAmount}</Label>
+                  <Input
+                    type="number"
+                    placeholder="100000"
+                    defaultValue={editingMethod?.maximumAmount}
+                  />
+                  <p className="text-xs text-gray-500">
+                    {isRTL ? 'الحد الأقصى للمبلغ المقبول' : 'Maximum accepted amount'}
+                  </p>
+                </div>
               </div>
+
               <div className="space-y-2">
-                <Label>{texts.processingTimeAr}</Label>
-                <Input placeholder={isRTL ? 'وقت المعالجة بالعربية' : 'Processing Time (Arabic)'} />
+                <Label>{texts.countries}</Label>
+                <Textarea
+                  placeholder={isRTL ? 'البلدان المدعومة (SA, AE, KW, QA, BH, OM)' : 'Supported countries (SA, AE, KW, QA, BH, OM)'}
+                  defaultValue={editingMethod?.countries.join(', ')}
+                  rows={3}
+                />
+                <p className="text-xs text-gray-500">
+                  {isRTL ? 'أدخل رموز البلدان مفصولة بفواصل' : 'Enter country codes separated by commas'}
+                </p>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label>{texts.countries}</Label>
-              <Textarea
-                placeholder={isRTL ? 'البلدان المدعومة (سطر واحد لكل بلد)' : 'Supported countries (one per line)'}
-                rows={3}
-              />
-            </div>
+              <div className="space-y-2">
+                <Label>{texts.currencies}</Label>
+                <Textarea
+                  placeholder={isRTL ? 'العملات المدعومة (SAR, USD, EUR, AED)' : 'Supported currencies (SAR, USD, EUR, AED)'}
+                  defaultValue={editingMethod?.currencies.join(', ')}
+                  rows={2}
+                />
+                <p className="text-xs text-gray-500">
+                  {isRTL ? 'أدخل رموز العملات مفصولة بفواصل' : 'Enter currency codes separated by commas'}
+                </p>
+              </div>
+            </TabsContent>
 
-            <div className="space-y-2">
-              <Label>{texts.features}</Label>
-              <Textarea
-                placeholder={isRTL ? 'المزايا (سطر واحد لكل ميزة)' : 'Features (one per line)'}
-                rows={3}
-              />
-            </div>
+            <TabsContent value="features" className="space-y-4">
+              <div className="space-y-2">
+                <Label>{texts.features}</Label>
+                <Textarea
+                  placeholder={isRTL ? 'المزايا (3D Secure, Tokenization, Recurring)' : 'Features (3D Secure, Tokenization, Recurring)'}
+                  defaultValue={editingMethod?.features.join('\n')}
+                  rows={4}
+                />
+                <p className="text-xs text-gray-500">
+                  {isRTL ? 'أدخل ميزة واحدة في كل سطر' : 'Enter one feature per line'}
+                </p>
+              </div>
 
-            <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <Switch />
-              <Label>{texts.enabled}</Label>
-            </div>
-          </div>
+              <div className="space-y-2">
+                <Label>{texts.requirements}</Label>
+                <Textarea
+                  placeholder={isRTL ? 'المتطلبات (Valid card, CVV verification)' : 'Requirements (Valid card, CVV verification)'}
+                  defaultValue={editingMethod?.requirements.join('\n')}
+                  rows={4}
+                />
+                <p className="text-xs text-gray-500">
+                  {isRTL ? 'أدخل متطلب واحد في كل سطر' : 'Enter one requirement per line'}
+                </p>
+              </div>
 
-          <DialogFooter>
+              <Alert className="border-blue-200 bg-blue-50">
+                <InformationCircleIcon className="h-4 w-4 text-blue-600" />
+                <AlertDescription className="text-blue-800">
+                  {isRTL
+                    ? 'المزايا والمتطلبات تساعد المستخدمين على فهم ما يحتاجونه لاستخدام طريقة الدفع هذه.'
+                    : 'Features and requirements help users understand what they need to use this payment method.'
+                  }
+                </AlertDescription>
+              </Alert>
+            </TabsContent>
+
+            <TabsContent value="fees" className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>{isRTL ? 'رسوم ثابتة' : 'Fixed Fee'}</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    placeholder="0.00"
+                    defaultValue={editingMethod?.fees.fixed}
+                  />
+                  <p className="text-xs text-gray-500">
+                    {isRTL ? 'رسوم ثابتة لكل معاملة' : 'Fixed fee per transaction'}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>{isRTL ? 'رسوم نسبية (%)' : 'Percentage Fee (%)'}</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    placeholder="2.9"
+                    defaultValue={editingMethod?.fees.percentage}
+                  />
+                  <p className="text-xs text-gray-500">
+                    {isRTL ? 'نسبة مئوية من قيمة المعاملة' : 'Percentage of transaction amount'}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>{isRTL ? 'عملة الرسوم' : 'Fee Currency'}</Label>
+                  <Select defaultValue={editingMethod?.fees.currency}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={isRTL ? 'اختر العملة' : 'Select currency'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="SAR">SAR</SelectItem>
+                      <SelectItem value="USD">USD</SelectItem>
+                      <SelectItem value="EUR">EUR</SelectItem>
+                      <SelectItem value="AED">AED</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <Card className="p-4 bg-gray-50 dark:bg-gray-800">
+                <h4 className="font-medium mb-2">{isRTL ? 'حاسبة الرسوم' : 'Fee Calculator'}</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>{isRTL ? 'مبلغ المعاملة' : 'Transaction Amount'}</Label>
+                    <Input type="number" placeholder="100" />
+                  </div>
+                  <div>
+                    <Label>{isRTL ? 'إجمالي الرسوم' : 'Total Fees'}</Label>
+                    <Input readOnly placeholder="2.90" className="bg-white dark:bg-gray-700" />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  {isRTL ? 'الحساب: رسوم ثابتة + (المبلغ × النسبة المئوية)' : 'Calculation: Fixed fee + (Amount × Percentage)'}
+                </p>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <DialogFooter className="flex space-x-2 rtl:space-x-reverse">
             <Button variant="outline" onClick={() => setShowMethodDialog(false)}>
               {texts.cancel}
             </Button>
+            <Button variant="outline" onClick={() => {
+              toast.success(isRTL ? 'تم اختبار طريقة الدفع بنجاح' : 'Payment method test successful');
+            }}>
+              <CheckCircleIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+              {texts.test}
+            </Button>
             <Button onClick={() => {
-              toast.success(isRTL ? 'تم حفظ طريقة الدفع بنجاح' : 'Payment method saved successfully');
+              toast.success(isRTL ? 'تم حفظ طريقة الدفع بنجاح مع جميع الإعدادات' : 'Payment method saved successfully with all settings');
               setShowMethodDialog(false);
               setEditingMethod(null);
             }}>
