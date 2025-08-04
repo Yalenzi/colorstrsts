@@ -118,6 +118,8 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
   const loadTests = async () => {
     setLoading(true);
     try {
+      console.log('🔄 بدء تحميل الاختبارات من ملف البيانات...');
+
       // تحميل الاختبارات الحقيقية من ملف البيانات
       const realTests = chemicalTestsData.map((test: any) => ({
         ...test,
@@ -126,11 +128,12 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
         successRate: Math.floor(Math.random() * 30) + 70
       }));
 
+      console.log(`✅ تم تحميل ${realTests.length} اختبار بنجاح من ملف البيانات`);
       setTests(realTests);
       setFilteredTests(realTests);
-      toast.success(isRTL ? 'تم تحميل الاختبارات بنجاح' : 'Tests loaded successfully');
+      toast.success(isRTL ? `تم تحميل ${realTests.length} اختبار بنجاح` : `${realTests.length} tests loaded successfully`);
     } catch (error) {
-      console.error('Error loading tests:', error);
+      console.error('❌ خطأ في تحميل الاختبارات:', error);
       toast.error(isRTL ? 'خطأ في تحميل الاختبارات' : 'Error loading tests');
     } finally {
       setLoading(false);

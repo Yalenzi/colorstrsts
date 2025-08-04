@@ -1,0 +1,12 @@
+{
+  "name": "firebase-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for Firebase operations",
+  "main": "upload-tests-to-firebase.js",
+  "scripts": {
+    "upload-tests": "node upload-tests-to-firebase.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.11.0"
+  }
+}
