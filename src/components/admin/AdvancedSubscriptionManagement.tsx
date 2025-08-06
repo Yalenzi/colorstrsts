@@ -28,6 +28,9 @@ import {
   ShieldCheckIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
+  PlusIcon,
+  PencilIcon,
+  TrashIcon,
   InformationCircleIcon,
   ArrowPathIcon,
   PlusIcon,
@@ -172,6 +175,15 @@ export function AdvancedSubscriptionManagement({ lang }: AdvancedSubscriptionMan
     editPlan: isRTL ? 'تعديل الخطة' : 'Edit Plan',
     deletePlan: isRTL ? 'حذف الخطة' : 'Delete Plan',
     duplicatePlan: isRTL ? 'نسخ الخطة' : 'Duplicate Plan',
+
+    // Access Rules
+    addRule: isRTL ? 'إضافة قاعدة' : 'Add Rule',
+    editRule: isRTL ? 'تعديل القاعدة' : 'Edit Rule',
+    deleteRule: isRTL ? 'حذف القاعدة' : 'Delete Rule',
+    enabled: isRTL ? 'مفعل' : 'Enabled',
+    disabled: isRTL ? 'معطل' : 'Disabled',
+    priority: isRTL ? 'الأولوية' : 'Priority',
+    requiredPlans: isRTL ? 'الخطط المطلوبة' : 'Required Plans',
     
     // Plan Properties
     planName: isRTL ? 'اسم الخطة' : 'Plan Name',
@@ -432,13 +444,13 @@ export function AdvancedSubscriptionManagement({ lang }: AdvancedSubscriptionMan
   const saveTrialSettings = async (settings: TrialSettings) => {
     try {
       setSaving(true);
-      
+
       const settingsRef = doc(db, 'settings', 'trial');
       await setDoc(settingsRef, {
         ...settings,
         updatedAt: new Date()
       });
-      
+
       setTrialSettings(settings);
       toast.success(isRTL ? 'تم حفظ إعدادات التجربة المجانية بنجاح' : 'Trial settings saved successfully');
     } catch (error: any) {
@@ -446,6 +458,23 @@ export function AdvancedSubscriptionManagement({ lang }: AdvancedSubscriptionMan
       toast.error(texts.error);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const deleteAccessRule = async (ruleId: string) => {
+    try {
+      if (!confirm(isRTL ? 'هل أنت متأكد من حذف هذه القاعدة؟' : 'Are you sure you want to delete this rule?')) {
+        return;
+      }
+
+      const ruleRef = doc(db, 'access_rules', ruleId);
+      await deleteDoc(ruleRef);
+
+      setAccessRules(prev => prev.filter(rule => rule.id !== ruleId));
+      toast.success(isRTL ? 'تم حذف القاعدة بنجاح' : 'Rule deleted successfully');
+    } catch (error: any) {
+      console.error('Error deleting access rule:', error);
+      toast.error(texts.error);
     }
   };
 
@@ -601,21 +630,81 @@ export function AdvancedSubscriptionManagement({ lang }: AdvancedSubscriptionMan
         <TabsContent value="accessRules">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse">
-                <LockClosedIcon className="h-5 w-5" />
-                <span>{texts.accessRules}</span>
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                  <LockClosedIcon className="h-5 w-5" />
+                  <span>{texts.accessRules}</span>
+                </div>
+                <Button onClick={() => setShowAccessRuleDialog(true)}>
+                  <PlusIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                  {texts.addRule}
+                </Button>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Alert>
-                <InformationCircleIcon className="h-4 w-4" />
-                <AlertDescription>
-                  {isRTL 
-                    ? 'إدارة قواعد الوصول ستكون متاحة قريباً'
-                    : 'Access rules management will be available soon'
-                  }
-                </AlertDescription>
-              </Alert>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+                </div>
+              ) : accessRules.length === 0 ? (
+                <div className="text-center py-8">
+                  <LockClosedIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {isRTL ? 'لا توجد قواعد وصول محددة' : 'No access rules defined'}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {accessRules.map((rule) => (
+                    <Card key={rule.id} className="border border-gray-200 dark:border-gray-700">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                              <h3 className="font-semibold text-gray-900 dark:text-white">
+                                {isRTL ? rule.nameAr : rule.name}
+                              </h3>
+                              <Badge variant={rule.enabled ? 'default' : 'secondary'}>
+                                {rule.enabled ? texts.enabled : texts.disabled}
+                              </Badge>
+                              <Badge variant="outline">
+                                {rule.type}
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              {isRTL ? rule.descriptionAr : rule.description}
+                            </p>
+                            <div className="flex items-center space-x-4 rtl:space-x-reverse text-xs text-gray-500">
+                              <span>{texts.priority}: {rule.priority}</span>
+                              <span>{texts.requiredPlans}: {rule.requiredPlan.join(', ')}</span>
+                            </div>
+                          </div>
+                          <div className="flex space-x-2 rtl:space-x-reverse">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setEditingRule(rule);
+                                setShowAccessRuleDialog(true);
+                              }}
+                            >
+                              <PencilIcon className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => deleteAccessRule(rule.id)}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

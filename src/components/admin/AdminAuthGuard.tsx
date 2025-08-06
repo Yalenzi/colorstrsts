@@ -117,6 +117,7 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
         const adminEmails = [
           'aburakan4551@gmail.com',
           'admin@colorstest.com',
+          'admin_colorstest_com@gmail.com',
           // Add more admin emails here
         ];
 

@@ -56,7 +56,8 @@ import { SecuritySettings } from './SecuritySettings';
 import { PaymentGatewaysManagement } from './PaymentGatewaysManagement';
 import { EnhancedPaymentManagement } from './EnhancedPaymentManagement';
 import { UserUpdateDiagnostic } from './UserUpdateDiagnostic';
-import { ChemicalTestsManagement } from './ChemicalTestsManagement';
+// Chemical Tests Management removed as requested
+// import { ChemicalTestsManagement } from './ChemicalTestsManagement';
 import { AdvancedSubscriptionManagement } from './AdvancedSubscriptionManagement';
 import { AccessControlManagement } from './AccessControlManagement';
 import { DatabaseDiagnostics } from './DatabaseDiagnostics';
@@ -114,7 +115,7 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
       }
 
       // Check admin email whitelist
-      const adminEmails = ['aburakan4551@gmail.com', 'admin@colorstest.com'];
+      const adminEmails = ['aburakan4551@gmail.com', 'admin@colorstest.com', 'admin_colorstest_com@gmail.com'];
       if (!adminEmails.includes(currentUser.email || '')) {
         console.warn('[ADMIN DASHBOARD] Email not in admin whitelist:', currentUser.email);
         router.push(`/${lang}/admin/login`);
@@ -336,7 +337,8 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'enhanced-payments', label: isRTL ? 'إدارة المدفوعات المتقدمة' : 'Enhanced Payments', icon: BanknotesIcon },
     { id: 'global-payment-settings', label: isRTL ? 'إعدادات الدفع العامة' : 'Global Payment Settings', icon: CogIcon },
     { id: 'user-diagnostic', label: isRTL ? 'تشخيص مشاكل المستخدمين' : 'User Diagnostic', icon: CogIcon },
-    { id: 'chemical-tests', label: isRTL ? 'إدارة الاختبارات الكيميائية' : 'Chemical Tests Management', icon: BeakerIcon },
+    // Chemical Tests Management removed as requested
+    // { id: 'chemical-tests', label: isRTL ? 'إدارة الاختبارات الكيميائية' : 'Chemical Tests Management', icon: BeakerIcon },
     { id: 'advanced-subscriptions', label: isRTL ? 'إدارة الاشتراكات المتقدمة' : 'Advanced Subscriptions', icon: StarIcon },
     { id: 'access-control', label: isRTL ? 'إدارة التحكم في الوصول' : 'Access Control', icon: LockClosedIcon },
     { id: 'content', label: isRTL ? 'إدارة المحتوى' : 'Content Management', icon: DocumentTextIcon },
@@ -836,8 +838,18 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             <UserUpdateDiagnostic lang={lang} />
           )}
 
+          {/* Chemical Tests Management removed as requested */}
           {activeTab === 'chemical-tests' && (
-            <ChemicalTestsManagement lang={lang} />
+            <Card>
+              <CardContent className="p-8 text-center">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  {isRTL ? 'تم إزالة إدارة الاختبارات الكيميائية' : 'Chemical Tests Management Removed'}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {isRTL ? 'تم حذف هذا القسم بناءً على الطلب' : 'This section has been removed as requested'}
+                </p>
+              </CardContent>
+            </Card>
           )}
 
           {activeTab === 'advanced-subscriptions' && (
@@ -861,7 +873,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
           )}
 
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'global-payment-settings', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control', 'database-diagnostics', 'data-management', 'audit-logs'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'global-payment-settings', 'user-diagnostic', 'advanced-subscriptions', 'access-control', 'database-diagnostics', 'data-management', 'audit-logs'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
