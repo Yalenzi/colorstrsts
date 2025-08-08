@@ -154,16 +154,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } catch (popupError: any) {
         console.warn('⚠️ Popup failed, trying redirect...', popupError);
 
-        if (popupError.code === 'auth/popup-blocked' ||
-            popupError.code === 'auth/popup-closed-by-user' ||
-            popupError.code === 'auth/cancelled-popup-request') {
-          // استخدام redirect كبديل
+        const code = popupError?.code || '';
+        const shouldRedirect = [
+          'auth/popup-blocked',
+          'auth/popup-closed-by-user',
+          'auth/cancelled-popup-request',
+          'auth/internal-error',
+          'auth/network-request-failed',
+        ].includes(code);
+
+        if (shouldRedirect) {
           const { signInWithRedirect } = await import('firebase/auth');
           await signInWithRedirect(auth, provider);
           return; // سيتم إعادة التوجيه
-        } else {
-          throw popupError;
         }
+        throw popupError;
       }
 
       // التحقق من نجاح العملية
