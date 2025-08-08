@@ -723,6 +723,7 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
       }
 
       // لا توجد بيانات: إنشاء طرق دفع افتراضية
+      const methods: PaymentMethod[] = [
         {
           id: 'visa',
           name: 'Visa',
