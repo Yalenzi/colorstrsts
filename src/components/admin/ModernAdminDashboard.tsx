@@ -114,8 +114,10 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
         return;
       }
 
-      // Check admin email whitelist
-      const adminEmails = ['aburakan4551@gmail.com', 'admin@colorstest.com', 'admin_colorstest_com@gmail.com'];
+      // Check admin email whitelist (from env)
+      const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'aburakan4551@gmail.com')
+        .split(',')
+        .map(e => e.trim().toLowerCase());
       if (!adminEmails.includes(currentUser.email || '')) {
         console.warn('[ADMIN DASHBOARD] Email not in admin whitelist:', currentUser.email);
         router.push(`/${lang}/admin/login`);

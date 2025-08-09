@@ -15,10 +15,11 @@ interface AdminLoginFormProps {
   lang: Language;
 }
 
-// Admin credentials (for UX only; real verification uses env hash)
-const ADMIN_CREDENTIALS = {
-  email: process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@colorstest.com'
-};
+// Admin allowed emails from env (comma-separated) with sensible defaults
+const ADMIN_ALLOWED_EMAILS: string[] = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'aburakan4551@gmail.com,admin@colorstest.com,admin_colorstest_com@gmail.com')
+  .split(',')
+  .map(e => e.trim().toLowerCase())
+  .filter(Boolean);
 
 export function AdminLoginForm({ lang }: AdminLoginFormProps) {
   const [email, setEmail] = useState('');
@@ -59,7 +60,7 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
 
     try {
       // Verify email only (password will be verified against env hash in next step)
-      if (email !== ADMIN_CREDENTIALS.email) {
+      if (!ADMIN_ALLOWED_EMAILS.includes(email.toLowerCase())) {
         setError(isRTL ? 'البريد الإلكتروني غير مصرح' : 'Email not authorized');
         setLoading(false);
         return;

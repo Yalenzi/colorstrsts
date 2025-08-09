@@ -113,13 +113,10 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
           return;
         }
 
-        // Additional security check - verify admin emails
-        const adminEmails = [
-          'aburakan4551@gmail.com',
-          'admin@colorstest.com',
-          'admin_colorstest_com@gmail.com',
-          // Add more admin emails here
-        ];
+        // Additional security check - verify admin emails (from env)
+        const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'aburakan4551@gmail.com')
+          .split(',')
+          .map(e => e.trim().toLowerCase());
 
         if (!adminEmails.includes(currentUser.email || '')) {
           console.warn('[ADMIN AUTH] Email not in admin whitelist:', currentUser.email);
