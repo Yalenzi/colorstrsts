@@ -113,20 +113,8 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
           return;
         }
 
-        // Additional security check - verify admin emails (from env)
-        const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'aburakan4551@gmail.com')
-          .split(',')
-          .map(e => e.trim().toLowerCase());
-
-        if (!adminEmails.includes(currentUser.email || '')) {
-          console.warn('[ADMIN AUTH] Email not in admin whitelist:', currentUser.email);
-          if (isMounted) {
-            setError(isRTL ? 'البريد الإلكتروني غير مصرح له بالوصول للإدارة' : 'Email not authorized for admin access');
-            setIsLoading(false);
-            router.push(`/${lang}/admin/login`);
-          }
-          return;
-        }
+        // الاعتماد على دور المستخدم فقط (role) دون قائمة بيضاء للبريد
+        // تم إزالة التحقق بقوائم البريد لتبسيط الصلاحيات والاعتماد على Firestore
 
         // All checks passed
         console.log('[ADMIN AUTH] All checks passed, granting access');
