@@ -101,16 +101,34 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
           return;
         }
 
-        // Check if user has admin privileges
-        const adminRoles = ['admin', 'super_admin'];
-        if (!adminRoles.includes(userProfile.role)) {
-          console.warn('[ADMIN AUTH] User does not have admin role:', userProfile.role);
-          if (isMounted) {
-            setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
-            setIsLoading(false);
-            router.push(`/${lang}/admin/login`);
+        // Prefer Firebase Custom Claims for admin check
+        try {
+          const tokenResult = await currentUser.getIdTokenResult(true);
+          const claims = tokenResult.claims as any;
+          const claimRole = claims.role || (claims.admin ? 'admin' : undefined);
+
+          const role = claimRole || userProfile.role;
+          const adminRoles = ['admin', 'super_admin'];
+          if (!adminRoles.includes(role)) {
+            console.warn('[ADMIN AUTH] User lacks admin privileges (claims or profile):', { claimRole, profileRole: userProfile.role });
+            if (isMounted) {
+              setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
+              setIsLoading(false);
+              router.push(`/${lang}/admin/login`);
+            }
+            return;
           }
-          return;
+        } catch (claimError) {
+          console.warn('[ADMIN AUTH] Failed to read custom claims, fallback to profile role');
+          const adminRoles = ['admin', 'super_admin'];
+          if (!adminRoles.includes(userProfile.role)) {
+            if (isMounted) {
+              setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
+              setIsLoading(false);
+              router.push(`/${lang}/admin/login`);
+            }
+            return;
+          }
         }
 
         // الاعتماد على دور المستخدم فقط (role) دون قائمة بيضاء للبريد

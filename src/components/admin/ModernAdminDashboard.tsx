@@ -114,10 +114,22 @@ export function ModernAdminDashboard({ lang }: ModernAdminDashboardProps) {
         return;
       }
 
-      // الاعتماد على دور المستخدم فقط (role) دون قائمة بيضاء للبريد
-      // تم إزالة التحقق بقوائم البريد لتبسيط الصلاحيات والاعتماد على Firestore
-
-      console.log('[ADMIN DASHBOARD] Security check passed');
+      // Prefer Firebase Custom Claims for admin check
+      currentUser.getIdTokenResult(true)
+        .then(tokenResult => {
+          const claims = tokenResult.claims as any;
+          const claimRole = claims.role || (claims.admin ? 'admin' : undefined);
+          if (!['admin', 'super_admin'].includes(claimRole || '')) {
+            console.warn('[ADMIN DASHBOARD] Missing admin claims, redirecting');
+            router.push(`/${lang}/admin/login`);
+            return;
+          }
+          console.log('[ADMIN DASHBOARD] Security check passed (claims)');
+        })
+        .catch(() => {
+          console.warn('[ADMIN DASHBOARD] Failed to read admin claims');
+          router.push(`/${lang}/admin/login`);
+        });
     };
 
     checkAuth();
