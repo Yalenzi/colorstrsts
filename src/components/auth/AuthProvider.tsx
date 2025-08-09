@@ -143,6 +143,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
         access_type: 'offline'
       });
 
+      const FORCE_REDIRECT = process.env.NEXT_PUBLIC_AUTH_FORCE_REDIRECT === 'true';
+
+      // إذا كنا على colorstest.com ونريد تقليل مشاكل الـ popup، نستخدم redirect مباشرة
+      const isProductionHost = typeof window !== 'undefined' && /(^|\.)colorstest\.com$/i.test(window.location.hostname);
+      if (FORCE_REDIRECT && isProductionHost) {
+        const { signInWithRedirect } = await import('firebase/auth');
+        await signInWithRedirect(auth, provider);
+        return;
+      }
+
       console.log('🔄 Attempting popup sign-in...');
       console.log('Firebase Auth instance:', auth);
       console.log('Google Provider:', provider);
