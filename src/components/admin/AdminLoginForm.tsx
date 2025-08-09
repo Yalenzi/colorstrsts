@@ -59,58 +59,25 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
     setLoading(true);
 
     try {
-      // Verify email only (password will be verified against env hash in next step)
-      if (!ADMIN_ALLOWED_EMAILS.includes(email.toLowerCase())) {
-        setError(isRTL ? 'البريد الإلكتروني غير مصرح' : 'Email not authorized');
-        setLoading(false);
-        return;
-      }
-
-      // Move to admin password step
-      setStep('admin-password');
-      setLoading(false);
-
-    } catch (error: any) {
-      console.error('Credentials verification error:', error);
-      setError(isRTL ? 'خطأ في التحقق من البيانات' : 'Credentials verification failed');
-      setLoading(false);
-    }
-  };
-
-  const handleAdminLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      // Verify admin password securely (using env hash + salt)
-      const isValid = await (await import('@/lib/auth-utils')).validateAdminPassword(adminPassword);
-      if (!isValid) {
-        setError(isRTL ? 'كلمة مرور الأدمن غير صحيحة' : 'Invalid admin password');
-        setLoading(false);
-        return;
-      }
-
-      // Sign in with Firebase
+      // Sign in with Firebase credentials
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Get or create user profile
+      // Get or create user profile (no auto-elevation to admin)
       const userDocRef = doc(db, 'users', user.uid);
       let userDoc = await getDoc(userDocRef);
 
       if (!userDoc.exists()) {
-        // Create admin profile if doesn't exist
         await setDoc(userDocRef, {
           email: user.email,
-          displayName: user.displayName || 'Admin User',
-          role: 'super_admin',
+          displayName: user.displayName || 'App User',
+          role: 'user',
           isActive: true,
-          emailVerified: true,
+          emailVerified: !!user.emailVerified,
           createdAt: serverTimestamp(),
           lastLoginAt: serverTimestamp(),
           language: lang,
-          adminAccess: true,
+          adminAccess: false,
           securitySettings: {
             mfaEnabled: false,
             lastPasswordChange: serverTimestamp(),
@@ -118,36 +85,39 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
           }
         });
       } else {
-        // Update existing user to admin
         await updateDoc(userDocRef, {
-          role: 'super_admin',
-          isActive: true,
-          emailVerified: true,
-          lastLoginAt: serverTimestamp(),
-          adminAccess: true
+          lastLoginAt: serverTimestamp()
         });
       }
 
-      // Set admin session cookies
+      // Set session cookies (client-side; consider HttpOnly server cookie via Functions)
       document.cookie = `auth-token=${await user.getIdToken()}; path=/; secure; samesite=strict`;
       document.cookie = `user-email=${user.email}; path=/; secure; samesite=strict`;
 
-      // Redirect to admin dashboard
+      // Redirect to admin; guard will enforce admin claims
       router.push(`/${lang}/admin`);
 
     } catch (error: any) {
-      console.error('Admin login error:', error);
-      
-      if (error.code === 'auth/user-not-found') {
-        setError(isRTL ? 'المستخدم غير موجود' : 'User not found');
-      } else if (error.code === 'auth/wrong-password') {
-        setError(isRTL ? 'كلمة المرور غير صحيحة' : 'Wrong password');
-      } else if (error.code === 'auth/too-many-requests') {
-        setError(isRTL ? 'محاولات كثيرة، حاول لاحقاً' : 'Too many attempts, try later');
-      } else {
-        setError(isRTL ? 'خطأ في تسجيل الدخول' : 'Login failed');
-      }
-      
+      console.error('Credentials verification error:', error);
+      setError(isRTL ? 'خطأ في التحقق من البيانات' : 'Credentials verification failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Remove second-step "admin password"; claims will enforce admin access
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      // Direct to admin; guard will validate claims
+      router.push(`/${lang}/admin`);
+    } catch (error: any) {
+      console.error('Admin navigation error:', error);
+      setError(isRTL ? 'خطأ في تسجيل الدخول' : 'Login failed');
+    } finally {
       setLoading(false);
     }
   };
