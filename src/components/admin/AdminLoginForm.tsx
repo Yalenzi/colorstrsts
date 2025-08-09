@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { Language } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -15,10 +15,9 @@ interface AdminLoginFormProps {
   lang: Language;
 }
 
-// Admin credentials
+// Admin credentials (for UX only; real verification uses env hash)
 const ADMIN_CREDENTIALS = {
-  email: 'aburakan4551@gmail.com',
-  password: 'Aa@456005'
+  email: process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@colorstest.com'
 };
 
 export function AdminLoginForm({ lang }: AdminLoginFormProps) {
@@ -59,9 +58,9 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
     setLoading(true);
 
     try {
-      // Verify credentials first
-      if (email !== ADMIN_CREDENTIALS.email || password !== ADMIN_CREDENTIALS.password) {
-        setError(isRTL ? 'بيانات الدخول غير صحيحة' : 'Invalid credentials');
+      // Verify email only (password will be verified against env hash in next step)
+      if (email !== ADMIN_CREDENTIALS.email) {
+        setError(isRTL ? 'البريد الإلكتروني غير مصرح' : 'Email not authorized');
         setLoading(false);
         return;
       }
@@ -83,8 +82,9 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
     setLoading(true);
 
     try {
-      // Verify admin password
-      if (adminPassword !== 'Aa@456005') {
+      // Verify admin password securely (using env hash + salt)
+      const isValid = await (await import('@/lib/auth-utils')).validateAdminPassword(adminPassword);
+      if (!isValid) {
         setError(isRTL ? 'كلمة مرور الأدمن غير صحيحة' : 'Invalid admin password');
         setLoading(false);
         return;
@@ -100,7 +100,7 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
 
       if (!userDoc.exists()) {
         // Create admin profile if doesn't exist
-        await updateDoc(userDocRef, {
+        await setDoc(userDocRef, {
           email: user.email,
           displayName: user.displayName || 'Admin User',
           role: 'super_admin',
