@@ -62,6 +62,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log('🔄 Starting email/password sign in...');
       const result = await signInWithEmailAndPassword(auth, email, password);
       console.log('✅ Email/password sign in successful:', result.user.email);
+
+      // Create secure session cookie via Netlify Function
+      try {
+        const idToken = await result.user.getIdToken(true);
+        await fetch('/api/sessionLogin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken })
+        });
+      } catch (e) {
+        console.warn('⚠️ Failed to create session cookie:', e);
+      }
       return result;
     } catch (error: any) {
       console.error('❌ Sign in error:', error);
@@ -161,6 +173,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       let result;
       try {
         result = await signInWithPopup(auth, provider);
+        // Create secure session cookie via Netlify Function
+        try {
+          const idToken = await result.user.getIdToken(true);
+          await fetch('/api/sessionLogin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken })
+          });
+        } catch (e) {
+          console.warn('⚠️ Failed to create session cookie:', e);
+        }
       } catch (popupError: any) {
         console.warn('⚠️ Popup failed, trying redirect...', popupError);
 
@@ -226,6 +249,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // تسجيل الخروج
   const logout = async () => {
     try {
+      try {
+        await fetch('/api/sessionLogout', { method: 'POST' });
+      } catch (e) {
+        console.warn('⚠️ Failed to clear session cookie:', e);
+      }
       await signOut(auth);
       setUserProfile(null);
     } catch (error) {

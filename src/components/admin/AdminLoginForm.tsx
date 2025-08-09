@@ -90,9 +90,17 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
         });
       }
 
-      // Set session cookies (client-side; consider HttpOnly server cookie via Functions)
-      document.cookie = `auth-token=${await user.getIdToken()}; path=/; secure; samesite=strict`;
-      document.cookie = `user-email=${user.email}; path=/; secure; samesite=strict`;
+      // Create secure session cookie via Netlify Function
+      try {
+        const idToken = await user.getIdToken(true);
+        await fetch('/api/sessionLogin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken })
+        });
+      } catch (e) {
+        console.warn('⚠️ Failed to create session cookie:', e);
+      }
 
       // Redirect to admin; guard will enforce admin claims
       router.push(`/${lang}/admin`);
