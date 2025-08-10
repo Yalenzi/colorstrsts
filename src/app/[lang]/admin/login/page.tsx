@@ -1,16 +1,19 @@
+// app/[lang]/admin/login/page.tsx
+
 import { Metadata } from 'next';
 import { Language } from '@/types';
 import { AdminLoginForm } from '@/components/admin/AdminLoginForm';
+import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard'; // اختياري إذا كنت تستخدم حماية
 
 interface AdminLoginPageProps {
-  params: Promise<{
+  params: {
     lang: Language;
-  }>;
+  };
 }
 
-export async function generateMetadata({ params }: AdminLoginPageProps): Promise<Metadata> {
-  const { lang } = await params;
-  
+export function generateMetadata({ params }: AdminLoginPageProps): Metadata {
+  const { lang } = params;
+
   return {
     title: lang === 'ar' ? 'دخول لوحة التحكم الإدارية' : 'Admin Login',
     description: lang === 'ar' ? 'دخول آمن للوحة التحكم الإدارية' : 'Secure admin panel login',
@@ -18,8 +21,12 @@ export async function generateMetadata({ params }: AdminLoginPageProps): Promise
   };
 }
 
-export default async function AdminLoginPage({ params }: AdminLoginPageProps) {
-  const { lang } = await params;
-  
-  return <AdminLoginForm lang={lang} />;
+export default function AdminLoginPage({ params }: AdminLoginPageProps) {
+  const { lang } = params;
+
+  return (
+    <AdminAuthGuard lang={lang}>
+      <AdminLoginForm lang={lang} />
+    </AdminAuthGuard>
+  );
 }
