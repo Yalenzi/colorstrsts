@@ -1,32 +1,40 @@
-// app/[lang]/admin/login/page.tsx
-
 import { Metadata } from 'next';
 import { Language } from '@/types';
-import { AdminLoginForm } from '@/components/admin/AdminLoginForm';
-import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard'; // اختياري إذا كنت تستخدم حماية
+import { getTranslations } from '@/lib/translations';
+import { AuthPage } from '@/components/pages/login-page';
+import { AuthGuard } from '@/components/auth/AuthGuard';
 
-interface AdminLoginPageProps {
-  params: {
-    lang: Language;
-  };
+// Generate static params for supported languages
+export async function generateStaticParams() {
+  return [
+    { lang: 'ar' },
+    { lang: 'en' },
+  ];
 }
 
-export function generateMetadata({ params }: AdminLoginPageProps): Metadata {
-  const { lang } = params;
+interface LoginPageProps {
+  params: Promise<{ lang: Language }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: Language }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const t = await getTranslations(lang);
 
   return {
-    title: lang === 'ar' ? 'دخول لوحة التحكم الإدارية' : 'Admin Login',
-    description: lang === 'ar' ? 'دخول آمن للوحة التحكم الإدارية' : 'Secure admin panel login',
-    robots: 'noindex, nofollow',
+    title: t('auth.login.title'),
+    description: t('auth.login.description'),
   };
 }
 
-export default function AdminLoginPage({ params }: AdminLoginPageProps) {
-  const { lang } = params;
-
+export default async function Login({ params }: LoginPageProps) {
+  const { lang } = await params;
   return (
-    <AdminAuthGuard lang={lang}>
-      <AdminLoginForm lang={lang} />
-    </AdminAuthGuard>
+    <AuthGuard lang={lang} requireAuth={false}>
+      <AuthPage lang={lang} />
+    </AuthGuard>
   );
 }
