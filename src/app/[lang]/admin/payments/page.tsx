@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Language } from '@/types';
 import { STCPaySettings } from '@/components/admin/STCPaySettings';
-import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
+import { AdminGuard } from '@/components/auth/AdminGuard';
 
 interface AdminPaymentsPageProps {
   params: Promise<{
@@ -22,12 +22,12 @@ export default async function AdminPaymentsPage({ params }: AdminPaymentsPagePro
   const { lang } = await params;
 
   return (
-    <AdminAuthGuard lang={lang}>
+    <AdminGuard lang={lang}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <STCPaySettings lang={lang} />
         </div>
       </div>
-    </AdminAuthGuard>
+    </AdminGuard>
   );
 }

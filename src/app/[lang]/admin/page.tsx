@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { Language } from '@/types';
-import { ModernAdminDashboard } from '@/components/admin/ModernAdminDashboard';
+import { AdminPage } from '@/components/pages/admin-page';
 import { getTranslations } from '@/lib/translations';
-import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
 
 // Generate static params for supported languages
 export async function generateStaticParams() {
@@ -32,10 +31,5 @@ export async function generateMetadata({
 
 export default async function AdminPageRoute({ params }: AdminPageProps) {
   const { lang } = await params;
-
-  return (
-    <AdminAuthGuard lang={lang}>
-      <ModernAdminDashboard lang={lang} />
-    </AdminAuthGuard>
-  );
+  return <AdminPage lang={lang} />;
 }
