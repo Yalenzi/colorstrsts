@@ -708,16 +708,41 @@ export function AuditLogSystem({ lang }: AuditLogSystemProps) {
                         )}
                       </div>
                       
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedLog(log);
-                          setShowLogDetails(true);
-                        }}
-                      >
-                        <EyeIcon className="h-4 w-4" />
-                      </Button>
+                      <div className="flex space-x-2 rtl:space-x-reverse">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            // Download individual log as JSON
+                            const logData = JSON.stringify(log, null, 2);
+                            const blob = new Blob([logData], { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `audit_log_${log.id}_${new Date(log.timestamp).toISOString().split('T')[0]}.json`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            toast.success(texts.exportSuccess);
+                          }}
+                          title={texts.download}
+                        >
+                          <ArrowDownTrayIcon className="h-4 w-4" />
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedLog(log);
+                            setShowLogDetails(true);
+                          }}
+                          title={isRTL ? 'عرض التفاصيل' : 'View Details'}
+                        >
+                          <EyeIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -844,13 +869,39 @@ export function AuditLogSystem({ lang }: AuditLogSystemProps) {
                     
                     <div className="flex space-x-2 rtl:space-x-reverse">
                       {report.downloadUrl && (
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            // Download report functionality
+                            const link = document.createElement('a');
+                            link.href = report.downloadUrl!;
+                            link.download = `${report.title.replace(/\s+/g, '_')}_${report.id}.pdf`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            toast.success(texts.exportSuccess);
+                          }}
+                        >
                           <ArrowDownTrayIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
                           {texts.download}
                         </Button>
                       )}
-                      <Button variant="outline" size="sm">
-                        <EyeIcon className="h-4 w-4" />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          // Preview report functionality
+                          if (report.downloadUrl) {
+                            window.open(report.downloadUrl, '_blank');
+                          } else {
+                            toast.info(isRTL ? 'معاينة التقرير غير متاحة' : 'Report preview not available');
+                          }
+                        }}
+                        title={isRTL ? 'معاينة التقرير' : 'Preview Report'}
+                      >
+                        <EyeIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                        {isRTL ? 'معاينة' : 'Preview'}
                       </Button>
                     </div>
                   </div>

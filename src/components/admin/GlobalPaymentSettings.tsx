@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { db } from '@/lib/firebase';
-import { doc, setDoc, getDoc, collection, getDocs, updateDoc, addDoc, deleteDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, getDocs, updateDoc, addDoc, deleteDoc, writeBatch } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import {
   CreditCardIcon,
@@ -477,52 +477,60 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
       setLoading(true);
       console.log('🔄 بدء تحميل بوابات الدفع...');
 
-      // Mock data for now - replace with actual Firebase call
-      const gateways: PaymentGateway[] = [
+      // حاول التحميل من Firestore أولاً
+      const gatewaysRef = collection(db, 'payment_gateways');
+      const snapshot = await getDocs(gatewaysRef);
+      if (!snapshot.empty) {
+        const gateways = snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as PaymentGateway[];
+        setPaymentGateways(gateways);
+        console.log(`✅ تم تحميل ${gateways.length} بوابة دفع من Firestore`);
+        return;
+      }
+
+      // لا توجد بيانات: تهيئة افتراضية وحفظها
+      const defaults: Omit<PaymentGateway, 'id'>[] = [
         {
-          id: 'stripe',
-          name: 'Stripe',
-          nameAr: 'سترايب',
-          type: 'stripe',
+          name: 'STC Pay',
+          nameAr: 'إس تي سي باي',
+          type: 'stc_pay',
           enabled: true,
           isDefault: true,
           configuration: {
             environment: 'sandbox',
             currency: 'SAR',
-            supportedCountries: ['SA', 'AE', 'KW', 'QA'],
+            supportedCountries: ['SA'],
             minimumAmount: 1,
-            maximumAmount: 100000,
-            processingFee: 2.9,
+            maximumAmount: 10000,
+            processingFee: 2.0,
             processingFeeType: 'percentage'
           },
           features: {
             refunds: true,
-            partialRefunds: true,
-            subscriptions: true,
+            partialRefunds: false,
+            subscriptions: false,
             installments: false,
-            savedCards: true,
-            multiCurrency: true,
+            savedCards: false,
+            multiCurrency: false,
             webhooks: true,
             fraud_protection: true
           },
           branding: {
-            color: '#635BFF',
-            displayName: 'Stripe',
-            displayNameAr: 'سترايب',
-            description: 'Secure online payments',
-            descriptionAr: 'مدفوعات آمنة عبر الإنترنت'
+            color: '#6B21A8',
+            displayName: 'STC Pay',
+            displayNameAr: 'STC Pay',
+            description: 'Mobile wallet payments',
+            descriptionAr: 'محفظة إلكترونية'
           },
           statistics: {
-            totalTransactions: 1250,
-            successfulTransactions: 1180,
-            failedTransactions: 70,
-            totalAmount: 315000,
-            averageAmount: 252,
-            lastTransaction: '2024-01-15T10:30:00Z'
+            totalTransactions: 0,
+            successfulTransactions: 0,
+            failedTransactions: 0,
+            totalAmount: 0,
+            averageAmount: 0,
+            lastTransaction: ''
           }
         },
         {
-          id: 'mada',
           name: 'Mada',
           nameAr: 'مدى',
           type: 'mada',
@@ -551,22 +559,27 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
             color: '#00A651',
             displayName: 'Mada',
             displayNameAr: 'مدى',
-            description: 'Saudi national payment system',
-            descriptionAr: 'نظام المدفوعات الوطني السعودي'
+            description: 'Saudi national payment',
+            descriptionAr: 'المدفوعات السعودية'
           },
           statistics: {
-            totalTransactions: 850,
-            successfulTransactions: 820,
-            failedTransactions: 30,
-            totalAmount: 180000,
-            averageAmount: 212,
-            lastTransaction: '2024-01-15T09:45:00Z'
+            totalTransactions: 0,
+            successfulTransactions: 0,
+            failedTransactions: 0,
+            totalAmount: 0,
+            averageAmount: 0,
+            lastTransaction: ''
           }
         }
       ];
 
-      setPaymentGateways(gateways);
-      console.log(`✅ تم تحميل ${gateways.length} بوابة دفع بنجاح`);
+      const created: PaymentGateway[] = [];
+      for (const gw of defaults) {
+        const docRef = await addDoc(gatewaysRef, { ...gw, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+        created.push({ id: docRef.id, ...(gw as any) } as PaymentGateway);
+      }
+      setPaymentGateways(created);
+      console.log(`✅ تم إنشاء ${created.length} بوابة دفع افتراضية`);
     } catch (error) {
       console.error('❌ خطأ في تحميل بوابات الدفع:', error);
       toast.error(texts.error);
@@ -579,8 +592,16 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
     try {
       console.log('🔄 بدء تحميل الإعدادات العامة...');
 
-      // Mock data for now - replace with actual Firebase call
-      const config: GlobalPaymentConfig = {
+      const configRef = doc(db, 'settings', 'payment_config');
+      const configSnap = await getDoc(configRef);
+      if (configSnap.exists()) {
+        setGlobalConfig(configSnap.data() as GlobalPaymentConfig);
+        console.log('✅ تم تحميل الإعدادات العامة من Firestore');
+        return;
+      }
+
+      // تهيئة افتراضية عند عدم وجود إعدادات
+      const defaultConfig: GlobalPaymentConfig = {
         general: {
           defaultCurrency: 'SAR',
           supportedCurrencies: ['SAR', 'USD', 'EUR', 'AED'],
@@ -634,7 +655,7 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         compliance: {
           pciCompliance: true,
           gdprCompliance: true,
-          dataRetentionPeriod: 2555, // 7 years
+          dataRetentionPeriod: 2555,
           anonymizeData: true,
           auditLogging: true,
           regulatoryReporting: true,
@@ -679,10 +700,12 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         }
       };
 
-      setGlobalConfig(config);
-      console.log('✅ تم تحميل الإعدادات العامة بنجاح');
+      await setDoc(configRef, { ...defaultConfig, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      setGlobalConfig(defaultConfig);
+      console.log('✅ تم إنشاء الإعدادات العامة الافتراضية');
     } catch (error) {
-      console.error('❌ خطأ في تحميل الإعدادات العامة:', error);
+      console.error('❌ خطأ في تحميل/تهيئة الإعدادات العامة:', error);
+      toast.error(texts.error);
     }
   };
 
@@ -690,7 +713,16 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
     try {
       console.log('🔄 بدء تحميل طرق الدفع...');
 
-      // Mock data for now - replace with actual Firebase call
+      const methodsRef = collection(db, 'payment_methods');
+      const snap = await getDocs(methodsRef);
+      if (!snap.empty) {
+        const methods = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as PaymentMethod[];
+        setPaymentMethods(methods);
+        console.log(`✅ تم تحميل ${methods.length} طريقة دفع من Firestore`);
+        return;
+      }
+
+      // لا توجد بيانات: إنشاء طرق دفع افتراضية
       const methods: PaymentMethod[] = [
         {
           id: 'visa',
@@ -826,10 +858,22 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
         }
       ];
 
-      setPaymentMethods(methods);
-      console.log(`✅ تم تحميل ${methods.length} طريقة دفع بنجاح`);
+      // حفظ الافتراضيات إلى Firestore
+      const batch = writeBatch(db);
+      methods.forEach((m) => {
+        const ref = doc(collection(db, 'payment_methods'));
+        batch.set(ref, { ...m, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      });
+      await batch.commit();
+
+      // إعادة التحميل من Firestore لضمان IDs
+      const after = await getDocs(collection(db, 'payment_methods'));
+      const created = after.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as PaymentMethod[];
+      setPaymentMethods(created);
+      console.log(`✅ تم إنشاء ${created.length} طريقة دفع افتراضية`);
     } catch (error) {
       console.error('❌ خطأ في تحميل طرق الدفع:', error);
+      toast.error(texts.error);
     }
   };
 
@@ -860,9 +904,14 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
     try {
       console.log(`🔄 ${enabled ? 'تفعيل' : 'إلغاء تفعيل'} بوابة الدفع: ${gatewayId}`);
 
+      // تحديث الواجهة
       setPaymentGateways(prev => prev.map(gateway =>
         gateway.id === gatewayId ? { ...gateway, enabled } : gateway
       ));
+
+      // تحديث Firestore
+      const ref = doc(db, 'payment_gateways', gatewayId);
+      await updateDoc(ref, { enabled, updatedAt: new Date().toISOString() });
 
       toast.success(enabled ?
         (isRTL ? 'تم تفعيل بوابة الدفع' : 'Payment gateway enabled') :
@@ -878,10 +927,21 @@ export function GlobalPaymentSettings({ lang }: GlobalPaymentSettingsProps) {
     try {
       console.log(`🔄 تعيين بوابة الدفع الافتراضية: ${gatewayId}`);
 
+      // تحديث الواجهة
       setPaymentGateways(prev => prev.map(gateway => ({
         ...gateway,
         isDefault: gateway.id === gatewayId
       })));
+
+      // تحديث Firestore: إزالة الافتراضي من الآخرين وتعيينه للحالي
+      const gatewaysRef = collection(db, 'payment_gateways');
+      const snap = await getDocs(gatewaysRef);
+      const batch = writeBatch(db);
+      snap.docs.forEach((d) => {
+        const isDefault = d.id === gatewayId;
+        batch.update(doc(db, 'payment_gateways', d.id), { isDefault });
+      });
+      await batch.commit();
 
       toast.success(isRTL ? 'تم تعيين بوابة الدفع الافتراضية' : 'Default payment gateway set');
     } catch (error) {

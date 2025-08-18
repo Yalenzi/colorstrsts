@@ -15,11 +15,11 @@ interface AdminLoginFormProps {
   lang: Language;
 }
 
-// Admin credentials
-const ADMIN_CREDENTIALS = {
-  email: 'aburakan4551@gmail.com',
-  password: 'Aa@456005'
-};
+// Admin allowed emails from env (comma-separated) with sensible defaults
+const ADMIN_ALLOWED_EMAILS: string[] = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'aburakan4551@gmail.com,admin@colorstest.com,admin_colorstest_com@gmail.com')
+  .split(',')
+  .map(e => e.trim().toLowerCase())
+  .filter(Boolean);
 
 export function AdminLoginForm({ lang }: AdminLoginFormProps) {
   const [email, setEmail] = useState('');
@@ -59,57 +59,29 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
     setLoading(true);
 
     try {
-      // Verify credentials first
-      if (email !== ADMIN_CREDENTIALS.email || password !== ADMIN_CREDENTIALS.password) {
-        setError(isRTL ? 'بيانات الدخول غير صحيحة' : 'Invalid credentials');
-        setLoading(false);
-        return;
-      }
-
-      // Move to admin password step
-      setStep('admin-password');
-      setLoading(false);
-
-    } catch (error: any) {
-      console.error('Credentials verification error:', error);
-      setError(isRTL ? 'خطأ في التحقق من البيانات' : 'Credentials verification failed');
-      setLoading(false);
-    }
-  };
-
-  const handleAdminLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      // Verify admin password
-      if (adminPassword !== 'Aa@456005') {
-        setError(isRTL ? 'كلمة مرور الأدمن غير صحيحة' : 'Invalid admin password');
-        setLoading(false);
-        return;
-      }
-
-      // Sign in with Firebase
+      // Sign in with Firebase credentials
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Get or create user profile
+      // Get or create user profile (no auto-elevation to admin)
       const userDocRef = doc(db, 'users', user.uid);
       let userDoc = await getDoc(userDocRef);
 
       if (!userDoc.exists()) {
+<<<<<<< HEAD
         // Create admin profile if doesn't exist - use setDoc instead of updateDoc
+=======
+>>>>>>> 34d370f076925b80e11574278b3e410d8d99a64a
         await setDoc(userDocRef, {
           email: user.email,
-          displayName: user.displayName || 'Admin User',
-          role: 'super_admin',
+          displayName: user.displayName || 'App User',
+          role: 'user',
           isActive: true,
-          emailVerified: true,
+          emailVerified: !!user.emailVerified,
           createdAt: serverTimestamp(),
           lastLoginAt: serverTimestamp(),
           language: lang,
-          adminAccess: true,
+          adminAccess: false,
           securitySettings: {
             mfaEnabled: false,
             lastPasswordChange: serverTimestamp(),
@@ -117,36 +89,47 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
           }
         });
       } else {
-        // Update existing user to admin
         await updateDoc(userDocRef, {
-          role: 'super_admin',
-          isActive: true,
-          emailVerified: true,
-          lastLoginAt: serverTimestamp(),
-          adminAccess: true
+          lastLoginAt: serverTimestamp()
         });
       }
 
-      // Set admin session cookies
-      document.cookie = `auth-token=${await user.getIdToken()}; path=/; secure; samesite=strict`;
-      document.cookie = `user-email=${user.email}; path=/; secure; samesite=strict`;
+      // Create secure session cookie via Netlify Function
+      try {
+        const idToken = await user.getIdToken(true);
+        await fetch('/api/sessionLogin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken })
+        });
+      } catch (e) {
+        console.warn('⚠️ Failed to create session cookie:', e);
+      }
 
-      // Redirect to admin dashboard
+      // Redirect to admin; guard will enforce admin claims
       router.push(`/${lang}/admin`);
 
     } catch (error: any) {
-      console.error('Admin login error:', error);
-      
-      if (error.code === 'auth/user-not-found') {
-        setError(isRTL ? 'المستخدم غير موجود' : 'User not found');
-      } else if (error.code === 'auth/wrong-password') {
-        setError(isRTL ? 'كلمة المرور غير صحيحة' : 'Wrong password');
-      } else if (error.code === 'auth/too-many-requests') {
-        setError(isRTL ? 'محاولات كثيرة، حاول لاحقاً' : 'Too many attempts, try later');
-      } else {
-        setError(isRTL ? 'خطأ في تسجيل الدخول' : 'Login failed');
-      }
-      
+      console.error('Credentials verification error:', error);
+      setError(isRTL ? 'خطأ في التحقق من البيانات' : 'Credentials verification failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Remove second-step "admin password"; claims will enforce admin access
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      // Direct to admin; guard will validate claims
+      router.push(`/${lang}/admin`);
+    } catch (error: any) {
+      console.error('Admin navigation error:', error);
+      setError(isRTL ? 'خطأ في تسجيل الدخول' : 'Login failed');
+    } finally {
       setLoading(false);
     }
   };

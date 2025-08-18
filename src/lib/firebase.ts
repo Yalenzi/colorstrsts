@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported as isAnalyticsSupported } from "firebase/analytics";
 
 // Firebase configuration from environment variables
 // إعداد Firebase من متغيرات البيئة
@@ -71,7 +71,9 @@ export const db = getFirestore(app);
 // Initialize Realtime Database and get a reference to the service
 export const database = getDatabase(app);
 
-// Initialize Analytics (optional, only in browser)
-export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+// Initialize Analytics (optional, only in browser) - only if measurement ID is provided and supported
+export const analytics = (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID)
+  ? await (async () => (await isAnalyticsSupported()) ? getAnalytics(app) : null)()
+  : null;
 
 export default app;

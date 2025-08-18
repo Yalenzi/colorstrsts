@@ -168,6 +168,10 @@ async function updateAdminLastLogin(uid: string): Promise<void> {
  * Create admin session
  */
 async function createAdminSession(adminUser: AdminUser): Promise<void> {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   const session: AdminSession = {
     user: adminUser,
     token: generateSessionToken(),
@@ -183,11 +187,16 @@ async function createAdminSession(adminUser: AdminUser): Promise<void> {
  */
 export function getCurrentAdminSession(): AdminSession | null {
   try {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
     const sessionData = localStorage.getItem(ADMIN_SESSION_KEY);
     if (!sessionData) return null;
 
     const session: AdminSession = JSON.parse(sessionData);
-    
+
     // Check if session is expired
     if (Date.now() > session.expiresAt) {
       clearAdminSession();
@@ -206,7 +215,9 @@ export function getCurrentAdminSession(): AdminSession | null {
  * Clear admin session
  */
 export function clearAdminSession(): void {
-  localStorage.removeItem(ADMIN_SESSION_KEY);
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(ADMIN_SESSION_KEY);
+  }
 }
 
 /**

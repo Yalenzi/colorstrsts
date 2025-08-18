@@ -101,34 +101,38 @@ export function AdminAuthGuard({ children, lang }: AdminAuthGuardProps) {
           return;
         }
 
-        // Check if user has admin privileges
-        const adminRoles = ['admin', 'super_admin'];
-        if (!adminRoles.includes(userProfile.role)) {
-          console.warn('[ADMIN AUTH] User does not have admin role:', userProfile.role);
-          if (isMounted) {
-            setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
-            setIsLoading(false);
-            router.push(`/${lang}/admin/login`);
+        // Prefer Firebase Custom Claims for admin check
+        try {
+          const tokenResult = await currentUser.getIdTokenResult(true);
+          const claims = tokenResult.claims as any;
+          const claimRole = claims.role || (claims.admin ? 'admin' : undefined);
+
+          const role = claimRole || userProfile.role;
+          const adminRoles = ['admin', 'super_admin'];
+          if (!adminRoles.includes(role)) {
+            console.warn('[ADMIN AUTH] User lacks admin privileges (claims or profile):', { claimRole, profileRole: userProfile.role });
+            if (isMounted) {
+              setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
+              setIsLoading(false);
+              router.push(`/${lang}/admin/login`);
+            }
+            return;
           }
-          return;
+        } catch (claimError) {
+          console.warn('[ADMIN AUTH] Failed to read custom claims, fallback to profile role');
+          const adminRoles = ['admin', 'super_admin'];
+          if (!adminRoles.includes(userProfile.role)) {
+            if (isMounted) {
+              setError(isRTL ? 'ليس لديك صلاحيات إدارية' : 'Admin access required');
+              setIsLoading(false);
+              router.push(`/${lang}/admin/login`);
+            }
+            return;
+          }
         }
 
-        // Additional security check - verify admin emails
-        const adminEmails = [
-          'aburakan4551@gmail.com',
-          'admin@colorstest.com',
-          // Add more admin emails here
-        ];
-
-        if (!adminEmails.includes(currentUser.email || '')) {
-          console.warn('[ADMIN AUTH] Email not in admin whitelist:', currentUser.email);
-          if (isMounted) {
-            setError(isRTL ? 'البريد الإلكتروني غير مصرح له بالوصول للإدارة' : 'Email not authorized for admin access');
-            setIsLoading(false);
-            router.push(`/${lang}/admin/login`);
-          }
-          return;
-        }
+        // الاعتماد على دور المستخدم فقط (role) دون قائمة بيضاء للبريد
+        // تم إزالة التحقق بقوائم البريد لتبسيط الصلاحيات والاعتماد على Firestore
 
         // All checks passed
         console.log('[ADMIN AUTH] All checks passed, granting access');

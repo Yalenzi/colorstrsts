@@ -135,6 +135,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log('🔄 Starting email/password sign in...');
       const result = await signInWithEmailAndPassword(auth, email, password);
       console.log('✅ Email/password sign in successful:', result.user.email);
+
+      // Create secure session cookie via Netlify Function
+      try {
+        const idToken = await result.user.getIdToken(true);
+        await fetch('/api/sessionLogin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken })
+        });
+      } catch (e) {
+        console.warn('⚠️ Failed to create session cookie:', e);
+      }
       return result;
     } catch (error: any) {
       console.error('❌ Sign in error:', error);
@@ -196,6 +208,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
         access_type: 'offline'
       });
 
+      const FORCE_REDIRECT = process.env.NEXT_PUBLIC_AUTH_FORCE_REDIRECT === 'true';
+
+      // إذا كنا على colorstest.com ونريد تقليل مشاكل الـ popup، نستخدم redirect مباشرة
+      const isProductionHost = typeof window !== 'undefined' && /(^|\.)colorstest\.com$/i.test(window.location.hostname);
+      if (FORCE_REDIRECT && isProductionHost) {
+        const { signInWithRedirect } = await import('firebase/auth');
+        await signInWithRedirect(auth, provider);
+        return;
+      }
+
       console.log('🔄 Attempting popup sign-in...');
       console.log('Firebase Auth instance:', auth);
       console.log('Google Provider:', provider);
@@ -204,6 +226,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       let result;
       try {
         result = await signInWithPopup(auth, provider);
+        // Create secure session cookie via Netlify Function
+        try {
+          const idToken = await result.user.getIdToken(true);
+          await fetch('/api/sessionLogin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken })
+          });
+        } catch (e) {
+          console.warn('⚠️ Failed to create session cookie:', e);
+        }
       } catch (popupError: any) {
         console.warn('⚠️ Popup failed, trying redirect...', popupError);
 
@@ -213,7 +246,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           'auth/popup-closed-by-user',
           'auth/cancelled-popup-request',
           'auth/internal-error', // إضافة internal-error للـ fallback
-          'auth/unauthorized-domain'
+          'auth/unauthorized-domain',
+          'auth/network-request-failed'
         ];
 
         if (redirectErrors.includes(popupError.code)) {
@@ -222,9 +256,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const { signInWithRedirect } = await import('firebase/auth');
           await signInWithRedirect(auth, provider);
           return; // سيتم إعادة التوجيه
-        } else {
-          throw popupError;
         }
+        throw popupError;
       }
 
       // التحقق من نجاح العملية
@@ -257,6 +290,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // تسجيل الخروج
   const logout = async () => {
     try {
+      try {
+        await fetch('/api/sessionLogout', { method: 'POST' });
+      } catch (e) {
+        console.warn('⚠️ Failed to clear session cookie:', e);
+      }
       await signOut(auth);
       setUserProfile(null);
     } catch (error) {

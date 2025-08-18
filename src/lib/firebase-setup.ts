@@ -91,7 +91,8 @@ export async function createDefaultAdminUser() {
     
     const adminEmails = [
       'aburakan4551@gmail.com',
-      'admin@colorstest.com'
+      'admin@colorstest.com',
+      'admin_colorstest_com@gmail.com'
     ];
 
     for (const email of adminEmails) {

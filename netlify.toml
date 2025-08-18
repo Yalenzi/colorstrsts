@@ -2,6 +2,10 @@
   command = "npm run build"
   publish = "out"
 
+
+[functions]
+  directory = "netlify/functions"
+
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "10"
@@ -14,22 +18,22 @@
 # This is handled by static export instead
 
 [context.production.environment]
-  NEXT_PUBLIC_ADMIN_PASSWORD_HASH = "8dacfb011f9ed4c4545fefb97acf99624fb02d876716ff03ae584173cd00822e"
-  NEXT_PUBLIC_AUTH_SALT = "b84997540de9ae822a6aa27e333cd8c8ce6b79079cf448ff6b8a027a845a666b"
-  NEXT_PUBLIC_ADMIN_EMAIL = "admin@colortest.local"
-  NEXT_PUBLIC_ADMIN_SESSION_DURATION = "3600000"
-  NEXT_PUBLIC_MAX_LOGIN_ATTEMPTS = "5"
-  NEXT_PUBLIC_LOCKOUT_DURATION = "900000"
-  NODE_ENV = "production"
+	  NEXT_PUBLIC_ADMIN_PASSWORD_HASH = "1962eb5a00a85ef6688f12ba5c2d5551d50da4c07d64b46fa1a9e1ae5076674f"
+	  NEXT_PUBLIC_AUTH_SALT = "b84997540de9ae822a6aa27e333cd8c8ce6b79079cf448ff6b8a027a845a666b"
+	  NEXT_PUBLIC_ADMIN_EMAIL = "aburakan4551@gmail.com"
+	  NEXT_PUBLIC_ADMIN_SESSION_DURATION = "3600000"
+	  NEXT_PUBLIC_MAX_LOGIN_ATTEMPTS = "5"
+	  NEXT_PUBLIC_LOCKOUT_DURATION = "900000"
+	  NODE_ENV = "production"
 
-  # Firebase Configuration (add your actual values)
-  NEXT_PUBLIC_FIREBASE_API_KEY = "your_api_key_here"
-  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = "colorstests-573ef.firebaseapp.com"
-  NEXT_PUBLIC_FIREBASE_DATABASE_URL = "https://colorstests-573ef.firebaseio.com"
-  NEXT_PUBLIC_FIREBASE_PROJECT_ID = "colorstests-573ef"
-  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = "colorstests-573ef.appspot.com"
-  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "your_sender_id"
-  NEXT_PUBLIC_FIREBASE_APP_ID = "your_app_id"
+	  # Firebase Configuration (add your actual values)
+	  NEXT_PUBLIC_FIREBASE_API_KEY = "AIzaSyBCTEmastiOgvmTDu1EHxA0bkDAws00bIU"
+	  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = "colorstests-573ef.firebaseapp.com"
+	  NEXT_PUBLIC_FIREBASE_DATABASE_URL = "https://colorstests-573ef.firebaseio.com"
+	  NEXT_PUBLIC_FIREBASE_PROJECT_ID = "colorstests-573ef"
+	  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = "colorstests-573ef.appspot.com"
+	  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "94361461929"
+	  NEXT_PUBLIC_FIREBASE_APP_ID = "1:94361461929:web:b34ad287c782710415f5b8"
 
 [[headers]]
   for = "/*"
@@ -38,6 +42,10 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.googleapis.com https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.stcpay.com.sa https://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com https://firebaseinstallations.googleapis.com https://firebaseremoteconfig.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com wss://*.firebaseio.com;"
 
 [[redirects]]
   from = "/"
@@ -52,6 +60,19 @@
 [[redirects]]
   from = "/ar/*"
   to = "/ar/:splat"
+  status = 200
+
+[[redirects]]
+
+# API endpoints to Netlify Functions
+[[redirects]]
+  from = "/api/sessionLogin"
+  to = "/.netlify/functions/sessionLogin"
+  status = 200
+
+[[redirects]]
+  from = "/api/sessionLogout"
+  to = "/.netlify/functions/sessionLogout"
   status = 200
 
 [[redirects]]

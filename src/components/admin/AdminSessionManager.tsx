@@ -171,8 +171,13 @@ export default function AdminSessionManager({ lang, onSessionExpired }: AdminSes
 
 // Hook for using session manager
 export function useAdminSession(lang: Language) {
-  const [session, setSession] = useState(getCurrentAdminSession());
+  const [session, setSession] = useState<any>(null);
   const [isExpired, setIsExpired] = useState(false);
+
+  // Initialize session on client side only
+  useEffect(() => {
+    setSession(getCurrentAdminSession());
+  }, []);
 
   useEffect(() => {
     const checkSession = () => {

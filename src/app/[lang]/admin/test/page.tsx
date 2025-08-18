@@ -26,7 +26,7 @@ interface AdminTestPageProps {
 
 export default function AdminTestPage({ params }: AdminTestPageProps) {
   const { lang } = params;
-  const [session, setSession] = useState(getCurrentAdminSession());
+  const [session, setSession] = useState<any>(null);
   const [testResults, setTestResults] = useState<Array<{
     name: string;
     status: 'pass' | 'fail' | 'warning';
@@ -36,6 +36,8 @@ export default function AdminTestPage({ params }: AdminTestPageProps) {
   const isRTL = lang === 'ar';
 
   useEffect(() => {
+    // Initialize session on client side
+    setSession(getCurrentAdminSession());
     runSecurityTests();
   }, []);
 

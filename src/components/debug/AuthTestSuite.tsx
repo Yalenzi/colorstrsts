@@ -2,22 +2,23 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
+import type { User } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  CheckCircle, 
-  XCircle, 
-  AlertCircle, 
-  User, 
-  Mail, 
-  Image,
-  LogIn,
-  LogOut,
-  UserPlus
-} from 'lucide-react';
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  ExclamationTriangleIcon,
+  UserIcon,
+  EnvelopeIcon,
+  PhotoIcon,
+  ArrowRightOnRectangleIcon,
+  ArrowLeftOnRectangleIcon,
+  UserPlusIcon
+} from '@heroicons/react/24/outline';
 
 interface TestResult {
   name: string;
@@ -208,11 +209,11 @@ export default function AuthTestSuite() {
   const getStatusIcon = (status: TestResult['status']) => {
     switch (status) {
       case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
+        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
       case 'error':
-        return <XCircle className="h-5 w-5 text-red-500" />;
+        return <XCircleIcon className="h-5 w-5 text-red-500" />;
       case 'pending':
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+        return <ExclamationTriangleIcon className="h-5 w-5 text-yellow-500" />;
     }
   };
 
@@ -232,7 +233,7 @@ export default function AuthTestSuite() {
           {/* Current User Status */}
           {user ? (
             <Alert>
-              <User className="h-4 w-4" />
+              <UserIcon className="h-4 w-4" />
               <AlertDescription>
                 <div className="space-y-2">
                   <div><strong>Logged in as:</strong> {user.email}</div>
@@ -249,7 +250,7 @@ export default function AuthTestSuite() {
             </Alert>
           ) : (
             <Alert>
-              <AlertCircle className="h-4 w-4" />
+              <ExclamationTriangleIcon className="h-4 w-4" />
               <AlertDescription>No user currently logged in</AlertDescription>
             </Alert>
           )}
@@ -271,11 +272,11 @@ export default function AuthTestSuite() {
             </div>
             <div className="space-y-2">
               <Button onClick={testEmailSignIn} className="w-full" variant="outline">
-                <LogIn className="h-4 w-4 mr-2" />
+                <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2" />
                 Test Email Sign-In
               </Button>
               <Button onClick={testEmailSignUp} className="w-full" variant="outline">
-                <UserPlus className="h-4 w-4 mr-2" />
+                <UserPlusIcon className="h-4 w-4 mr-2" />
                 Test Email Sign-Up
               </Button>
               <Button onClick={testGoogleSignIn} className="w-full" variant="outline">
@@ -304,7 +305,7 @@ export default function AuthTestSuite() {
             </Button>
             {user && (
               <Button onClick={logout} variant="destructive">
-                <LogOut className="h-4 w-4 mr-2" />
+                <ArrowLeftOnRectangleIcon className="h-4 w-4 mr-2" />
                 Logout
               </Button>
             )}
