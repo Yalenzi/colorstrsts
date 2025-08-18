@@ -5,39 +5,119 @@
 /* Import Admin Theme */
 @import '../styles/admin-theme.css';
 
-/* CSS Variables for themes */
+/* ===== SCIENTIFIC DESIGN SYSTEM ===== */
+/* Professional Laboratory-Grade Color Palette */
 :root {
-  --color-primary: 14 165 233;
-  --color-secondary: 212 70 239;
+  /* Primary Scientific Blue - Trust & Precision */
+  --color-primary: 37 99 235;
+  --color-primary-50: 239 246 255;
+  --color-primary-100: 219 234 254;
+  --color-primary-200: 191 219 254;
+  --color-primary-300: 147 197 253;
+  --color-primary-400: 96 165 250;
+  --color-primary-500: 59 130 246;
+  --color-primary-600: 37 99 235;
+  --color-primary-700: 29 78 216;
+  --color-primary-800: 30 64 175;
+  --color-primary-900: 30 58 138;
+  --color-primary-950: 23 37 84;
+
+  /* Secondary Teal - Scientific Accuracy */
+  --color-secondary: 20 184 166;
+  --color-secondary-50: 240 253 250;
+  --color-secondary-100: 204 251 241;
+  --color-secondary-200: 153 246 228;
+  --color-secondary-300: 94 234 212;
+  --color-secondary-400: 45 212 191;
+  --color-secondary-500: 20 184 166;
+  --color-secondary-600: 13 148 136;
+  --color-secondary-700: 15 118 110;
+  --color-secondary-800: 17 94 89;
+  --color-secondary-900: 19 78 74;
+
+  /* Success Green - Positive Results */
   --color-success: 34 197 94;
+  --color-success-50: 240 253 244;
+  --color-success-100: 220 252 231;
+  --color-success-200: 187 247 208;
+  --color-success-300: 134 239 172;
+  --color-success-400: 74 222 128;
+  --color-success-500: 34 197 94;
+  --color-success-600: 22 163 74;
+  --color-success-700: 21 128 61;
+  --color-success-800: 22 101 52;
+  --color-success-900: 20 83 45;
+
+  /* Warning Amber - Caution */
   --color-warning: 245 158 11;
+  --color-warning-50: 255 251 235;
+  --color-warning-100: 254 243 199;
+  --color-warning-200: 253 230 138;
+  --color-warning-300: 252 211 77;
+  --color-warning-400: 251 191 36;
+  --color-warning-500: 245 158 11;
+  --color-warning-600: 217 119 6;
+  --color-warning-700: 180 83 9;
+  --color-warning-800: 146 64 14;
+  --color-warning-900: 120 53 15;
+
+  /* Danger Red - Critical Results */
   --color-danger: 239 68 68;
+  --color-danger-50: 254 242 242;
+  --color-danger-100: 254 226 226;
+  --color-danger-200: 254 202 202;
+  --color-danger-300: 252 165 165;
+  --color-danger-400: 248 113 113;
+  --color-danger-500: 239 68 68;
+  --color-danger-600: 220 38 38;
+  --color-danger-700: 185 28 28;
+  --color-danger-800: 153 27 27;
+  --color-danger-900: 127 29 29;
+
+  /* Neutral Grays - Professional Foundation */
   --color-background: 255 255 255;
   --color-foreground: 15 23 42;
   --color-muted: 248 250 252;
   --color-muted-foreground: 100 116 139;
   --color-border: 226 232 240;
   --color-input: 255 255 255;
-  --color-ring: 14 165 233;
+  --color-ring: 37 99 235;
 
-  /* Semantic color variables for Tailwind */
+  /* Scientific Semantic Colors */
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
   --muted: 210 40% 98%;
   --muted-foreground: 215.4 16.3% 46.9%;
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
+  --ring: 221.2 83.2% 53.3%;
+
+  /* Laboratory-Grade Precision Colors */
+  --precision-high: 34 197 94;
+  --precision-medium: 245 158 11;
+  --precision-low: 239 68 68;
+  --confidence-excellent: 16 185 129;
+  --confidence-good: 59 130 246;
+  --confidence-fair: 245 158 11;
+  --confidence-poor: 239 68 68;
+
+  /* Scientific Gradients */
+  --gradient-primary: linear-gradient(135deg, rgb(59 130 246) 0%, rgb(37 99 235) 100%);
+  --gradient-secondary: linear-gradient(135deg, rgb(20 184 166) 0%, rgb(13 148 136) 100%);
+  --gradient-success: linear-gradient(135deg, rgb(34 197 94) 0%, rgb(22 163 74) 100%);
+  --gradient-lab: linear-gradient(135deg, rgb(239 246 255) 0%, rgb(219 234 254) 50%, rgb(191 219 254) 100%);
 }
 
+/* ===== DARK MODE SCIENTIFIC THEME ===== */
 .dark {
+  /* Dark Laboratory Environment */
   --color-background: 2 6 23;
   --color-foreground: 248 250 252;
   --color-muted: 15 23 42;
   --color-muted-foreground: 148 163 184;
   --color-border: 30 41 59;
   --color-input: 15 23 42;
-  --color-ring: 14 165 233;
+  --color-ring: 59 130 246;
 
   /* Dark mode semantic colors */
   --background: 222.2 84% 4.9%;
@@ -46,21 +126,160 @@
   --muted-foreground: 215 20.2% 65.1%;
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
+  --ring: 217.2 91.2% 59.8%;
+
+  /* Dark Laboratory Gradients */
+  --gradient-primary: linear-gradient(135deg, rgb(59 130 246) 0%, rgb(96 165 250) 100%);
+  --gradient-secondary: linear-gradient(135deg, rgb(45 212 191) 0%, rgb(20 184 166) 100%);
+  --gradient-success: linear-gradient(135deg, rgb(74 222 128) 0%, rgb(34 197 94) 100%);
+  --gradient-lab: linear-gradient(135deg, rgb(15 23 42) 0%, rgb(30 41 59) 50%, rgb(51 65 85) 100%);
+
+  /* Enhanced contrast for precision */
+  --precision-high: 74 222 128;
+  --precision-medium: 251 191 36;
+  --precision-low: 248 113 113;
+  --confidence-excellent: 45 212 191;
+  --confidence-good: 96 165 250;
+  --confidence-fair: 251 191 36;
+  --confidence-poor: 248 113 113;
 }
 
-/* Base styles */
+/* ===== SCIENTIFIC BASE STYLES ===== */
 * {
   border-color: rgb(var(--color-border));
+  box-sizing: border-box;
 }
 
 body {
   color: rgb(var(--color-foreground));
   background: rgb(var(--color-background));
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-feature-settings: "rlig" 1, "calt" 1, "kern" 1;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
-/* Custom scrollbar */
+/* Scientific Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: rgb(var(--color-foreground));
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Scientific Precision Text */
+.text-precision {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.025em;
+}
+
+/* Laboratory-Grade Components */
+.lab-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 12px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 10px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lab-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.07),
+    0 10px 15px rgba(0, 0, 0, 0.1),
+    0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .lab-card {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    0 4px 6px rgba(0, 0, 0, 0.3),
+    0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== SCIENTIFIC INTERACTIONS & ANIMATIONS ===== */
+
+/* Precision Indicators */
+.precision-indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.precision-high {
+  background: rgba(34, 197, 94, 0.1);
+  color: rgb(22, 163, 74);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.precision-medium {
+  background: rgba(245, 158, 11, 0.1);
+  color: rgb(217, 119, 6);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.precision-low {
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(220, 38, 38);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Scientific Button Enhancements */
+.btn-scientific {
+  position: relative;
+  overflow: hidden;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-scientific::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-scientific:hover::before {
+  left: 100%;
+}
+
+/* Enhanced Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -68,15 +287,170 @@ body {
 
 ::-webkit-scrollbar-track {
   background: rgb(var(--color-muted));
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgb(var(--color-muted-foreground));
   border-radius: 4px;
 }
 
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 4px;
+  border: 2px solid rgb(var(--color-muted));
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--color-foreground) / 0.8);
+  background: var(--gradient-secondary);
+}
+
+/* ===== SCIENTIFIC COMPONENTS ===== */
+
+/* Laboratory Equipment Styling */
+.lab-equipment {
+  background: var(--gradient-lab);
+  border: 2px solid rgba(37, 99, 235, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.lab-equipment::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: 16px 16px 0 0;
+}
+
+/* Scientific Progress Bars */
+.progress-scientific {
+  height: 8px;
+  background: rgba(226, 232, 240, 0.5);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-scientific::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Scientific Data Tables */
+.data-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.data-table th {
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+}
+
+.data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgb(var(--color-border));
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tr:hover td {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* Confidence Level Indicators */
+.confidence-excellent {
+  background: rgba(16, 185, 129, 0.1);
+  color: rgb(5, 150, 105);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.confidence-good {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgb(37, 99, 235);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.confidence-fair {
+  background: rgba(245, 158, 11, 0.1);
+  color: rgb(217, 119, 6);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.confidence-poor {
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(220, 38, 38);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Scientific Animations */
+@keyframes pulse-scientific {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .shimmer {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200px 100%;
+}
+
+/* Mobile-First Responsive Enhancements */
+@media (max-width: 768px) {
+  .lab-card {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+
+  .precision-indicator {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
 }
 
 /* Focus styles */

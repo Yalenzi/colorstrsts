@@ -13,31 +13,33 @@ module.exports = {
         'english': ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // Scientific Primary Blue - Trust & Precision
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554',
         },
+        // Scientific Secondary Teal - Accuracy & Analysis
         secondary: {
-          50: '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
-          950: '#4a044e',
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14b8a6',
+          600: '#0d9488',
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
+          950: '#042f2e',
         },
         success: {
           50: '#f0fdf4',
@@ -88,6 +90,29 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+
+        // Scientific Precision Colors
+        precision: {
+          high: 'rgb(var(--precision-high))',
+          medium: 'rgb(var(--precision-medium))',
+          low: 'rgb(var(--precision-low))',
+        },
+
+        // Confidence Level Colors
+        confidence: {
+          excellent: 'rgb(var(--confidence-excellent))',
+          good: 'rgb(var(--confidence-good))',
+          fair: 'rgb(var(--confidence-fair))',
+          poor: 'rgb(var(--confidence-poor))',
+        },
+
+        // Laboratory Equipment Colors
+        lab: {
+          primary: '#2563eb',
+          secondary: '#14b8a6',
+          accent: '#f59e0b',
+          neutral: '#6b7280',
+        },
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
@@ -99,6 +124,7 @@ module.exports = {
         'bounce-slow': 'bounce 2s infinite',
       },
       keyframes: {
+        // Basic Animations
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
@@ -119,6 +145,47 @@ module.exports = {
           '0%': { opacity: '0', transform: 'translateX(-30px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
+
+        // Scientific Animations
+        pulseScientific: {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200px 0' },
+          '100%': { backgroundPosition: 'calc(200px + 100%) 0' },
+        },
+        glow: {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)' },
+          '50%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.8)' },
+        },
+        scan: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        precision: {
+          '0%': { transform: 'scale(1)', opacity: '0.7' },
+          '50%': { transform: 'scale(1.1)', opacity: '1' },
+          '100%': { transform: 'scale(1)', opacity: '0.7' },
+        },
+        analyze: {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
+      },
+
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-out',
+        'slide-up': 'slideUp 0.5s ease-out',
+        'slide-down': 'slideDown 0.5s ease-out',
+        'slide-left': 'slideLeft 0.5s ease-out',
+        'slide-right': 'slideRight 0.5s ease-out',
+        'pulse-scientific': 'pulseScientific 2s ease-in-out infinite',
+        'shimmer': 'shimmer 1.5s infinite',
+        'glow': 'glow 2s ease-in-out infinite',
+        'scan': 'scan 2s linear infinite',
+        'precision': 'precision 3s ease-in-out infinite',
+        'analyze': 'analyze 2s ease-out',
       },
       spacing: {
         '18': '4.5rem',

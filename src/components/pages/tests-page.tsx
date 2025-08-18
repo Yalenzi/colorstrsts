@@ -217,19 +217,43 @@ function TestsPageContent({ lang }: TestsPageProps) {
   return (
     <div className={`min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-950 dark:via-background dark:to-secondary-950 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 mb-6">
-            <BeakerIcon className="h-8 w-8 text-primary-600" />
+        {/* Scientific Header */}
+        <div className="text-center mb-16">
+          <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900 dark:to-secondary-900 mb-8 shadow-lg">
+            <BeakerIcon className="h-10 w-10 text-primary-600 animate-pulse-scientific" />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-secondary-500/20 animate-glow"></div>
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            {t('tests.title')}
+
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900 dark:to-secondary-900 text-primary-800 dark:text-primary-200 text-sm font-semibold mb-6">
+            <BeakerIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+            {lang === 'ar' ? 'مختبر التحليل الكيميائي' : 'Chemical Analysis Laboratory'}
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-700 bg-clip-text text-transparent">
+              {t('tests.title')}
+            </span>
           </h1>
-          
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8 leading-relaxed">
             {t('tests.subtitle')}
           </p>
+
+          {/* Scientific Metrics */}
+          <div className="flex flex-wrap justify-center gap-6 mb-8">
+            <div className="precision-indicator precision-high">
+              <BeakerIcon className="h-4 w-4" />
+              <span>{lang === 'ar' ? `${tests.length} اختبار متاح` : `${tests.length} Tests Available`}</span>
+            </div>
+            <div className="precision-indicator confidence-excellent">
+              <ShieldCheckIcon className="h-4 w-4" />
+              <span>{lang === 'ar' ? 'معتمد مختبرياً' : 'Laboratory Certified'}</span>
+            </div>
+            <div className="precision-indicator confidence-good">
+              <ClockIcon className="h-4 w-4" />
+              <span>{lang === 'ar' ? 'نتائج فورية' : 'Instant Results'}</span>
+            </div>
+          </div>
 
           {/* Statistics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
@@ -277,34 +301,48 @@ function TestsPageContent({ lang }: TestsPageProps) {
           )}
         </div>
 
-        {/* Search and Filters */}
-        <div className="mb-8 space-y-4">
-          {/* Search Bar */}
-          <div className="relative max-w-md mx-auto">
-            <MagnifyingGlassIcon className="absolute left-3 rtl:right-3 rtl:left-auto top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
-            <input
-              type="text"
-              placeholder={lang === 'ar' ? 'البحث في الاختبارات...' : 'Search tests...'}
-              value={searchQuery || ''}
-              onChange={(e) => {
-                try {
-                  setSearchQuery(e.target.value || '');
-                } catch (error) {
-                  console.error('Search input error:', error);
-                }
-              }}
-              className="w-full pl-10 rtl:pr-10 rtl:pl-4 pr-4 py-3 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
+        {/* Scientific Search and Filters */}
+        <div className="mb-12 space-y-6">
+          {/* Advanced Search Bar */}
+          <div className="relative max-w-2xl mx-auto">
+            <div className="lab-equipment p-6">
+              <div className="relative">
+                <MagnifyingGlassIcon className="absolute left-4 rtl:right-4 rtl:left-auto top-1/2 transform -translate-y-1/2 h-6 w-6 text-primary-600 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder={lang === 'ar' ? 'البحث المتقدم في قاعدة البيانات المختبرية...' : 'Advanced search in laboratory database...'}
+                  value={searchQuery || ''}
+                  onChange={(e) => {
+                    try {
+                      setSearchQuery(e.target.value || '');
+                    } catch (error) {
+                      console.error('Search input error:', error);
+                    }
+                  }}
+                  className="w-full pl-12 rtl:pr-12 rtl:pl-6 pr-16 py-4 border-2 border-primary-200 rounded-xl bg-white dark:bg-gray-800 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 text-lg"
+                />
+                <div className="absolute right-4 rtl:left-4 rtl:right-auto top-1/2 transform -translate-y-1/2">
+                  <div className="precision-indicator confidence-good">
+                    <span className="text-xs font-mono">{filteredTests.length}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Filters */}
-          <div className="flex flex-wrap gap-4 justify-center">
-            <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <FunnelIcon className="h-5 w-5 text-muted-foreground" />
+          {/* Scientific Filters */}
+          <div className="flex flex-wrap gap-6 justify-center">
+            <div className="lab-card p-4 min-w-[200px]">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse mb-2">
+                <FunnelIcon className="h-5 w-5 text-primary-600" />
+                <span className="text-sm font-semibold text-foreground">
+                  {lang === 'ar' ? 'فئة التحليل' : 'Analysis Category'}
+                </span>
+              </div>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="rounded-lg border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500"
+                className="w-full px-4 py-3 border-2 border-primary-200 rounded-lg bg-white dark:bg-gray-800 text-foreground focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200"
               >
                 {categories.map(category => (
                   <option key={category.value} value={category.value}>
@@ -314,12 +352,17 @@ function TestsPageContent({ lang }: TestsPageProps) {
               </select>
             </div>
 
-            <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <ExclamationTriangleIcon className="h-5 w-5 text-muted-foreground" />
+            <div className="lab-card p-4 min-w-[200px]">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse mb-2">
+                <ShieldCheckIcon className="h-5 w-5 text-secondary-600" />
+                <span className="text-sm font-semibold text-foreground">
+                  {lang === 'ar' ? 'مستوى الأمان' : 'Safety Level'}
+                </span>
+              </div>
               <select
                 value={selectedSafetyLevel}
                 onChange={(e) => setSelectedSafetyLevel(e.target.value)}
-                className="rounded-lg border border-border bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500"
+                className="w-full px-4 py-3 border-2 border-secondary-200 rounded-lg bg-white dark:bg-gray-800 text-foreground focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 transition-all duration-200"
               >
                 {safetyLevels.map(level => (
                   <option key={level.value} value={level.value}>
