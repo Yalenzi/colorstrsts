@@ -13,7 +13,8 @@ import {
   DocumentTextIcon,
   ArrowRightIcon,
   SparklesIcon,
-  GlobeAltIcon
+  GlobeAltIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 
 interface HomePageProps {

@@ -19,7 +19,8 @@ import {
   ExclamationTriangleIcon,
   ClockIcon,
   LockClosedIcon,
-  StarIcon
+  StarIcon,
+  ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 
 interface TestsPageProps {
