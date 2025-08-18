@@ -306,25 +306,7 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
           </div>
         </div>
 
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-foreground">
-            {lang === 'ar' ? 'التقدم' : 'Progress'}
-          </span>
-          <span className="text-sm text-muted-foreground">
-            {completed.filter(Boolean).length} / {instructions.length}
-          </span>
-        </div>
-        <div className="w-full bg-secondary rounded-full h-2">
-          <div 
-            className="bg-primary h-2 rounded-full transition-all duration-300"
-            style={{ 
-              width: `${(completed.filter(Boolean).length / instructions.length) * 100}%` 
-            }}
-          />
-        </div>
-      </div>
+
 
         {/* All Instructions in Single Card */}
         <div className="lab-card mb-6">
