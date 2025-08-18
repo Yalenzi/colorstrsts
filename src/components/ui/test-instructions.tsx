@@ -41,8 +41,7 @@ interface TestInstructionsProps {
 }
 
 export function TestInstructions({ testId, lang, onComplete, onCancel }: TestInstructionsProps) {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [completed, setCompleted] = useState<boolean[]>([]);
+  const [safetyAcknowledged, setSafetyAcknowledged] = useState(false);
   const [testData, setTestData] = useState<any>(null);
   const [prepareSteps, setPrepareSteps] = useState<string[]>([]);
   const t = getTranslationsSync(lang);
@@ -72,16 +71,8 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         en: 'Safety and Protection Procedures'
       },
       description: {
-        ar: `• ارتدِ القفازات المقاومة للمواد الكيميائية
-• ارتدِ نظارات الأمان الواقية
-• تأكد من وجود تهوية ممتازة في المكان
-• أبعد المواد القابلة للاشتعال من منطقة العمل
-• تأكد من وجود مواد الإسعافات الأولية`,
-        en: `• Wear chemical-resistant gloves
-• Wear protective safety goggles
-• Ensure excellent ventilation in the area
-• Remove flammable materials from work area
-• Ensure first aid materials are available`
+        ar: 'ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية. تأكد من وجود تهوية ممتازة في المكان وأبعد المواد القابلة للاشتعال من منطقة العمل.',
+        en: 'Wear chemical-resistant gloves and protective safety goggles. Ensure excellent ventilation in the area and remove flammable materials from work area.'
       },
       warning: {
         ar: 'خطر: لا تلمس الكواشف الكيميائية مباشرة - قد تسبب حروق كيميائية شديدة',
@@ -98,8 +89,8 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         en: 'Sample and Equipment Preparation'
       },
       description: {
-        ar: 'ضع كمية صغيرة جداً من العينة (حجم حبة الأرز) على طبق خزفي أبيض نظيف. استخدم ملقط أو أداة معدنية نظيفة لنقل العينة.',
-        en: 'Place a very small amount of sample (rice grain size) on a clean white ceramic plate. Use clean tweezers or metal tool to transfer the sample.'
+        ar: 'ضع كمية صغيرة من المادة المشتبه بها على لوحة البقعة البيضاء النظيفة (حجم حبة الأرز تقريباً).',
+        en: 'Place a small amount of suspected material on a clean white spot plate (approximately rice grain size).'
       },
       warning: {
         ar: 'تجنب استخدام الأسطح البلاستيكية - قد تتفاعل مع الكواشف',
@@ -116,8 +107,8 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         en: 'Add Chemical Reagent'
       },
       description: {
-        ar: 'باستخدام قطارة زجاجية نظيفة، أضف قطرة واحدة فقط من الكاشف على العينة. أمسك القطارة بزاوية 45 درجة وأضف القطرة ببطء.',
-        en: 'Using a clean glass dropper, add exactly one drop of reagent to the sample. Hold the dropper at 45-degree angle and add the drop slowly.'
+        ar: 'أضف قطرة واحدة من الكاشف الكيميائي على العينة باستخدام قطارة زجاجية نظيفة.',
+        en: 'Add one drop of chemical reagent to the sample using a clean glass dropper.'
       },
       warning: {
         ar: 'تحذير: لا تضع أكثر من قطرة واحدة - قد يؤثر على دقة النتائج',
@@ -134,8 +125,8 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         en: 'Observe and Record Reaction'
       },
       description: {
-        ar: 'راقب تغير اللون فوراً بعد إضافة الكاشف. سجل اللون الأولي الذي يظهر خلال أول 15-30 ثانية. لا تنتظر أكثر من دقيقة واحدة.',
-        en: 'Observe color change immediately after adding reagent. Record the initial color that appears within the first 15-30 seconds. Do not wait more than one minute.'
+        ar: 'راقب تغير اللون فوراً بعد إضافة الكاشف وسجل النتيجة خلال أول دقيقة.',
+        en: 'Observe color change immediately after adding reagent and record the result within the first minute.'
       },
       warning: {
         ar: 'مهم: اللون الأولي هو الأكثر دقة - التغيرات اللاحقة قد تكون مضللة',
@@ -265,22 +256,15 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
     }
   };
 
-  const handleStepComplete = (stepIndex: number) => {
-    const newCompleted = [...completed];
-    newCompleted[stepIndex] = true;
-    setCompleted(newCompleted);
-
-    if (stepIndex < instructions.length - 1) {
-      setCurrentStep(stepIndex + 1);
-    }
+  const handleSafetyAcknowledgment = (checked: boolean) => {
+    setSafetyAcknowledged(checked);
   };
 
   const handleFinish = () => {
-    onComplete();
+    if (safetyAcknowledged) {
+      onComplete();
+    }
   };
-
-  const allStepsCompleted = completed.length === instructions.length && 
-    completed.every(step => step === true);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -342,50 +326,27 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         </div>
       </div>
 
-        {/* Instructions Steps */}
+        {/* All Instructions in Single Card */}
         <div className="lab-card mb-6">
-          <div className="space-y-4">
+          <div className="space-y-6">
             {instructions.map((instruction, index) => (
-              <div
-                key={instruction.id}
-                className={`
-                  flex items-start space-x-4 rtl:space-x-reverse p-4 rounded-lg transition-all duration-300
-                  ${index === currentStep
-                    ? 'bg-primary-50 dark:bg-primary-950 border-l-4 border-primary-500'
-                    : completed[index]
-                      ? 'bg-green-50 dark:bg-green-950 border-l-4 border-green-500'
-                      : 'hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }
-                  ${index > currentStep ? 'opacity-60' : 'opacity-100'}
-                `}
-              >
+              <div key={instruction.id} className="flex items-start space-x-4 rtl:space-x-reverse">
                 {/* Step Number Circle */}
-                <div className={`
-                  flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
-                  ${completed[index]
-                    ? 'bg-green-500 text-white'
-                    : index === currentStep
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-                  }
-                `}>
-                  {completed[index] ? (
-                    <CheckCircleIcon className="h-5 w-5" />
-                  ) : (
-                    instruction.step
-                  )}
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold">
+                  {instruction.step}
                 </div>
 
                 {/* Step Content */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-foreground leading-relaxed">
+                  <p className="text-foreground leading-relaxed mb-3">
                     {lang === 'ar' ? instruction.description.ar : instruction.description.en}
                   </p>
 
                   {instruction.warning && (
-                    <div className="mt-2 flex items-start space-x-2 rtl:space-x-reverse p-2 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded text-xs">
+                    <div className="flex items-start space-x-2 rtl:space-x-reverse p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
                       <ExclamationTriangleIcon className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
-                      <p className="text-red-700 dark:text-red-300">
+                      <p className="text-sm text-red-700 dark:text-red-300">
+                        <strong>{lang === 'ar' ? 'تحذير: ' : 'Warning: '}</strong>
                         {lang === 'ar' ? instruction.warning.ar : instruction.warning.en}
                       </p>
                     </div>
@@ -398,7 +359,7 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
 
         {/* Safety Acknowledgment */}
         <div className="lab-card">
-          <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
+          <div className="flex items-center space-x-3 rtl:space-x-reverse mb-6">
             <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900 flex items-center justify-center">
               <ShieldCheckIcon className="w-6 h-6 text-green-600" />
             </div>
@@ -409,58 +370,48 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-start space-x-3 rtl:space-x-reverse">
+          <div className="space-y-6">
+            <div className="flex items-start space-x-3 rtl:space-x-reverse p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <input
                 type="checkbox"
                 id="safety-acknowledgment"
-                checked={allStepsCompleted}
-                onChange={() => {}}
-                className="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                disabled
+                checked={safetyAcknowledged}
+                onChange={(e) => handleSafetyAcknowledgment(e.target.checked)}
+                className="mt-1 h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded"
               />
-              <label htmlFor="safety-acknowledgment" className="text-sm text-foreground">
+              <label htmlFor="safety-acknowledgment" className="text-sm text-foreground leading-relaxed">
                 {lang === 'ar'
-                  ? 'لقد قرأت وفهمت جميع تعليمات السلامة وسأتبع إجراءات السلامة المناسبة'
-                  : 'I have read and understand all safety instructions and will follow proper safety procedures'
+                  ? 'لقد قرأت وفهمت جميع تعليمات السلامة أعلاه وسأتبع إجراءات السلامة المناسبة أثناء تنفيذ الاختبار'
+                  : 'I have read and understand all safety instructions above and will follow proper safety procedures during test execution'
                 }
               </label>
             </div>
 
             <Button
               onClick={handleFinish}
-              disabled={!allStepsCompleted}
-              className={`w-full ${allStepsCompleted
+              disabled={!safetyAcknowledged}
+              className={`w-full ${safetyAcknowledged
                 ? 'bg-green-600 hover:bg-green-700 text-white'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
               size="lg"
             >
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <ExclamationTriangleIcon className="h-5 w-5" />
+              <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                {safetyAcknowledged ? (
+                  <CheckCircleIcon className="h-5 w-5" />
+                ) : (
+                  <ExclamationTriangleIcon className="h-5 w-5" />
+                )}
                 <span>
-                  {allStepsCompleted
+                  {safetyAcknowledged
                     ? (lang === 'ar' ? 'بدء التحليل' : 'Start Analysis')
-                    : (lang === 'ar' ? 'إقرار السلامة مطلوب' : 'Safety Acknowledgment Required')
+                    : (lang === 'ar' ? 'يرجى قراءة التعليمات والموافقة' : 'Please read instructions and acknowledge')
                   }
                 </span>
               </div>
             </Button>
           </div>
         </div>
-
-        {/* Complete Current Step Button */}
-        {currentStep < instructions.length && !completed[currentStep] && (
-          <div className="mt-6">
-            <Button
-              onClick={() => handleStepComplete(currentStep)}
-              className="w-full bg-primary-600 hover:bg-primary-700 text-white"
-              size="lg"
-            >
-              {lang === 'ar' ? 'تم قراءة هذه الخطوة' : 'Mark Step as Read'}
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
