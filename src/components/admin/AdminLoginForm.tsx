@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { Language } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -99,8 +99,8 @@ export function AdminLoginForm({ lang }: AdminLoginFormProps) {
       let userDoc = await getDoc(userDocRef);
 
       if (!userDoc.exists()) {
-        // Create admin profile if doesn't exist
-        await updateDoc(userDocRef, {
+        // Create admin profile if doesn't exist - use setDoc instead of updateDoc
+        await setDoc(userDocRef, {
           email: user.email,
           displayName: user.displayName || 'Admin User',
           role: 'super_admin',

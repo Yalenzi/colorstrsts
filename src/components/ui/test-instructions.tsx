@@ -72,8 +72,16 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         en: 'Safety and Protection Procedures'
       },
       description: {
-        ar: 'ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية. تأكد من وجود تهوية ممتازة في المكان وإبعاد المواد القابلة للاشتعال.',
-        en: 'Wear chemical-resistant gloves and protective safety goggles. Ensure excellent ventilation and remove any flammable materials from the area.'
+        ar: `• ارتدِ القفازات المقاومة للمواد الكيميائية
+• ارتدِ نظارات الأمان الواقية
+• تأكد من وجود تهوية ممتازة في المكان
+• أبعد المواد القابلة للاشتعال من منطقة العمل
+• تأكد من وجود مواد الإسعافات الأولية`,
+        en: `• Wear chemical-resistant gloves
+• Wear protective safety goggles
+• Ensure excellent ventilation in the area
+• Remove flammable materials from work area
+• Ensure first aid materials are available`
       },
       warning: {
         ar: 'خطر: لا تلمس الكواشف الكيميائية مباشرة - قد تسبب حروق كيميائية شديدة',
@@ -174,8 +182,16 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         en: 'Safety and Protection Procedures'
       },
       description: {
-        ar: 'ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية. تأكد من وجود تهوية ممتازة في المكان.',
-        en: 'Wear chemical-resistant gloves and protective safety goggles. Ensure excellent ventilation in the area.'
+        ar: `• ارتدِ القفازات المقاومة للمواد الكيميائية
+• ارتدِ نظارات الأمان الواقية
+• تأكد من وجود تهوية ممتازة في المكان
+• أبعد المواد القابلة للاشتعال من منطقة العمل
+• تأكد من وجود مواد الإسعافات الأولية`,
+        en: `• Wear chemical-resistant gloves
+• Wear protective safety goggles
+• Ensure excellent ventilation in the area
+• Remove flammable materials from work area
+• Ensure first aid materials are available`
       },
       warning: {
         ar: `خطر: ${testData.method_name_ar} يتطلب احتياطات خاصة`,
@@ -370,14 +386,13 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
                   </div>
                 )}
 
-                {/* Step Action Button */}
+                {/* Step Action Button - Only show for current step */}
                 {index === currentStep && !completed[index] && (
-                  <Button
-                    onClick={() => handleStepComplete(index)}
-                    className="mt-4"
-                  >
-                    {lang === 'ar' ? 'تم إكمال هذه الخطوة' : 'Complete This Step'}
-                  </Button>
+                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <p className="text-sm text-blue-700 dark:text-blue-300 text-center">
+                      {lang === 'ar' ? 'اقرأ التعليمات بعناية ثم انقر "تم إكمال هذه الخطوة" أدناه' : 'Read instructions carefully then click "Complete This Step" below'}
+                    </p>
+                  </div>
                 )}
 
                 {completed[index] && (
@@ -393,6 +408,21 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
           </div>
         ))}
       </div>
+
+      {/* Complete Current Step Button */}
+      {currentStep < instructions.length && !completed[currentStep] && (
+        <div className="mt-8 pt-6 border-t border-border">
+          <div className="text-center">
+            <Button
+              onClick={() => handleStepComplete(currentStep)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+              size="lg"
+            >
+              {lang === 'ar' ? 'تم إكمال هذه الخطوة' : 'Complete This Step'}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">

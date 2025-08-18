@@ -38,6 +38,8 @@ import {
 import { EnhancedCharts } from './charts/EnhancedCharts';
 import ColorResultsManagement from './ColorResultsManagement';
 import { TestStepsManagement } from './TestStepsManagement';
+import { TestStepsDataManagement } from './TestStepsDataManagement';
+import { TextContentManagement } from './RichTextEditor';
 import { SubscriptionManagement } from './SubscriptionManagement';
 import { SubscriptionPlansManagement } from './SubscriptionPlansManagement';
 import { TextEditorManagement } from './TextEditorManagement';
@@ -330,6 +332,8 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
     { id: 'tests', label: texts.tests, icon: BeakerIcon },
     { id: 'color-results', label: isRTL ? 'النتائج اللونية' : 'Color Results', icon: BeakerIcon },
     { id: 'test-steps', label: isRTL ? 'خطوات الاختبار' : 'Test Steps', icon: DocumentTextIcon },
+    { id: 'test-steps-data', label: isRTL ? 'إدارة خطوات الاختبار' : 'Test Steps Data Management', icon: DocumentTextIcon },
+    { id: 'text-content', label: isRTL ? 'محرر المحتوى النصي' : 'Text Content Editor', icon: DocumentTextIcon },
     { id: 'subscriptions', label: isRTL ? 'الاشتراكات' : 'Subscriptions', icon: CreditCardIcon },
     { id: 'subscription-plans', label: isRTL ? 'خطط الاشتراك' : 'Subscription Plans', icon: CreditCardIcon },
     { id: 'payment-gateways', label: isRTL ? 'بوابات الدفع' : 'Payment Gateways', icon: CreditCardIcon },
@@ -769,6 +773,14 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
             <TestStepsManagement lang={lang} />
           )}
 
+          {activeTab === 'test-steps-data' && (
+            <TestStepsDataManagement lang={lang} />
+          )}
+
+          {activeTab === 'text-content' && (
+            <TextContentManagement lang={lang} />
+          )}
+
           {activeTab === 'subscriptions' && (
             <SubscriptionManagement isRTL={isRTL} lang={lang} />
           )}
@@ -861,7 +873,7 @@ ${isRTL ? 'عدد الاختبارات:' : 'Tests Count:'} ${user.testsCount || 
           )}
 
           {/* Other tabs content */}
-          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'global-payment-settings', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control', 'database-diagnostics', 'data-management', 'audit-logs'].includes(activeTab) && (
+          {!['dashboard', 'users', 'tests', 'color-results', 'test-steps', 'test-steps-data', 'text-content', 'subscriptions', 'subscription-plans', 'content', 'database', 'reports', 'settings', 'admin-roles', 'performance', 'notifications', 'security', 'payment-gateways', 'enhanced-payments', 'global-payment-settings', 'user-diagnostic', 'chemical-tests', 'advanced-subscriptions', 'access-control', 'database-diagnostics', 'data-management', 'audit-logs'].includes(activeTab) && (
             <Card>
               <CardContent className="p-8 text-center">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">

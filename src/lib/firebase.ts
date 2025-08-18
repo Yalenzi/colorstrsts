@@ -11,12 +11,12 @@ import { getAnalytics } from "firebase/analytics";
 // Get Firebase configuration from environment variables or fallback to defaults
 // الحصول على إعداد Firebase من متغيرات البيئة أو استخدام القيم الافتراضية
 const getFirebaseConfig = () => {
-  // Check if we're in development mode and have environment variables
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  // Always try to use environment variables first
   const hasEnvVars = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 
-  if (isDevelopment && hasEnvVars) {
-    // Use environment variables in development
+  if (hasEnvVars) {
+    // Use environment variables when available
+    console.log('🔧 Using Firebase config from environment variables');
     return {
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
       authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -29,6 +29,7 @@ const getFirebaseConfig = () => {
   } else {
     // Fallback configuration for static export or when env vars are not available
     // إعداد احتياطي للتصدير الثابت أو عندما متغيرات البيئة غير متاحة
+    console.log('⚠️ Using fallback Firebase config');
     return {
       apiKey: "AIzaSyBCTEmastiOgvmTDu1EHxA0bkDAws00bIU",
       authDomain: "colorstests-573ef.firebaseapp.com",
@@ -47,7 +48,15 @@ const firebaseConfig = getFirebaseConfig();
 // التحقق من صحة إعداد Firebase
 if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
   console.error('❌ Firebase configuration is incomplete');
-  console.error('Please check your Firebase configuration');
+  console.error('Missing required fields:', {
+    apiKey: !firebaseConfig.apiKey ? 'MISSING' : 'OK',
+    projectId: !firebaseConfig.projectId ? 'MISSING' : 'OK',
+    authDomain: !firebaseConfig.authDomain ? 'MISSING' : 'OK'
+  });
+  console.error('Please check your Firebase configuration in .env.local');
+} else {
+  console.log('✅ Firebase configuration is valid');
+  console.log('🔧 Firebase Project:', firebaseConfig.projectId);
 }
 
 // Initialize Firebase

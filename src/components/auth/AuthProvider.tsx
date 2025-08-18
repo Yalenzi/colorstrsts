@@ -11,7 +11,8 @@ import {
   signInWithPopup,
   sendPasswordResetEmail,
   fetchSignInMethodsForEmail,
-  updateProfile
+  updateProfile,
+  getRedirectResult
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { createOrUpdateUserProfile, getUserProfile, UserProfile } from '@/lib/subscription-service';
@@ -37,6 +38,78 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+}
+
+// دالة معالجة أخطاء Google Sign-In
+function getGoogleSignInErrorMessage(errorCode: string): string {
+  switch (errorCode) {
+    case 'auth/popup-closed-by-user':
+      return 'تم إغلاق نافذة تسجيل الدخول. يرجى المحاولة مرة أخرى';
+    case 'auth/popup-blocked':
+      return 'تم حجب النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة في متصفحك والمحاولة مرة أخرى';
+    case 'auth/cancelled-popup-request':
+      return 'تم إلغاء طلب تسجيل الدخول';
+    case 'auth/operation-not-allowed':
+      return 'تسجيل الدخول بـ Google غير مفعل. يرجى التواصل مع المدير';
+    case 'auth/unauthorized-domain':
+      return 'النطاق الحالي غير مصرح له. يرجى استخدام النطاق الصحيح';
+    case 'auth/network-request-failed':
+      return 'خطأ في الاتصال بالشبكة. تحقق من اتصالك بالإنترنت والمحاولة مرة أخرى';
+    case 'auth/internal-error':
+      return 'خطأ داخلي في Firebase. قد يكون النطاق غير مصرح به. يرجى المحاولة مرة أخرى أو استخدام طريقة أخرى';
+    case 'auth/too-many-requests':
+      return 'تم تجاوز عدد المحاولات المسموح. يرجى الانتظار قليلاً والمحاولة مرة أخرى';
+    case 'auth/user-disabled':
+      return 'تم تعطيل هذا الحساب. يرجى التواصل مع المدير';
+    case 'auth/account-exists-with-different-credential':
+      return 'يوجد حساب بنفس البريد الإلكتروني مع طريقة تسجيل دخول مختلفة';
+    case 'auth/credential-already-in-use':
+      return 'هذا الحساب مستخدم بالفعل مع طريقة تسجيل دخول أخرى';
+    case 'auth/unauthorized-domain':
+      return 'النطاق الحالي غير مصرح له في إعدادات Firebase. يرجى التواصل مع المدير';
+    default:
+      return 'خطأ غير متوقع في تسجيل الدخول بـ Google. يرجى المحاولة مرة أخرى';
+  }
+}
+
+// دالة معالجة أخطاء تسجيل الدخول العادي
+function getSignInErrorMessage(errorCode: string): string {
+  switch (errorCode) {
+    case 'auth/user-not-found':
+      return 'لا يوجد حساب بهذا البريد الإلكتروني. يرجى التحقق من البريد الإلكتروني أو إنشاء حساب جديد';
+    case 'auth/wrong-password':
+      return 'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى';
+    case 'auth/invalid-email':
+      return 'البريد الإلكتروني غير صالح. يرجى التحقق من صيغة البريد الإلكتروني';
+    case 'auth/user-disabled':
+      return 'تم تعطيل هذا الحساب. يرجى التواصل مع المدير';
+    case 'auth/too-many-requests':
+      return 'تم تجاوز عدد المحاولات المسموح. يرجى الانتظار قليلاً والمحاولة مرة أخرى';
+    case 'auth/network-request-failed':
+      return 'خطأ في الاتصال بالشبكة. تحقق من اتصالك بالإنترنت';
+    case 'auth/invalid-credential':
+      return 'بيانات تسجيل الدخول غير صحيحة';
+    default:
+      return 'خطأ في تسجيل الدخول. يرجى المحاولة مرة أخرى';
+  }
+}
+
+// دالة معالجة أخطاء إنشاء الحساب
+function getSignUpErrorMessage(errorCode: string): string {
+  switch (errorCode) {
+    case 'auth/email-already-in-use':
+      return 'هذا البريد الإلكتروني مستخدم بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر';
+    case 'auth/weak-password':
+      return 'كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل وتحتوي على أرقام وحروف';
+    case 'auth/invalid-email':
+      return 'البريد الإلكتروني غير صالح. يرجى التحقق من صيغة البريد الإلكتروني';
+    case 'auth/operation-not-allowed':
+      return 'إنشاء الحسابات غير مفعل حالياً. يرجى التواصل مع المدير';
+    case 'auth/network-request-failed':
+      return 'خطأ في الاتصال بالشبكة. تحقق من اتصالك بالإنترنت';
+    default:
+      return 'حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى';
+  }
 }
 
 interface AuthProviderProps {
@@ -67,19 +140,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('❌ Sign in error:', error);
 
       // معالجة أخطاء محددة
-      if (error.code === 'auth/user-not-found') {
-        throw new Error('لا يوجد حساب بهذا البريد الإلكتروني');
-      } else if (error.code === 'auth/wrong-password') {
-        throw new Error('كلمة المرور غير صحيحة');
-      } else if (error.code === 'auth/invalid-email') {
-        throw new Error('البريد الإلكتروني غير صالح');
-      } else if (error.code === 'auth/user-disabled') {
-        throw new Error('تم تعطيل هذا الحساب');
-      } else if (error.code === 'auth/too-many-requests') {
-        throw new Error('تم تجاوز عدد المحاولات المسموح. حاول مرة أخرى لاحقاً');
-      } else {
-        throw new Error(error.message || 'خطأ في تسجيل الدخول');
-      }
+      const errorMessage = getSignInErrorMessage(error.code);
+      throw new Error(errorMessage);
     }
   };
 
@@ -107,17 +169,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('❌ Sign up error:', error);
 
       // معالجة أخطاء محددة
-      if (error.code === 'auth/email-already-in-use') {
-        throw new Error('هذا البريد الإلكتروني مستخدم بالفعل. يرجى تسجيل الدخول أو استخدام بريد آخر');
-      } else if (error.code === 'auth/weak-password') {
-        throw new Error('كلمة المرور ضعيفة. يجب أن تكون 6 أحرف على الأقل');
-      } else if (error.code === 'auth/invalid-email') {
-        throw new Error('البريد الإلكتروني غير صالح');
-      } else if (error.code === 'auth/operation-not-allowed') {
-        throw new Error('إنشاء الحسابات غير مفعل حالياً');
-      } else {
-        throw new Error(error.message || 'حدث خطأ أثناء إنشاء الحساب');
-      }
+      const errorMessage = getSignUpErrorMessage(error.code);
+      throw new Error(errorMessage);
     }
   };
 
@@ -154,9 +207,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } catch (popupError: any) {
         console.warn('⚠️ Popup failed, trying redirect...', popupError);
 
-        if (popupError.code === 'auth/popup-blocked' ||
-            popupError.code === 'auth/popup-closed-by-user' ||
-            popupError.code === 'auth/cancelled-popup-request') {
+        // قائمة الأخطاء التي تستدعي استخدام redirect
+        const redirectErrors = [
+          'auth/popup-blocked',
+          'auth/popup-closed-by-user',
+          'auth/cancelled-popup-request',
+          'auth/internal-error', // إضافة internal-error للـ fallback
+          'auth/unauthorized-domain'
+        ];
+
+        if (redirectErrors.includes(popupError.code)) {
+          console.log('🔄 Switching to redirect authentication...');
           // استخدام redirect كبديل
           const { signInWithRedirect } = await import('firebase/auth');
           await signInWithRedirect(auth, provider);
@@ -187,24 +248,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         stack: error.stack
       });
 
-      // معالجة أخطاء محددة
-      if (error.code === 'auth/popup-closed-by-user') {
-        throw new Error('تم إغلاق نافذة تسجيل الدخول');
-      } else if (error.code === 'auth/popup-blocked') {
-        throw new Error('تم حجب النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة في متصفحك');
-      } else if (error.code === 'auth/cancelled-popup-request') {
-        throw new Error('تم إلغاء طلب تسجيل الدخول');
-      } else if (error.code === 'auth/operation-not-allowed') {
-        throw new Error('تسجيل الدخول بـ Google غير مفعل في إعدادات Firebase');
-      } else if (error.code === 'auth/unauthorized-domain') {
-        throw new Error('النطاق الحالي غير مصرح له في إعدادات Firebase');
-      } else if (error.code === 'auth/network-request-failed') {
-        throw new Error('خطأ في الاتصال بالشبكة. تحقق من اتصالك بالإنترنت');
-      } else if (error.code === 'auth/internal-error') {
-        throw new Error('خطأ داخلي في Firebase. حاول مرة أخرى');
-      } else {
-        throw new Error(error.message || 'خطأ غير متوقع في تسجيل الدخول بـ Google');
-      }
+      // معالجة أخطاء محددة مع رسائل واضحة
+      const errorMessage = getGoogleSignInErrorMessage(error.code);
+      throw new Error(errorMessage);
     }
   };
 

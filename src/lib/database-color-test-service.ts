@@ -209,10 +209,10 @@ class DatabaseColorTestService {
     unique_colors: number;
   }> {
     try {
-      const tests = await this.getGroupedTests();
+      const tests = await this.getAllTests();
 
       if (!tests || !Array.isArray(tests)) {
-        console.warn('⚠️ No grouped tests data available for statistics');
+        console.warn('⚠️ No tests data available for statistics');
         return {
           total_tests: 0,
           total_results: 0,
@@ -226,13 +226,12 @@ class DatabaseColorTestService {
       let totalResults = 0;
 
       tests.forEach(test => {
-        // Safe access to total_results
-        totalResults += test.total_results || 0;
-
-        // Safe access to results array
-        const results = test.results || [];
-        if (Array.isArray(results)) {
-          results.forEach(result => {
+        // Safe access to color_results array from new format
+        const colorResults = test.color_results || [];
+        if (Array.isArray(colorResults)) {
+          totalResults += colorResults.length;
+          
+          colorResults.forEach(result => {
             if (result) {
               const substance = result.possible_substance || '';
               const color = result.color_result || '';
@@ -359,12 +358,20 @@ class DatabaseColorTestService {
   async getAllTests(): Promise<any[]> {
     await this.initialize();
 
-    // إذا كانت البيانات محملة مباشرة من JSON الجديد
-    if (this.tests.length > 0 && this.tests[0].id) {
-      console.log(`📊 Returning ${this.tests.length} tests from new JSON format`);
+    // إذا كانت البيانات محملة مباشرة من JSON الجديد (تحتوي على id و color_results)
+    if (this.tests.length > 0 && this.tests[0].id && this.tests[0].color_results) {
+      console.log(`📊 Returning ${this.tests.length} tests from new JSON format with color_results`);
       return this.tests.map(test => ({
         ...test,
-        color_results: test.color_results || []
+        // تأكد من وجود color_results صالح
+        color_results: Array.isArray(test.color_results) ? test.color_results.map(result => ({
+          color_result: result.color_result || result.color || '',
+          color_result_ar: result.color_result_ar || result.color_ar || '',
+          possible_substance: result.possible_substance || result.substance || '',
+          possible_substance_ar: result.possible_substance_ar || result.substance_ar || '',
+          confidence_level: result.confidence_level || result.confidence || 'medium',
+          color_hex: result.color_hex || '#000000'
+        })) : []
       }));
     }
 
@@ -380,11 +387,12 @@ class DatabaseColorTestService {
         category: test.test_type || 'general',
         safety_level: 'medium',
         color_results: test.results.map(result => ({
-          color: result.color_result,
-          color_ar: result.color_result_ar,
-          substance: result.possible_substance,
-          substance_ar: result.possible_substance_ar,
-          confidence: 'high'
+          color_result: result.color_result || '',
+          color_result_ar: result.color_result_ar || '',
+          possible_substance: result.possible_substance || '',
+          possible_substance_ar: result.possible_substance_ar || '',
+          confidence_level: 'high',
+          color_hex: '#000000'
         })),
         prepare: test.prepare,
         prepare_ar: test.prepare_ar,

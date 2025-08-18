@@ -3,8 +3,8 @@
     "id": "marquis-step-1",
     "test_id": "marquis-test",
     "step_number": 1,
-    "instruction": "Wear chemical-resistant gloves and protective safety goggles",
-    "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+    "instruction": "• Wear chemical-resistant gloves\n• Wear protective safety goggles\n• Ensure excellent ventilation\n• Remove flammable materials from area\n• Have first aid materials ready",
+    "instruction_ar": "• ارتدِ القفازات المقاومة للمواد الكيميائية\n• ارتدِ نظارات الأمان الواقية\n• تأكد من وجود تهوية ممتازة\n• أبعد المواد القابلة للاشتعال من المنطقة\n• تأكد من وجود مواد الإسعافات الأولية",
     "safety_warning": "DANGER: Marquis reagent contains concentrated sulfuric acid - may cause severe chemical burns",
     "safety_warning_ar": "خطر: كاشف ماركيز يحتوي على حمض الكبريتيك المركز - قد يسبب حروق كيميائية شديدة",
     "icon": "ShieldCheckIcon"
@@ -153,8 +153,8 @@
     "id": "nitric-step-1",
     "test_id": "nitric-acid-test",
     "step_number": 1,
-    "instruction": "Use extreme caution - wear full protective equipment",
-    "instruction_ar": "توخ الحذر الشديد - ارتدِ المعدات الواقية الكاملة",
+    "instruction": "• Use extreme caution at all times\n• Wear full protective equipment\n• Work only in fume hood\n• Have emergency shower/eyewash accessible\n• Never work alone with this chemical",
+    "instruction_ar": "• توخ الحذر الشديد في جميع الأوقات\n• ارتدِ المعدات الواقية الكاملة\n• اعمل فقط في خزانة الأبخرة\n• تأكد من إمكانية الوصول لدش الطوارئ وغسيل العيون\n• لا تعمل أبداً بمفردك مع هذه المادة الكيميائية",
     "safety_warning": "Nitric acid is extremely corrosive and dangerous",
     "safety_warning_ar": "حمض النيتريك شديد التآكل والخطورة",
     "icon": "ExclamationTriangleIcon"
@@ -203,8 +203,8 @@
     "id": "potassium-dichromate-step-1",
     "test_id": "potassium-dichromate-test",
     "step_number": 1,
-    "instruction": "Wear full protective equipment: gloves, goggles, and lab coat",
-    "instruction_ar": "ارتدِ المعدات الواقية الكاملة: القفازات والنظارات ومعطف المختبر",
+    "instruction": "• Wear chemical-resistant gloves\n• Wear safety goggles\n• Wear laboratory coat\n• Work in well-ventilated area or fume hood\n• Have emergency equipment accessible",
+    "instruction_ar": "• ارتدِ القفازات المقاومة للمواد الكيميائية\n• ارتدِ نظارات الأمان\n• ارتدِ معطف المختبر\n• اعمل في منطقة جيدة التهوية أو خزانة الأبخرة\n• تأكد من إمكانية الوصول لمعدات الطوارئ",
     "safety_warning": "Concentrated sulfuric acid is extremely dangerous and corrosive",
     "safety_warning_ar": "حمض الكبريتيك المركز خطير جداً ومسبب للتآكل",
     "icon": "ShieldCheckIcon"

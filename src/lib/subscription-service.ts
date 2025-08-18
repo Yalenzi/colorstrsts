@@ -31,7 +31,9 @@ export interface UserProfile {
   uid: string;
   email: string;
   displayName?: string;
+  photoURL?: string;
   createdAt: any;
+  lastLoginAt?: any;
   subscription?: {
     status: 'active' | 'inactive' | 'canceled' | 'past_due';
     plan: 'free' | 'premium';
@@ -57,29 +59,64 @@ export interface TestUsage {
 
 // إنشاء أو تحديث ملف المستخدم
 export async function createOrUpdateUserProfile(user: User): Promise<UserProfile> {
-  const userRef = doc(db, 'users', user.uid);
-  const userSnap = await getDoc(userRef);
+  try {
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
 
-  if (userSnap.exists()) {
-    return userSnap.data() as UserProfile;
-  } else {
-    const newUserProfile: UserProfile = {
-      uid: user.uid,
-      email: user.email || '',
-      displayName: user.displayName || '',
-      createdAt: serverTimestamp(),
-      subscription: {
-        status: 'inactive',
-        plan: 'free'
-      },
-      usage: {
-        freeTestsUsed: 0,
-        totalTestsUsed: 0
+    if (userSnap.exists()) {
+      // تحديث البيانات الأساسية إذا تغيرت
+      const existingProfile = userSnap.data() as UserProfile;
+      const updates: Partial<UserProfile> = {};
+
+      if (user.email && user.email !== existingProfile.email) {
+        updates.email = user.email;
       }
-    };
 
-    await setDoc(userRef, newUserProfile);
-    return newUserProfile;
+      if (user.displayName && user.displayName !== existingProfile.displayName) {
+        updates.displayName = user.displayName;
+      }
+
+      // إضافة photoURL إذا كان متوفراً
+      if (user.photoURL && user.photoURL !== existingProfile.photoURL) {
+        updates.photoURL = user.photoURL;
+      }
+
+      // تحديث آخر تسجيل دخول
+      updates.lastLoginAt = serverTimestamp();
+
+      if (Object.keys(updates).length > 0) {
+        await updateDoc(userRef, updates);
+        console.log('✅ User profile updated:', updates);
+        return { ...existingProfile, ...updates };
+      }
+
+      return existingProfile;
+    } else {
+      // إنشاء ملف جديد
+      const newUserProfile: UserProfile = {
+        uid: user.uid,
+        email: user.email || '',
+        displayName: user.displayName || user.email?.split('@')[0] || '',
+        photoURL: user.photoURL || '',
+        createdAt: serverTimestamp(),
+        lastLoginAt: serverTimestamp(),
+        subscription: {
+          status: 'inactive',
+          plan: 'free'
+        },
+        usage: {
+          freeTestsUsed: 0,
+          totalTestsUsed: 0
+        }
+      };
+
+      await setDoc(userRef, newUserProfile);
+      console.log('✅ New user profile created:', newUserProfile);
+      return newUserProfile;
+    }
+  } catch (error) {
+    console.error('❌ Error creating/updating user profile:', error);
+    throw error;
   }
 }
 

@@ -32,13 +32,17 @@ export function GoogleSignInButton({
       // التحقق من دعم المتصفح للنوافذ المنبثقة
       if (typeof window !== 'undefined') {
         console.log('🔄 Testing popup support...');
-        const testPopup = window.open('', '_blank', 'width=1,height=1');
-        if (!testPopup || testPopup.closed) {
-          console.error('❌ Popup blocked');
-          throw new Error('auth/popup-blocked');
+        try {
+          const testPopup = window.open('', '_blank', 'width=1,height=1');
+          if (!testPopup || testPopup.closed) {
+            console.warn('⚠️ Popup might be blocked, will try anyway');
+          } else {
+            testPopup.close();
+            console.log('✅ Popup support confirmed');
+          }
+        } catch (popupTestError) {
+          console.warn('⚠️ Popup test failed, will try anyway:', popupTestError);
         }
-        testPopup.close();
-        console.log('✅ Popup support confirmed');
       }
 
       console.log('🔄 Calling signInWithGoogle...');
@@ -62,6 +66,14 @@ export function GoogleSignInButton({
         errorMessage = error.message;
       } else if (error.code) {
         errorMessage = getErrorMessage(error.code);
+      }
+
+      // إضافة معلومات إضافية للأخطاء الشائعة في الإنتاج
+      if (error.code === 'auth/internal-error' && typeof window !== 'undefined') {
+        const domain = window.location.hostname;
+        if (domain === 'colorstest.com' || domain === 'www.colorstest.com') {
+          errorMessage += ' (قد يكون النطاق غير مضاف للنطاقات المصرح بها في Firebase)';
+        }
       }
 
       console.log('📤 Sending error to parent:', errorMessage);
