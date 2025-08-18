@@ -98,6 +98,14 @@ export function Footer({ lang }: FooterProps) {
                   {lang === 'ar' ? 'اتصل بنا' : 'Contact Us'}
                 </Link>
               </li>
+              <li>
+                <Link
+                  href={`/${lang}/privacy`}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -105,8 +113,37 @@ export function Footer({ lang }: FooterProps) {
         {/* Copyright Section */}
         <div className="mt-12 pt-8 border-t border-gray-300 dark:border-gray-600">
           <div className="text-center">
+            {/* Legal Links */}
+            <div className="flex flex-wrap justify-center items-center space-x-6 rtl:space-x-reverse mb-6">
+              <Link
+                href={`/${lang}/privacy`}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
+              </Link>
+              <span className="text-gray-300 dark:text-gray-600">•</span>
+              <Link
+                href={`/${lang}/safety`}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {lang === 'ar' ? 'إرشادات السلامة' : 'Safety Guidelines'}
+              </Link>
+              <span className="text-gray-300 dark:text-gray-600">•</span>
+              <Link
+                href={`/${lang}/contact`}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {lang === 'ar' ? 'اتصل بنا' : 'Contact Us'}
+              </Link>
+            </div>
             <p className="text-sm text-gray-500 mb-4">
-              {lang === 'ar' ? 'جميع الحقوق محفوظة © 2025' : 'All rights reserved © 2025'}
+              {lang === 'ar' ? 'جميع الحقوق محفوظة © 2025 ColorTests' : 'All rights reserved © 2025 ColorTests'}
+            </p>
+            <p className="text-xs text-gray-400 mb-4">
+              {lang === 'ar'
+                ? 'نظام الكشف المختبري المتقدم - متوافق مع معايير GDPR و CCPA'
+                : 'Advanced Laboratory Detection System - GDPR & CCPA Compliant'
+              }
             </p>
             <p className="text-sm text-gray-500 mb-4">
               {lang === 'ar' ? 'تم تطويره من قبل' : 'Developed by'}
