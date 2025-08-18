@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
-import { DataService } from '@/lib/data-service';
+import { getTestById } from '@/lib/local-data-service';
 import { Button } from '@/components/ui/button';
 import {
   ExclamationTriangleIcon,
@@ -49,7 +49,7 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
 
   useEffect(() => {
     // Load test data
-    const test = DataService.getChemicalTestById(testId);
+    const test = getTestById(testId);
     setTestData(test);
 
     if (test?.prepare) {
@@ -283,27 +283,44 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
     completed.every(step => step === true);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          {lang === 'ar' ? 'تعليمات الاختبار الكيميائي' : 'Chemical Test Instructions'}
-        </h1>
-        <p className="text-muted-foreground mb-4">
-          {lang === 'ar'
-            ? 'اتبع هذه الخطوات بدقة وحذر شديد لضمان سلامتك الشخصية والحصول على نتائج موثوقة ودقيقة'
-            : 'Follow these steps precisely and with extreme caution to ensure your personal safety and obtain reliable, accurate results'
-          }
-        </p>
-        <div className="mb-4 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-800 dark:text-red-200 font-bold">
-            {lang === 'ar'
-              ? '⚠️ تحذير مهم: هذه الاختبارات للمتخصصين المدربين فقط في بيئة مختبرية آمنة ومجهزة'
-              : '⚠️ IMPORTANT WARNING: These tests are for trained professionals only in a safe, equipped laboratory environment'
-            }
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="max-w-4xl mx-auto p-4 sm:p-6">
+        {/* Header with Back Button */}
+        <div className="flex items-center mb-6">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onCancel}
+            className="mr-4 rtl:ml-4 rtl:mr-0"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </Button>
+          <h1 className="text-2xl font-bold text-foreground">
+            {testData?.method_name || (lang === 'ar' ? 'اختبار كيميائي' : 'Chemical Test')}
+          </h1>
         </div>
-      </div>
+
+        {/* Test Instructions Card */}
+        <div className="lab-card mb-6">
+          <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
+            <div className="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+              <BeakerIcon className="w-6 h-6 text-primary-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">
+                {lang === 'ar' ? 'تعليمات الاختبار' : 'Test Instructions'}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {lang === 'ar'
+                  ? 'اتبع هذه الخطوات بدقة وحذر شديد لضمان سلامتك الشخصية والحصول على نتائج موثوقة ودقيقة'
+                  : 'Follow these steps precisely and with extreme caution to ensure your personal safety and obtain reliable, accurate results'
+                }
+              </p>
+            </div>
+          </div>
+        </div>
 
       {/* Progress Bar */}
       <div className="mb-8">
@@ -325,124 +342,126 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
         </div>
       </div>
 
-      {/* Instructions Steps */}
-      <div className="space-y-6">
-        {instructions.map((instruction, index) => (
-          <div
-            key={instruction.id}
-            className={`
-              border rounded-lg p-6 transition-all duration-300
-              ${index === currentStep 
-                ? 'border-primary bg-primary-50 dark:bg-primary-950' 
-                : completed[index]
-                  ? 'border-green-500 bg-green-50 dark:bg-green-950'
-                  : 'border-border bg-background'
-              }
-              ${index > currentStep ? 'opacity-50' : 'opacity-100'}
-            `}
-          >
-            <div className="flex items-start space-x-4 rtl:space-x-reverse">
-              {/* Step Icon */}
-              <div className={`
-                flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
-                ${completed[index]
-                  ? 'bg-green-500 text-white'
-                  : index === currentStep
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-secondary-foreground'
-                }
-              `}>
-                {completed[index] ? (
-                  <CheckCircleIcon className="h-6 w-6" />
-                ) : (
-                  getIcon(instruction.icon)
-                )}
-              </div>
-
-              {/* Step Content */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-lg font-semibold text-foreground">
-                    {lang === 'ar' ? `${instruction.step}. ${instruction.title.ar}` : `${instruction.step}. ${instruction.title.en}`}
-                  </h3>
-                  {instruction.duration && (
-                    <span className="text-sm text-muted-foreground bg-secondary px-2 py-1 rounded">
-                      {instruction.duration}
-                    </span>
+        {/* Instructions Steps */}
+        <div className="lab-card mb-6">
+          <div className="space-y-4">
+            {instructions.map((instruction, index) => (
+              <div
+                key={instruction.id}
+                className={`
+                  flex items-start space-x-4 rtl:space-x-reverse p-4 rounded-lg transition-all duration-300
+                  ${index === currentStep
+                    ? 'bg-primary-50 dark:bg-primary-950 border-l-4 border-primary-500'
+                    : completed[index]
+                      ? 'bg-green-50 dark:bg-green-950 border-l-4 border-green-500'
+                      : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }
+                  ${index > currentStep ? 'opacity-60' : 'opacity-100'}
+                `}
+              >
+                {/* Step Number Circle */}
+                <div className={`
+                  flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
+                  ${completed[index]
+                    ? 'bg-green-500 text-white'
+                    : index === currentStep
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                  }
+                `}>
+                  {completed[index] ? (
+                    <CheckCircleIcon className="h-5 w-5" />
+                  ) : (
+                    instruction.step
                   )}
                 </div>
 
-                <p className="text-muted-foreground mb-4">
-                  {lang === 'ar' ? instruction.description.ar : instruction.description.en}
-                </p>
+                {/* Step Content */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-foreground leading-relaxed">
+                    {lang === 'ar' ? instruction.description.ar : instruction.description.en}
+                  </p>
 
-                {instruction.warning && (
-                  <div className="flex items-start space-x-2 rtl:space-x-reverse p-3 bg-warning-50 dark:bg-warning-950 border border-warning-200 dark:border-warning-800 rounded-lg mb-4">
-                    <ExclamationTriangleIcon className="h-5 w-5 text-warning-600 mt-0.5 flex-shrink-0" />
-                    <p className="text-sm text-warning-700 dark:text-warning-300">
-                      <strong>{lang === 'ar' ? 'تحذير: ' : 'Warning: '}</strong>
-                      {lang === 'ar' ? instruction.warning.ar : instruction.warning.en}
-                    </p>
-                  </div>
-                )}
-
-                {/* Step Action Button - Only show for current step */}
-                {index === currentStep && !completed[index] && (
-                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
-                    <p className="text-sm text-blue-700 dark:text-blue-300 text-center">
-                      {lang === 'ar' ? 'اقرأ التعليمات بعناية ثم انقر "تم إكمال هذه الخطوة" أدناه' : 'Read instructions carefully then click "Complete This Step" below'}
-                    </p>
-                  </div>
-                )}
-
-                {completed[index] && (
-                  <div className="mt-4 flex items-center space-x-2 rtl:space-x-reverse text-green-600">
-                    <CheckCircleIcon className="h-5 w-5" />
-                    <span className="text-sm font-medium">
-                      {lang === 'ar' ? 'تم إكمال هذه الخطوة' : 'Step Completed'}
-                    </span>
-                  </div>
-                )}
+                  {instruction.warning && (
+                    <div className="mt-2 flex items-start space-x-2 rtl:space-x-reverse p-2 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded text-xs">
+                      <ExclamationTriangleIcon className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-red-700 dark:text-red-300">
+                        {lang === 'ar' ? instruction.warning.ar : instruction.warning.en}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Safety Acknowledgment */}
+        <div className="lab-card">
+          <div className="flex items-center space-x-3 rtl:space-x-reverse mb-4">
+            <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900 flex items-center justify-center">
+              <ShieldCheckIcon className="w-6 h-6 text-green-600" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-foreground">
+                {lang === 'ar' ? 'إقرار السلامة' : 'Safety Acknowledgment'}
+              </h3>
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* Complete Current Step Button */}
-      {currentStep < instructions.length && !completed[currentStep] && (
-        <div className="mt-8 pt-6 border-t border-border">
-          <div className="text-center">
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 rtl:space-x-reverse">
+              <input
+                type="checkbox"
+                id="safety-acknowledgment"
+                checked={allStepsCompleted}
+                onChange={() => {}}
+                className="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                disabled
+              />
+              <label htmlFor="safety-acknowledgment" className="text-sm text-foreground">
+                {lang === 'ar'
+                  ? 'لقد قرأت وفهمت جميع تعليمات السلامة وسأتبع إجراءات السلامة المناسبة'
+                  : 'I have read and understand all safety instructions and will follow proper safety procedures'
+                }
+              </label>
+            </div>
+
             <Button
-              onClick={() => handleStepComplete(currentStep)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+              onClick={handleFinish}
+              disabled={!allStepsCompleted}
+              className={`w-full ${allStepsCompleted
+                ? 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
               size="lg"
             >
-              {lang === 'ar' ? 'تم إكمال هذه الخطوة' : 'Complete This Step'}
+              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <ExclamationTriangleIcon className="h-5 w-5" />
+                <span>
+                  {allStepsCompleted
+                    ? (lang === 'ar' ? 'بدء التحليل' : 'Start Analysis')
+                    : (lang === 'ar' ? 'إقرار السلامة مطلوب' : 'Safety Acknowledgment Required')
+                  }
+                </span>
+              </div>
             </Button>
           </div>
         </div>
-      )}
 
-      {/* Action Buttons */}
-      <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-        <Button
-          variant="outline"
-          onClick={onCancel}
-        >
-          {lang === 'ar' ? 'إلغاء' : 'Cancel'}
-        </Button>
-
-        <Button
-          onClick={handleFinish}
-          disabled={!allStepsCompleted}
-          className={allStepsCompleted ? 'bg-green-600 hover:bg-green-700' : ''}
-        >
-          {lang === 'ar' ? 'بدء الاختبار' : 'Start Test'}
-        </Button>
+        {/* Complete Current Step Button */}
+        {currentStep < instructions.length && !completed[currentStep] && (
+          <div className="mt-6">
+            <Button
+              onClick={() => handleStepComplete(currentStep)}
+              className="w-full bg-primary-600 hover:bg-primary-700 text-white"
+              size="lg"
+            >
+              {lang === 'ar' ? 'تم قراءة هذه الخطوة' : 'Mark Step as Read'}
+            </Button>
+          </div>
+        )}
       </div>
-
-
     </div>
   );
 }
