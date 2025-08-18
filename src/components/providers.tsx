@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Language } from '@/types';
 import { ThemeProvider } from 'next-themes';
-import { DataService } from '@/lib/data-service';
 
 // Simple User type for local auth
 interface User {

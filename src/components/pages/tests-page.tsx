@@ -166,7 +166,13 @@ function TestsPageContent({ lang }: TestsPageProps) {
 
     // Search filter
     if (searchQuery) {
-      filtered = DataService.searchTests(searchQuery, lang);
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(test => {
+        const name = lang === 'ar' ? test.method_name_ar : test.method_name;
+        const description = lang === 'ar' ? test.description_ar : test.description;
+        return name.toLowerCase().includes(query) ||
+               description.toLowerCase().includes(query);
+      });
     }
 
     // Category filter

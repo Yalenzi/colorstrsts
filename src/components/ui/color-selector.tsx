@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
-import { DataService, ColorResult as DataServiceColorResult } from '@/lib/data-service';
+import { getColorResultsLocal } from '@/lib/local-data-service';
 import { Button } from '@/components/ui/button';
 import { ImageColorAnalyzer } from '@/components/ui/image-color-analyzer';
 import {
@@ -43,22 +43,22 @@ interface ColorSelectorProps {
   testId: string;
 }
 
-// Convert DataService ColorResult to ColorSelector ColorResult
-const convertColorResult = (dsColor: DataServiceColorResult): ColorResult => {
+// Convert local ColorResult to ColorSelector ColorResult
+const convertColorResult = (localColor: any): ColorResult => {
   return {
-    id: dsColor.id,
-    test_id: dsColor.test_id,
-    hex_code: dsColor.color_hex,
+    id: localColor.id || Math.random().toString(36).substr(2, 9),
+    test_id: localColor.test_id || '',
+    hex_code: localColor.color_hex || '#000000',
     color_name: {
-      ar: dsColor.color_result_ar,
-      en: dsColor.color_result
+      ar: localColor.color_result_ar || 'غير محدد',
+      en: localColor.color_result || 'Unknown'
     },
     substances: {
-      ar: [dsColor.possible_substance_ar],
-      en: [dsColor.possible_substance]
+      ar: [localColor.possible_substance_ar || 'غير محدد'],
+      en: [localColor.possible_substance || 'Unknown']
     },
-    confidence: getConfidenceScore(dsColor.confidence_level),
-    confidence_level: dsColor.confidence_level
+    confidence: getConfidenceScore(localColor.confidence_level),
+    confidence_level: localColor.confidence_level || 'medium'
   };
 };
 
@@ -99,7 +99,7 @@ export function ColorSelector({
           setAvailableColors(colorResults);
         } else {
           // Otherwise load all color results and convert them
-          const allColors = DataService.getColorResults();
+          const allColors = getColorResultsLocal();
           const convertedColors = allColors.map(convertColorResult);
           setAvailableColors(convertedColors);
         }
