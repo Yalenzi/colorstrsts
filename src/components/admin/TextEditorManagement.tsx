@@ -316,14 +316,14 @@ export function TextEditorManagement({ lang }: TextEditorManagementProps) {
 
       {/* Edit Modal */}
       {editingContent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-2xl border-2">
+            <CardHeader className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900 dark:to-primary-800">
+              <CardTitle className="flex items-center justify-between text-primary-900 dark:text-primary-100">
+                <span className="font-bold">
                   {lang === 'ar' ? 'تحرير المحتوى' : 'Edit Content'}: {isRTL ? editingContent.title_ar : editingContent.title_en}
                 </span>
-                <Button variant="ghost" size="sm" onClick={() => setEditingContent(null)}>
+                <Button variant="ghost" size="sm" onClick={() => setEditingContent(null)} className="hover:bg-primary-200 dark:hover:bg-primary-700">
                   <XMarkIcon className="h-4 w-4" />
                 </Button>
               </CardTitle>
@@ -411,14 +411,14 @@ export function TextEditorManagement({ lang }: TextEditorManagementProps) {
 
       {/* Preview Modal */}
       {previewContent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-2xl border-2">
+            <CardHeader className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900 dark:to-green-800">
+              <CardTitle className="flex items-center justify-between text-green-900 dark:text-green-100">
+                <span className="font-bold">
                   {lang === 'ar' ? 'معاينة المحتوى' : 'Content Preview'}: {isRTL ? previewContent.title_ar : previewContent.title_en}
                 </span>
-                <Button variant="ghost" size="sm" onClick={() => setPreviewContent(null)}>
+                <Button variant="ghost" size="sm" onClick={() => setPreviewContent(null)} className="hover:bg-green-200 dark:hover:bg-green-700">
                   <XMarkIcon className="h-4 w-4" />
                 </Button>
               </CardTitle>

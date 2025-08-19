@@ -13,6 +13,14 @@ import {
   EnvelopeIcon
 } from '@heroicons/react/24/outline';
 
+// Generate static params for supported languages
+export async function generateStaticParams() {
+  return [
+    { lang: 'ar' },
+    { lang: 'en' },
+  ];
+}
+
 interface PrivacyPageProps {
   params: {
     lang: Language;
