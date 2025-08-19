@@ -92,11 +92,11 @@ export function middleware(request: NextRequest) {
   response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
   response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
 
-  // Enhanced CSP Header - Secure Configuration without unsafe-eval
+  // Enhanced CSP Header - Firebase Compatible Configuration
   response.headers.set(
     'Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' " +
       "https://www.gstatic.com " +
       "https://www.googleapis.com " +
       "https://accounts.google.com " +

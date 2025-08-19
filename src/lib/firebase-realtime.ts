@@ -12,12 +12,19 @@ import {
 } from 'firebase/database';
 import app from './firebase';
 
-// Initialize Realtime Database lazily
+// Initialize Realtime Database lazily with proper error handling
 let database: any = null;
 
 function getDB() {
   if (!database && typeof window !== 'undefined') {
-    database = getDatabase(app);
+    try {
+      database = getDatabase(app);
+      console.log('✅ Firebase Realtime Database initialized successfully');
+    } catch (error) {
+      console.error('❌ Failed to initialize Firebase Realtime Database:', error);
+      console.error('Please ensure that you have the URL of your Firebase Realtime Database instance configured correctly.');
+      return null;
+    }
   }
   return database;
 }

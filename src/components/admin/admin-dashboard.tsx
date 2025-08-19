@@ -14,6 +14,7 @@ import { ColorResultsManagement } from './color-results-management';
 import { SubscriptionManagement } from './SubscriptionManagement';
 import SubscriptionSettingsWrapper from './SubscriptionSettingsWrapper';
 import { UserManagement } from './UserManagement';
+import { FirebaseConnectionTest } from './FirebaseConnectionTest';
 import FirebaseDebugger from './FirebaseDebugger';
 import { STCPaySettings } from './STCPaySettings';
 import { UsageChart } from './UsageChart';
@@ -108,6 +109,7 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
     { id: 'text-editor', name: lang === 'ar' ? 'محرر النصوص' : 'Text Editor', icon: PencilSquareIcon },
     { id: 'subscription-settings', name: lang === 'ar' ? 'إعدادات الوصول' : 'Access Settings', icon: LockOpenIcon },
     { id: 'firebase-debugger', name: lang === 'ar' ? 'مصحح Firebase' : 'Firebase Debug', icon: Cog6ToothIcon },
+    { id: 'firebase-connection', name: lang === 'ar' ? 'اختبار الاتصال' : 'Connection Test', icon: Cog6ToothIcon },
     { id: 'payments', name: lang === 'ar' ? 'إعدادات الدفع' : 'Payments', icon: Cog6ToothIcon },
     { id: 'reports', name: lang === 'ar' ? 'التقارير' : 'Reports', icon: DocumentTextIcon },
     { id: 'database', name: lang === 'ar' ? 'قاعدة البيانات' : 'Database', icon: CircleStackIcon },
@@ -677,6 +679,8 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
           return <SubscriptionSettingsWrapper lang={lang} />;
         case 'firebase-debugger':
           return <FirebaseDebugger lang={lang} />;
+        case 'firebase-connection':
+          return <FirebaseConnectionTest lang={lang} />;
         case 'payments':
           return <STCPaySettings lang={lang} />;
         case 'reports':

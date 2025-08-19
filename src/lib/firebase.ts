@@ -68,8 +68,18 @@ export const auth = getAuth(app);
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
 
-// Initialize Realtime Database and get a reference to the service
-export const database = getDatabase(app);
+// Initialize Realtime Database and get a reference to the service with error handling
+let database: any = null;
+try {
+  database = getDatabase(app);
+  console.log('✅ Firebase Realtime Database initialized successfully');
+} catch (error) {
+  console.error('❌ Failed to initialize Firebase Realtime Database:', error);
+  console.error('Database URL:', firebaseConfig.databaseURL);
+  console.error('Please ensure that you have the URL of your Firebase Realtime Database instance configured correctly.');
+}
+
+export { database };
 
 // Initialize Analytics (optional, only in browser) - only if measurement ID is provided and supported
 export const analytics = (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID)
