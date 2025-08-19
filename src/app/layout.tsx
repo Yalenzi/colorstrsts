@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Noto_Sans_Arabic } from 'next/font/google';
+import { Inter, Cairo } from 'next/font/google';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { Toaster } from 'react-hot-toast';
 import { AnalyticsProvider } from '@/components/analytics/AnalyticsProvider';
@@ -12,9 +12,9 @@ const inter = Inter({
   display: 'swap',
 });
 
-const notoSansArabic = Noto_Sans_Arabic({
-  subsets: ['arabic'],
-  variable: '--font-noto-sans-arabic',
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
+  variable: '--font-cairo',
   display: 'swap',
 });
 
@@ -130,7 +130,7 @@ export default function RootLayout({
         <meta name="apple-touch-fullscreen" content="yes" />
       </head>
       <body
-        className={`${inter.variable} ${notoSansArabic.variable} font-arabic antialiased`}
+        className={`${inter.variable} ${cairo.variable} font-cairo antialiased`}
         suppressHydrationWarning
       >
         <AuthProvider>

@@ -571,8 +571,13 @@ textarea::placeholder {
 }
 
 /* Arabic font optimization */
+.font-cairo {
+  font-family: var(--font-cairo), system-ui, sans-serif;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
 .font-arabic {
-  font-family: var(--font-noto-sans-arabic), system-ui, sans-serif;
+  font-family: var(--font-cairo), system-ui, sans-serif;
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
 

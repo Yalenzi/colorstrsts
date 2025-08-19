@@ -15,7 +15,8 @@ import {
   SwatchIcon,
   CameraIcon,
   DocumentDuplicateIcon,
-  SparklesIcon
+  SparklesIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline';
 
 interface DetectedColor {
@@ -43,6 +44,7 @@ export function ResponsiveImageAnalyzer({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [aiAnalysisEnabled, setAiAnalysisEnabled] = useState(true);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -51,18 +53,29 @@ export function ResponsiveImageAnalyzer({
   const isRTL = lang === 'ar';
 
   const texts = {
-    title: isRTL ? 'محلل الألوان' : 'Color Analyzer',
+    title: isRTL ? 'تحليل الألوان بالصور' : 'Image Color Analysis',
     subtitle: isRTL ? 'استخرج الألوان من الصور' : 'Extract colors from images',
-    uploadImage: isRTL ? 'رفع صورة' : 'Upload Image',
-    dragDrop: isRTL ? 'اسحب وأفلت الصورة هنا' : 'Drag and drop image here',
+    uploadImage: isRTL ? 'ارفع صورة نتيجة الاختبار' : 'Upload Test Result Image',
+    dragDrop: isRTL ? 'اسحب وأفلت الصورة هنا أو انقر للاختيار' : 'Drag and drop image here or click to select',
     orClick: isRTL ? 'أو انقر للاختيار' : 'or click to select',
-    analyzing: isRTL ? 'جاري التحليل...' : 'Analyzing...',
-    detectedColors: isRTL ? 'الألوان المكتشفة' : 'Detected Colors',
+    selectImage: isRTL ? 'اختيار صورة' : 'Select Image',
+    analyzing: isRTL ? 'جاري تحليل الألوان...' : 'Analyzing colors...',
+    detectedColors: isRTL ? 'الألوان المكتشفة:' : 'Detected Colors:',
     selectColor: isRTL ? 'اختيار اللون' : 'Select Color',
     copyHex: isRTL ? 'نسخ الكود' : 'Copy Code',
     clickOnImage: isRTL ? 'انقر على الصورة لاختيار لون' : 'Click on image to pick color',
     dominance: isRTL ? 'الهيمنة' : 'Dominance',
     position: isRTL ? 'الموضع' : 'Position',
+    photographyGuidelines: isRTL ? 'تعليمات التصوير:' : 'Photography Guidelines:',
+    goodLighting: isRTL ? 'استخدم إضاءة جيدة وطبيعية' : 'Use good natural lighting',
+    clearImage: isRTL ? 'تأكد من وضوح الصورة' : 'Ensure image is clear and focused',
+    centerSample: isRTL ? 'اجعل العينة في وسط الصورة' : 'Center the sample in the image',
+    avoidShadows: isRTL ? 'تجنب الظلال والانعكاسات' : 'Avoid shadows and reflections',
+    aiEnhanced: isRTL ? 'التحليل بالذكاء الاصطناعي' : 'AI-Enhanced Analysis',
+    aiDescription: isRTL ? 'تحليل متقدم للألوان مع دقة أعلى' : 'Advanced color analysis with higher accuracy',
+    enabled: isRTL ? 'مُفعل' : 'Enabled',
+    importantNotice: isRTL ? 'تنبيه مهم:' : 'Important Notice:',
+    accuracyNotice: isRTL ? 'دقة تحليل الألوان تعتمد على جودة الصورة والإضاءة. يُنصح بالتحقق من النتائج يدوياً.' : 'Color analysis accuracy depends on image quality and lighting. Manual verification is recommended.',
     
     // Error messages
     errorUploading: isRTL ? 'خطأ في رفع الصورة' : 'Error uploading image',
@@ -317,6 +330,60 @@ export function ResponsiveImageAnalyzer({
         </p>
       </div>
 
+      {/* Instructions */}
+      <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+        <CardContent className="p-4">
+          <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+            {texts.photographyGuidelines}
+          </h3>
+          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+            <li>• {texts.goodLighting}</li>
+            <li>• {texts.clearImage}</li>
+            <li>• {texts.centerSample}</li>
+            <li>• {texts.avoidShadows}</li>
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* AI Analysis Toggle */}
+      <Card className="bg-gray-50 dark:bg-gray-800">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3 rtl:space-x-reverse">
+              <CpuChipIcon className="h-5 w-5 text-primary-600" />
+              <div>
+                <p className="font-medium text-gray-900 dark:text-gray-100">
+                  {texts.aiEnhanced}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {texts.aiDescription}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setAiAnalysisEnabled(!aiAnalysisEnabled)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                aiAnalysisEnabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  aiAnalysisEnabled ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+          {aiAnalysisEnabled && (
+            <div className="mt-2 flex items-center space-x-2 rtl:space-x-reverse">
+              <SparklesIcon className="h-4 w-4 text-primary-600" />
+              <span className="text-sm text-primary-600 font-medium">
+                {texts.enabled}
+              </span>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Upload Area */}
       {!uploadedImage && (
         <Card className="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-400 transition-colors">
@@ -353,7 +420,7 @@ export function ResponsiveImageAnalyzer({
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <CloudArrowUpIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
-                {texts.uploadImage}
+                {texts.selectImage}
               </Button>
 
               <input
@@ -523,6 +590,23 @@ export function ResponsiveImageAnalyzer({
           </Card>
         </div>
       )}
+
+      {/* Important Notice */}
+      <Card className="bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800">
+        <CardContent className="p-4">
+          <div className="flex items-start space-x-3 rtl:space-x-reverse">
+            <ExclamationTriangleIcon className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <h3 className="font-medium text-yellow-800 dark:text-yellow-200">
+                {texts.importantNotice}
+              </h3>
+              <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                {texts.accuracyNotice}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Hidden canvas for image processing */}
       <canvas ref={canvasRef} className="hidden" />
