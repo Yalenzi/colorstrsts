@@ -13,6 +13,7 @@ import NewTestsManagement from './NewTestsManagement';
 import { ColorResultsManagement } from './color-results-management';
 import { SubscriptionManagement } from './SubscriptionManagement';
 import SubscriptionSettingsWrapper from './SubscriptionSettingsWrapper';
+import { UserManagement } from './UserManagement';
 import FirebaseDebugger from './FirebaseDebugger';
 import { STCPaySettings } from './STCPaySettings';
 import { UsageChart } from './UsageChart';
@@ -39,7 +40,11 @@ import {
   LockOpenIcon,
   ListBulletIcon,
   PencilSquareIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  ChartPieIcon,
+  Cog8ToothIcon,
+  CloudArrowUpIcon,
+  DocumentDuplicateIcon
 } from '@heroicons/react/24/outline';
 
 interface AdminDashboardProps {
@@ -96,17 +101,22 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
   const tabs = [
     { id: 'dashboard', name: lang === 'ar' ? 'لوحة التحكم' : 'Dashboard', icon: ChartBarIcon },
     { id: 'tests', name: lang === 'ar' ? 'إدارة الاختبارات' : 'Tests Management', icon: BeakerIcon },
-    { id: 'test-steps', name: lang === 'ar' ? 'إدارة خطوات الاختبار' : 'Test Steps Management', icon: ListBulletIcon },
-    { id: 'colors', name: lang === 'ar' ? 'إدارة النتائج اللونية' : 'Color Results', icon: SwatchIcon },
-    { id: 'subscriptions', name: lang === 'ar' ? 'إدارة الاشتراكات' : 'Subscriptions', icon: CreditCardIcon },
-    { id: 'subscription-plans', name: lang === 'ar' ? 'خطط الاشتراك' : 'Subscription Plans', icon: BanknotesIcon },
+    { id: 'test-steps', name: lang === 'ar' ? 'خطوات الاختبار' : 'Test Steps', icon: ListBulletIcon },
+    { id: 'colors', name: lang === 'ar' ? 'النتائج اللونية' : 'Color Results', icon: SwatchIcon },
+    { id: 'subscriptions', name: lang === 'ar' ? 'الاشتراكات' : 'Subscriptions', icon: CreditCardIcon },
+    { id: 'subscription-plans', name: lang === 'ar' ? 'خطط الاشتراك' : 'Plans', icon: BanknotesIcon },
     { id: 'text-editor', name: lang === 'ar' ? 'محرر النصوص' : 'Text Editor', icon: PencilSquareIcon },
     { id: 'subscription-settings', name: lang === 'ar' ? 'إعدادات الوصول' : 'Access Settings', icon: LockOpenIcon },
-    { id: 'firebase-debugger', name: lang === 'ar' ? 'مصحح Firebase' : 'Firebase Debugger', icon: Cog6ToothIcon },
-    { id: 'payments', name: lang === 'ar' ? 'إعدادات الدفع' : 'Payment Settings', icon: Cog6ToothIcon },
+    { id: 'firebase-debugger', name: lang === 'ar' ? 'مصحح Firebase' : 'Firebase Debug', icon: Cog6ToothIcon },
+    { id: 'payments', name: lang === 'ar' ? 'إعدادات الدفع' : 'Payments', icon: Cog6ToothIcon },
     { id: 'reports', name: lang === 'ar' ? 'التقارير' : 'Reports', icon: DocumentTextIcon },
     { id: 'database', name: lang === 'ar' ? 'قاعدة البيانات' : 'Database', icon: CircleStackIcon },
-    { id: 'excel', name: lang === 'ar' ? 'ملفات Excel' : 'Excel Files', icon: TableCellsIcon }
+    { id: 'excel', name: lang === 'ar' ? 'ملفات Excel' : 'Excel Files', icon: TableCellsIcon },
+    { id: 'users', name: lang === 'ar' ? 'إدارة المستخدمين' : 'Users', icon: UsersIcon },
+    { id: 'analytics', name: lang === 'ar' ? 'التحليلات' : 'Analytics', icon: ChartPieIcon },
+    { id: 'system-settings', name: lang === 'ar' ? 'إعدادات النظام' : 'System Settings', icon: Cog8ToothIcon },
+    { id: 'backup', name: lang === 'ar' ? 'النسخ الاحتياطي' : 'Backup', icon: CloudArrowUpIcon },
+    { id: 'logs', name: lang === 'ar' ? 'سجلات النظام' : 'System Logs', icon: DocumentDuplicateIcon }
   ];
 
   useEffect(() => {
@@ -675,6 +685,16 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
           return <DatabaseManagement lang={lang} />;
         case 'excel':
           return <ExcelManagement lang={lang} />;
+        case 'users':
+          return <UserManagement lang={lang} />;
+        case 'analytics':
+          return renderAnalytics();
+        case 'system-settings':
+          return renderSystemSettings();
+        case 'backup':
+          return renderBackupManagement();
+        case 'logs':
+          return renderSystemLogs();
         default:
           return renderDashboard();
       }
@@ -1056,36 +1076,165 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
     </div>
   );
 
+  // دالة عرض التحليلات
+  const renderAnalytics = () => (
+    <div className="space-y-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+        <h2 className="text-xl font-bold mb-4">
+          {lang === 'ar' ? 'تحليلات النظام' : 'System Analytics'}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+            <h3 className="font-semibold text-blue-800 dark:text-blue-200">
+              {lang === 'ar' ? 'استخدام الاختبارات' : 'Test Usage'}
+            </h3>
+            <p className="text-2xl font-bold text-blue-600 mt-2">{stats.totalTests}</p>
+          </div>
+          <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+            <h3 className="font-semibold text-green-800 dark:text-green-200">
+              {lang === 'ar' ? 'المستخدمين النشطين' : 'Active Users'}
+            </h3>
+            <p className="text-2xl font-bold text-green-600 mt-2">{stats.activeUsers}</p>
+          </div>
+          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+            <h3 className="font-semibold text-purple-800 dark:text-purple-200">
+              {lang === 'ar' ? 'الجلسات' : 'Sessions'}
+            </h3>
+            <p className="text-2xl font-bold text-purple-600 mt-2">{stats.totalSessions}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // دالة عرض إعدادات النظام
+  const renderSystemSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+        <h2 className="text-xl font-bold mb-4">
+          {lang === 'ar' ? 'إعدادات النظام' : 'System Settings'}
+        </h2>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <span>{lang === 'ar' ? 'الوضع المظلم' : 'Dark Mode'}</span>
+            <button className="px-4 py-2 bg-primary-600 text-white rounded-lg">
+              {lang === 'ar' ? 'تفعيل' : 'Enable'}
+            </button>
+          </div>
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <span>{lang === 'ar' ? 'الإشعارات' : 'Notifications'}</span>
+            <button className="px-4 py-2 bg-primary-600 text-white rounded-lg">
+              {lang === 'ar' ? 'إدارة' : 'Manage'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // دالة عرض إدارة النسخ الاحتياطي
+  const renderBackupManagement = () => (
+    <div className="space-y-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+        <h2 className="text-xl font-bold mb-4">
+          {lang === 'ar' ? 'إدارة النسخ الاحتياطي' : 'Backup Management'}
+        </h2>
+        <div className="space-y-4">
+          <button
+            onClick={handleExportData}
+            className="w-full p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center gap-2"
+          >
+            <CloudArrowUpIcon className="h-5 w-5" />
+            {lang === 'ar' ? 'إنشاء نسخة احتياطية' : 'Create Backup'}
+          </button>
+          <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+            <p className="text-yellow-800 dark:text-yellow-200">
+              {lang === 'ar'
+                ? 'آخر نسخة احتياطية: لم يتم إنشاء نسخة بعد'
+                : 'Last backup: No backup created yet'
+              }
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // دالة عرض سجلات النظام
+  const renderSystemLogs = () => (
+    <div className="space-y-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+        <h2 className="text-xl font-bold mb-4">
+          {lang === 'ar' ? 'سجلات النظام' : 'System Logs'}
+        </h2>
+        <div className="space-y-2">
+          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded border-l-4 border-blue-500">
+            <div className="flex justify-between items-center">
+              <span className="text-sm">{lang === 'ar' ? 'تسجيل دخول مدير' : 'Admin login'}</span>
+              <span className="text-xs text-gray-500">{new Date().toLocaleString()}</span>
+            </div>
+          </div>
+          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded border-l-4 border-green-500">
+            <div className="flex justify-between items-center">
+              <span className="text-sm">{lang === 'ar' ? 'تحديث البيانات' : 'Data update'}</span>
+              <span className="text-xs text-gray-500">{new Date().toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
-      {/* Tab Navigation */}
-      <div className="border-b border-gray-200 dark:border-gray-700">
-        <nav className="-mb-px flex space-x-8 rtl:space-x-reverse">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-primary-500 text-primary-600 dark:text-primary-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
-            >
-              <tab.icon
-                className={`mr-2 rtl:ml-2 rtl:mr-0 h-5 w-5 ${
+      {/* Enhanced Tab Navigation */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        {/* Mobile Dropdown for Tabs */}
+        <div className="lg:hidden p-4 border-b border-gray-200 dark:border-gray-700">
+          <select
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value)}
+            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          >
+            {tabs.map((tab) => (
+              <option key={tab.id} value={tab.id}>
+                {tab.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Desktop Tab Navigation */}
+        <div className="hidden lg:block">
+          <nav className="flex flex-wrap gap-1 p-2">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`group inline-flex items-center px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'text-primary-500'
-                    : 'text-gray-400 group-hover:text-gray-500'
+                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
-              />
-              {tab.name}
-            </button>
-          ))}
-        </nav>
+              >
+                <tab.icon
+                  className={`mr-2 rtl:ml-2 rtl:mr-0 h-4 w-4 ${
+                    activeTab === tab.id
+                      ? 'text-primary-600 dark:text-primary-400'
+                      : 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+                  }`}
+                />
+                <span className="whitespace-nowrap">{tab.name}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
       </div>
 
       {/* Tab Content */}
-      {renderTabContent()}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        {renderTabContent()}
+      </div>
     </div>
   );
 }
