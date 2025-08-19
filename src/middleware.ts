@@ -92,7 +92,7 @@ export function middleware(request: NextRequest) {
   response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
   response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
 
-  // CSP Header - Updated to include all Firebase services
+  // Enhanced CSP Header - Secure Configuration without unsafe-eval
   response.headers.set(
     'Content-Security-Policy',
     "default-src 'self'; " +
@@ -106,9 +106,15 @@ export function middleware(request: NextRequest) {
       "https://firebaseinstallations.googleapis.com " +
       "https://colorstests-573ef.firebaseio.com " +
       "https://colorstests-573ef-default-rtdb.firebaseio.com; " +
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-    "img-src 'self' data: https: blob:; " +
-    "font-src 'self' data: https://fonts.gstatic.com; " +
+    "style-src 'self' 'unsafe-inline' " +
+      "https://fonts.googleapis.com " +
+      "https://fonts.gstatic.com; " +
+    "img-src 'self' data: https: blob: " +
+      "https://*.firebaseapp.com " +
+      "https://*.googleapis.com; " +
+    "font-src 'self' data: " +
+      "https://fonts.gstatic.com " +
+      "https://fonts.googleapis.com; " +
     "connect-src 'self' " +
       "https://api.stcpay.com.sa " +
       "https://*.firebaseio.com " +
@@ -120,7 +126,18 @@ export function middleware(request: NextRequest) {
       "https://identitytoolkit.googleapis.com " +
       "https://securetoken.googleapis.com " +
       "https://www.googleapis.com " +
-      "wss://*.firebaseio.com;"
+      "wss://*.firebaseio.com " +
+      "https://colorstests-573ef.firebaseio.com " +
+      "https://colorstests-573ef-default-rtdb.firebaseio.com; " +
+    "worker-src 'self' blob:; " +
+    "child-src 'self' blob:; " +
+    "object-src 'none'; " +
+    "base-uri 'self'; " +
+    "form-action 'self' " +
+      "https://api.stcpay.com.sa " +
+      "https://accounts.google.com; " +
+    "frame-ancestors 'none'; " +
+    "upgrade-insecure-requests;"
   );
 
   return response;
