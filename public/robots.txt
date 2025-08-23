@@ -7,10 +7,10 @@ Disallow: /*/auth/
 Disallow: /api/
 
 # Host
-Host: https://colorstrsts.vercel.app
+Host: https://colorstest.com
 
 # Sitemaps
-Sitemap: https://colorstrsts.vercel.app/sitemap.xml
+Sitemap: https://colorstest.com/sitemap.xml
 
 # Additional metadata
 # Color Testing for Drug Detection
