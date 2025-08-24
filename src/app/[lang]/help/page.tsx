@@ -155,12 +155,12 @@ export default async function Help({ params }: HelpPageProps) {
                 <p className="text-muted-foreground">
                   <strong>
                     {lang === 'ar' ? 'البريد الإلكتروني:' : 'Email:'}
-                  </strong> mnalruwaili@moh.gov.sa
+                  </strong> aburakan4551@gmail.com
                 </p>
                 <p className="text-muted-foreground">
                   <strong>
-                    {lang === 'ar' ? 'البريد الإلكتروني:' : 'Email:'}
-                  </strong> Yalenzi@moh.gov.sa
+                    {lang === 'ar' ? 'البريد الإلكتروني الاحتياطي:' : 'Backup Email:'}
+                  </strong> aburakan4551@gmail.com
                 </p>
               </div>
             </div>
