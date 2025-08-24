@@ -65,7 +65,7 @@ export function EmailTest() {
         },
         body: JSON.stringify({
           name: 'Email Test',
-          email: 'test@colortest.system',
+          email: 'aburakan4551@gmail.com',
           subject: 'Direct FormSubmit Test',
           message: 'This is a direct test of the FormSubmit service to verify it works.',
           _captcha: 'false',
