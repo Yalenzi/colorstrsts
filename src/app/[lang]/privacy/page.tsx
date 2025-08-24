@@ -148,8 +148,7 @@ export default function PrivacyPage({ params }: PrivacyPageProps) {
               />
             </div>
           </PolicySection>
-          </div>
-        </div>
+        </PolicyFrame>
 
         {/* Data Usage */}
         <div className="lab-card mb-8">
