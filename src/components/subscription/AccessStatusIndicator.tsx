@@ -54,18 +54,18 @@ export default function AccessStatusIndicator({
   const userHasPremium = userProfile?.subscription?.status === 'active' && 
                         userProfile?.subscription?.plan === 'premium';
 
-  // Check if this specific test requires premium
+  // Check if this specific test requires premium - Hidden as requested
   if (settings.specificPremiumTests.includes(testIndex + 1)) {
     if (userHasPremium) {
       return (
-        <Badge variant="default" className={`bg-purple-100 text-purple-800 border-purple-200 ${className}`}>
+        <Badge variant="default" className={`bg-purple-100 text-purple-800 border-purple-200 ${className} hidden`}>
           <StarIcon className="h-3 w-3 mr-1" />
           {showText && (isRTL ? 'مميز - متاح' : 'Premium - Available')}
         </Badge>
       );
     } else {
       return (
-        <Badge variant="destructive" className={className}>
+        <Badge variant="destructive" className={`${className} hidden`}>
           <LockClosedIcon className="h-3 w-3 mr-1" />
           {showText && (isRTL ? 'يتطلب اشتراك مميز' : 'Premium Required')}
         </Badge>
@@ -83,18 +83,18 @@ export default function AccessStatusIndicator({
     );
   }
 
-  // Check if premium is required for advanced tests
+  // Check if premium is required for advanced tests - Hidden as requested
   if (settings.premiumRequired && testIndex >= settings.freeTestsCount) {
     if (userHasPremium) {
       return (
-        <Badge variant="default" className={`bg-purple-100 text-purple-800 border-purple-200 ${className}`}>
+        <Badge variant="default" className={`bg-purple-100 text-purple-800 border-purple-200 ${className} hidden`}>
           <StarIcon className="h-3 w-3 mr-1" />
           {showText && (isRTL ? 'مميز - متاح' : 'Premium - Available')}
         </Badge>
       );
     } else {
       return (
-        <Badge variant="destructive" className={className}>
+        <Badge variant="destructive" className={`${className} hidden`}>
           <LockClosedIcon className="h-3 w-3 mr-1" />
           {showText && (isRTL ? 'يتطلب اشتراك مميز' : 'Premium Required')}
         </Badge>
@@ -102,9 +102,9 @@ export default function AccessStatusIndicator({
     }
   }
 
-  // Default - accessible
+  // Default - accessible - Hidden as requested
   return (
-    <Badge variant="default" className={`bg-green-100 text-green-800 border-green-200 ${className}`}>
+    <Badge variant="default" className={`bg-green-100 text-green-800 border-green-200 ${className} hidden`}>
       <LockOpenIcon className="h-3 w-3 mr-1" />
       {showText && (isRTL ? 'متاح' : 'Available')}
     </Badge>
