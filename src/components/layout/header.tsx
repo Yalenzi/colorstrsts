@@ -120,14 +120,14 @@ export function Header({ lang }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 safe-area-inset-top">
+      <div className="container mx-auto px-3 sm:px-4 lg:px-8">
+        <div className="flex h-14 sm:h-16 items-center justify-between">
+          {/* Logo - Optimized for mobile */}
+          <div className="flex items-center min-w-0 flex-1">
             <Link
               href={`/${lang}`}
-              className="flex items-center space-x-2 rtl:space-x-reverse hover:opacity-80 transition-opacity"
+              className="flex items-center space-x-2 rtl:space-x-reverse hover:opacity-80 transition-opacity touch-manipulation"
               onClick={(e) => {
                 e.preventDefault();
                 // Handle both logo click and navigation
@@ -136,8 +136,8 @@ export function Header({ lang }: HeaderProps) {
                 router.push(`/${lang}`);
               }}
             >
-              <TestTubeIcon className="h-8 w-8 text-primary-600" />
-              <span className="text-xl font-bold text-foreground">
+              <TestTubeIcon className="h-7 w-7 sm:h-8 sm:w-8 text-primary-600 flex-shrink-0" />
+              <span className="text-lg sm:text-xl font-bold text-foreground truncate">
                 {lang === 'ar' ? 'اختبارات الألوان' : 'Color Testing'}
               </span>
             </Link>
@@ -146,124 +146,139 @@ export function Header({ lang }: HeaderProps) {
           {/* Desktop Navigation */}
           
 
-          {/* Right side actions */}
-          <div className="flex items-center space-x-4 rtl:space-x-reverse">
-            {/* Image Color Analysis Button */}
-            
+          {/* Right side actions - Mobile optimized */}
+          <div className="flex items-center space-x-2 sm:space-x-4 rtl:space-x-reverse">
+            {/* Language and Theme - Hidden on small screens, shown in mobile menu */}
+            <div className="hidden sm:flex items-center space-x-2 rtl:space-x-reverse">
+              <LanguageSwitcher currentLang={lang} />
+              <ThemeToggle />
+            </div>
 
-            <LanguageSwitcher currentLang={lang} />
-            <ThemeToggle />
-            
             {user || isAdmin ? (
-              <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                {/* عرض اسم المستخدم */}
-                <div className="hidden sm:flex items-center space-x-2 rtl:space-x-reverse bg-primary-50 dark:bg-primary-900/20 px-3 py-1.5 rounded-full">
+              <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse">
+                {/* عرض اسم المستخدم - Responsive */}
+                <div className="hidden md:flex items-center space-x-2 rtl:space-x-reverse bg-primary-50 dark:bg-primary-900/20 px-3 py-1.5 rounded-full">
                   <div className="w-6 h-6 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center">
                     <UserIcon className="h-3 w-3 text-primary-600 dark:text-primary-400" />
                   </div>
-                  <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
+                  <span className="text-sm font-medium text-primary-700 dark:text-primary-300 max-w-24 truncate">
                     {isAdmin ? (lang === 'ar' ? 'المدير' : 'Admin') :
                      (user?.displayName || user?.email?.split('@')[0] || t('navigation.user'))}
                   </span>
                 </div>
 
+                {/* Mobile user indicator */}
+                <div className="md:hidden w-8 h-8 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center">
+                  <UserIcon className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+                </div>
 
-                {/* أزرار المدير */}
-                {isAdmin && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                    >
-                      <Link href={`/${lang}/admin`}>
-                        <span className="flex items-center">
-                          <Cog6ToothIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                          {lang === 'ar' ? 'لوحة الإدارة' : 'Admin Panel'}
-                        </span>
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                    >
-                      <Link href={`/${lang}/admin/tests`}>
-                        <span className="flex items-center">
-                          <TestTubeIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                          {lang === 'ar' ? 'إدارة الاختبارات' : 'Manage Tests'}
-                        </span>
-                      </Link>
-                    </Button>
-                  </>
-                )}
 
-                {/* أزرار المستخدم العادي */}
-                {user && !isAdmin && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                    >
-                      <Link href={`/${lang}/profile`}>
-                        <span className="flex items-center">
-                          <UserIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                          {t('navigation.profile')}
-                        </span>
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      asChild
-                    >
-                      <Link href={`/${lang}/dashboard`}>
-                        <span className="flex items-center">
-                          <Cog6ToothIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                          {lang === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
-                        </span>
-                      </Link>
-                    </Button>
-                  </>
-                )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleSignOut}
-                >
-                  <PowerIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                  {t('navigation.logout')}
-                </Button>
+                {/* Desktop-only admin/user buttons */}
+                <div className="hidden lg:flex items-center space-x-2 rtl:space-x-reverse">
+                  {isAdmin && (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                        className="touch-manipulation"
+                      >
+                        <Link href={`/${lang}/admin`}>
+                          <span className="flex items-center">
+                            <Cog6ToothIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                            <span className="hidden xl:inline">{lang === 'ar' ? 'لوحة الإدارة' : 'Admin Panel'}</span>
+                          </span>
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                        className="touch-manipulation"
+                      >
+                        <Link href={`/${lang}/admin/tests`}>
+                          <span className="flex items-center">
+                            <TestTubeIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                            <span className="hidden xl:inline">{lang === 'ar' ? 'إدارة الاختبارات' : 'Manage Tests'}</span>
+                          </span>
+                        </Link>
+                      </Button>
+                    </>
+                  )}
+
+                  {user && !isAdmin && (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                        className="touch-manipulation"
+                      >
+                        <Link href={`/${lang}/profile`}>
+                          <span className="flex items-center">
+                            <UserIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                            <span className="hidden xl:inline">{t('navigation.profile')}</span>
+                          </span>
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                        className="touch-manipulation"
+                      >
+                        <Link href={`/${lang}/dashboard`}>
+                          <span className="flex items-center">
+                            <Cog6ToothIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                            <span className="hidden xl:inline">{lang === 'ar' ? 'لوحة التحكم' : 'Dashboard'}</span>
+                          </span>
+                        </Link>
+                      </Button>
+                    </>
+                  )}
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="touch-manipulation"
+                  >
+                    <PowerIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                    <span className="hidden xl:inline">{t('navigation.logout')}</span>
+                  </Button>
+                </div>
               </div>
             ) : (
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+              <div className="hidden sm:flex items-center space-x-2 rtl:space-x-reverse">
                 <Button
                   variant="ghost"
                   size="sm"
                   asChild
+                  className="touch-manipulation"
                 >
                   <Link href={`/${lang}/auth/login`}>
-                    {t('navigation.login')}
+                    <span className="text-sm">{t('navigation.login')}</span>
                   </Link>
                 </Button>
                 <Button
                   size="sm"
                   asChild
+                  className="touch-manipulation"
                 >
                   <Link href={`/${lang}/auth/register`}>
-                    {t('navigation.register')}
+                    <span className="text-sm">{t('navigation.register')}</span>
                   </Link>
                 </Button>
               </div>
             )}
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button - Enhanced for touch */}
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden"
+              className="lg:hidden p-2 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {isMenuOpen ? (
                 <XMarkIcon className="h-6 w-6" />
@@ -274,120 +289,203 @@ export function Header({ lang }: HeaderProps) {
           </div>
         </div>
 
-        {/* Sidebar Navigation */}
+        {/* Enhanced Mobile Sidebar Navigation */}
         <div
           className={`fixed inset-0 z-50 transform ${
-            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          } transition-transform duration-300 ease-in-out md:hidden`}
+            isMenuOpen ? 'translate-x-0' : lang === 'ar' ? 'translate-x-full' : '-translate-x-full'
+          } transition-transform duration-300 ease-in-out lg:hidden`}
         >
           <div
-            className="fixed inset-0 bg-black opacity-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMenuOpen(false)}
           ></div>
-          <div className="relative z-10 w-64 h-full p-4 bg-white dark:bg-gray-800">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold">القائمة</h2>
+          <div className={`relative z-10 w-80 max-w-[85vw] h-full bg-white dark:bg-gray-900 shadow-2xl ${
+            lang === 'ar' ? 'mr-auto' : 'ml-auto'
+          } safe-area-inset-top safe-area-inset-bottom`}>
+            {/* Mobile Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <TestTubeIcon className="h-6 w-6 text-primary-600" />
+                <h2 className="text-lg font-bold text-foreground">
+                  {lang === 'ar' ? 'القائمة' : 'Menu'}
+                </h2>
+              </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMenuOpen(false)}
+                className="touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Close menu"
               >
                 <XMarkIcon className="w-6 h-6" />
               </Button>
             </div>
-            <div className="space-y-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`block px-3 py-2 text-base font-medium rounded-md transition-colors cursor-pointer ${
-                    isActive(item.href)
-                      ? 'text-primary-600 bg-primary-50 dark:bg-primary-950'
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800'
-                  }`}
-                  onClick={(e) => {
-                    e.preventDefault();
+
+            {/* Mobile Menu Content */}
+            <div className="flex-1 overflow-y-auto p-4")
+              {/* Language and Theme Controls */}
+              <div className="mb-6 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                  {lang === 'ar' ? 'الإعدادات' : 'Settings'}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <LanguageSwitcher currentLang={lang} />
+                  <ThemeToggle />
+                </div>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="space-y-1 mb-6">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 px-3">
+                  {lang === 'ar' ? 'التنقل' : 'Navigation'}
+                </h3>
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`flex items-center px-3 py-3 text-base font-medium rounded-lg transition-colors touch-manipulation ${
+                      isActive(item.href)
+                        ? 'text-primary-600 bg-primary-50 dark:bg-primary-950 border-r-2 border-primary-600'
+                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsMenuOpen(false);
+                      router.push(item.href);
+                    }}
+                  >
+                    <span className="flex-1">{item.name}</span>
+                    {isActive(item.href) && (
+                      <div className="w-2 h-2 bg-primary-600 rounded-full"></div>
+                    )}
+                  </Link>
+                ))}
+                <button
+                  onClick={() => {
+                    setShowImageAnalyzer(true);
                     setIsMenuOpen(false);
-                    router.push(item.href);
                   }}
+                  className="flex items-center w-full px-3 py-3 text-base font-medium rounded-lg transition-colors touch-manipulation text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
                 >
-                  {item.name}
-                </Link>
-              ))}
-              <button
-                onClick={() => {
-                  setShowImageAnalyzer(true);
-                  setIsMenuOpen(false);
-                }}
-                className="w-full text-left block px-3 py-2 text-base font-medium rounded-md transition-colors text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
-              >
-                <span className="flex items-center">
                   <PhotoIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
-                  {t('navigation.image_analysis')}
-                </span>
-              </button>
-              <div className="pt-4 border-t border-gray-300 dark:border-gray-600">
-                {user ? (
-                  <>
-                    <div className="px-3 py-2 mb-2">
-                      <div className="flex items-center space-x-3 rtl:space-x-reverse bg-primary-50 dark:bg-primary-900/20 px-3 py-2 rounded-lg">
-                        <div className="w-8 h-8 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center">
-                          <UserIcon className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                  <span className="flex-1">{t('navigation.image_analysis')}</span>
+                </button>
+              </div>
+
+              {/* User Section */}
+              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
+                {user || isAdmin ? (
+                  <div className="space-y-3">
+                    {/* User Profile Card */}
+                    <div className="p-4 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-xl">
+                      <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                        <div className="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center shadow-lg">
+                          <UserIcon className="w-6 h-6 text-white" />
                         </div>
-                        <div>
-                          <p className="text-sm font-medium text-primary-700 dark:text-primary-300">
-                            {user.displayName || user.email?.split('@')[0] || t('navigation.user')}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-base font-semibold text-primary-700 dark:text-primary-300 truncate">
+                            {isAdmin ? (lang === 'ar' ? 'المدير' : 'Admin') :
+                             (user?.displayName || user?.email?.split('@')[0] || t('navigation.user'))}
                           </p>
-                          <p className="text-xs text-primary-500 dark:text-primary-400">
-                            {user.email}
+                          <p className="text-sm text-primary-600 dark:text-primary-400 truncate">
+                            {isAdmin ? (lang === 'ar' ? 'مدير النظام' : 'System Administrator') :
+                             (user?.email || (lang === 'ar' ? 'مستخدم' : 'User'))}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <Link
-                      href={`/${lang}/profile`}
-                      className="flex items-center px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-md dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <UserIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
-                      {t('navigation.profile')}
-                    </Link>
-                    <Link
-                      href={`/${lang}/dashboard`}
-                      className="flex items-center px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-md dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Cog6ToothIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
-                      {lang === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
-                    </Link>
-                    <button
-                      onClick={() => {
-                        handleSignOut();
-                        setIsMenuOpen(false);
-                      }}
-                      className="w-full text-left flex items-center px-3 py-2 text-base font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20"
-                    >
-                      <PowerIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
-                      {t('navigation.logout')}
-                    </button>
+                    {/* User Action Links */}
+                    <div className="space-y-2">
+                      {isAdmin ? (
+                        <>
+                          <Link
+                            href={`/${lang}/admin`}
+                            className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            <Cog6ToothIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
+                            <span className="flex-1">{lang === 'ar' ? 'لوحة الإدارة' : 'Admin Panel'}</span>
+                          </Link>
+                          <Link
+                            href={`/${lang}/admin/tests`}
+                            className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            <TestTubeIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
+                            <span className="flex-1">{lang === 'ar' ? 'إدارة الاختبارات' : 'Manage Tests'}</span>
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            href={`/${lang}/profile`}
+                            className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            <UserIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
+                            <span className="flex-1">{t('navigation.profile')}</span>
+                          </Link>
+                          <Link
+                            href={`/${lang}/dashboard`}
+                            className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            <Cog6ToothIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
+                            <span className="flex-1">{lang === 'ar' ? 'لوحة التحكم' : 'Dashboard'}</span>
+                          </Link>
+                        </>
+                      )}
+
+                      {/* Logout Button */}
+                      <button
+                        onClick={() => {
+                          handleSignOut();
+                          setIsMenuOpen(false);
+                        }}
+                        className="w-full flex items-center px-4 py-3 text-base font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors touch-manipulation dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20"
+                      >
+                        <PowerIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
+                        <span className="flex-1">{t('navigation.logout')}</span>
+                      </button>
+                    </div>
                   </>
                 ) : (
-                  <>
-                    <Link
-                      href={`/${lang}/auth/login`}
-                      className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-md dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {t('navigation.login')}
-                    </Link>
-                    <Link
-                      href={`/${lang}/auth/register`}
-                      className="block px-3 py-2 text-base font-medium text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950 rounded-md"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {t('navigation.register')}
-                    </Link>
-                  </>
+                  <div className="space-y-3">
+                    {/* Guest User Card */}
+                    <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-xl">
+                      <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                        <div className="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center">
+                          <UserIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <p className="text-base font-semibold text-gray-700 dark:text-gray-300">
+                            {lang === 'ar' ? 'مستخدم زائر' : 'Guest User'}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {lang === 'ar' ? 'سجل دخولك للحصول على المزيد' : 'Sign in for more features'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Auth Buttons */}
+                    <div className="space-y-2">
+                      <Link
+                        href={`/${lang}/auth/login`}
+                        className="flex items-center justify-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <span>{t('navigation.login')}</span>
+                      </Link>
+                      <Link
+                        href={`/${lang}/auth/register`}
+                        className="flex items-center justify-center px-4 py-3 text-base font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors touch-manipulation shadow-lg"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <span>{t('navigation.register')}</span>
+                      </Link>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
