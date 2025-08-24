@@ -130,8 +130,8 @@ export function QuickActions({ lang }: QuickActionsProps) {
         })}
       </div>
 
-      {/* إجراء مميز للاشتراك */}
-      <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+      {/* إجراء مميز للاشتراك - Hidden as requested */}
+      <div className="hidden mt-6 p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
           <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
             <StarIcon className="h-5 w-5 text-white" />
@@ -141,14 +141,14 @@ export function QuickActions({ lang }: QuickActionsProps) {
               {lang === 'ar' ? 'ترقية للمميز' : 'Upgrade to Premium'}
             </h3>
             <p className="text-sm text-yellow-700 dark:text-yellow-300">
-              {lang === 'ar' 
+              {lang === 'ar'
                 ? 'احصل على اختبارات غير محدودة وميزات إضافية'
                 : 'Get unlimited tests and additional features'
               }
             </p>
           </div>
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             className="bg-yellow-500 hover:bg-yellow-600 text-white"
             asChild
           >
