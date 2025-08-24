@@ -164,11 +164,25 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
     setTestData(test);
 
     if (test?.prepare) {
-      // Parse prepare field into steps
-      const steps = (lang === 'ar' ? test.prepare_ar || test.prepare : test.prepare)
-        .split('\n')
-        .filter(step => step.trim() !== '')
-        .map(step => step.replace(/^\d+\.\s*/, '')); // Remove numbering
+      // Parse prepare field into steps - handle both \n and numbered steps
+      const prepareText = lang === 'ar' ? test.prepare_ar || test.prepare : test.prepare;
+
+      let steps: string[] = [];
+
+      // First try to split by \n (for properly formatted data)
+      if (prepareText.includes('\n')) {
+        steps = prepareText
+          .split('\n')
+          .filter(step => step.trim() !== '')
+          .map(step => step.replace(/^\d+\.\s*/, '')); // Remove numbering
+      } else {
+        // Fallback: split by numbered steps pattern for old format
+        steps = prepareText
+          .split(/(?=\d+\.\s)/) // Split before numbered steps
+          .filter(step => step.trim() !== '')
+          .map(step => step.replace(/^\d+\.\s*/, '')); // Remove numbering
+      }
+
       setPrepareSteps(steps);
     }
   }, [testId, lang]);
