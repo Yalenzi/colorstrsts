@@ -181,7 +181,7 @@ export default function AdminDashboardWrapper({ lang }: AdminDashboardWrapperPro
 
   return (
     <AdminDashboardErrorBoundary isRTL={isRTL}>
-      <AdminDashboard lang={safeLang} />
+      <SimpleAdminDashboard lang={safeLang} />
     </AdminDashboardErrorBoundary>
   );
 }
