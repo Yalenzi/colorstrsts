@@ -409,8 +409,8 @@ function TestsPageContent({ lang }: TestsPageProps) {
                     lang={lang}
                   >
                     <div className="relative">
-                      {/* Free/Premium Badge */}
-                      <div className="absolute top-2 right-2 z-10">
+                      {/* Free/Premium Badge - Hidden as requested */}
+                      <div className="absolute top-2 right-2 z-10 hidden">
                         {isFreeTest ? (
                           <div className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
                             <StarIcon className="w-3 h-3 mr-1" />
