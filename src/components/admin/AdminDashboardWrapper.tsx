@@ -7,8 +7,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-// Import AdminDashboard directly to avoid prop passing issues
-import { AdminDashboard } from './admin-dashboard';
+// Import Enhanced AdminDashboard with simplified components
+import { EnhancedAdminDashboard } from './enhanced-admin-dashboard';
 
 interface AdminDashboardWrapperProps {
   lang: Language;
@@ -174,7 +174,7 @@ export default function AdminDashboardWrapper({ lang }: AdminDashboardWrapperPro
     // Use fallback lang instead of showing error
     return (
       <AdminDashboardErrorBoundary isRTL={fallbackLang === 'ar'}>
-        <AdminDashboard lang={fallbackLang} />
+        <EnhancedAdminDashboard lang={fallbackLang} />
       </AdminDashboardErrorBoundary>
     );
   }
