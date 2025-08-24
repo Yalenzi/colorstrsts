@@ -377,6 +377,97 @@
   }
 }
 
+/* ===== MOBILE HEADER ENHANCEMENTS ===== */
+.safe-area-inset-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Enhanced mobile header */
+@media (max-width: 1024px) {
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  /* Mobile menu improvements */
+  .mobile-menu-overlay {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .mobile-menu-panel {
+    box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.1), -4px 0 10px -6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Touch targets */
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Improved scrolling */
+  .mobile-scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ===== RESPONSIVE TYPOGRAPHY ===== */
+@media (max-width: 640px) {
+  .mobile-text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .mobile-text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .mobile-text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* ===== MOBILE NAVIGATION ENHANCEMENTS ===== */
+.mobile-nav-item {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.mobile-nav-item:active {
+  transform: scale(0.98);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mobile-nav-item::after {
+  content: '';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.mobile-nav-item.active::after {
+  background-color: var(--instruction-primary);
+}
+
 /* ===== PRINT STYLES ===== */
 @media print {
   .instruction-frame {
@@ -384,8 +475,12 @@
     box-shadow: none;
     border: 1px solid #000;
   }
-  
+
   .instruction-start-button {
+    display: none;
+  }
+
+  header {
     display: none;
   }
 }
