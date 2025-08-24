@@ -66,7 +66,7 @@ function generateAdminCredentials() {
     password,
     salt,
     passwordHash,
-    email: 'admin@colortest.local',
+    email: 'aburakan4551@gmail.com',
     sessionDuration: 3600000, // 1 hour
     maxLoginAttempts: 5,
     lockoutDuration: 900000, // 15 minutes
