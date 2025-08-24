@@ -506,12 +506,12 @@ export default function PrivacyPage({ params }: PrivacyPageProps) {
             <div className="grid md:grid-cols-2 gap-6">
               <ContactInfo
                 title={lang === 'ar' ? 'مسؤول حماية البيانات' : 'Data Protection Officer'}
-                email="privacy@colorstest.com"
+                email="aburakan4551@gmail.com"
                 variant="primary"
               />
               <ContactInfo
                 title={lang === 'ar' ? 'الدعم التقني' : 'Technical Support'}
-                email="support@colorstest.com"
+                email="aburakan4551@gmail.com"
                 variant="secondary"
               />
             </div>
