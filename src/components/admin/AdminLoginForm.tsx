@@ -16,7 +16,7 @@ interface AdminLoginFormProps {
 }
 
 // Admin allowed emails from env (comma-separated) with sensible defaults
-const ADMIN_ALLOWED_EMAILS: string[] = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'aburakan4551@gmail.com,admin@colorstest.com,admin_colorstest_com@gmail.com')
+const ADMIN_ALLOWED_EMAILS: string[] = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'aburakan4551@gmail.com')
   .split(',')
   .map(e => e.trim().toLowerCase())
   .filter(Boolean);
