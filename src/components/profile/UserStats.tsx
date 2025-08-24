@@ -97,16 +97,17 @@ export function UserStats({ lang }: UserStatsProps) {
   };
 
   const getSubscriptionBadge = () => {
+    // Hidden as requested - Premium/Free badges
     if (stats.isSubscribed) {
       return (
-        <div className="flex items-center space-x-2 rtl:space-x-reverse bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+        <div className="hidden flex items-center space-x-2 rtl:space-x-reverse bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-3 py-1 rounded-full text-sm font-medium">
           <StarIcon className="h-4 w-4" />
           <span>{lang === 'ar' ? 'مشترك مميز' : 'Premium Member'}</span>
         </div>
       );
     } else {
       return (
-        <div className="flex items-center space-x-2 rtl:space-x-reverse bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-full text-sm font-medium">
+        <div className="hidden flex items-center space-x-2 rtl:space-x-reverse bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-full text-sm font-medium">
           <StarIcon className="h-4 w-4" />
           <span>{lang === 'ar' ? 'مستخدم مجاني' : 'Free User'}</span>
         </div>
