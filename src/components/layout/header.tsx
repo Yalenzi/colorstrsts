@@ -122,7 +122,7 @@ export function Header({ lang }: HeaderProps) {
   const headerClasses = "sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 safe-area-inset-top";
 
   return (
-    <header className={headerClasses}>
+    <div role="banner" className={headerClasses}>
       <div className="container mx-auto px-3 sm:px-4 lg:px-8">
         <div className="flex h-14 sm:h-16 items-center justify-between">
           {/* Logo - Optimized for mobile */}
@@ -496,7 +496,7 @@ export function Header({ lang }: HeaderProps) {
       </div>
 
       {/* Global Image Color Analyzer Modal */}
-      
-    </header>
+
+    </div>
   );
 }
