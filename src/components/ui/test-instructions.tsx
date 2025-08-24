@@ -387,7 +387,7 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
       <div className="max-w-6xl mx-auto p-4 sm:p-8">
         {/* Enhanced Header */}
         <EnhancedHeader
-          title={lang === 'ar' ? 'اختبار كبريتات الحديد' : 'Iron Sulfate Test'}
+          title={testData ? (lang === 'ar' ? testData.method_name_ar : testData.method_name) : (lang === 'ar' ? 'اختبار كيميائي' : 'Chemical Test')}
           subtitle={testData?.method_name || (lang === 'ar' ? 'اختبار كيميائي متقدم للكشف عن المواد' : 'Advanced Chemical Detection Test')}
           onBack={onCancel}
         />
@@ -440,6 +440,12 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
                   icon={safetyIcons.dropper}
                   text={lang === 'ar' ? 'استخدم قطارة زجاجية نظيفة' : 'Use a clean glass dropper'}
                 />
+                {testData && (
+                  <EnhancedBulletPoint
+                    icon={safetyIcons.warning}
+                    text={testData ? (lang === 'ar' ? `تحذير خاص: كاشف ${testData.method_name_ar} يتطلب احتياطات إضافية` : `Special Warning: ${testData.method_name} reagent requires additional precautions`) : ''}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -454,16 +460,22 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
           <div className="space-y-4">
             <EnhancedBulletPoint
               icon={chemicalIcons.chemical}
-              text={lang === 'ar' ? 'كبريتات الحديد (Ferric Sulfate)' : 'Ferric Sulfate'}
+              text={testData ? (lang === 'ar' ? `كاشف ${testData.method_name_ar}` : `${testData.method_name} Reagent`) : (lang === 'ar' ? 'الكاشف الكيميائي' : 'Chemical Reagent')}
             />
             <EnhancedBulletPoint
               icon={chemicalIcons.water}
-              text={lang === 'ar' ? 'الماء المقطر (Water)' : 'Distilled Water'}
+              text={lang === 'ar' ? 'الماء المقطر' : 'Distilled Water'}
             />
             <EnhancedBulletPoint
               icon={chemicalIcons.reagent}
-              text={lang === 'ar' ? 'محلول الكاشف الكيميائي' : 'Chemical reagent solution'}
+              text={lang === 'ar' ? 'طبق اختبار نظيف' : 'Clean test plate'}
             />
+            {testData && (
+              <EnhancedBulletPoint
+                icon={chemicalIcons.chemical}
+                text={testData ? (lang === 'ar' ? `النتيجة المتوقعة: ${testData.color_result_ar || testData.color_result}` : `Expected Result: ${testData.color_result}`) : ''}
+              />
+            )}
           </div>
         </EnhancedInstructionFrame>
 
@@ -474,26 +486,38 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
           variant="instructions"
         >
           <div className="space-y-5">
-            <EnhancedNumberedStep
-              number={1}
-              text={lang === 'ar' ? 'ضع عينة صغيرة على طبق الاختبار' : 'Place a small sample on the test plate'}
-            />
-            <EnhancedNumberedStep
-              number={2}
-              text={lang === 'ar' ? 'أضف ثلاث قطرات من الماء واخلط' : 'Add three drops of water and mix'}
-            />
-            <EnhancedNumberedStep
-              number={3}
-              text={lang === 'ar' ? 'انقل القطرة إلى تجويف آخر' : 'Transfer the drop to another cavity'}
-            />
-            <EnhancedNumberedStep
-              number={4}
-              text={lang === 'ar' ? 'أضف قطرة من الكاشف (5 مجم كبريتات حديد في 100 مل ماء)' : 'Add one drop of reagent (5mg iron sulfate in 100ml water)'}
-            />
-            <EnhancedNumberedStep
-              number={5}
-              text={lang === 'ar' ? 'راقب تغير اللون (بني إيجابي للهيروين)' : 'Observe color change (brown positive for heroin)'}
-            />
+            {prepareSteps.length > 0 ? (
+              prepareSteps.map((step, index) => (
+                <EnhancedNumberedStep
+                  key={index}
+                  number={index + 1}
+                  text={step}
+                />
+              ))
+            ) : (
+              <>
+                <EnhancedNumberedStep
+                  number={1}
+                  text={lang === 'ar' ? 'ضع عينة صغيرة على طبق الاختبار' : 'Place a small sample on the test plate'}
+                />
+                <EnhancedNumberedStep
+                  number={2}
+                  text={lang === 'ar' ? 'أضف ثلاث قطرات من الماء واخلط' : 'Add three drops of water and mix'}
+                />
+                <EnhancedNumberedStep
+                  number={3}
+                  text={lang === 'ar' ? 'انقل القطرة إلى تجويف آخر' : 'Transfer the drop to another cavity'}
+                />
+                <EnhancedNumberedStep
+                  number={4}
+                  text={testData ? (lang === 'ar' ? `أضف قطرة من كاشف ${testData.method_name_ar}` : `Add one drop of ${testData.method_name} reagent`) : (lang === 'ar' ? 'أضف قطرة من الكاشف الكيميائي' : 'Add one drop of chemical reagent')}
+                />
+                <EnhancedNumberedStep
+                  number={5}
+                  text={testData ? (lang === 'ar' ? `راقب تغير اللون - ${testData.color_result_ar || 'انتظر النتيجة'}` : `Observe color change - ${testData.color_result || 'wait for result'}`) : (lang === 'ar' ? 'راقب تغير اللون' : 'Observe color change')}
+                />
+              </>
+            )}
           </div>
         </EnhancedInstructionFrame>
 
