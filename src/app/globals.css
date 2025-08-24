@@ -5,6 +5,9 @@
 /* Import Admin Theme */
 @import '../styles/admin-theme.css';
 
+/* Import Enhanced Instructions Theme */
+@import '../styles/enhanced-instructions.css';
+
 /* ===== SCIENTIFIC DESIGN SYSTEM ===== */
 /* Professional Laboratory-Grade Color Palette */
 :root {
