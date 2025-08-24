@@ -62,8 +62,6 @@
   to = "/ar/:splat"
   status = 200
 
-[[redirects]]
-
 # API endpoints to Netlify Functions
 [[redirects]]
   from = "/api/sessionLogin"
