@@ -2,16 +2,29 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslationsSync } from '@/lib/translations';
 import { Language } from '@/types';
-import { 
-  ShieldCheckIcon, 
-  DocumentTextIcon, 
+import {
+  ShieldCheckIcon,
+  DocumentTextIcon,
   LockClosedIcon,
   UserGroupIcon,
   ServerIcon,
   CogIcon,
   ExclamationTriangleIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  EyeIcon,
+  KeyIcon,
+  ClockIcon,
+  GlobeAltIcon
 } from '@heroicons/react/24/outline';
+import {
+  PolicyFrame,
+  PolicyBulletPoint,
+  PolicySection,
+  PolicyHeader,
+  ContactInfo,
+  UpdateNotice,
+  PolicyIcons
+} from '@/components/ui/policy-components';
 
 // Generate static params for supported languages
 export async function generateStaticParams() {
@@ -56,102 +69,85 @@ export default function PrivacyPage({ params }: PrivacyPageProps) {
   const lastUpdated = '2024-01-15';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
-              <ShieldCheckIcon className="w-8 h-8 text-primary-600" />
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            {lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
-          </h1>
-          <p className="text-lg text-muted-foreground mb-4">
-            {lang === 'ar' 
-              ? 'ColorTests - نظام الكشف المختبري المتقدم'
-              : 'ColorTests - Advanced Laboratory Detection System'
-            }
-          </p>
-          <div className="inline-flex items-center px-4 py-2 bg-secondary-100 dark:bg-secondary-900 rounded-lg">
-            <DocumentTextIcon className="w-5 h-5 text-secondary-600 mr-2 rtl:ml-2 rtl:mr-0" />
-            <span className="text-sm text-secondary-700 dark:text-secondary-300">
-              {lang === 'ar' ? `آخر تحديث: ${lastUpdated}` : `Last Updated: ${lastUpdated}`}
-            </span>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-gray-800">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Enhanced Header */}
+        <PolicyHeader
+          title={lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
+          subtitle={lang === 'ar'
+            ? 'ColorTests - نظام الكشف المختبري المتقدم'
+            : 'ColorTests - Advanced Laboratory Detection System'
+          }
+          lastUpdated={lang === 'ar' ? `آخر تحديث: ${lastUpdated}` : `Last Updated: ${lastUpdated}`}
+        />
 
-        {/* Introduction */}
-        <div className="lab-card mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center">
-            <ExclamationTriangleIcon className="w-6 h-6 text-primary-600 mr-3 rtl:ml-3 rtl:mr-0" />
-            {lang === 'ar' ? 'مقدمة' : 'Introduction'}
-          </h2>
-          <p className="text-foreground leading-relaxed mb-4">
-            {lang === 'ar' 
-              ? 'نحن في ColorTests نلتزم بحماية خصوصيتك وأمان بياناتك الشخصية. تشرح هذه السياسة كيفية جمعنا واستخدامنا وحماية المعلومات التي تقدمها لنا عند استخدام تطبيق ColorTests للكشف المختبري المتقدم.'
-              : 'At ColorTests, we are committed to protecting your privacy and the security of your personal data. This policy explains how we collect, use, and protect the information you provide when using the ColorTests advanced laboratory detection application.'
-            }
-          </p>
-          <p className="text-foreground leading-relaxed">
-            {lang === 'ar'
-              ? 'تطبيق ColorTests هو نظام علمي متخصص في كشف المواد الكيميائية، ونحن ندرك حساسية البيانات التي نتعامل معها ونلتزم بأعلى معايير الحماية والخصوصية.'
-              : 'ColorTests is a scientific system specialized in chemical substance detection, and we understand the sensitivity of the data we handle and are committed to the highest standards of protection and privacy.'
-            }
-          </p>
-        </div>
+        {/* Enhanced Introduction */}
+        <PolicyFrame
+          title={lang === 'ar' ? 'مقدمة' : 'Introduction'}
+          icon={<ExclamationTriangleIcon className="w-7 h-7" />}
+          variant="info"
+        >
+          <div className="space-y-4">
+            <p className="text-foreground leading-relaxed text-lg">
+              {lang === 'ar'
+                ? 'نحن في ColorTests نلتزم بحماية خصوصيتك وأمان بياناتك الشخصية. تشرح هذه السياسة كيفية جمعنا واستخدامنا وحماية المعلومات التي تقدمها لنا عند استخدام تطبيق ColorTests للكشف المختبري المتقدم.'
+                : 'At ColorTests, we are committed to protecting your privacy and the security of your personal data. This policy explains how we collect, use, and protect the information you provide when using the ColorTests advanced laboratory detection application.'
+              }
+            </p>
+            <p className="text-foreground leading-relaxed text-lg">
+              {lang === 'ar'
+                ? 'تطبيق ColorTests هو نظام علمي متخصص في كشف المواد الكيميائية، ونحن ندرك حساسية البيانات التي نتعامل معها ونلتزم بأعلى معايير الحماية والخصوصية.'
+                : 'ColorTests is a scientific system specialized in chemical substance detection, and we understand the sensitivity of the data we handle and are committed to the highest standards of protection and privacy.'
+              }
+            </p>
+          </div>
+        </PolicyFrame>
 
-        {/* Data Collection */}
-        <div className="lab-card mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center">
-            <ServerIcon className="w-6 h-6 text-primary-600 mr-3 rtl:ml-3 rtl:mr-0" />
-            {lang === 'ar' ? 'جمع البيانات الشخصية' : 'Personal Data Collection'}
-          </h2>
-          
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-3">
-                {lang === 'ar' ? 'البيانات التي نجمعها:' : 'Data We Collect:'}
-              </h3>
-              <ul className="space-y-2 text-foreground">
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-primary-500 rounded-full mt-2 mr-3 rtl:ml-3 rtl:mr-0 flex-shrink-0"></span>
-                  {lang === 'ar' 
-                    ? 'معلومات الحساب: الاسم، البريد الإلكتروني، كلمة المرور المشفرة'
-                    : 'Account Information: Name, email address, encrypted password'
-                  }
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-primary-500 rounded-full mt-2 mr-3 rtl:ml-3 rtl:mr-0 flex-shrink-0"></span>
-                  {lang === 'ar'
-                    ? 'نتائج الاختبارات: البيانات المختبرية، الصور، النتائج التحليلية'
-                    : 'Test Results: Laboratory data, images, analytical results'
-                  }
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-primary-500 rounded-full mt-2 mr-3 rtl:ml-3 rtl:mr-0 flex-shrink-0"></span>
-                  {lang === 'ar'
-                    ? 'معلومات الاستخدام: تاريخ الاختبارات، تفضيلات المستخدم، إعدادات التطبيق'
-                    : 'Usage Information: Test history, user preferences, application settings'
-                  }
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-primary-500 rounded-full mt-2 mr-3 rtl:ml-3 rtl:mr-0 flex-shrink-0"></span>
-                  {lang === 'ar'
-                    ? 'معلومات الجهاز: نوع الجهاز، نظام التشغيل، معرف التطبيق'
-                    : 'Device Information: Device type, operating system, application identifier'
-                  }
-                </li>
-                <li className="flex items-start">
-                  <span className="w-2 h-2 bg-primary-500 rounded-full mt-2 mr-3 rtl:ml-3 rtl:mr-0 flex-shrink-0"></span>
-                  {lang === 'ar'
-                    ? 'معلومات الدفع: تفاصيل الاشتراك، تاريخ المعاملات (بدون تفاصيل بطاقة الائتمان)'
-                    : 'Payment Information: Subscription details, transaction history (without credit card details)'
-                  }
-                </li>
-              </ul>
+        {/* Enhanced Data Collection */}
+        <PolicyFrame
+          title={lang === 'ar' ? 'جمع البيانات الشخصية' : 'Personal Data Collection'}
+          icon={<ServerIcon className="w-7 h-7" />}
+          variant="primary"
+        >
+          <PolicySection title={lang === 'ar' ? 'البيانات التي نجمعها:' : 'Data We Collect:'}>
+            <div className="space-y-3">
+              <PolicyBulletPoint
+                icon={<UserGroupIcon className="w-5 h-5" />}
+                text={lang === 'ar'
+                  ? 'معلومات الحساب: الاسم، البريد الإلكتروني، كلمة المرور المشفرة'
+                  : 'Account Information: Name, email address, encrypted password'
+                }
+              />
+              <PolicyBulletPoint
+                icon={<DocumentTextIcon className="w-5 h-5" />}
+                text={lang === 'ar'
+                  ? 'نتائج الاختبارات: البيانات المختبرية، الصور، النتائج التحليلية'
+                  : 'Test Results: Laboratory data, images, analytical results'
+                }
+              />
+              <PolicyBulletPoint
+                icon={<ClockIcon className="w-5 h-5" />}
+                text={lang === 'ar'
+                  ? 'معلومات الاستخدام: تاريخ الاختبارات، تفضيلات المستخدم، إعدادات التطبيق'
+                  : 'Usage Information: Test history, user preferences, application settings'
+                }
+              />
+              <PolicyBulletPoint
+                icon={<CogIcon className="w-5 h-5" />}
+                text={lang === 'ar'
+                  ? 'معلومات الجهاز: نوع الجهاز، نظام التشغيل، معرف التطبيق'
+                  : 'Device Information: Device type, operating system, application identifier'
+                }
+              />
+              <PolicyBulletPoint
+                icon={<KeyIcon className="w-5 h-5" />}
+                text={lang === 'ar'
+                  ? 'معلومات الدفع: تفاصيل الاشتراك، تاريخ المعاملات (بدون تفاصيل بطاقة الائتمان)'
+                  : 'Payment Information: Subscription details, transaction history (without credit card details)'
+                }
+              />
             </div>
+          </PolicySection>
           </div>
         </div>
 
@@ -494,51 +490,41 @@ export default function PrivacyPage({ params }: PrivacyPageProps) {
           </div>
         </div>
 
-        {/* Contact Information */}
-        <div className="lab-card mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center">
-            <EnvelopeIcon className="w-6 h-6 text-primary-600 mr-3 rtl:ml-3 rtl:mr-0" />
-            {lang === 'ar' ? 'معلومات الاتصال' : 'Contact Information'}
-          </h2>
-
-          <div className="space-y-4">
-            <p className="text-foreground leading-relaxed">
+        {/* Enhanced Contact Information */}
+        <PolicyFrame
+          title={lang === 'ar' ? 'معلومات الاتصال' : 'Contact Information'}
+          icon={<EnvelopeIcon className="w-7 h-7" />}
+          variant="secondary"
+        >
+          <div className="space-y-6">
+            <p className="text-foreground leading-relaxed text-lg">
               {lang === 'ar'
                 ? 'لأي استفسارات حول سياسة الخصوصية أو لممارسة حقوقك، يرجى التواصل معنا:'
                 : 'For any inquiries about this privacy policy or to exercise your rights, please contact us:'
               }
             </p>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="p-4 bg-primary-50 dark:bg-primary-950 rounded-lg border border-primary-200 dark:border-primary-800">
-                <h4 className="font-semibold text-primary-800 dark:text-primary-200 mb-2">
-                  {lang === 'ar' ? 'مسؤول حماية البيانات' : 'Data Protection Officer'}
-                </h4>
-                <p className="text-sm text-primary-700 dark:text-primary-300">
-                  privacy@colorstest.com
-                </p>
-              </div>
-              <div className="p-4 bg-secondary-50 dark:bg-secondary-950 rounded-lg border border-secondary-200 dark:border-secondary-800">
-                <h4 className="font-semibold text-secondary-800 dark:text-secondary-200 mb-2">
-                  {lang === 'ar' ? 'الدعم التقني' : 'Technical Support'}
-                </h4>
-                <p className="text-sm text-secondary-700 dark:text-secondary-300">
-                  support@colorstest.com
-                </p>
-              </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <ContactInfo
+                title={lang === 'ar' ? 'مسؤول حماية البيانات' : 'Data Protection Officer'}
+                email="privacy@colorstest.com"
+                variant="primary"
+              />
+              <ContactInfo
+                title={lang === 'ar' ? 'الدعم التقني' : 'Technical Support'}
+                email="support@colorstest.com"
+                variant="secondary"
+              />
             </div>
-            <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
-              <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-                {lang === 'ar' ? 'وقت الاستجابة' : 'Response Time'}
-              </h4>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">
+            <UpdateNotice>
+              <p className="text-sm font-medium">
                 {lang === 'ar'
                   ? 'نلتزم بالرد على استفساراتك خلال 72 ساعة من تاريخ الاستلام'
                   : 'We commit to responding to your inquiries within 72 hours of receipt'
                 }
               </p>
-            </div>
+            </UpdateNotice>
           </div>
-        </div>
+        </PolicyFrame>
 
         {/* Updates */}
         <div className="lab-card">
