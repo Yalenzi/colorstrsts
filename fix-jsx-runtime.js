@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-console.log('🔧 Fixing JSX Runtime Issues...');
-console.log('🔧 إصلاح مشاكل JSX Runtime...');
+console.log('🔧 Comprehensive JSX Runtime Fix...');
+console.log('🔧 إصلاح شامل لـ JSX Runtime...');
 
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 // Check if react/jsx-runtime is available
 console.log('\n🔍 Checking React JSX Runtime...');
@@ -126,5 +127,31 @@ console.log('2. اضبط "jsx": "react-jsx" في tsconfig.json');
 console.log('3. امسح node_modules وأعد التثبيت إذا لزم الأمر');
 console.log('4. استخدم Next.js 14+ لأفضل دعم لـ React 18');
 
-console.log('\n🔧 JSX Runtime fix completed!');
-console.log('🔧 اكتمل إصلاح JSX Runtime!');
+// Force clean install if jsx-runtime issues persist
+console.log('\n🧹 Cleaning node_modules for fresh install...');
+console.log('🧹 تنظيف node_modules للتثبيت الجديد...');
+
+try {
+  if (fs.existsSync('node_modules')) {
+    console.log('🗑️ Removing node_modules...');
+    execSync('rm -rf node_modules', { stdio: 'inherit' });
+  }
+
+  if (fs.existsSync('package-lock.json')) {
+    console.log('🗑️ Removing package-lock.json...');
+    fs.unlinkSync('package-lock.json');
+  }
+
+  console.log('📦 Installing fresh dependencies...');
+  console.log('📦 تثبيت تبعيات جديدة...');
+  execSync('npm install', { stdio: 'inherit' });
+
+  console.log('✅ Fresh install completed');
+  console.log('✅ اكتمل التثبيت الجديد');
+} catch (error) {
+  console.log(`⚠️ Clean install failed: ${error.message}`);
+  console.log(`⚠️ فشل التثبيت النظيف: ${error.message}`);
+}
+
+console.log('\n🔧 Comprehensive JSX Runtime fix completed!');
+console.log('🔧 اكتمل الإصلاح الشامل لـ JSX Runtime!');
