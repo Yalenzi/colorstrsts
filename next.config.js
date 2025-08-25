@@ -61,12 +61,8 @@ const nextConfig = {
     tsconfigPath: './tsconfig.build.json',
   },
 
-  // Force SWC usage instead of Babel
-  swcMinify: true,
-  compiler: {
-    // Enable SWC transforms
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
+  // SWC is enabled by default in Next.js 15
+  // Using minimal babel config to ensure compatibility
 
   // Optimization for static export
   // experimental: {

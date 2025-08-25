@@ -6,36 +6,42 @@ console.log('🔧 اختبار إصلاح تكوين SWC...');
 const fs = require('fs');
 const path = require('path');
 
-// Check if babel.config.js is removed (should NOT exist)
+// Check if babel.config.js exists with correct content
 const babelConfigPath = path.join(__dirname, 'babel.config.js');
-if (!fs.existsSync(babelConfigPath)) {
-  console.log('✅ babel.config.js removed (good - using SWC)');
-  console.log('✅ ملف babel.config.js محذوف (جيد - استخدام SWC)');
+if (fs.existsSync(babelConfigPath)) {
+  const babelConfig = fs.readFileSync(babelConfigPath, 'utf8');
+  if (babelConfig.includes('next/babel')) {
+    console.log('✅ babel.config.js exists with next/babel preset');
+    console.log('✅ ملف babel.config.js موجود مع next/babel preset');
+  } else {
+    console.log('⚠️ babel.config.js exists but may have wrong configuration');
+    console.log('⚠️ ملف babel.config.js موجود لكن قد يحتوي تكوين خاطئ');
+  }
 } else {
-  console.log('❌ babel.config.js still exists (will conflict with SWC)');
-  console.log('❌ ملف babel.config.js ما زال موجود (سيتعارض مع SWC)');
+  console.log('❌ babel.config.js missing');
+  console.log('❌ ملف babel.config.js مفقود');
   process.exit(1);
 }
 
-// Check next.config.js for SWC configuration
+// Check next.config.js for proper configuration
 const nextConfigPath = path.join(__dirname, 'next.config.js');
 if (fs.existsSync(nextConfigPath)) {
   const nextConfigContent = fs.readFileSync(nextConfigPath, 'utf8');
 
   if (nextConfigContent.includes('swcMinify: true')) {
-    console.log('✅ SWC minification enabled in next.config.js');
-    console.log('✅ تفعيل SWC minification في next.config.js');
+    console.log('⚠️ swcMinify found (not supported in Next.js 15)');
+    console.log('⚠️ swcMinify موجود (غير مدعوم في Next.js 15)');
   } else {
-    console.log('⚠️ SWC minification not explicitly enabled');
-    console.log('⚠️ SWC minification غير مفعل صراحة');
+    console.log('✅ No swcMinify configuration (good for Next.js 15)');
+    console.log('✅ لا يوجد تكوين swcMinify (جيد لـ Next.js 15)');
   }
 
-  if (nextConfigContent.includes('compiler:')) {
-    console.log('✅ SWC compiler configuration found');
-    console.log('✅ تكوين SWC compiler موجود');
+  if (nextConfigContent.includes('SWC is enabled by default')) {
+    console.log('✅ Proper SWC comment found');
+    console.log('✅ تعليق SWC الصحيح موجود');
   } else {
-    console.log('⚠️ SWC compiler configuration not found');
-    console.log('⚠️ تكوين SWC compiler غير موجود');
+    console.log('ℹ️ SWC comment not found (optional)');
+    console.log('ℹ️ تعليق SWC غير موجود (اختياري)');
   }
 } else {
   console.log('❌ next.config.js not found');
@@ -51,14 +57,24 @@ if (fs.existsSync(packageJsonPath)) {
   console.log('\n📦 Checking dependency configuration...');
   console.log('📦 فحص تكوين التبعيات...');
 
-  // Check that Babel deps are NOT in dependencies (production)
-  const babelDepsInProd = packageJson.dependencies && Object.keys(packageJson.dependencies).filter(dep => dep.startsWith('@babel/'));
-  if (babelDepsInProd.length === 0) {
-    console.log('✅ No Babel dependencies in production dependencies (good)');
-    console.log('✅ لا توجد تبعيات Babel في dependencies الإنتاج (جيد)');
+  // Check that @babel/plugin-transform-runtime is in dependencies (required for build)
+  const transformRuntimeInProd = packageJson.dependencies && packageJson.dependencies['@babel/plugin-transform-runtime'];
+  if (transformRuntimeInProd) {
+    console.log('✅ @babel/plugin-transform-runtime in dependencies (required)');
+    console.log('✅ @babel/plugin-transform-runtime في dependencies (مطلوب)');
   } else {
-    console.log('⚠️ Found Babel dependencies in production:', babelDepsInProd);
-    console.log('⚠️ وجدت تبعيات Babel في الإنتاج:', babelDepsInProd);
+    console.log('❌ @babel/plugin-transform-runtime missing from dependencies');
+    console.log('❌ @babel/plugin-transform-runtime مفقود من dependencies');
+  }
+
+  // Check other Babel deps are in devDependencies
+  const otherBabelDepsInProd = packageJson.dependencies && Object.keys(packageJson.dependencies).filter(dep => dep.startsWith('@babel/') && dep !== '@babel/plugin-transform-runtime');
+  if (otherBabelDepsInProd.length === 0) {
+    console.log('✅ Other Babel dependencies not in production (good)');
+    console.log('✅ باقي تبعيات Babel ليست في الإنتاج (جيد)');
+  } else {
+    console.log('⚠️ Found other Babel dependencies in production:', otherBabelDepsInProd);
+    console.log('⚠️ وجدت تبعيات Babel أخرى في الإنتاج:', otherBabelDepsInProd);
   }
 
   // Check that Babel deps are in devDependencies
@@ -71,8 +87,8 @@ if (fs.existsSync(packageJsonPath)) {
     console.log('⚠️ لا توجد تبعيات Babel في devDependencies');
   }
 
-  console.log('\n🎉 Configuration looks good for SWC usage!');
-  console.log('🎉 التكوين يبدو جيد لاستخدام SWC!');
+  console.log('\n🎉 Configuration looks good for Next.js with minimal Babel!');
+  console.log('🎉 التكوين يبدو جيد لـ Next.js مع Babel بسيط!');
   console.log('\n📝 Next steps:');
   console.log('📝 الخطوات التالية:');
   console.log('1. Run: npm install');
