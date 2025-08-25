@@ -61,7 +61,9 @@
     "cleanup": "node scripts/cleanup-project.js",
     "cleanup:all": "node scripts/cleanup-project.js --all",
     "cleanup:security": "node scripts/cleanup-project.js --security",
-    "cleanup:npm": "node scripts/cleanup-project.js --npm"
+    "cleanup:npm": "node scripts/cleanup-project.js --npm",
+    "postinstall": "node check-dependencies.js",
+    "check-deps": "node check-dependencies.js"
   },
   "dependencies": {
     "@capacitor/android": "^7.3.0",
