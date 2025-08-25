@@ -112,9 +112,16 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.0",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "@babel/runtime": "^7.23.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/plugin-transform-runtime": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@babel/preset-react": "^7.23.0",
+    "@babel/preset-typescript": "^7.23.0",
+    "@babel/runtime": "^7.23.0",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@typescript-eslint/eslint-plugin": "^6.19.0",

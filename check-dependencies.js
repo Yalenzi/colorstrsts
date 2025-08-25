@@ -29,7 +29,10 @@ const criticalDeps = {
   'postcss': 'PostCSS',
   'firebase': 'Firebase SDK',
   '@heroicons/react': 'Heroicons React',
-  'cross-env': 'Cross-platform environment variables'
+  'cross-env': 'Cross-platform environment variables',
+  '@babel/core': 'Babel core compiler',
+  '@babel/plugin-transform-runtime': 'Babel transform runtime plugin',
+  '@babel/runtime': 'Babel runtime helpers'
 };
 
 console.log('\n📋 Critical Dependencies Check:');
