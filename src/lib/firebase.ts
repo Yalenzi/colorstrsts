@@ -3,7 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
-import { getAnalytics, isSupported as isAnalyticsSupported } from "firebase/analytics";
+// Analytics removed to avoid build issues
+// import { getAnalytics, isSupported as isAnalyticsSupported } from "firebase/analytics";
 
 // Firebase configuration from environment variables
 // إعداد Firebase من متغيرات البيئة
@@ -81,24 +82,15 @@ try {
 
 export { database };
 
+// Analytics temporarily disabled to avoid build issues
 // Initialize Analytics (optional, only in browser) - only if measurement ID is provided and supported
 // تهيئة Analytics (اختياري، فقط في المتصفح) - فقط إذا تم توفير معرف القياس ومدعوم
-let analytics: any = null;
+export const analytics = null;
 
-// Initialize analytics asynchronously to avoid top-level await
-if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
-  isAnalyticsSupported().then((supported) => {
-    if (supported) {
-      analytics = getAnalytics(app);
-      console.log('✅ Firebase Analytics initialized');
-    } else {
-      console.log('⚠️ Firebase Analytics not supported in this environment');
-    }
-  }).catch((error) => {
-    console.error('❌ Error initializing Firebase Analytics:', error);
-  });
-}
-
-export { analytics };
+// Function to initialize analytics when needed (disabled for now)
+export const initializeAnalytics = () => {
+  console.log('⚠️ Firebase Analytics is disabled to avoid build issues');
+  return Promise.resolve(null);
+};
 
 export default app;
