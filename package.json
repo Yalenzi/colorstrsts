@@ -111,7 +111,7 @@
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.344.0",
-    "next": "^15.0.0",
+    "next": "^15.3.3",
     "next-themes": "^0.2.1",
     "postcss": "^8.4.33",
     "react": "^18.3.0",
