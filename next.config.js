@@ -77,6 +77,32 @@ const nextConfig = {
       '@': require('path').resolve(__dirname, 'src'),
     };
 
+    // Ensure proper async/await support
+    config.module.rules.push({
+      test: /\.(js|jsx|ts|tsx)$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['@babel/preset-env', {
+              targets: {
+                browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
+              },
+              modules: false,
+              useBuiltIns: 'usage',
+              corejs: 3
+            }],
+            '@babel/preset-react',
+            '@babel/preset-typescript'
+          ],
+          plugins: [
+            '@babel/plugin-transform-runtime'
+          ]
+        }
+      }
+    });
+
     return config;
   },
   
