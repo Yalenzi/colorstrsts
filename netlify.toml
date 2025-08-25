@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build"
+  command = "node check-env.js && npm install && npm run build"
   publish = "out"
 
 [build.environment]
