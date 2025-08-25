@@ -65,7 +65,7 @@ const nextConfig = {
   // experimental: {
   //   esmExternals: false
   // },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -77,8 +77,17 @@ const nextConfig = {
       '@': require('path').resolve(__dirname, 'src'),
     };
 
-    // Simplified configuration to avoid build issues
-    // Ensure proper async/await support is handled by Next.js default configuration
+    // Fix React resolution issues
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react': require.resolve('react'),
+        'react-dom': require.resolve('react-dom'),
+      };
+    }
+
+    // Ensure proper module resolution
+    config.resolve.extensions = ['.tsx', '.ts', '.jsx', '.js', '.json'];
 
     return config;
   },
