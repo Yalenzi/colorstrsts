@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build"
+  command = "node final-fix.js && npm run build"
   publish = "out"
 
 [build.environment]
