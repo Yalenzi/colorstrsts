@@ -74,7 +74,8 @@
     "fix-package-lock": "node fix-package-lock.js",
     "validate-netlify": "node validate-netlify-config.js",
     "fix-build": "node fix-build-issues.js",
-    "simplify": "node simplify-app.js"
+    "simplify": "node simplify-app.js",
+    "force-swc": "node force-swc-build.js"
   },
   "dependencies": {
     "@capacitor/android": "^7.3.0",
