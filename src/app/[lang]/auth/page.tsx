@@ -5,6 +5,8 @@ import { AuthPage } from '@/components/pages/login-page';
 
 // Force dynamic rendering to avoid prerendering issues with client-side auth
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+export const revalidate = 0;
 
 // Generate static params for supported languages
 export async function generateStaticParams() {
