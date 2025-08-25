@@ -1,6 +1,10 @@
 [build]
-  command = "node netlify-build-debug.js && npm ci && npm run build"
+  command = "node netlify-build-debug.js && rm -f package-lock.json && npm install && npm run build"
   publish = "out"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
 
 
 [functions]

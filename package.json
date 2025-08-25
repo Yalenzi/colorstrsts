@@ -3,6 +3,10 @@
   "version": "2.0.0",
   "description": "Advanced Color Testing System for Drug and Psychoactive Substance Detection - نظام اختبارات الألوان المتقدم للكشف عن المخدرات والمؤثرات العقلية",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "dev:static": "next dev",
@@ -66,7 +70,8 @@
     "check-deps": "node check-dependencies.js",
     "fix-deps": "node fix-dependencies.js",
     "debug-build": "node netlify-build-debug.js",
-    "emergency-fix": "node emergency-build-fix.js"
+    "emergency-fix": "node emergency-build-fix.js",
+    "fix-package-lock": "node fix-package-lock.js"
   },
   "dependencies": {
     "@capacitor/android": "^7.3.0",
