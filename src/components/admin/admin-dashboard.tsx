@@ -5,22 +5,34 @@ import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
 import { getChemicalTestsLocal, initializeLocalStorage } from '@/lib/local-data-service';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+
+// Core Management Components
 import { ReportsSystem } from './reports-system';
 import { DatabaseManagement } from './database-management';
 import { ExcelManagement } from './excel-management';
-import { TestsManagement } from './tests-management';
+import { EnhancedTestsManagement } from './EnhancedTestsManagement';
 import NewTestsManagement from './NewTestsManagement';
+import { UserManagement } from './UserManagement';
+
+// Advanced Management Components
 import { ColorResultsManagement } from './color-results-management';
 import { SubscriptionManagement } from './SubscriptionManagement';
 import SubscriptionSettingsWrapper from './SubscriptionSettingsWrapper';
-import { UserManagement } from './UserManagement';
+import { SubscriptionPlansManagement } from './SubscriptionPlansManagement';
+import { TestStepsManagement } from './TestStepsManagement';
+import { TextEditorManagement } from './TextEditorManagement';
+
+// System Components
 import { FirebaseConnectionTest } from './FirebaseConnectionTest';
 import FirebaseDebugger from './FirebaseDebugger';
 import { STCPaySettings } from './STCPaySettings';
 import { UsageChart } from './UsageChart';
-import { TestStepsManagement } from './TestStepsManagement';
-import { TextEditorManagement } from './TextEditorManagement';
-import { SubscriptionPlansManagement } from './SubscriptionPlansManagement';
+
+// Utilities
 import { exportTests } from '@/lib/firebase-tests';
 import {
   ChartBarIcon,
@@ -78,6 +90,13 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
       </div>
     );
   }
+
+  const isRTL = lang === 'ar';
+  const t = getTranslationsSync(lang) || {};
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const isRTL = lang === 'ar';
+  const t = getTranslationsSync(lang) || {};
 
   const [stats, setStats] = useState<DashboardStats>({
     totalTests: 0,

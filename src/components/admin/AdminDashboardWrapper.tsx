@@ -7,8 +7,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-// Import a safe, simple AdminDashboard component
-import { SimpleAdminDashboard } from './simple-admin-dashboard';
+// Import comprehensive AdminDashboard component
+import { ComprehensiveAdminDashboard } from './comprehensive-admin-dashboard';
 
 interface AdminDashboardWrapperProps {
   lang: Language;
@@ -174,14 +174,14 @@ export default function AdminDashboardWrapper({ lang }: AdminDashboardWrapperPro
     // Use fallback lang instead of showing error
     return (
       <AdminDashboardErrorBoundary isRTL={fallbackLang === 'ar'}>
-        <SimpleAdminDashboard lang={fallbackLang} />
+        <ComprehensiveAdminDashboard lang={fallbackLang} />
       </AdminDashboardErrorBoundary>
     );
   }
 
   return (
     <AdminDashboardErrorBoundary isRTL={isRTL}>
-      <SimpleAdminDashboard lang={safeLang} />
+      <ComprehensiveAdminDashboard lang={safeLang} />
     </AdminDashboardErrorBoundary>
   );
 }
