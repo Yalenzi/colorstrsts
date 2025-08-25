@@ -5,18 +5,13 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-
-
-[functions]
-  directory = "netlify/functions"
-
-[build.environment]
-  NODE_VERSION = "18"
-  NPM_VERSION = "10"
   CI = "true"
   NODE_ENV = "production"
   NEXT_TELEMETRY_DISABLED = "1"
   NETLIFY = "true"
+
+[functions]
+  directory = "netlify/functions"
 
 # Disable Next.js plugin for static export
 # This is handled by static export instead

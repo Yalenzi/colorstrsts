@@ -71,7 +71,8 @@
     "fix-deps": "node fix-dependencies.js",
     "debug-build": "node netlify-build-debug.js",
     "emergency-fix": "node emergency-build-fix.js",
-    "fix-package-lock": "node fix-package-lock.js"
+    "fix-package-lock": "node fix-package-lock.js",
+    "validate-netlify": "node validate-netlify-config.js"
   },
   "dependencies": {
     "@capacitor/android": "^7.3.0",
