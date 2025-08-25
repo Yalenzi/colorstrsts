@@ -64,7 +64,9 @@
     "cleanup:npm": "node scripts/cleanup-project.js --npm",
     "postinstall": "node check-dependencies.js",
     "check-deps": "node check-dependencies.js",
-    "fix-deps": "node fix-dependencies.js"
+    "fix-deps": "node fix-dependencies.js",
+    "debug-build": "node netlify-build-debug.js",
+    "emergency-fix": "node emergency-build-fix.js"
   },
   "dependencies": {
     "@capacitor/android": "^7.3.0",
