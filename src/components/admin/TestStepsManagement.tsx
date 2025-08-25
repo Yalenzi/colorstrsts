@@ -27,9 +27,8 @@ import {
   BookOpenIcon,
   FunnelIcon
 } from '@heroicons/react/24/outline';
-import { databaseColorTestService } from '@/lib/database-color-test-service';
-import { firebaseTestsService } from '@/lib/firebase-tests-service';
-import toast from 'react-hot-toast';
+import { getChemicalTestsLocal } from '@/lib/local-data-service';
+import { toast } from 'sonner';
 
 interface TestStepsManagementProps {
   lang: Language;
@@ -167,12 +166,13 @@ export function TestStepsManagement({ lang }: TestStepsManagementProps) {
 
   const loadData = async () => {
     try {
+      console.log('🔄 Loading test steps from local database...');
       setLoading(true);
 
-      // Load tests from database service
-      const allTests = await databaseColorTestService.getAllTests();
+      // تحميل الاختبارات من الملف المحلي
+      const allTests = await getChemicalTestsLocal();
 
-      // Transform to ChemicalTestStep format
+      // تحويل إلى تنسيق ChemicalTestStep
       const testSteps: ChemicalTestStep[] = allTests.map((test, index) => ({
         id: test.id,
         method_name: test.method_name || `Test ${index + 1}`,
@@ -197,7 +197,7 @@ export function TestStepsManagement({ lang }: TestStepsManagementProps) {
       }));
 
       setTests(testSteps);
-      console.log(`📋 Loaded ${testSteps.length} chemical test procedures`);
+      console.log(`✅ Loaded ${testSteps.length} chemical test procedures from local database`);
 
     } catch (error) {
       console.error('Error loading test procedures:', error);
@@ -237,17 +237,21 @@ export function TestStepsManagement({ lang }: TestStepsManagementProps) {
         created_by: editingTest?.created_by || 'admin'
       };
 
+      let updatedTests;
       if (editingTest) {
         // Update existing test
-        const updatedTests = tests.map(test => test.id === editingTest.id ? newTest : test);
-        setTests(updatedTests);
+        updatedTests = tests.map(test => test.id === editingTest.id ? newTest : test);
         toast.success(lang === 'ar' ? 'تم تحديث الاختبار بنجاح' : 'Test updated successfully');
       } else {
         // Add new test
-        const updatedTests = [...tests, newTest];
-        setTests(updatedTests);
+        updatedTests = [...tests, newTest];
         toast.success(lang === 'ar' ? 'تم إضافة الاختبار بنجاح' : 'Test added successfully');
       }
+
+      // حفظ في localStorage
+      setTests(updatedTests);
+      localStorage.setItem('chemical_tests_steps_admin', JSON.stringify(updatedTests));
+      console.log('💾 Test steps saved to localStorage:', updatedTests.length);
 
       // Reset form
       setFormData({

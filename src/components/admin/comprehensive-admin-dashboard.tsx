@@ -46,7 +46,8 @@ import { ColorResultsManagement } from './color-results-management';
 import { SubscriptionManagement } from './SubscriptionManagement';
 import SubscriptionSettingsWrapper from './SubscriptionSettingsWrapper';
 import { SubscriptionPlansManagement } from './SubscriptionPlansManagement';
-import { TestStepsManagement } from './TestStepsManagement';
+import { EnhancedTestStepsManagement } from './EnhancedTestStepsManagement';
+import { ChemicalComponentsManagement } from './ChemicalComponentsManagement';
 import { TextEditorManagement } from './TextEditorManagement';
 
 // System Components
@@ -103,7 +104,8 @@ export function ComprehensiveAdminDashboard({ lang }: ComprehensiveAdminDashboar
     
     // Advanced Management
     { id: 'colors', label: 'Color Results', labelAr: 'نتائج الألوان', icon: SwatchIcon, category: 'advanced', component: ColorResultsManagement },
-    { id: 'test-steps', label: 'Test Steps', labelAr: 'خطوات الاختبار', icon: ListBulletIcon, category: 'advanced', component: TestStepsManagement },
+    { id: 'test-steps', label: 'Test Steps', labelAr: 'خطوات الاختبار', icon: ListBulletIcon, category: 'advanced', component: EnhancedTestStepsManagement },
+    { id: 'chemical-components', label: 'Chemical Components', labelAr: 'المكونات الكيميائية', icon: BeakerIcon, category: 'advanced', component: ChemicalComponentsManagement },
     { id: 'text-editor', label: 'Text Editor', labelAr: 'محرر النصوص', icon: PencilSquareIcon, category: 'advanced', component: TextEditorManagement },
     { id: 'subscription-plans', label: 'Subscription Plans', labelAr: 'خطط الاشتراك', icon: BanknotesIcon, category: 'advanced', component: SubscriptionPlansManagement },
     { id: 'subscription-settings', label: 'Subscription Settings', labelAr: 'إعدادات الاشتراك', icon: Cog6ToothIcon, category: 'advanced', component: SubscriptionSettingsWrapper },

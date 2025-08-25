@@ -11,8 +11,8 @@ import {
   EyeIcon,
   SwatchIcon
 } from '@heroicons/react/24/outline';
-import { adminDataService } from '@/lib/admin-data-service';
-import toast from 'react-hot-toast';
+import { getChemicalTestsLocal } from '@/lib/local-data-service';
+import { toast } from 'sonner';
 
 interface ColorResult {
   id: string;
@@ -53,23 +53,49 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
 
   const loadData = async () => {
     try {
-      // Use the enhanced admin data service
-      const [colorResults, tests] = await Promise.all([
-        adminDataService.getColorResults(),
-        adminDataService.getChemicalTests()
-      ]);
+      console.log('🔄 Loading color results data...');
+
+      // تحميل الاختبارات من الملف المحلي
+      const testsData = await getChemicalTestsLocal();
+      setTests(testsData);
+
+      // تحميل نتائج الألوان من localStorage أو إنشاء بيانات تجريبية
+      const savedResults = localStorage.getItem('color_results_admin');
+      let colorResults: ColorResult[] = [];
+
+      if (savedResults) {
+        colorResults = JSON.parse(savedResults);
+        console.log('📦 Loaded color results from localStorage:', colorResults.length);
+      } else {
+        // إنشاء بيانات تجريبية من الاختبارات
+        colorResults = testsData.slice(0, 10).flatMap((test, index) =>
+          test.color_results?.slice(0, 3).map((result, resultIndex) => ({
+            id: `${test.id}-${resultIndex}`,
+            test_id: test.id,
+            color_result: result.color || 'Unknown',
+            color_result_ar: result.color_ar || result.color || 'غير معروف',
+            color_hex: result.color_hex || '#808080',
+            possible_substance: result.substance || 'Unknown substance',
+            possible_substance_ar: result.substance_ar || result.substance || 'مادة غير معروفة',
+            confidence_level: result.confidence || 'medium'
+          })) || []
+        );
+
+        // حفظ البيانات التجريبية
+        localStorage.setItem('color_results_admin', JSON.stringify(colorResults));
+        console.log('🆕 Created sample color results:', colorResults.length);
+      }
 
       setColorResults(colorResults);
-      setTests(tests);
 
-      console.log('✅ Loaded data:', {
+      console.log('✅ Color results loaded successfully:', {
         colorResults: colorResults.length,
-        tests: tests.length
+        tests: testsData.length
       });
 
     } catch (error) {
-      console.error('Error loading data:', error);
-      toast.error('خطأ في تحميل البيانات | Error loading data');
+      console.error('❌ Error loading color results data:', error);
+      toast.error('خطأ في تحميل بيانات نتائج الألوان');
     } finally {
       setLoading(false);
     }
@@ -78,6 +104,8 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
   const saveColorResults = (updatedResults: ColorResult[]) => {
     setColorResults(updatedResults);
     localStorage.setItem('color_results_admin', JSON.stringify(updatedResults));
+    console.log('💾 Color results saved to localStorage:', updatedResults.length);
+    toast.success('تم حفظ نتائج الألوان بنجاح');
   };
 
   const handleAddResult = () => {
@@ -93,9 +121,8 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
   const handleDeleteResult = async (resultId: string) => {
     if (confirm(lang === 'ar' ? 'هل أنت متأكد من حذف هذه النتيجة؟' : 'Are you sure you want to delete this result?')) {
       try {
-        await adminDataService.deleteColorResult(resultId);
         const updatedResults = colorResults.filter(result => result.id !== resultId);
-        setColorResults(updatedResults);
+        saveColorResults(updatedResults);
         toast.success(lang === 'ar' ? 'تم حذف النتيجة' : 'Result deleted');
       } catch (error) {
         console.error('Error deleting result:', error);
@@ -108,17 +135,22 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
     try {
       let updatedResults;
       if (editingResult) {
-        await adminDataService.updateColorResult(resultData);
+        // تحديث نتيجة موجودة
         updatedResults = colorResults.map(result =>
           result.id === editingResult.id ? resultData : result
         );
         toast.success(lang === 'ar' ? 'تم تحديث النتيجة' : 'Result updated');
       } else {
-        await adminDataService.addColorResult(resultData);
-        updatedResults = [...colorResults, resultData];
+        // إضافة نتيجة جديدة
+        const newResult = {
+          ...resultData,
+          id: `result-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        };
+        updatedResults = [...colorResults, newResult];
         toast.success(lang === 'ar' ? 'تم إضافة النتيجة' : 'Result added');
       }
-      setColorResults(updatedResults);
+
+      saveColorResults(updatedResults);
       setShowModal(false);
       setEditingResult(null);
     } catch (error) {
