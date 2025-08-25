@@ -1,74 +1,68 @@
-# إصلاح خطأ Babel في Netlify - Babel Netlify Build Fix
+# إصلاح خطأ البناء في Netlify - Netlify Build Fix
 
-## المشكلة - Problem
-كان البناء يفشل في Netlify مع الخطأ التالي:
-The build was failing on Netlify with the following error:
+## المشاكل - Problems
+كان البناء يفشل في Netlify مع الأخطاء التالية:
+The build was failing on Netlify with the following errors:
 
+### المشكلة الأولى - First Issue:
 ```
 Error: Cannot find module '@babel/plugin-transform-runtime'
 ```
 
-## السبب - Root Cause
-1. كان `@babel/plugin-transform-runtime` موجود في `devDependencies` فقط
-2. لم يكن هناك ملف `babel.config.js` لتكوين Babel بشكل صحيح
-3. Next.js كان يحاول استخدام Babel ولكن لم يجد التكوين المطلوب
+### المشكلة الثانية - Second Issue:
+```
+Support for the experimental syntax 'importAttributes' isn't currently enabled
+```
 
-The issue was:
-1. `@babel/plugin-transform-runtime` was only in `devDependencies`
-2. No `babel.config.js` file existed to properly configure Babel
-3. Next.js was trying to use Babel but couldn't find the required configuration
+### المشكلة الثالثة - Third Issue:
+```
+"next/font" requires SWC although Babel is being used due to a custom babel config
+```
+
+## السبب - Root Cause
+1. Next.js 15 يحتاج SWC لـ `next/font` ولكن وجود `babel.config.js` يجبره على استخدام Babel
+2. الـ syntax الجديد `importAttributes` غير مدعوم في إعدادات Babel القديمة
+3. تعارض بين Babel و SWC في Next.js 15
+
+The issues were:
+1. Next.js 15 requires SWC for `next/font` but `babel.config.js` forces Babel usage
+2. New `importAttributes` syntax not supported in older Babel configurations
+3. Conflict between Babel and SWC in Next.js 15
 
 ## الحل المطبق - Applied Solution
 
-### 1. إنشاء ملف babel.config.js - Created babel.config.js
-تم إنشاء ملف `babel.config.js` مع التكوين الصحيح:
-Created `babel.config.js` with proper configuration:
+### 1. إزالة تكوين Babel - Removed Babel Configuration
+تم إزالة ملف `babel.config.js` لتجنب التعارض مع SWC:
+Removed `babel.config.js` file to avoid conflict with SWC:
+
+- حذف `babel.config.js`
+- الاعتماد على SWC الافتراضي في Next.js 15
+- Deleted `babel.config.js`
+- Rely on default SWC in Next.js 15
+
+### 2. تفعيل SWC صراحة - Explicitly Enable SWC
+تم تحديث `next.config.js` لتفعيل SWC:
+Updated `next.config.js` to enable SWC:
 
 ```javascript
-module.exports = {
-  presets: [
-    ['@babel/preset-env', {
-      targets: {
-        node: 'current',
-      },
-    }],
-    ['@babel/preset-react', {
-      runtime: 'automatic',
-    }],
-    '@babel/preset-typescript',
-  ],
-  plugins: [
-    ['@babel/plugin-transform-runtime', {
-      regenerator: true,
-      corejs: false,
-      helpers: true,
-      useESModules: false,
-    }],
-  ],
-  env: {
-    production: {
-      plugins: [
-        ['@babel/plugin-transform-runtime', {
-          regenerator: true,
-          corejs: false,
-          helpers: true,
-          useESModules: false,
-        }],
-      ],
-    },
-  },
-};
+// Force SWC usage instead of Babel
+swcMinify: true,
+compiler: {
+  // Enable SWC transforms
+  removeConsole: process.env.NODE_ENV === 'production',
+},
 ```
 
-### 2. نقل تبعيات Babel إلى dependencies - Moved Babel Dependencies
-تم نقل جميع تبعيات Babel من `devDependencies` إلى `dependencies`:
-Moved all Babel dependencies from `devDependencies` to `dependencies`:
+### 3. نقل تبعيات Babel إلى devDependencies - Moved Babel to devDependencies
+تم نقل جميع تبعيات Babel إلى `devDependencies` (للاختبارات فقط):
+Moved all Babel dependencies to `devDependencies` (for testing only):
 
 - `@babel/core`
 - `@babel/plugin-transform-runtime`
 - `@babel/preset-env`
 - `@babel/preset-react`
 - `@babel/preset-typescript`
+- `@babel/plugin-syntax-import-attributes`
 
 ## الخطوات التالية - Next Steps
 

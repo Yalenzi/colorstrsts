@@ -61,6 +61,13 @@ const nextConfig = {
     tsconfigPath: './tsconfig.build.json',
   },
 
+  // Force SWC usage instead of Babel
+  swcMinify: true,
+  compiler: {
+    // Enable SWC transforms
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+
   // Optimization for static export
   // experimental: {
   //   esmExternals: false
