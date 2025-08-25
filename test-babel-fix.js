@@ -1,26 +1,40 @@
 #!/usr/bin/env node
 
-console.log('🔧 Testing SWC Configuration Fix...');
-console.log('🔧 اختبار إصلاح تكوين SWC...');
+console.log('🔧 Testing SWC-Only Configuration...');
+console.log('🔧 اختبار تكوين SWC فقط...');
 
 const fs = require('fs');
 const path = require('path');
 
-// Check if babel.config.js exists with correct content
+// Check that babel.config.js is completely removed
 const babelConfigPath = path.join(__dirname, 'babel.config.js');
-if (fs.existsSync(babelConfigPath)) {
-  const babelConfig = fs.readFileSync(babelConfigPath, 'utf8');
-  if (babelConfig.includes('next/babel')) {
-    console.log('✅ babel.config.js exists with next/babel preset');
-    console.log('✅ ملف babel.config.js موجود مع next/babel preset');
-  } else {
-    console.log('⚠️ babel.config.js exists but may have wrong configuration');
-    console.log('⚠️ ملف babel.config.js موجود لكن قد يحتوي تكوين خاطئ');
-  }
+if (!fs.existsSync(babelConfigPath)) {
+  console.log('✅ babel.config.js removed - SWC will be used');
+  console.log('✅ babel.config.js محذوف - سيتم استخدام SWC');
 } else {
-  console.log('❌ babel.config.js missing');
-  console.log('❌ ملف babel.config.js مفقود');
+  console.log('❌ babel.config.js still exists - will conflict with next/font');
+  console.log('❌ babel.config.js ما زال موجود - سيتعارض مع next/font');
+  console.log('🔧 Please delete babel.config.js completely');
+  console.log('🔧 يرجى حذف babel.config.js نهائياً');
   process.exit(1);
+}
+
+// Check for other babel config files
+const otherBabelFiles = ['.babelrc', '.babelrc.js', '.babelrc.json', 'babel.config.json'];
+let foundOtherBabelFiles = false;
+
+otherBabelFiles.forEach(file => {
+  const filePath = path.join(__dirname, file);
+  if (fs.existsSync(filePath)) {
+    console.log(`⚠️ Found ${file} - may conflict with SWC`);
+    console.log(`⚠️ وجد ${file} - قد يتعارض مع SWC`);
+    foundOtherBabelFiles = true;
+  }
+});
+
+if (!foundOtherBabelFiles) {
+  console.log('✅ No other Babel config files found');
+  console.log('✅ لم يتم العثور على ملفات تكوين Babel أخرى');
 }
 
 // Check next.config.js for proper configuration
@@ -57,24 +71,26 @@ if (fs.existsSync(packageJsonPath)) {
   console.log('\n📦 Checking dependency configuration...');
   console.log('📦 فحص تكوين التبعيات...');
 
-  // Check that @babel/plugin-transform-runtime is in dependencies (required for build)
-  const transformRuntimeInProd = packageJson.dependencies && packageJson.dependencies['@babel/plugin-transform-runtime'];
-  if (transformRuntimeInProd) {
-    console.log('✅ @babel/plugin-transform-runtime in dependencies (required)');
-    console.log('✅ @babel/plugin-transform-runtime في dependencies (مطلوب)');
+  // Check that NO Babel dependencies are in production dependencies
+  const babelDepsInProd = packageJson.dependencies && Object.keys(packageJson.dependencies).filter(dep => dep.startsWith('@babel/'));
+  if (babelDepsInProd.length === 0) {
+    console.log('✅ No Babel dependencies in production (perfect for SWC)');
+    console.log('✅ لا توجد تبعيات Babel في الإنتاج (مثالي لـ SWC)');
   } else {
-    console.log('❌ @babel/plugin-transform-runtime missing from dependencies');
-    console.log('❌ @babel/plugin-transform-runtime مفقود من dependencies');
+    console.log('⚠️ Found Babel dependencies in production:', babelDepsInProd);
+    console.log('⚠️ وجدت تبعيات Babel في الإنتاج:', babelDepsInProd);
+    console.log('💡 Consider moving them to devDependencies');
+    console.log('💡 فكر في نقلها إلى devDependencies');
   }
 
-  // Check other Babel deps are in devDependencies
-  const otherBabelDepsInProd = packageJson.dependencies && Object.keys(packageJson.dependencies).filter(dep => dep.startsWith('@babel/') && dep !== '@babel/plugin-transform-runtime');
-  if (otherBabelDepsInProd.length === 0) {
-    console.log('✅ Other Babel dependencies not in production (good)');
-    console.log('✅ باقي تبعيات Babel ليست في الإنتاج (جيد)');
+  // Check that Babel deps are in devDependencies (for testing)
+  const babelDepsInDev = packageJson.devDependencies && Object.keys(packageJson.devDependencies).filter(dep => dep.startsWith('@babel/'));
+  if (babelDepsInDev.length > 0) {
+    console.log(`✅ Found ${babelDepsInDev.length} Babel dependencies in devDependencies (good for testing)`);
+    console.log(`✅ وجد ${babelDepsInDev.length} تبعيات Babel في devDependencies (جيد للاختبارات)`);
   } else {
-    console.log('⚠️ Found other Babel dependencies in production:', otherBabelDepsInProd);
-    console.log('⚠️ وجدت تبعيات Babel أخرى في الإنتاج:', otherBabelDepsInProd);
+    console.log('ℹ️ No Babel dependencies in devDependencies');
+    console.log('ℹ️ لا توجد تبعيات Babel في devDependencies');
   }
 
   // Check that Babel deps are in devDependencies
@@ -87,16 +103,16 @@ if (fs.existsSync(packageJsonPath)) {
     console.log('⚠️ لا توجد تبعيات Babel في devDependencies');
   }
 
-  console.log('\n🎉 Configuration looks good for Next.js with minimal Babel!');
-  console.log('🎉 التكوين يبدو جيد لـ Next.js مع Babel بسيط!');
+  console.log('\n🎉 Configuration perfect for SWC-only Next.js!');
+  console.log('🎉 التكوين مثالي لـ Next.js مع SWC فقط!');
   console.log('\n📝 Next steps:');
   console.log('📝 الخطوات التالية:');
   console.log('1. Run: npm install');
-  console.log('2. Run: npm run build');
-  console.log('3. Deploy to Netlify');
+  console.log('2. Run: npm run build (should work with next/font)');
+  console.log('3. Deploy to Netlify (SWC will handle everything)');
   console.log('1. شغل: npm install');
-  console.log('2. شغل: npm run build');
-  console.log('3. انشر على Netlify');
+  console.log('2. شغل: npm run build (يجب أن يعمل مع next/font)');
+  console.log('3. انشر على Netlify (SWC سيتعامل مع كل شيء)');
 } else {
   console.log('❌ package.json not found');
   console.log('❌ ملف package.json غير موجود');

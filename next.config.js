@@ -62,7 +62,7 @@ const nextConfig = {
   },
 
   // SWC is enabled by default in Next.js 15
-  // Using minimal babel config to ensure compatibility
+  // No babel config needed - SWC handles everything including next/font
 
   // Optimization for static export
   // experimental: {
