@@ -1,5 +1,5 @@
 [build]
-  command = "node remove-all-babel-configs.js && node fix-jsx-runtime.js && node netlify-build-debug.js && rm -f package-lock.json && npm install && npm run build"
+  command = "npm install && npm run build"
   publish = "out"
 
 [build.environment]

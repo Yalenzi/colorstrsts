@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:static": "next dev",
-    "build": "cross-env NODE_ENV=production NETLIFY=true next build",
+    "build": "next build",
     "build:next": "next build",
     "build:static": "cross-env NODE_ENV=production next build",
     "build:netlify": "node build-netlify.js",
