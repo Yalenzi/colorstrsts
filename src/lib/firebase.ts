@@ -82,8 +82,23 @@ try {
 export { database };
 
 // Initialize Analytics (optional, only in browser) - only if measurement ID is provided and supported
-export const analytics = (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID)
-  ? await (async () => (await isAnalyticsSupported()) ? getAnalytics(app) : null)()
-  : null;
+// تهيئة Analytics (اختياري، فقط في المتصفح) - فقط إذا تم توفير معرف القياس ومدعوم
+let analytics: any = null;
+
+// Initialize analytics asynchronously to avoid top-level await
+if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
+  isAnalyticsSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+      console.log('✅ Firebase Analytics initialized');
+    } else {
+      console.log('⚠️ Firebase Analytics not supported in this environment');
+    }
+  }).catch((error) => {
+    console.error('❌ Error initializing Firebase Analytics:', error);
+  });
+}
+
+export { analytics };
 
 export default app;
