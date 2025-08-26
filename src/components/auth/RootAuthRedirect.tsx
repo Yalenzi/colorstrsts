@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/auth/EnhancedAuthProvider';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface RootAuthRedirectProps {
