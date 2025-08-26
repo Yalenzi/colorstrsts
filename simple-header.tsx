@@ -23,7 +23,7 @@ interface SimpleHeaderProps {
 
 export function SimpleHeader({ lang }: SimpleHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const t = getTranslationsSync(lang) || {};
@@ -39,7 +39,7 @@ export function SimpleHeader({ lang }: SimpleHeaderProps) {
   const handleSignOut = async () => {
     try {
       if (user) {
-        await signOut();
+        await logout();
       }
       router.push(`/${lang}`);
     } catch (error) {
