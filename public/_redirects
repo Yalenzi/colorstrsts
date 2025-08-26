@@ -1,6 +1,9 @@
 # Netlify redirects for Color Testing Drug Detection App
 # إعادة توجيه Netlify لتطبيق اختبار الألوان
 
+# Firebase Auth iframe redirect
+/__/auth/iframe https://colorstests-573ef.firebaseapp.com/__/auth/iframe 200
+
 # Domain redirects - redirect www to non-www and old domain to new domain
 https://www.colorstest.com/* https://colorstest.com/:splat 301!
 https://color-testing-drug.netlify.app/* https://colorstest.com/:splat 301!

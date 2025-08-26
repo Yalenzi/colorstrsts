@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter, Cairo } from 'next/font/google';
 import { Providers } from '@/components/safe-providers';
 import { Toaster } from 'react-hot-toast';
-import { FirebaseAuthDomainFixer } from '@/components/auth/FirebaseAuthDomainFixer';
 
 import './globals.css';
 import '../styles/print.css';
@@ -150,7 +149,6 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Providers>
-          <FirebaseAuthDomainFixer />
           <div id="root">
             {children}
           </div>

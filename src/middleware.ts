@@ -120,6 +120,7 @@ export function middleware(request: NextRequest) {
       "https://api.stcpay.com.sa " +
       "https://*.firebaseio.com " +
       "https://*.googleapis.com " +
+      "https://apis.google.com " +
       "https://*.firebaseapp.com " +
       "https://firebaseinstallations.googleapis.com " +
       "https://firebaseremoteconfig.googleapis.com " +
