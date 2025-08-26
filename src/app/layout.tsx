@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Cairo } from 'next/font/google';
 import { Providers } from '@/components/safe-providers';
 import { Toaster } from 'react-hot-toast';
+import { CSPOverride } from '@/components/seo/CSPOverride';
 
 import './globals.css';
 import '../styles/print.css';
@@ -149,6 +150,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Providers>
+          <CSPOverride />
           <div id="root">
             {children}
           </div>

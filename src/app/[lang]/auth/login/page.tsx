@@ -3,6 +3,7 @@ import { Language } from '@/types';
 import { getTranslations } from '@/lib/translations';
 import { AuthPage } from '@/components/pages/login-page';
 import { AuthGuard } from '@/components/auth/AuthGuard';
+import { AuthRedirectHandler } from '@/components/auth/AuthRedirectHandler';
 
 // Generate static params for supported languages
 export async function generateStaticParams() {
@@ -34,6 +35,7 @@ export default async function Login({ params }: LoginPageProps) {
   const { lang } = await params;
   return (
     <AuthGuard lang={lang} requireAuth={false}>
+      <AuthRedirectHandler lang={lang} />
       <AuthPage lang={lang} />
     </AuthGuard>
   );

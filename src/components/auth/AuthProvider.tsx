@@ -318,13 +318,48 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // فحص نتيجة redirect عند تحميل الصفحة
     const checkRedirectResult = async () => {
       try {
-        const { getRedirectResult } = await import('firebase/auth');
+        console.log('🔄 Checking redirect result...');
         const result = await getRedirectResult(auth);
         if (result) {
           console.log('✅ Redirect sign-in successful:', result.user.email);
+          console.log('User details:', {
+            uid: result.user.uid,
+            email: result.user.email,
+            displayName: result.user.displayName
+          });
+
+          // Create secure session cookie via Netlify Function
+          try {
+            const idToken = await result.user.getIdToken(true);
+            await fetch('/api/sessionLogin', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ idToken })
+            });
+            console.log('✅ Session cookie created successfully');
+          } catch (e) {
+            console.warn('⚠️ Failed to create session cookie:', e);
+          }
+        } else {
+          console.log('ℹ️ No redirect result found');
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('❌ Redirect result error:', error);
+        console.error('Error details:', {
+          code: error.code,
+          message: error.message,
+          stack: error.stack
+        });
+
+        // معالجة أخطاء محددة
+        if (error.code === 'auth/internal-error') {
+          console.warn('⚠️ Internal error - possibly CSP or configuration issue');
+          // لا نرمي خطأ هنا لتجنب كسر التطبيق
+        } else if (error.code === 'auth/network-request-failed') {
+          console.warn('⚠️ Network error during redirect');
+        } else {
+          console.error('Unexpected redirect error:', error);
+        }
       }
     };
 
