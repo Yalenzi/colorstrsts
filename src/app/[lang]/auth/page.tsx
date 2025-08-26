@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Language } from '@/types';
 import { getTranslations } from '@/lib/translations';
 import { AuthPage } from '@/components/pages/login-page';
+import { AuthRedirectHandler } from '@/components/auth/AuthRedirectHandler';
 
 // Static generation compatible with output: export
 // Client-side auth will be handled by components
@@ -34,5 +35,10 @@ export async function generateMetadata({
 
 export default async function Auth({ params }: AuthPageProps) {
   const { lang } = await params;
-  return <AuthPage lang={lang} />;
+  return (
+    <>
+      <AuthRedirectHandler lang={lang} />
+      <AuthPage lang={lang} />
+    </>
+  );
 }

@@ -36,36 +36,42 @@ export function GoogleSignInRedirectButton({
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    
+
     try {
       console.log('🔄 Starting Google Sign-In with redirect...');
-      
+      console.log('🔍 Current URL before redirect:', window.location.href);
+
       const provider = new GoogleAuthProvider();
-      
+
       // إعداد إضافي لـ Google Provider
       provider.addScope('email');
       provider.addScope('profile');
-      
-      // إعداد معاملات مخصصة
+
+      // إعداد معاملات مخصصة مع redirect URL صريح
       provider.setCustomParameters({
         prompt: 'select_account',
-        access_type: 'offline'
+        access_type: 'offline',
+        redirect_uri: `${window.location.origin}/${lang}/auth/login`
       });
 
       console.log('🔄 Redirecting to Google...');
-      
+      console.log('🔍 Expected return URL:', `${window.location.origin}/${lang}/auth/login`);
+
+      // حفظ الصفحة الحالية في localStorage للعودة إليها
+      localStorage.setItem('google_signin_return_url', window.location.href);
+
       // استخدام redirect بدلاً من popup لتجنب مشاكل CSP
       await signInWithRedirect(auth, provider);
-      
+
       // لن نصل هنا لأن الصفحة ستعيد التوجيه
-      
+
     } catch (error: any) {
       console.error('❌ Google Sign-In redirect error:', error);
-      
+
       setLoading(false);
-      
+
       const errorMessage = error.message || texts.error;
-      
+
       if (onError) {
         onError(errorMessage);
       }
