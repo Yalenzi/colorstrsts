@@ -1,6 +1,12 @@
 # Netlify redirects for Color Testing Drug Detection App
 # إعادة توجيه Netlify لتطبيق اختبار الألوان
 
+# Domain redirects - redirect www to non-www and old domain to new domain
+https://www.colorstest.com/* https://colorstest.com/:splat 301!
+https://color-testing-drug.netlify.app/* https://colorstest.com/:splat 301!
+http://colorstest.com/* https://colorstest.com/:splat 301!
+http://www.colorstest.com/* https://colorstest.com/:splat 301!
+
 # Main redirect from root to Arabic
 / /ar 302
 
