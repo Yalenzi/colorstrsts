@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '@/components/auth/EnhancedAuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { Language } from '@/types';
 

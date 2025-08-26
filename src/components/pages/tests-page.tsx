@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { TestCard } from '@/components/ui/test-card';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { SimpleTestAccessGuard } from '@/components/tests/SimpleTestAccessGuard';
-import { AuthProvider } from '@/components/auth/AuthProvider';
+
 import {
   BeakerIcon,
   MagnifyingGlassIcon,
@@ -447,9 +447,7 @@ function TestsPageContent({ lang }: TestsPageProps) {
 }
 
 export function TestsPage({ lang }: TestsPageProps) {
-  return (
-    <AuthProvider>
-      <TestsPageContent lang={lang} />
-    </AuthProvider>
-  );
+  return <TestsPageContent lang={lang} />;
 }
+
+export default TestsPage;

@@ -859,3 +859,5 @@ export function ImageAnalyzerPage({ lang }: ImageAnalyzerPageProps) {
     </div>
   );
 }
+
+export default ImageAnalyzerPage;

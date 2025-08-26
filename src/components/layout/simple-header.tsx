@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/ui/language-switcher';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
@@ -23,7 +23,7 @@ interface SimpleHeaderProps {
 
 export function SimpleHeader({ lang }: SimpleHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, signOut } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const t = getTranslationsSync(lang) || {};
@@ -39,7 +39,7 @@ export function SimpleHeader({ lang }: SimpleHeaderProps) {
   const handleSignOut = async () => {
     try {
       if (user) {
-        await logout();
+        await signOut();
       }
       router.push(`/${lang}`);
     } catch (error) {
@@ -98,7 +98,7 @@ export function SimpleHeader({ lang }: SimpleHeaderProps) {
                     <UserIcon className="h-3 w-3 text-primary-600 dark:text-primary-400" />
                   </div>
                   <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
-                    {user?.displayName || user?.email?.split('@')[0] || t?.navigation?.user || 'User'}
+                    {user?.full_name || user?.email?.split('@')[0] || t?.navigation?.user || 'User'}
                   </span>
                 </div>
                 

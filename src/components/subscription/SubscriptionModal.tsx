@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import { createCheckoutSession, subscriptionPlans } from '@/lib/tap-service';
 import { X, Crown, Check, Star, Zap } from 'lucide-react';
 

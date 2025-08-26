@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import { Language } from '@/types';
 
 interface SimpleTestAccessGuardProps {

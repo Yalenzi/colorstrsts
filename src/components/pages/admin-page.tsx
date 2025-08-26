@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
 import { DataService } from '@/lib/data-service';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import AdminDashboardWrapper from '@/components/admin/AdminDashboardWrapper';
@@ -273,3 +273,5 @@ export function AdminPage({ lang }: AdminPageProps) {
     </div>
   );
 }
+
+export default AdminPage;

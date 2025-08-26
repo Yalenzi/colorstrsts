@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useSubscriptionSettings } from '@/hooks/useSubscriptionSettings';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/providers';
 import { Badge } from '@/components/ui/badge';
 import { LockOpenIcon, LockClosedIcon, StarIcon } from '@heroicons/react/24/outline';
 

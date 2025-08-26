@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Language } from '@/types';
-import { useAuth } from '@/components/auth/EnhancedAuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import { EnhancedLoginForm } from '@/components/auth/EnhancedLoginForm';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
@@ -94,3 +94,5 @@ export function AuthPage({ lang }: AuthPageProps) {
     </div>
   );
 }
+
+export default AuthPage;

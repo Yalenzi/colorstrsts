@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Language } from '@/types';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 import { getTranslationsSync } from '@/lib/translations';
 import { Button } from '@/components/ui/button';
 import {

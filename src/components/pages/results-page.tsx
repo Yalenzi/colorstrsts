@@ -261,3 +261,5 @@ export function ResultsPage({ lang }: ResultsPageProps) {
     </div>
   );
 }
+
+export default ResultsPage;

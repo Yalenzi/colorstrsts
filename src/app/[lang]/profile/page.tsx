@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { Language } from '@/types';
 import { getAllTranslations } from '@/lib/translations';
 import UserProfile from '@/components/profile/UserProfile';
-import { AuthProvider } from '@/components/auth/AuthProvider';
 
 // Generate static params for supported languages
 export async function generateStaticParams() {
@@ -40,16 +39,14 @@ export default async function ProfilePage({ params }: PageProps) {
   const isRTL = lang === 'ar';
 
   return (
-    <AuthProvider>
-      <div className={`min-h-screen bg-gray-50 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-        <div className="container mx-auto px-4 py-8">
-          <UserProfile
-            translations={translations.profile || {}}
-            isRTL={isRTL}
-            lang={lang}
-          />
-        </div>
+    <div className={`min-h-screen bg-gray-50 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="container mx-auto px-4 py-8">
+        <UserProfile
+          translations={translations.profile || {}}
+          isRTL={isRTL}
+          lang={lang}
+        />
       </div>
-    </AuthProvider>
+    </div>
   );
 }

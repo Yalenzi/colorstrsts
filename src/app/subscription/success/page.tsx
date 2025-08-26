@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { CheckCircleIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/safe-providers';
 
 export default function SubscriptionSuccessPage() {
   const { refreshUserProfile } = useAuth();

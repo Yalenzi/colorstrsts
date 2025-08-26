@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useAuth } from '@/components/auth/EnhancedAuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import { Button } from '@/components/ui/button';
 
 export function AuthTest() {

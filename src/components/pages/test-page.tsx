@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Language } from '@/types';
-import { useAuth } from '@/components/auth/EnhancedAuthProvider';
+import { useAuth } from '@/components/providers';
 import { recordTestVisit } from '@/lib/firebase-user';
 
 import { getTestById, ChemicalTest } from '@/lib/local-data-service';
@@ -483,3 +483,5 @@ export function TestPage({ lang, testId }: TestPageProps) {
     </div>
   );
 }
+
+export default TestPage;

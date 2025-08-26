@@ -6,7 +6,7 @@ import { Language } from '@/types';
 import { SubscriptionPlan, SUBSCRIPTION_PLANS, UserSubscription } from '@/types/subscription';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 import { getUserSTCSubscription } from '@/lib/subscription-service';
 import { stcPayService } from '@/lib/stc-pay';
 import {

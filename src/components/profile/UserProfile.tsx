@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useAuth } from '@/components/providers';
 import { useForm } from 'react-hook-form';
 import { 
   getUserProfile, 
