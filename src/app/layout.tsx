@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Cairo } from 'next/font/google';
-import { AuthProvider } from '@/components/auth/EnhancedAuthProvider';
+import { EnhancedAuthProvider } from '@/components/auth/EnhancedAuthProvider';
 import { Toaster } from 'react-hot-toast';
 import { AnalyticsProvider } from '@/components/analytics/AnalyticsProvider';
 import './globals.css';
@@ -133,7 +133,7 @@ export default function RootLayout({
         className={`${inter.variable} ${cairo.variable} font-cairo antialiased`}
         suppressHydrationWarning
       >
-        <AuthProvider>
+        <EnhancedAuthProvider>
           <AnalyticsProvider>
             <div id="root">
               {children}
@@ -142,7 +142,7 @@ export default function RootLayout({
             <div id="toast-root" />
             <Toaster />
           </AnalyticsProvider>
-        </AuthProvider>
+        </EnhancedAuthProvider>
       </body>
     </html>
   );
