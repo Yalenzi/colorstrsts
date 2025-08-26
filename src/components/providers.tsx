@@ -1,9 +1,8 @@
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { ThemeProvider } from 'next-themes';
 
-// Minimal User type
+// Ultra minimal User type
 interface User {
   id: string;
   uid: string;
@@ -12,7 +11,7 @@ interface User {
   role: 'user' | 'admin';
 }
 
-// Minimal Auth Context
+// Ultra minimal Auth Context
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -36,7 +35,7 @@ export function useAuth() {
   return context;
 }
 
-// Minimal Auth Provider
+// Ultra minimal Auth Provider
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
@@ -83,7 +82,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshUser = async () => {
-    // No-op for minimal version
+    // No-op
   };
 
   const signInWithGoogle = async () => {
@@ -120,7 +119,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Language Context (minimal)
+// Language Context (ultra minimal)
 type Language = 'ar' | 'en';
 
 interface LanguageContextType {
@@ -161,20 +160,13 @@ function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Main Providers Component (minimal)
+// Main Providers Component (ultra minimal - NO external dependencies)
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem={false}
-      disableTransitionOnChange
-    >
-      <AuthProvider>
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <LanguageProvider>
+        {children}
+      </LanguageProvider>
+    </AuthProvider>
   );
 }
