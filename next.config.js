@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Next.js 12 configuration
   images: {
     domains: ['localhost'],
     unoptimized: true,
@@ -16,6 +17,8 @@ const nextConfig = {
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   },
+
+
   // Note: redirects, rewrites, and headers don't work with static export
   // These are completely disabled for static export builds
   ...(!(process.env.NETLIFY || process.env.NODE_ENV === 'production') && {
