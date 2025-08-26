@@ -18,15 +18,10 @@ export function ThemeToggle() {
   };
 
   return (
-    <Button variant="ghost" size="sm" className="w-9 h-9" onClick={toggleTheme}>
-    );
-  }
-
-  return (
     <Button
       variant="ghost"
       size="sm"
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      onClick={toggleTheme}
       className="w-9 h-9"
       title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
     >
