@@ -1,5 +1,5 @@
 [build]
-  command = "node custom-react-dom-fix.js && npm run build"
+  command = "node simple-fix.js && npm run build"
   publish = "out"
 
 [build.environment]
