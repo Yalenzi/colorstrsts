@@ -3,10 +3,8 @@ import { Language } from '@/types';
 import { getTranslations } from '@/lib/translations';
 import { AuthPage } from '@/components/pages/login-page';
 
-// Force dynamic rendering to avoid prerendering issues with client-side auth
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-export const revalidate = 0;
+// Static generation compatible with output: export
+// Client-side auth will be handled by components
 
 // Generate static params for supported languages
 export async function generateStaticParams() {
