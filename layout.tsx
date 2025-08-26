@@ -1,144 +1,74 @@
-import type { Metadata } from 'next';
-import { Inter, Cairo } from 'next/font/google';
-import { Providers } from '@/components/providers';
-import { Toaster } from 'react-hot-toast';
+import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
+import { Language } from '@/types';
+import { i18nConfig, getTextDirection, getFontFamily } from '@/lib/i18n';
+import { Providers } from '@/components/safe-providers';
+import { SimpleHeader as Header } from '@/components/layout/simple-header';
+import { Footer } from '@/components/layout/footer';
+import { Toaster } from '@/components/ui/toaster';
 
-import './globals.css';
-import '../styles/print.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const cairo = Cairo({
-  subsets: ['arabic', 'latin'],
-  variable: '--font-cairo',
-  display: 'swap',
-});
-
-export const metadata: Metadata = {
-  title: {
-    default: 'Color Testing for Drug and Psychoactive Substance Detection | اختبارات الألوان للكشف عن المخدرات والمؤثرات العقلية',
-    template: '%s | Color Testing System',
-  },
-  description: 'Advanced color testing system for drug and psychoactive substance detection using chemical reagents. نظام متقدم لاختبارات الألوان للكشف عن المخدرات والمؤثرات العقلية باستخدام الكواشف الكيميائية.',
-  keywords: [
-    'drug testing',
-    'color testing',
-    'chemical analysis',
-    'forensic science',
-    'اختبارات المخدرات',
-    'اختبارات الألوان',
-    'التحليل الكيميائي',
-    'العلوم الجنائية',
-  ],
-  authors: [
-    { name: 'Mohammed Nafa Al-Ruwaili' },
-    { name: 'Youssef Musayyir Al-Anzi' },
-  ],
-  creator: 'Mohammed Nafa Al-Ruwaili & Youssef Musayyir Al-Anzi',
-  publisher: 'Color Testing System',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  alternates: {
-    canonical: '/',
-    languages: {
-      'ar': '/ar',
-      'en': '/en',
-    },
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'ar_SA',
-    alternateLocale: 'en_US',
-    title: 'Color Testing for Drug Detection | اختبارات الألوان للكشف عن المخدرات',
-    description: 'Advanced color testing system for drug detection using chemical reagents.',
-    siteName: 'Color Testing System',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Color Testing System',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Color Testing for Drug Detection',
-    description: 'Advanced color testing system for drug detection using chemical reagents.',
-    images: ['/og-image.png'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: process.env.GOOGLE_VERIFICATION,
-  },
-};
-
-export default function RootLayout({
-  children,
-}: {
+interface LanguageLayoutProps {
   children: React.ReactNode;
-}) {
+  params: Promise<{ lang: Language }>;
+}
+
+export async function generateStaticParams() {
+  return i18nConfig.supportedLanguages.map((lang) => ({ lang }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: Language }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const isArabic = lang === 'ar';
+
+  return {
+    title: isArabic
+      ? 'اختبارات الألوان للكشف عن المخدرات والمؤثرات العقلية'
+      : 'Color Testing for Drug and Psychoactive Substance Detection',
+    description: isArabic
+      ? 'نظام متقدم لاختبار المواد والمؤثرات العقلية باستخدام الكواشف الكيميائية'
+      : 'Advanced system for drug and psychoactive substance testing using chemical reagents',
+    alternates: {
+      canonical: `/${lang}`,
+      languages: {
+        'ar': '/ar',
+        'en': '/en',
+      },
+    },
+    openGraph: {
+      locale: isArabic ? 'ar_SA' : 'en_US',
+      alternateLocale: isArabic ? 'en_US' : 'ar_SA',
+    },
+  };
+}
+
+export default async function LanguageLayout({
+  children,
+  params,
+}: LanguageLayoutProps) {
+  const { lang } = await params;
+  // Validate language parameter
+  if (!i18nConfig.supportedLanguages.includes(lang)) {
+    notFound();
+  }
+
+  const direction = getTextDirection(lang);
+  const fontClass = getFontFamily(lang);
+
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <head>
-        {/* Favicon and Icons */}
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
-
-        {/* PWA Manifest */}
-        <link rel="manifest" href="/manifest.json" />
-
-        {/* Theme Colors */}
-        <meta name="theme-color" content="#3B82F6" />
-        <meta name="msapplication-TileColor" content="#3B82F6" />
-
-        {/* Apple Mobile Web App */}
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Color Testing | اختبارات الألوان" />
-
-        {/* Mobile Web App */}
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="application-name" content="Color Testing" />
-
-        {/* Microsoft Tiles */}
-        <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="msapplication-TileImage" content="/icon-512.svg" />
-
-        {/* Additional PWA Meta Tags */}
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-touch-fullscreen" content="yes" />
-      </head>
-      <body
-        className={`${inter.variable} ${cairo.variable} font-cairo antialiased`}
-        suppressHydrationWarning
-      >
+    <html lang={lang} dir={direction} suppressHydrationWarning>
+      <body className={`${fontClass} antialiased`} suppressHydrationWarning>
         <Providers>
-          <div id="root">
-            {children}
+          <div className="min-h-screen flex flex-col">
+            <Header lang={lang} />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer lang={lang} />
           </div>
-          <div id="modal-root" />
-          <div id="toast-root" />
           <Toaster />
         </Providers>
       </body>
