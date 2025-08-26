@@ -3,7 +3,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Language } from '@/types';
 import { ThemeProvider } from 'next-themes';
-import { AnalyticsProvider } from '@/components/analytics/AnalyticsProvider';
 
 // Simple User type for local auth (compatible with Firebase User)
 interface User {
@@ -75,13 +74,15 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load user from localStorage
-    const savedUser = localStorage.getItem(STORAGE_KEY_USER);
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (error) {
-        console.error('Error loading user:', error);
+    // Load user from localStorage (only on client side)
+    if (typeof window !== 'undefined') {
+      const savedUser = localStorage.getItem(STORAGE_KEY_USER);
+      if (savedUser) {
+        try {
+          setUser(JSON.parse(savedUser));
+        } catch (error) {
+          console.error('Error loading user:', error);
+        }
       }
     }
     setLoading(false);
@@ -92,12 +93,15 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const getUsers = (): Array<{email: string, password: string, user: User}> => {
+    if (typeof window === 'undefined') return [];
     const users = localStorage.getItem(STORAGE_KEY_USERS);
     return users ? JSON.parse(users) : [];
   };
 
   const saveUsers = (users: Array<{email: string, password: string, user: User}>) => {
-    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+    }
   };
 
   const signIn = async (email: string, password: string) => {
@@ -118,7 +122,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         };
 
         setUser(adminUser);
-        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(adminUser));
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(adminUser));
+        }
         setLoading(false);
         return;
       }
@@ -129,7 +135,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (foundUser) {
         setUser(foundUser.user);
-        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(foundUser.user));
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(foundUser.user));
+        }
       } else {
         throw new Error('Invalid email or password');
       }
@@ -167,7 +175,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       saveUsers(users);
 
       setUser(newUser);
-      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(newUser));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(newUser));
+      }
     } catch (error) {
       throw error;
     } finally {
@@ -177,10 +187,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     setUser(null);
-    localStorage.removeItem(STORAGE_KEY_USER);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEY_USER);
+    }
   };
 
   const refreshUser = async () => {
+    if (typeof window === 'undefined') return;
     const savedUser = localStorage.getItem(STORAGE_KEY_USER);
     if (savedUser) {
       setUser(JSON.parse(savedUser));
@@ -236,26 +249,30 @@ function LanguageProvider({
 
   const setLanguage = (newLanguage: Language) => {
     setLanguageState(newLanguage);
-    
-    // Update document attributes
-    document.documentElement.lang = newLanguage;
-    document.documentElement.dir = newLanguage === 'ar' ? 'rtl' : 'ltr';
-    
-    // Update body class for font
-    document.body.className = document.body.className.replace(
-      /font-(arabic|english)/g,
-      `font-${newLanguage === 'ar' ? 'arabic' : 'english'}`
-    );
-    
-    // Store preference
-    localStorage.setItem('preferred-language', newLanguage);
+
+    // Update document attributes (only on client side)
+    if (typeof window !== 'undefined') {
+      document.documentElement.lang = newLanguage;
+      document.documentElement.dir = newLanguage === 'ar' ? 'rtl' : 'ltr';
+
+      // Update body class for font
+      document.body.className = document.body.className.replace(
+        /font-(arabic|english)/g,
+        `font-${newLanguage === 'ar' ? 'arabic' : 'english'}`
+      );
+
+      // Store preference
+      localStorage.setItem('preferred-language', newLanguage);
+    }
   };
 
   useEffect(() => {
-    // Load saved language preference
-    const savedLanguage = localStorage.getItem('preferred-language') as Language;
-    if (savedLanguage && ['ar', 'en'].includes(savedLanguage)) {
-      setLanguage(savedLanguage);
+    // Load saved language preference (only on client side)
+    if (typeof window !== 'undefined') {
+      const savedLanguage = localStorage.getItem('preferred-language') as Language;
+      if (savedLanguage && ['ar', 'en'].includes(savedLanguage)) {
+        setLanguage(savedLanguage);
+      }
     }
   }, []);
 
@@ -285,9 +302,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <AuthProvider>
         <LanguageProvider>
-          <AnalyticsProvider>
-            {children}
-          </AnalyticsProvider>
+          {children}
         </LanguageProvider>
       </AuthProvider>
     </ThemeProvider>
