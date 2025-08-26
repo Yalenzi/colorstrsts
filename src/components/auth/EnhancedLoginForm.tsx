@@ -20,6 +20,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { Language } from '@/types';
+import { GoogleSignInRedirectButton } from '@/components/auth/GoogleSignInRedirectButton';
 
 interface EnhancedLoginFormProps {
   lang: Language;
