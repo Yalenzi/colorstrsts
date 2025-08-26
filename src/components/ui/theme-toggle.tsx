@@ -1,23 +1,24 @@
 'use client';
 
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  // Simplified theme toggle without next-themes dependency
+  const [theme, setTheme] = useState('light');
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    // Apply theme to document if needed
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    }
+  };
 
-  if (!mounted) {
-    return (
-      <Button variant="ghost" size="sm" className="w-9 h-9">
-        <div className="h-4 w-4" />
-      </Button>
+  return (
+    <Button variant="ghost" size="sm" className="w-9 h-9" onClick={toggleTheme}>
     );
   }
 
