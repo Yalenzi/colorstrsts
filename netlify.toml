@@ -33,7 +33,9 @@
 	  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = "colorstests-573ef.appspot.com"
 	  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "94361461929"
 	  NEXT_PUBLIC_FIREBASE_APP_ID = "1:94361461929:web:b34ad287c782710415f5b8"
-
+    # Google Auth
+    GOOGLE_CLIENT_ID=991442547146-lfjk8eg4rmi4q0veidfqqqgoq7l9ul0r.apps.googleusercontent.com
+    GOOGLE_CLIENT_SECRET=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
 [[headers]]
   for = "/*"
   [headers.values]
