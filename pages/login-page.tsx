@@ -94,3 +94,5 @@ export function AuthPage({ lang }: AuthPageProps) {
     </div>
   );
 }
+
+export default AuthPage;

@@ -273,3 +273,5 @@ export function HomePage({ lang }: HomePageProps) {
     </div>
   );
 }
+
+export default HomePage;

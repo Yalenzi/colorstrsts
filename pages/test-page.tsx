@@ -483,3 +483,5 @@ export function TestPage({ lang, testId }: TestPageProps) {
     </div>
   );
 }
+
+export default TestPage;

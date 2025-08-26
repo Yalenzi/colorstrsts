@@ -345,3 +345,5 @@ export function EnhancedImageAnalyzerPage({ lang }: EnhancedImageAnalyzerPagePro
     </div>
   );
 }
+
+export default EnhancedImageAnalyzerPage;

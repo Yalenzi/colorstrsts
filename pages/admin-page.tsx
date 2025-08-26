@@ -273,3 +273,5 @@ export function AdminPage({ lang }: AdminPageProps) {
     </div>
   );
 }
+
+export default AdminPage;

@@ -222,3 +222,5 @@ export function RegisterPage({ lang }: RegisterPageProps) {
     </div>
   );
 }
+
+export default RegisterPage;

@@ -302,3 +302,5 @@ export function HistoryPage({ lang }: HistoryPageProps) {
     </div>
   );
 }
+
+export default HistoryPage;

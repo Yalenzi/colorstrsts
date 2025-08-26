@@ -303,3 +303,5 @@ export function ContactPage({ lang }: ContactPageProps) {
     </div>
   );
 }
+
+export default ContactPage;

@@ -372,3 +372,5 @@ export function ResultDetailPage({ lang, resultId }: ResultDetailPageProps) {
     </div>
   );
 }
+
+export default ResultDetailPage;

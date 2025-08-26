@@ -449,3 +449,5 @@ function TestsPageContent({ lang }: TestsPageProps) {
 export function TestsPage({ lang }: TestsPageProps) {
   return <TestsPageContent lang={lang} />;
 }
+
+export default TestsPage;
