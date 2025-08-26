@@ -41,7 +41,12 @@ try {
   console.log('\n📦 Installing dependencies...');
   console.log('📦 تثبيت التبعيات...');
 
-  // Simple npm install
+  // Install immer specifically (required by Next.js)
+  console.log('📥 Installing immer (required by Next.js)...');
+  console.log('📥 تثبيت immer (مطلوب لـ Next.js)...');
+  execSync('npm install immer@^10.0.3', { stdio: 'inherit' });
+
+  // Install all dependencies
   execSync('npm install', { stdio: 'inherit' });
 
   console.log('✅ Dependencies installed successfully');
