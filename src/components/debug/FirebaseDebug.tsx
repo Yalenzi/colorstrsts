@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { auth } from '@/lib/firebase';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 
 export function FirebaseDebug() {
   const [debugInfo, setDebugInfo] = useState<any>({});

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Language } from '@/types';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 import { recordTestVisit } from '@/lib/firebase-user';
 
 import { getTestById, ChemicalTest } from '@/lib/local-data-service';

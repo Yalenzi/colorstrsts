@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 import { getUserUsageStats, TestUsage } from '@/lib/subscription-service';
 // import { createCustomerPortalSession } from '@/lib/tap-service'; // سيتم تنفيذه لاحقاً
 import { 

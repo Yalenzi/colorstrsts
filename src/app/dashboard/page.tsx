@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Providers } from '@/components/providers';
+import { Providers } from '@/components/safe-providers';
 import { UserDashboard } from '@/components/dashboard/UserDashboard';
 
 export default function DashboardPage() {

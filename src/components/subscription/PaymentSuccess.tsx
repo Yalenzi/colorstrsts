@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Language } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 import { 
   createSTCSubscription, 
   addSTCPaymentHistory,

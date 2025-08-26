@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/components/providers';
+import { useAuth } from '@/components/safe-providers';
 import { 
   getUserTestHistory, 
   getUserTestStats, 
