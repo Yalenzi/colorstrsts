@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { Language } from '@/types';
 import { i18nConfig, getTextDirection, getFontFamily } from '@/lib/i18n';
-import { Providers } from '@/components/providers';
+import { Providers } from '@/components/safe-providers';
 import { SimpleHeader as Header } from '@/components/layout/simple-header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
