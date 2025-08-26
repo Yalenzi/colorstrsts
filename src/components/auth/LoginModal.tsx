@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useAuth } from './AuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import GoogleSignInButton from './GoogleSignInButton';
 import { X, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 

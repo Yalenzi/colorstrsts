@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useAuth } from './AuthProvider';
+import { useAuth } from '@/components/safe-providers';
 import { X, Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
 
 interface SignupModalProps {
