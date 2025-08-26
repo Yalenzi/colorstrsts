@@ -138,7 +138,7 @@ export function middleware(request: NextRequest) {
     "form-action 'self' " +
       "https://api.stcpay.com.sa " +
       "https://accounts.google.com; " +
-    "frame-ancestors 'none'; " +
+    "frame-ancestors 'self' https://accounts.google.com https://*.google.com; " +
     "upgrade-insecure-requests;"
   );
 
