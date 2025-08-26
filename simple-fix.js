@@ -58,5 +58,62 @@ try {
   process.exit(1);
 }
 
-console.log('\n🎉 Simple fix with path resolution completed!');
-console.log('🎉 اكتمل الإصلاح البسيط مع حل المسارات!');
+// Check for force-dynamic conflicts with static export
+console.log('\n🔍 Checking for force-dynamic conflicts...');
+console.log('🔍 فحص تعارضات force-dynamic...');
+
+const fs = require('fs');
+const path = require('path');
+
+function checkForForceDynamic(dir) {
+  const conflicts = [];
+
+  function searchRecursive(currentDir) {
+    try {
+      const items = fs.readdirSync(currentDir);
+
+      for (const item of items) {
+        const fullPath = path.join(currentDir, item);
+        const stat = fs.statSync(fullPath);
+
+        if (stat.isDirectory()) {
+          searchRecursive(fullPath);
+        } else if (item.endsWith('.tsx') || item.endsWith('.ts')) {
+          try {
+            const content = fs.readFileSync(fullPath, 'utf8');
+            if (content.includes("dynamic = 'force-dynamic'")) {
+              conflicts.push(fullPath);
+            }
+          } catch (error) {
+            // Skip files that can't be read
+          }
+        }
+      }
+    } catch (error) {
+      // Skip directories that can't be read
+    }
+  }
+
+  if (fs.existsSync(dir)) {
+    searchRecursive(dir);
+  }
+  return conflicts;
+}
+
+const conflicts = checkForForceDynamic('src/app');
+
+if (conflicts.length === 0) {
+  console.log('✅ No force-dynamic conflicts found');
+  console.log('✅ لم يتم العثور على تعارضات force-dynamic');
+} else {
+  console.log(`⚠️ Found ${conflicts.length} force-dynamic conflicts:`);
+  console.log(`⚠️ تم العثور على ${conflicts.length} تعارضات force-dynamic:`);
+  conflicts.forEach(file => {
+    console.log(`   - ${file}`);
+  });
+  console.log('💡 These files need to be fixed for static export');
+  console.log('💡 هذه الملفات تحتاج إصلاح للتصدير الثابت');
+}
+
+console.log('\n🎉 Simple fix with path resolution and static export check completed!');
+console.log('🎉 اكتمل الإصلاح البسيط مع حل المسارات وفحص التصدير الثابت!');
