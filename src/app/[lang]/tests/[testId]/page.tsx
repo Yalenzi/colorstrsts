@@ -14,11 +14,8 @@ export async function generateStaticParams() {
     const testIds = getAllTestIds();
     console.log(`📋 Generating static params for ${testIds.length} tests`);
 
-    // Add special test pages
-    const allTestIds = [
-      'test-simple', // Debug test page
-      ...testIds
-    ];
+    // Use only actual test IDs from data
+    const allTestIds = testIds;
 
     const languages: Language[] = ['ar', 'en'];
 
