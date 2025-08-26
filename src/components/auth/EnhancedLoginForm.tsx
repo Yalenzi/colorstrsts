@@ -20,7 +20,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { Language } from '@/types';
-import { GoogleSignInHybridButton } from '@/components/auth/GoogleSignInHybridButton';
+import { SimpleGoogleSignIn } from '@/components/auth/SimpleGoogleSignIn';
 
 interface EnhancedLoginFormProps {
   lang: Language;
@@ -383,9 +383,10 @@ export function EnhancedLoginForm({ lang, onSuccess, redirectTo }: EnhancedLogin
                 </div>
               </div>
 
-              <GoogleSignInHybridButton
+              <SimpleGoogleSignIn
                 lang={lang}
-                onSuccess={() => {
+                onSuccess={(user) => {
+                  console.log('✅ Google Sign-In successful:', user);
                   if (onSuccess) onSuccess();
                   if (redirectTo) router.push(redirectTo);
                 }}
@@ -395,7 +396,7 @@ export function EnhancedLoginForm({ lang, onSuccess, redirectTo }: EnhancedLogin
                 fullWidth={true}
               >
                 {currentTexts.googleButton}
-              </GoogleSignInHybridButton>
+              </SimpleGoogleSignIn>
             </>
           )}
 
