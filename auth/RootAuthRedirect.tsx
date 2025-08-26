@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/providers';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 interface RootAuthRedirectProps {
@@ -10,15 +9,12 @@ interface RootAuthRedirectProps {
 }
 
 export function RootAuthRedirect({ defaultLang = 'en' }: RootAuthRedirectProps) {
-  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (loading) return;
-
     // Detect user's preferred language from browser or localStorage
     let preferredLang = defaultLang;
-    
+
     if (typeof window !== 'undefined') {
       // Check localStorage first
       const savedLang = localStorage.getItem('preferred-language');
@@ -33,22 +29,17 @@ export function RootAuthRedirect({ defaultLang = 'en' }: RootAuthRedirectProps) 
       }
     }
 
-    if (user) {
-      // User is authenticated, redirect to main app
-      router.replace(`/${preferredLang}`);
-    } else {
-      // User is not authenticated, redirect to auth page
-      router.replace(`/${preferredLang}/auth`);
-    }
-  }, [user, loading, router, defaultLang]);
+    // Redirect to the main app with detected language
+    router.replace(`/${preferredLang}`);
+  }, [router, defaultLang]);
 
-  // Show loading spinner while checking authentication
+  // Show loading spinner while redirecting
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-950 dark:via-gray-900 dark:to-secondary-950">
       <div className="text-center">
         <LoadingSpinner size="lg" />
         <p className="mt-4 text-gray-600 dark:text-gray-400">
-          Loading...
+          Redirecting...
         </p>
       </div>
     </div>
