@@ -99,6 +99,7 @@ export function middleware(request: NextRequest) {
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' " +
       "https://www.gstatic.com " +
       "https://www.googleapis.com " +
+      "https://apis.google.com " +
       "https://accounts.google.com " +
       "https://*.firebaseio.com " +
       "https://*.firebaseapp.com " +
@@ -131,6 +132,7 @@ export function middleware(request: NextRequest) {
       "https://colorstests-573ef-default-rtdb.firebaseio.com; " +
     "worker-src 'self' blob:; " +
     "child-src 'self' blob:; " +
+    "frame-src 'self' https://accounts.google.com https://*.firebaseapp.com; " +
     "object-src 'none'; " +
     "base-uri 'self'; " +
     "form-action 'self' " +
