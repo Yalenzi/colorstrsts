@@ -62,9 +62,6 @@ try {
 console.log('\n🔍 Checking for force-dynamic conflicts...');
 console.log('🔍 فحص تعارضات force-dynamic...');
 
-const fs = require('fs');
-const path = require('path');
-
 function checkForForceDynamic(dir) {
   const conflicts = [];
 
