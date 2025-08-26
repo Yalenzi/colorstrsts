@@ -1,10 +1,10 @@
 'use client';
 
 import { Toaster as HotToaster } from 'react-hot-toast';
-import { useTheme } from 'next-themes';
 
 export function Toaster() {
-  const { theme } = useTheme();
+  // Removed useTheme to avoid build issues
+  const theme = 'light'; // Default theme
 
   return (
     <HotToaster
