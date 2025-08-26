@@ -21,17 +21,32 @@ export function AuthRedirectHandler({ lang }: AuthRedirectHandlerProps) {
     // إذا تم تسجيل الدخول بنجاح
     if (user) {
       console.log('✅ User authenticated, redirecting...');
-      
+      console.log('User info:', {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName
+      });
+
       // الحصول على الصفحة المطلوبة من query parameters
       const returnTo = searchParams.get('returnTo');
       const redirectTo = returnTo || `/${lang}/dashboard`;
-      
+
       console.log('🔄 Redirecting to:', redirectTo);
-      
+
       // تأخير قصير للتأكد من اكتمال العملية
       setTimeout(() => {
         router.push(redirectTo);
-      }, 1000);
+      }, 1500); // زيادة التأخير قليلاً
+    } else {
+      // إذا لم يكن هناك مستخدم، تحقق من وجود redirect parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const hasAuthParams = urlParams.has('code') || urlParams.has('state') || window.location.hash.includes('access_token');
+
+      if (hasAuthParams) {
+        console.log('🔍 Found auth parameters in URL, waiting for auth state...');
+        console.log('URL params:', Object.fromEntries(urlParams.entries()));
+        console.log('URL hash:', window.location.hash);
+      }
     }
   }, [user, loading, router, lang, searchParams]);
 

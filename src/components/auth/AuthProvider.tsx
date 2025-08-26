@@ -315,8 +315,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // مراقبة حالة المصادقة
   useEffect(() => {
-    // فحص نتيجة redirect عند تحميل الصفحة
+    let redirectChecked = false;
+
+    // فحص نتيجة redirect عند تحميل الصفحة (مرة واحدة فقط)
     const checkRedirectResult = async () => {
+      if (redirectChecked) return;
+      redirectChecked = true;
+
       try {
         console.log('🔄 Checking redirect result...');
         const result = await getRedirectResult(auth);
@@ -325,23 +330,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
           console.log('User details:', {
             uid: result.user.uid,
             email: result.user.email,
-            displayName: result.user.displayName
+            displayName: result.user.displayName,
+            providerId: result.providerId,
+            operationType: result.operationType
           });
 
           // Create secure session cookie via Netlify Function
           try {
             const idToken = await result.user.getIdToken(true);
-            await fetch('/api/sessionLogin', {
+            const response = await fetch('/api/sessionLogin', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ idToken })
             });
-            console.log('✅ Session cookie created successfully');
+
+            if (response.ok) {
+              console.log('✅ Session cookie created successfully');
+            } else {
+              console.warn('⚠️ Session cookie creation failed:', response.status);
+            }
           } catch (e) {
             console.warn('⚠️ Failed to create session cookie:', e);
           }
         } else {
           console.log('ℹ️ No redirect result found');
+
+          // إضافة معلومات تشخيصية
+          console.log('🔍 Current URL:', window.location.href);
+          console.log('🔍 URL params:', window.location.search);
+          console.log('🔍 URL hash:', window.location.hash);
         }
       } catch (error: any) {
         console.error('❌ Redirect result error:', error);
