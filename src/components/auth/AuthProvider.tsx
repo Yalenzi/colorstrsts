@@ -433,6 +433,3 @@ export function AuthProvider({ children }: AuthProviderProps) {
     </AuthContext.Provider>
   );
 }
-
-// Export the hook for external use
-export { useAuth };
