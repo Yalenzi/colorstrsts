@@ -190,11 +190,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const signInWithGoogle = async () => {
     try {
       console.log('🔄 Starting Google Sign-In...');
+      console.log('🔧 Current domain:', typeof window !== 'undefined' ? window.location.hostname : 'SSR');
+      console.log('🔧 Auth domain:', auth.app.options.authDomain);
 
       // التحقق من إعدادات Firebase
       if (!auth.app.options.apiKey) {
-        throw new Error('Firebase API Key is missing');
+        console.error('❌ Firebase API Key is missing');
+        throw new Error('Firebase API Key is missing. Please check your Firebase configuration.');
       }
+
+      if (!auth.app.options.projectId) {
+        console.error('❌ Firebase Project ID is missing');
+        throw new Error('Firebase Project ID is missing. Please check your Firebase configuration.');
+      }
+
+      console.log('✅ Firebase configuration is valid');
+      console.log('🔧 Project ID:', auth.app.options.projectId);
 
       const provider = new GoogleAuthProvider();
 
@@ -278,8 +289,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('Error details:', {
         code: error.code,
         message: error.message,
-        stack: error.stack
+        stack: error.stack,
+        currentDomain: typeof window !== 'undefined' ? window.location.hostname : 'SSR',
+        authDomain: auth.app.options.authDomain,
+        projectId: auth.app.options.projectId
       });
+
+      // إضافة معلومات تشخيصية للأخطاء الشائعة
+      if (error.code === 'auth/unauthorized-domain') {
+        console.error('🚨 UNAUTHORIZED DOMAIN ERROR:');
+        console.error('Current domain:', typeof window !== 'undefined' ? window.location.hostname : 'Unknown');
+        console.error('Auth domain:', auth.app.options.authDomain);
+        console.error('Solution: Add this domain to Firebase Console > Authentication > Settings > Authorized domains');
+      }
+
+      if (error.code === 'auth/popup-blocked') {
+        console.error('🚨 POPUP BLOCKED ERROR:');
+        console.error('Solution: Allow popups in browser or the system will automatically try redirect method');
+      }
+
+      if (error.code === 'auth/internal-error') {
+        console.error('🚨 INTERNAL ERROR:');
+        console.error('This might be due to configuration issues or network problems');
+        console.error('Check Firebase configuration and network connectivity');
+      }
 
       // معالجة أخطاء محددة مع رسائل واضحة
       const errorMessage = getGoogleSignInErrorMessage(error.code);
