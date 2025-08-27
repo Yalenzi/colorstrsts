@@ -160,13 +160,14 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
   }, []);
 
   const filteredResults = results.filter(result => {
-    const matchesSearch = searchTerm === '' || 
-      result.test_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      result.test_name_ar.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      result.color_result.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      result.color_result_ar.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      result.possible_substance.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      result.possible_substance_ar.toLowerCase().includes(searchTerm.toLowerCase());
+    const searchLower = searchTerm.toLowerCase();
+    const matchesSearch = searchTerm === '' ||
+      String(result.test_name || '').toLowerCase().includes(searchLower) ||
+      String(result.test_name_ar || '').toLowerCase().includes(searchLower) ||
+      String(result.color_result || '').toLowerCase().includes(searchLower) ||
+      String(result.color_result_ar || '').toLowerCase().includes(searchLower) ||
+      String(result.possible_substance || '').toLowerCase().includes(searchLower) ||
+      String(result.possible_substance_ar || '').toLowerCase().includes(searchLower);
 
     const matchesCategory = selectedCategory === 'all' || result.category === selectedCategory;
 
@@ -221,8 +222,9 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
     }
   };
 
-  const getConfidenceBadgeColor = (confidence: string) => {
-    switch (confidence.toLowerCase()) {
+  const getConfidenceBadgeColor = (confidence: any) => {
+    const confidenceStr = String(confidence || '').toLowerCase();
+    switch (confidenceStr) {
       case 'high': return 'bg-green-100 text-green-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
       case 'low': return 'bg-red-100 text-red-800';

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { Language } from '@/types';
 import { getTranslations } from '@/lib/translations';
 import { ExclamationTriangleIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { TestColorResults } from '@/components/ui/test-color-results';
 
 // Generate static params for supported languages
 export async function generateStaticParams() {
@@ -275,6 +276,11 @@ export default async function Safety({ params }: SafetyPageProps) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Test Color Results Section */}
+        <div className="mt-12">
+          <TestColorResults lang={lang} />
         </div>
       </div>
     </div>
