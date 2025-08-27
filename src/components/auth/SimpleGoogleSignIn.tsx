@@ -41,7 +41,7 @@ export function SimpleGoogleSignIn({
       console.log('🔄 Starting simple Google Sign-In...');
       
       // إنشاء URL للـ OAuth مباشرة
-      const clientId = '94361461929-your-client-id.apps.googleusercontent.com'; // استبدل بـ client ID الفعلي
+      const clientId = '991442547146-lfjk8eg4rmi4q0veidfqqqgoq7l9ul0r.apps.googleusercontent.com'; // استبدل بـ client ID الفعلي
       const redirectUri = `${window.location.origin}/${lang}/auth/google-callback`;
       const scope = 'email profile';
       const responseType = 'code';
