@@ -9,6 +9,7 @@ import { useAuth } from '@/components/safe-providers';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import AdminDashboardWrapper from '@/components/admin/AdminDashboardWrapper';
+import { ProfessionalAdminDashboard } from '@/components/admin/ProfessionalAdminDashboard';
 import { AdminLogin } from '@/components/admin/admin-login';
 import { PasswordRecovery } from '@/components/admin/password-recovery';
 import {
@@ -239,39 +240,8 @@ export function AdminPage({ lang }: AdminPageProps) {
     return <AdminLogin lang={lang} onLogin={handlePasswordSubmit} />;
   }
 
-  // Show admin dashboard
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-950 dark:via-gray-900 dark:to-secondary-950">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4 rtl:space-x-reverse">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900">
-                <ShieldCheckIcon className="h-6 w-6 text-primary-600" />
-              </div>
-
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                  {t('admin.title')}
-                </h1>
-                <p className="text-gray-500">
-                  {lang === 'ar' ? 'إدارة نظام اختبارات الألوان' : 'Color Testing System Management'}
-                </p>
-              </div>
-            </div>
-
-            <Button variant="outline" onClick={handleLogout}>
-              {lang === 'ar' ? 'تسجيل الخروج' : 'Logout'}
-            </Button>
-          </div>
-        </div>
-
-        {/* Admin Dashboard */}
-        <AdminDashboardWrapper lang={lang} />
-      </div>
-    </div>
-  );
+  // Show admin dashboard with professional design
+  return <ProfessionalAdminDashboard lang={lang} />;
 }
 
 export default AdminPage;

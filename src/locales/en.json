@@ -139,6 +139,14 @@
     "instructions": {
       "title": "Chemical Test Instructions",
       "safety_title": "Critical Safety Warnings",
+      "chemical_components": "Chemical Components",
+      "test_procedure": "Test Procedure",
+      "safety_warnings_title": "Special Safety Warnings",
+      "expected_results": "Expected Results",
+      "safety_acknowledgment": "Safety Acknowledgment",
+      "safety_acknowledgment_text": "I have read and understand all safety instructions and will follow proper safety procedures during test execution",
+      "start_analysis": "Start Analysis",
+      "safety_required": "Safety Acknowledgment Required",
       "safety_warnings": [
         "Always wear chemical-resistant gloves",
         "Ensure excellent ventilation or use fume hood",

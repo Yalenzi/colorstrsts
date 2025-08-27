@@ -20,10 +20,10 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Color Testing for Drug and Psychoactive Substance Detection | اختبارات الألوان للكشف عن المخدرات والمؤثرات العقلية',
-    template: '%s | Color Testing System',
+    default: 'Color Testing for Drug and Psychoactive Substance Detection | ColorTests',
+    template: '%s | ColorTests',
   },
-  description: 'Advanced color testing system for drug and psychoactive substance detection using chemical reagents. نظام متقدم لاختبارات الألوان للكشف عن المخدرات والمؤثرات العقلية باستخدام الكواشف الكيميائية.',
+  description: 'Advanced color testing system for drug and psychoactive substance detection using chemical reagents. Professional laboratory-grade analysis tools for forensic and research applications.',
   keywords: [
     'drug testing',
     'color testing',

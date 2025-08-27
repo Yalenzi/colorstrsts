@@ -146,22 +146,49 @@ export default async function Help({ params }: HelpPageProps) {
                 {lang === 'ar' ? 'الدعم التقني' : 'Technical Support'}
               </h2>
               <p className="text-muted-foreground mb-4">
-                {lang === 'ar' 
+                {lang === 'ar'
                   ? 'إذا واجهت أي مشاكل تقنية، يرجى التواصل معنا:'
                   : 'If you encounter any technical issues, please contact us:'
                 }
               </p>
-              <div className="space-y-2">
-                <p className="text-muted-foreground">
-                  <strong>
-                    {lang === 'ar' ? 'البريد الإلكتروني:' : 'Email:'}
-                  </strong> aburakan4551@gmail.com
-                </p>
-                <p className="text-muted-foreground">
-                  <strong>
-                    {lang === 'ar' ? 'البريد الإلكتروني الاحتياطي:' : 'Backup Email:'}
-                  </strong> aburakan4551@gmail.com
-                </p>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3 rtl:space-x-reverse p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+                  <svg className="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <p className="text-sm font-medium text-primary-700 dark:text-primary-300">
+                      {lang === 'ar' ? 'البريد الإلكتروني:' : 'Email:'}
+                    </p>
+                    <a href="mailto:aburakan4551@gmail.com" className="text-primary-600 hover:text-primary-700 font-medium">
+                      aburakan4551@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3 rtl:space-x-reverse p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg">
+                  <svg className="h-5 w-5 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <p className="text-sm font-medium text-secondary-700 dark:text-secondary-300">
+                      {lang === 'ar' ? 'البريد الإلكتروني:' : 'Email:'}
+                    </p>
+                    <a href="mailto:ftaksa@hotmail.com" className="text-secondary-600 hover:text-secondary-700 font-medium">
+                      ftaksa@hotmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                    <strong>{lang === 'ar' ? 'ملاحظة:' : 'Note:'}</strong> {' '}
+                    {lang === 'ar'
+                      ? 'نلتزم بالرد على استفساراتكم خلال 24-48 ساعة من تاريخ الاستلام'
+                      : 'We commit to responding to your inquiries within 24-48 hours of receipt'
+                    }
+                  </p>
+                </div>
               </div>
             </div>
           </div>

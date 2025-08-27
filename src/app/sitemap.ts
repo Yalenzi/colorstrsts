@@ -3,11 +3,11 @@ import { MetadataRoute } from 'next';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://colorstest.com';
   
-  // الصفحات الأساسية
+  // الصفحات الأساسية - English as default
   const staticPages = [
-    '',
+    '', // Root redirects to /en
+    '/en', // Default language first
     '/ar',
-    '/en',
     '/ar/tests',
     '/en/tests',
     '/ar/results',

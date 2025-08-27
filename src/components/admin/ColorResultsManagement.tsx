@@ -32,8 +32,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import toast from 'react-hot-toast';
-import colorResultsData from '@/data/color-results.json';
-import chemicalTestsData from '@/data/chemical-tests.json';
+import databaseData from '@/data/Db.json';
 
 interface ColorResult {
   id: string;
@@ -114,22 +113,41 @@ export default function ColorResultsManagement({ isRTL, lang = 'en' }: ColorResu
   ];
 
   useEffect(() => {
-    // تحميل البيانات الحقيقية
+    // تحميل البيانات الحقيقية من Db.json
     const loadRealData = () => {
       try {
-        // دمج بيانات النتائج اللونية مع بيانات الاختبارات
-        const enrichedResults = colorResultsData.map((result: any) => {
-          const test = chemicalTestsData.find((t: any) => t.id === result.test_id);
-          return {
-            ...result,
-            test_name: test?.method_name || 'Unknown Test',
-            test_name_ar: test?.method_name_ar || 'اختبار غير معروف'
-          };
+        // استخراج النتائج اللونية من جميع الاختبارات
+        const allColorResults: ColorResult[] = [];
+
+        databaseData.chemical_tests.forEach((test: any) => {
+          if (test.color_results && test.color_results.length > 0) {
+            test.color_results.forEach((result: any, index: number) => {
+              allColorResults.push({
+                id: `${test.id}-${index}`,
+                test_id: test.id,
+                test_name: test.method_name,
+                test_name_ar: test.method_name_ar,
+                color_result: result.color_result,
+                color_result_ar: result.color_result_ar,
+                color_hex: result.color_hex,
+                possible_substance: result.possible_substance,
+                possible_substance_ar: result.possible_substance_ar,
+                confidence_level: result.confidence_level === 'very_high' ? 95 :
+                                result.confidence_level === 'high' ? 85 :
+                                result.confidence_level === 'medium' ? 75 :
+                                result.confidence_level === 'low' ? 60 : 50,
+                category: test.category,
+                reference: test.reference,
+                created_at: test.created_at,
+                updated_at: test.created_at
+              });
+            });
+          }
         });
 
-        setResults(enrichedResults);
+        setResults(allColorResults);
         setLoading(false);
-        toast.success(`تم تحميل ${enrichedResults.length} نتيجة لونية`);
+        toast.success(`تم تحميل ${allColorResults.length} نتيجة لونية من قاعدة البيانات الجديدة`);
       } catch (error) {
         console.error('Error loading color results:', error);
         setResults([]);

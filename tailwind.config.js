@@ -9,8 +9,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'arabic': ['Noto Sans Arabic', 'system-ui', 'sans-serif'],
-        'english': ['Inter', 'system-ui', 'sans-serif'],
+        'sans': ['Cairo', 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'],
+        'arabic': ['Cairo', 'Noto Sans Arabic', 'system-ui', 'sans-serif'],
+        'english': ['Cairo', 'Inter', 'system-ui', 'sans-serif'],
+        'cairo': ['Cairo', 'sans-serif'],
       },
       colors: {
         // Scientific Primary Blue - Trust & Precision

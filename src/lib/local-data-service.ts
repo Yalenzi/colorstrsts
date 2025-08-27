@@ -3,7 +3,7 @@
  * خدمة البيانات المحلية باستخدام ملف JSON و localStorage
  */
 
-import localDatabase from '@/data/Databsecolorstest.json';
+import localDatabase from '@/data/Db.json';
 
 // Types based on the JSON structure
 export interface ColorResult {
@@ -13,6 +13,11 @@ export interface ColorResult {
   possible_substance: string;
   possible_substance_ar: string;
   confidence_level: string;
+}
+
+export interface ChemicalComponent {
+  name: string;
+  name_ar: string;
 }
 
 export interface Instruction {
@@ -36,6 +41,7 @@ export interface ChemicalTest {
   icon: string;
   color_primary: string;
   created_at: string;
+  chemical_components?: ChemicalComponent[];
   prepare: string;
   prepare_ar: string;
   test_type: string;

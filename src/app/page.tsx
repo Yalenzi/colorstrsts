@@ -7,8 +7,8 @@ export default function RootPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Simple redirect to Arabic version (default language)
-    router.replace('/ar');
+    // Simple redirect to English version (default language)
+    router.replace('/en');
   }, [router]);
 
   return (

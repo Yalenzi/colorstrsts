@@ -1,0 +1,980 @@
+{
+  "chemical_tests": [
+    {
+      "id": "marquis-test",
+      "method_name": "Marquis Test",
+      "method_name_ar": "اختبار ماركيز",
+      "description": "For detecting opiates and amphetamines",
+      "description_ar": "للكشف عن الأفيونات والأمفيتامينات",
+      "category": "basic",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#8B5CF6",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Formaldehyde Solution (37%)",
+          "name_ar": "محلول الفورمالديهايد (37%)"
+        },
+        {
+          "name": "Glacial Acetic Acid",
+          "name_ar": "حمض الخليك الجليدي"
+        },
+        {
+          "name": "Concentrated Sulfuric Acid",
+          "name_ar": "حمض الكبريتيك المركز"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add three drops of water and smear the sample against the spot plate with a glass rod or spatula.\n3. Transfer a drop of the liquid to another depression of the spot plate.\n4. Add one drop of reagent 1A (Add 8-10 drops of 37% formaldehyde solution to 10 ml of glacial acetic acid).\n5. Add three drops of reagent 1B (Concentrated sulfuric acid).\n6. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على طبق نقطي.\n2. أضف قطرة واحدة من الكاشف IA (محضر بخلط 8-10 قطرات من الفورمالديهايد 37% مع 10 مل من حمض الخليك الجليدي).\n3. أضف 2-3 قطرات من الكاشف 1B (حمض الكبريتيك المركز).\n4. راقب تغيير اللون.",
+      "test_type": "F/L",
+      "test_number": "Test 1",
+      "reference": "Auterhoff, H., Braun, D.. Arch.Pharm.(Weinheim), 306 (1973) 866.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Marquis reagent contains concentrated sulfuric acid - may cause severe chemical burns",
+          "safety_warning_ar": "خطر: كاشف ماركيز يحتوي على حمض الكبريتيك المركز - قد يسبب حروق كيميائية شديدة",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Purple to violet",
+          "color_result_ar": "بنفسجي إلى بنفسجي داكن",
+          "color_hex": "#8B5CF6",
+          "possible_substance": "Opium, Morphine, Heroin",
+          "possible_substance_ar": "الأفيون، المورفين، الهيروين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange to brown",
+          "color_result_ar": "برتقالي إلى بني",
+          "color_hex": "#FF8C00",
+          "possible_substance": "Amphetamine, Methamphetamine",
+          "possible_substance_ar": "الأمفيتامين، الميثامفيتامين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Black",
+          "color_result_ar": "أسود",
+          "color_hex": "#000000",
+          "possible_substance": "MDA, MDMA, MDE, N-OH MDA",
+          "possible_substance_ar": "إم دي إيه، إم دي إم إيه، إم دي إي، إن-أوه إم دي إيه",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange",
+          "color_result_ar": "برتقالي",
+          "color_hex": "#FFA500",
+          "possible_substance": "Mescaline, Psilocybine",
+          "possible_substance_ar": "ميسكالين، سيلوسيبين",
+          "confidence_level": "medium"
+        },
+        {
+          "color_result": "Pink to violet",
+          "color_result_ar": "وردي إلى بنفسجي",
+          "color_hex": "#DA70D6",
+          "possible_substance": "Methadone",
+          "possible_substance_ar": "الميثادون",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange",
+          "color_result_ar": "برتقالي",
+          "color_hex": "#FFA500",
+          "possible_substance": "Pethidine, Fentanyl, alpha-Methylfentanyl",
+          "possible_substance_ar": "بيثيدين، فينتانيل، ألفا-ميثيلفنتانيل",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "ferric-sulfate-test",
+      "method_name": "Ferric Sulfate Test",
+      "method_name_ar": "اختبار كبريتات الحديد",
+      "description": "For detecting opium and morphine",
+      "description_ar": "للكشف عن الأفيون والمورفين",
+      "category": "basic",
+      "safety_level": "medium",
+      "preparation_time": 3,
+      "icon": "BeakerIcon",
+      "color_primary": "#8B4513",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Ferric Sulfate",
+          "name_ar": "كبريتات الحديديك"
+        },
+        {
+          "name": "Water",
+          "name_ar": "ماء"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add three drops of water and smear the sample against the spot plate with a glass rod or spatula.\n3. Transfer a drop of the liquid to another depression of the spot plate.\n4. Add one drop of reagent 2 (Dissolve 5 g of ferric sulfate in 100 ml of water).\n5. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على صفيحة تركيز.\n2. أضف ثلاث قطرات من الماء وامسح العينة على صفيحة التركيز بقضيب زجاجي أو ملعقة.\n3. انقل قطرة من السائل إلى تجويف آخر في صفيحة التركيز.\n4. أضف قطرة واحدة من الكاشف 2 (أذب 5 جرامات من كبريتات الحديد في 100 مل من الماء).\n5. راقب تغير اللون.",
+      "test_type": "F/L",
+      "test_number": "Test 2",
+      "reference": "Hartke, K., Mutschler, E. (Editors). DAB 9 - Kommentar. Wissenschaftliche Verlagsgesellschaft, Stuttgart (1987), p. 2603. Roth, H.J., Eger, K., Torschuetz, R.. Pharmazeutische Chemie II - Arzneistoffanalyse, 2nd Edition. Georg Thieme Verlag, Stuttgart, New York (1985), p. 517.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear appropriate protective gear",
+          "instruction_ar": "ارتدِ المعدات الواقية المناسبة",
+          "safety_warning": "Ferric sulfate can cause staining",
+          "safety_warning_ar": "كبريتات الحديد قد تسبب تلطيخاً",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Brownish purple",
+          "color_result_ar": "بنفسجي بني",
+          "color_hex": "#8B4513",
+          "possible_substance": "Opium",
+          "possible_substance_ar": "أفيون",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Red",
+          "color_result_ar": "أحمر",
+          "color_hex": "#FF0000",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "mecke-test",
+      "method_name": "Mecke Test",
+      "method_name_ar": "اختبار ميكي",
+      "description": "For detecting morphine, codeine and heroin",
+      "description_ar": "للكشف عن المورفين والكودايين والهيروين",
+      "category": "basic",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#0080FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Selenious Acid",
+          "name_ar": "حمض السيلينيوز"
+        },
+        {
+          "name": "Concentrated Sulfuric Acid",
+          "name_ar": "حمض الكبريتيك المركز"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 3 (Dissolve 1 g of selenious acid in 100 ml of concentrated sulfuric acid).\n3. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على لوحة البقعة. 2. أضف قطرة واحدة من الكاشف 3 (قم بإذابة 1 جرام من حمض السيلينيوم في 100 مل من حمض الكبريتيك المركز).",
+      "test_type": "L",
+      "test_number": "Test 3",
+      "reference": "Rehse, K.. Arch.Pharm.(Weinheim), 302 (1969) 487.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective equipment including gloves and goggles",
+          "instruction_ar": "ارتدِ المعدات الواقية بما في ذلك القفازات والنظارات",
+          "safety_warning": "Mecke reagent is corrosive",
+          "safety_warning_ar": "كاشف ميكي مادة أكالة",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Blue to green",
+          "color_result_ar": "أزرق إلى أخضر",
+          "color_hex": "#0080FF",
+          "possible_substance": "Morphine, Codeine, Heroin",
+          "possible_substance_ar": "المورفين، الكودايين، الهيروين",
+          "confidence_level": "very_high"
+        },
+        {
+          "color_result": "Pink",
+          "color_result_ar": "وردي",
+          "color_hex": "#FF69B4",
+          "possible_substance": "Phencyclidine (PCP)",
+          "possible_substance_ar": "فينسيكليدين (PCP)",
+          "confidence_level": "medium"
+        }
+      ]
+    },
+    {
+      "id": "nitric-acid-test",
+      "method_name": "Nitric Acid Test",
+      "method_name_ar": "اختبار حمض النيتريك",
+      "description": "For detecting heroin, morphine and codeine",
+      "description_ar": "للكشف عن الهيروين والمورفين والكودايين",
+      "category": "advanced",
+      "safety_level": "extreme",
+      "preparation_time": 7,
+      "icon": "ExclamationTriangleIcon",
+      "color_primary": "#FFFF00",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Concentrated Nitric Acid",
+          "name_ar": "حمض النيتريك المركز"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 4 (Concentrated nitric acid).\n3. Observe the color change immediately.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على لوحة موضعية.\n2. أضف قطرة واحدة من الكاشف 4 (حمض النيتريك المركز).\n3. راقب تغير اللون فوراً.",
+      "test_type": "F/L",
+      "test_number": "Test 4",
+      "reference": "Ditzel, P., Kovar, K.-A.. Rausch- und Suchtmittel. Deutscher Apotheker Verlag, Stuttgart (1983). Kovar, K.-A., Noy, M., Pieper, R.. Dtsch.Apoth.Ztg., 122 (1982) 3.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Use extreme caution - wear full protective equipment",
+          "instruction_ar": "توخ الحذر الشديد - ارتدِ المعدات الواقية الكاملة",
+          "safety_warning": "Nitric acid is extremely corrosive and dangerous",
+          "safety_warning_ar": "حمض النيتريك شديد التآكل والخطورة",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Yellow → Light Green",
+          "color_result_ar": "أصفر ← أخضر فاتح",
+          "color_hex": "#90EE90",
+          "possible_substance": "Heroin",
+          "possible_substance_ar": "هيروين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange → Red → Yellow",
+          "color_result_ar": "برتقالي ← أحمر ← أصفر",
+          "color_hex": "#FFFF00",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange → Yellow",
+          "color_result_ar": "برتقالي ← أصفر",
+          "color_hex": "#FFFF00",
+          "possible_substance": "Codeine",
+          "possible_substance_ar": "كودايين",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "fast-blue-b-test",
+      "method_name": "Fast Blue B Salt Test",
+      "method_name_ar": "اختبار الملح الأزرق السريع",
+      "description": "For detecting cannabis (THC)",
+      "description_ar": "للكشف عن القنب (THC)",
+      "category": "specialized",
+      "safety_level": "high",
+      "preparation_time": 8,
+      "icon": "BeakerIcon",
+      "color_primary": "#8B5CF6",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Fast Blue B Salt",
+          "name_ar": "ملح الأزرق السريع ب"
+        },
+        {
+          "name": "Anhydrous Sodium Sulfate",
+          "name_ar": "كبريتات الصوديوم اللامائية"
+        },
+        {
+          "name": "Chloroform",
+          "name_ar": "كلوروفورم"
+        },
+        {
+          "name": "Sodium Hydroxide",
+          "name_ar": "هيدروكسيد الصوديوم"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add a small amount of reagent 5A (Carefully mix 2.5 g of fast blue B salt with 100 g of anhydrous sodium sulfate).\n3. Add 25 drops of reagent 5B (Chloroform) and shake the test tube for one minute.\n4. Add 25 drops of reagent 5C (Dissolve 0.4 g of sodium hydroxide in 100 ml of water = 0.1N sodium hydroxide solution) and shake for two minutes.\n5. Observe color changes and record results.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف كمية صغيرة من الكاشف 5أ (اخلط بعناية 2.5 جرام من ملح الأزرق السريع ب مع 100 جرام من كبريتات الصوديوم اللامائية).\n3. أضف 25 قطرة من الكاشف 5ب (الكلوروفورم) ورج أنبوب الاختبار لمدة دقيقة واحدة.\n4. أضف 25 قطرة من الكاشف 5ج (أذب 0.4 جرام من هيدروكسيد الصوديوم في 100 مل من الماء = محلول هидروكسيد الصوديوم 0.1 عادي) ورج لمدة دقيقتين.\n5. راقب تغيرات اللون وسجل النتائج.",
+      "test_type": "F/L",
+      "test_number": "Test 5",
+      "reference": "Ditzel, P., Kovar, K.-A.. Rausch- und Suchtmittel. Deutscher Apotheker Verlag, Stuttgart (1983). Kovar, K.-A., Noy, M., Pieper, R.. Dtsch.Apoth.Ztg., 122 (1982) 3.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear gloves and work in well-ventilated area",
+          "instruction_ar": "ارتدِ القفازات واعمل في منطقة جيدة التهوية",
+          "safety_warning": "Chloroform is toxic - avoid inhalation",
+          "safety_warning_ar": "الكلوروفورم سام - تجنب الاستنشاق",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Purple-red",
+          "color_result_ar": "أحمر بنفسجي",
+          "color_hex": "#8B5CF6",
+          "possible_substance": "Cannabis",
+          "possible_substance_ar": "قنب",
+          "confidence_level": "very_high"
+        }
+      ]
+    },
+    {
+      "id": "duquenois-levine-test",
+      "method_name": "Duquenois-Levine Test",
+      "method_name_ar": "اختبار دوكينوا-ليفين",
+      "description": "For detecting cannabis and derivatives",
+      "description_ar": "للكشف عن القنب ومشتقاته",
+      "category": "specialized",
+      "safety_level": "medium",
+      "preparation_time": 6,
+      "icon": "BeakerIcon",
+      "color_primary": "#8B5CF6",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Vanillin",
+          "name_ar": "فانيلين"
+        },
+        {
+          "name": "Ethanol (95%)",
+          "name_ar": "إيثانول (95%)"
+        },
+        {
+          "name": "Acetaldehyde",
+          "name_ar": "أسيتالدهيد"
+        },
+        {
+          "name": "Concentrated Hydrochloric Acid",
+          "name_ar": "حمض الهيدروكلوريك المركز"
+        },
+        {
+          "name": "Chloroform",
+          "name_ar": "كلوروفورم"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add 2 ml (approximately 50 drops) of reagent 6A (Dissolve 2 g of vanillin in 100 ml of 95% ethanol, then add 2.5 ml of acetaldehyde) and shake the test tube for one minute.\n3. Add 2 ml of reagent 6B (Concentrated hydrochloric acid), shake again for a few seconds and allow the mixture to stand for a few minutes.\n4. If a color develops within 2-3 minutes, add 2 ml of reagent 6C (Chloroform) and shake the mixture gently.\n5. Observe the final color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف 2 مل (حوالي 50 قطرة) من الكاشف 6أ (أذب 2 جرام من الفانيلين في 100 مل من الإيثانول 95%، ثم أضف 2.5 مل من الأسيتالديهايد) وهز أنبوب الاختبار لمدة دقيقة واحدة.\n3. أضف 2 مل من الكاشف 6ب (حمض الهيدروكلوريك المركز)، ورج مرة أخرى لبضع ثوان واترك الخليط يقف لبضع دقائق.\n4. إذا تطور اللون في غضون 2-3 دقائق، أضف 2 مل من الكاشف 6ج (الكلوروفورم) ورج الخليط برفق.\n5. راقب تغير اللون النهائي.",
+      "test_type": "F/L",
+      "test_number": "Test 6",
+      "reference": "Kovar, K.-A., Keck, M., Krieger, Th.. Sci.Pharm., 56 (1988) 29. Kovar, K.-A., Keck, M., Krieger, Th.. Arch.Pharm.(Weinheim), 321 (1988) 249.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Work in fume hood due to hydrochloric acid vapors",
+          "instruction_ar": "اعمل في خزانة الأبخرة بسبب أبخرة حمض الهيدروكلوريك",
+          "safety_warning": "Hydrochloric acid is corrosive",
+          "safety_warning_ar": "حمض الهيدروكلوريك مادة أكالة",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Violet",
+          "color_result_ar": "بنفسجي",
+          "color_hex": "#8B5CF6",
+          "possible_substance": "Cannabis",
+          "possible_substance_ar": "قنب",
+          "confidence_level": "very_high"
+        }
+      ]
+    },
+    {
+      "id": "cobalt-thiocyanate-test",
+      "method_name": "Cobalt Thiocyanate Test",
+      "method_name_ar": "اختبار كوبالت ثيوسيانات",
+      "description": "For detecting cocaine and methaqualone",
+      "description_ar": "للكشف عن الكوكايين والميثاكوالون",
+      "category": "advanced",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#0066FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Hydrochloric Acid (16% aqueous)",
+          "name_ar": "حمض الهيدروكلوريك (16% مائي)"
+        },
+        {
+          "name": "Cobalt(II) Thiocyanate",
+          "name_ar": "كوبالت ثيوسيانات"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add one drop of reagent 7A (16% aqueous hydrochloric acid solution) and shake the test tube for ten seconds.\n3. Add one drop of reagent 7B (Dissolve 2.5 g of cobalt(II) thiocyanate in 100 ml of water) and shake for ten seconds.\n4. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف قطرة واحدة من الكاشف 7أ (محلول حمض الهيدروكلوريك المائي 16%) ورج أنبوب الاختبار لمدة عشر ثوان.\n3. أضف قطرة واحدة من الكاشف 7ب (أذب 2.5 جرام من كوبالت ثيوسيانات في 100 مل من الماء) ورج لمدة عشر ثوان.\n4. راقب تغير اللون.",
+      "test_type": "F/L",
+      "test_number": "Test 7",
+      "reference": "Kovar, K.-A., Noy, M., Pieper, R.. Dtsch.Apoth.Ztg., 122 (1982) 3.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear gloves and eye protection",
+          "instruction_ar": "ارتدِ القفازات وحماية العين",
+          "safety_warning": "Cobalt compounds may be toxic",
+          "safety_warning_ar": "مركبات الكوبالت قد تكون سامة",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Blue",
+          "color_result_ar": "أزرق",
+          "color_hex": "#0066FF",
+          "possible_substance": "Cocaine, Methaqualone, Phencyclidine",
+          "possible_substance_ar": "كوكايين، ميثاكوالون، فينسيكليدين",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "modified-cobalt-thiocyanate-test",
+      "method_name": "Modified Cobalt Thiocyanate Test (Scott Test)",
+      "method_name_ar": "اختبار ثيوسيانات الكوبالت المعدل (اختبار سكوت)",
+      "description": "For detecting cocaine with confirmation steps",
+      "description_ar": "للكشف عن الكوكايين بخطوات تأكيدية",
+      "category": "advanced",
+      "safety_level": "high",
+      "preparation_time": 8,
+      "icon": "BeakerIcon",
+      "color_primary": "#0066FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Cobalt(II) Thiocyanate",
+          "name_ar": "كوبالت ثيوسيانات"
+        },
+        {
+          "name": "Acetic Acid (10%)",
+          "name_ar": "حمض الخليك (10%)"
+        },
+        {
+          "name": "Glycerine",
+          "name_ar": "جليسرين"
+        },
+        {
+          "name": "Concentrated Hydrochloric Acid",
+          "name_ar": "حمض الهيدروكلوريك المركز"
+        },
+        {
+          "name": "Chloroform",
+          "name_ar": "كلوروفورم"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add five drops of reagent 8A (Dissolve 1 g of cobalt(II) thiocyanate in 50 ml of 10% acetic acid, then add 50 ml of glycerine) and shake the test tube for ten seconds.\n3. If the solution turned blue in step 2, add one drop of reagent 8B (Concentrated hydrochloric acid) and shake the mixture for a few seconds.\n4. If the solution turns completely pink in step 3, add five drops of reagent 8C (Chloroform) and shake again to mix the liquids.\n5. Observe the color changes: Blue → Pink → Blue (chloroform layer indicates cocaine presence).",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف خمس قطرات من الكاشف 8أ (أذب 1 جرام من كوبالت ثيوسيانات في 50 مل من حمض الخليك 10%، ثم أضف 50 مل من الجليسرين) ورج أنبوب الاختبار لمدة عشر ثوان.\n3. إذا تحول المحلول إلى الأزرق في الخطوة 2، أضف قطرة واحدة من الكاشف 8ب (حمض الهيدروكلوريك المركز) ورج الخليط لبضع ثوان.\n4. إذا تحول المحلول إلى الوردي تماماً في الخطوة 3، أضف خمس قطرات من الكاشف 8ج (الكلوروفورم) ورج مرة أخرى لخلط السوائل.\n5. راقب تغيرات اللون: أزرق ← وردي ← أزرق (طبقة الكلوروفورم تشير لوجود الكوكايين).",
+      "test_type": "F/L",
+      "test_number": "Test 8",
+      "reference": "Kovar, K.-A., Laudszun, M.. Chemistry and Reaction Mechanisms of Rapid Tests for Drugs of Abuse and Precursor Chemicals. United Nations - Scientific and Technical Notes, SCITEC/6, Vienna (1989), p.15.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Use precise measurements for accurate results",
+          "instruction_ar": "استخدم قياسات دقيقة لنتائج دقيقة",
+          "safety_warning": "Follow the sequence exactly for proper identification",
+          "safety_warning_ar": "اتبع التسلسل بدقة للتحديد الصحيح",
+          "icon": "BeakerIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Blue → Pink → Blue (chloroform layer)",
+          "color_result_ar": "أزرق ← وردي ← أزرق (طبقة الكلوروفورم)",
+          "color_hex": "#0000FF",
+          "possible_substance": "Cocaine",
+          "possible_substance_ar": "كوكايين",
+          "confidence_level": "very_high"
+        }
+      ]
+    },
+    {
+      "id": "methyl-benzoate-test",
+      "method_name": "Methyl Benzoate Test",
+      "method_name_ar": "اختبار ميثيل بنزوات",
+      "description": "Smell-based test for cocaine detection",
+      "description_ar": "اختبار قائم على الرائحة للكشف عن الكوكايين",
+      "category": "specialized",
+      "safety_level": "medium",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#87CEEB",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Potassium Hydroxide",
+          "name_ar": "هيدروكسيد البوتاسيوم"
+        },
+        {
+          "name": "Absolute Methanol",
+          "name_ar": "ميثانول مطلق"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add approximately ten drops of reagent 9 (Dissolve 5 g of potassium hydroxide in 100 ml of absolute methanol).\n3. Shake the test tube for ten seconds.\n4. Compare the smell with that of a reference methyl benzoate sample.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها في أنبوب اختبار.\n2. أضف حوالي 10 قطرات من KOH المذاب في الميثانول.\n3. رج وقارن الرائحة مع ميثيل بنزوات المرجعي.",
+      "test_type": "F/L",
+      "test_number": "Test 9",
+      "reference": "Grant, F.W., Martin, W.C., Quackenbush, R.W.. Bull.Narc., No.2 (1975) 33.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Smell from a safe distance (15-20 cm) with brief sniff",
+          "instruction_ar": "اشتم من مسافة آمنة (15-20 سم) بشمّة قصيرة",
+          "safety_warning": "Avoid direct inhalation of vapors",
+          "safety_warning_ar": "تجنب استنشاق الأبخرة مباشرة",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Characteristic methyl benzoate smell",
+          "color_result_ar": "رائحة ميثيل بنزوات مميزة",
+          "color_hex": "#87CEEB",
+          "possible_substance": "Cocaine",
+          "possible_substance_ar": "كوكايين",
+          "confidence_level": "medium"
+        }
+      ]
+    },
+    {
+      "id": "wagner-test",
+      "method_name": "Wagner Test",
+      "method_name_ar": "اختبار واجنر",
+      "description": "For detecting alkaloids including cocaine hydrochloride",
+      "description_ar": "للكشف عن القلويدات بما في ذلك كوكايين هيدروكلوريد",
+      "category": "basic",
+      "safety_level": "medium",
+      "preparation_time": 4,
+      "icon": "BeakerIcon",
+      "color_primary": "#D2691E",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Iodine",
+          "name_ar": "يود"
+        },
+        {
+          "name": "Potassium Iodide",
+          "name_ar": "يوديد البوتاسيوم"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add five drops of water and shake the test tube for a few seconds.\n3. Add two drops of reagent 10 (Mix 1.27 g of iodine and 2 g of potassium iodide, then dissolve the mixture in 100 ml of water).\n4. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف خمس قطرات من الماء ورج أنبوب الاختبار لبضع ثوان.\n3. أضف قطرتين من الكاشف 10 (اخلط 1.27 جرام من اليود و 2 جرام من يوديد البوتاسيوم، ثم أذب الخليط في 100 مل من الماء).\n4. راقب تغير اللون.",
+      "test_type": "L",
+      "test_number": "Test 10",
+      "reference": "Jungreis, E.. Spot Test Analysis - Clinical, Environmental, Forensic and Geochemical Applications. John Wiley & Sons, Inc., New York (1985), p. 77. Butler, W.P.. Methods of Analysis - Alkaloids, Opiates, Marihuana, Barbiturates, and Miscellaneous Drugs. Internal Revenue Service, Publication No. 341 (Rev. 6-67), p. 77.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Use for differentiating cocaine HCl from cocaine base",
+          "instruction_ar": "استخدم للتمييز بين كوكايين هيدروكلوريد وقاعدة الكوكايين",
+          "safety_warning": "Not specific - many alkaloids give similar reaction",
+          "safety_warning_ar": "غير محدد - العديد من القلويدات تعطي تفاعلاً مماثلاً",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Brown precipitate",
+          "color_result_ar": "راسب بني",
+          "color_hex": "#D2691E",
+          "possible_substance": "Cocaine hydrochloride",
+          "possible_substance_ar": "كوكايين هيدروكلوريد",
+          "confidence_level": "medium"
+        }
+      ]
+    },
+    {
+      "id": "simon-test",
+      "method_name": "Simon Test",
+      "method_name_ar": "اختبار سايمون",
+      "description": "For detecting methamphetamine and derivatives",
+      "description_ar": "للكشف عن الميثامفيتامين ومشتقاته",
+      "category": "advanced",
+      "safety_level": "high",
+      "preparation_time": 6,
+      "icon": "BeakerIcon",
+      "color_primary": "#0066FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Sodium Nitroprusside",
+          "name_ar": "نيتروبروسيد الصوديوم"
+        },
+        {
+          "name": "Acetaldehyde",
+          "name_ar": "أسيتالدهيد"
+        },
+        {
+          "name": "Sodium Carbonate",
+          "name_ar": "كربونات الصوديوم"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 12A (Dissolve 0.9 g of sodium nitroprusside in 90 ml of water, then add 10 ml of acetaldehyde).\n3. Add two drops of reagent 12B (Dissolve 2 g of sodium carbonate in 100 ml of water).\n4. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها على لوحة موضعية.\n2. أضف قطرة واحدة من الكاشف 12أ (أذب 0.9 جرام من نيتروبروسايد الصوديوم في 90 مل من الماء، ثم أضف 10 مل من الأسيتالديهايد).\n3. أضف قطرتين من الكاشف 12ب (أذب 2 جرام من كربونات الصوديوم في 100 مل من الماء).\n4. راقب تغير اللون.",
+      "test_type": "L",
+      "test_number": "Test 12",
+      "reference": "Wiegrebe, W., Vilbig, M.. Ztg.Naturforsch., 36b (1981) 1297. World Health Organization - Programme on Substance Abuse. Information Manual on Designer Drugs. WHO/PSA/90.5, Geneva (1991).",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Use fresh reagents for best results",
+          "instruction_ar": "استخدم كواشف طازجة للحصول على أفضل النتائج",
+          "safety_warning": "Reagents may degrade over time",
+          "safety_warning_ar": "قد تتحلل الكواشف بمرور الوقت",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Blue",
+          "color_result_ar": "أزرق",
+          "color_hex": "#0066FF",
+          "possible_substance": "Methamphetamine, MDMA, MDE, DMMA, PMMA",
+          "possible_substance_ar": "ميثامفيتامين، إم دي إم إيه، إم دي إي، دي إم إم إيه، بي إم إم إيه",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "simon-acetone-test",
+      "method_name": "Simon Test with Acetone",
+      "method_name_ar": "اختبار سايمون مع الأسيتون",
+      "description": "Modified Simon test for secondary amines",
+      "description_ar": "اختبار سايمون معدل للأمينات الثانوية",
+      "category": "advanced",
+      "safety_level": "medium",
+      "preparation_time": 7,
+      "icon": "BeakerIcon",
+      "color_primary": "#0066FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Sodium Nitroprusside",
+          "name_ar": "نيتروبروسيد الصوديوم"
+        },
+        {
+          "name": "Acetone",
+          "name_ar": "أسيتون"
+        },
+        {
+          "name": "Sodium Carbonate",
+          "name_ar": "كربونات الصوديوم"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 13A (Dissolve 0.9 g of sodium nitroprusside in 90 ml of water, then add 10 ml of acetone).\n3. Add two drops of reagent 13B (Dissolve 2 g of sodium carbonate in 100 ml of water).\n4. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها على لوحة موضعية.\n2. أضف قطرة واحدة من الكاشف 13أ (أذب 0.9 جرام من نيتروبروسايد الصوديوم في 90 مل من الماء، ثم أضف 10 مل من الأسيتون).\n3. أضف قطرتين من الكاشف 13ب (أذب 2 جرام من كربونات الصوديوم في 100 مل من الماء).\n4. راقب تغير اللون.",
+      "test_type": "L",
+      "test_number": "Test 13",
+      "reference": "Wiegrebe, W., Vilbig, M.. Ztg.Naturforsch., 36b (1981) 1297. World Health Organization - Programme on Substance Abuse. Information Manual on Designer Drugs. WHO/PSA/90.5, Geneva (1991).",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Differentiates between different amphetamine derivatives",
+          "instruction_ar": "يميز بين مشتقات الأمفيتامين المختلفة",
+          "safety_warning": "Acetone is flammable",
+          "safety_warning_ar": "الأسيتون قابل للاشتعال",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Blue",
+          "color_result_ar": "أزرق",
+          "color_hex": "#0066FF",
+          "possible_substance": "Methamphetamine, MDMA, MDE, DMMA, PMMA",
+          "possible_substance_ar": "ميثامفيتامين، إم دي إم إيه، إم دي إي، دي إم إم إيه، بي إم إم إيه",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "zimmermann-test",
+      "method_name": "Zimmermann Test",
+      "method_name_ar": "اختبار زيمرمان",
+      "description": "For detecting ketamine and barbiturates",
+      "description_ar": "للكشف عن الكيتامين والباربيتورات",
+      "category": "advanced",
+      "safety_level": "high",
+      "preparation_time": 6,
+      "icon": "BeakerIcon",
+      "color_primary": "#FF69B4",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "1,3-Dinitrobenzene",
+          "name_ar": "1،3-ثنائي نيتروبنزين"
+        },
+        {
+          "name": "Methanol",
+          "name_ar": "ميثانول"
+        },
+        {
+          "name": "Potassium Hydroxide",
+          "name_ar": "هيدروكسيد البوتاسيوم"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 14A (Dissolve 0.5 g of 2,4-dinitrobenzene in 100 ml of methanol).\n3. Add two drops of reagent 14B (Dissolve 5 g of potassium hydroxide in 100 ml of methanol).\n4. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها على لوحة موضعية.\n2. أضف قطرة واحدة من الكاشف 14أ (أذب 0.5 جرام من 2،4-ثنائي نيتروبنزين في 100 مل من الميثانول).\n3. أضف قطرتين من الكاشف 14ب (أذب 5 جرامات من هيدروكسيد البوتاسيوم في 100 مل من الميثانول).\n4. راقب تغير اللون.",
+      "test_type": "L",
+      "test_number": "Test 14",
+      "reference": "Kovar, K.-A., Laudszun, M.. Chemistry and Reaction Mechanisms of Rapid Tests for Drugs of Abuse and Precursor Chemicals. United Nations - Scientific and Technical Notes, SCITEC/6, Vienna (1989), p. 17.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Use for ketamine and barbiturate identification",
+          "instruction_ar": "استخدم لتحديد الكيتامين والباربيتورات",
+          "safety_warning": "Methanol is toxic - avoid skin contact",
+          "safety_warning_ar": "الميثانول سام - تجنب ملامسة الجلد",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Violet",
+          "color_result_ar": "بنفسجي",
+          "color_hex": "#8B5CF6",
+          "possible_substance": "Ketamine",
+          "possible_substance_ar": "كيتامين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Red-violet",
+          "color_result_ar": "أحمر بنفسجي",
+          "color_hex": "#FF69B4",
+          "possible_substance": "Barbiturates",
+          "possible_substance_ar": "باربيتورات",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "dille-koppanyi-test",
+      "method_name": "Dille-Koppanyi Test",
+      "method_name_ar": "اختبار ديل-كوباني",
+      "description": "For detecting barbiturates",
+      "description_ar": "للكشف عن الباربيتورات",
+      "category": "basic",
+      "safety_level": "medium",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#FF69B4",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Cobalt(II) Acetate",
+          "name_ar": "أسيتات الكوبالت الثنائي"
+        },
+        {
+          "name": "Methanol",
+          "name_ar": "ميثانول"
+        },
+        {
+          "name": "Glacial Acetic Acid",
+          "name_ar": "حمض الخليك الجليدي"
+        },
+        {
+          "name": "Isopropylamine",
+          "name_ar": "أيزوبروبيل أمين"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 15A (Dissolve 0.1 g of cobalt(II) acetate in 100 ml of methanol, then add 0.2 ml of glacial acetic acid).\n3. Add one drop of reagent 15B (Dissolve 5 g of isopropylamine in 100 ml of methanol).\n4. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها على لوحة موضعية.\n2. أضف قطرة واحدة من الكاشف 15أ (أذب 0.1 جرام من خلات الكوبالت في 100 مل من الميثانول، ثم أضف 0.2 مل من حمض الخليك الجليدي).\n3. أضف قطرة واحدة من الكاشف 15ب (أذب 5 جرامات من الأيزوبروبيل أمين في 100 مل من الميثانول).\n4. راقب تغير اللون.",
+      "test_type": "L",
+      "test_number": "Test 15",
+      "reference": "Dille, J.M., Koppanyi, T.. J.Am.Pharm.Assoc., 23 (1934) 1079. Auterhoff, H., Knabe, J., Hoeltje, H.-D.. Lehrbuch der Pharmazeutischen Chemie. 12th Edition. Wissenschaftliche Verlagsgesellschaft, Stuttgart (1991), p. 476.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Specific test for barbiturate compounds",
+          "instruction_ar": "اختبار محدد لمركبات الباربيتورات",
+          "safety_warning": "Isopropylamine has strong odor",
+          "safety_warning_ar": "الأيزوبروبيل أمين له رائحة قوية",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Violet",
+          "color_result_ar": "بنفسجي",
+          "color_hex": "#8B5CF6",
+          "possible_substance": "Barbiturates",
+          "possible_substance_ar": "باربيتورات",
+          "confidence_level": "very_high"
+        }
+      ]
+    },
+    {
+      "id": "van-urk-test",
+      "method_name": "Van Urk Test",
+      "method_name_ar": "اختبار فان أورك",
+      "description": "For detecting LSD and ergot alkaloids",
+      "description_ar": "للكشف عن LSD والقلويدات الإرغوتية",
+      "category": "specialized",
+      "safety_level": "high",
+      "preparation_time": 8,
+      "icon": "BeakerIcon",
+      "color_primary": "#0000FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "p-Dimethylaminobenzaldehyde",
+          "name_ar": "بارا-ثنائي ميثيل أمينو بنزالدهيد"
+        },
+        {
+          "name": "Concentrated Hydrochloric Acid",
+          "name_ar": "حمض الهيدروكلوريك المركز"
+        },
+        {
+          "name": "Absolute Ethanol",
+          "name_ar": "إيثانول مطلق"
+        },
+        {
+          "name": "Iron(III) Chloride",
+          "name_ar": "كلوريد الحديديك"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add five drops of reagent 16A (Dissolve 0.125 g of p-dimethylaminobenzaldehyde in 65 ml of concentrated hydrochloric acid and 35 ml of absolute ethanol).\n3. Shake the test tube for a few seconds and allow the mixture to stand for 10-15 minutes.\n4. Add five drops of reagent 16B (Dissolve 0.1 g of iron(III) chloride in 100 ml of water).\n5. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف خمس قطرات من الكاشف 16أ (أذب 0.125 جرام من بارا-ثنائي ميثيل أمينو بنزالديهايد في 65 مل من حمض الهيدروكلوريك المركز و 35 مل من الإيثانول المطلق).\n3. رج أنبوب الاختبار لبضع ثوان واترك الخليط يقف لمدة 10-15 دقيقة.\n4. أضف خمس قطرات من الكاشف 16ب (أذب 0.1 جرام من كلوريد الحديد في 100 مل من الماء).\n5. راقب تغير اللون.",
+      "test_type": "F/L",
+      "test_number": "Test 16",
+      "reference": "Van Urk, H.W.. Pharm.Weekbl., 66 (1929) 473. Genest, K., Farmilo, C.G.. J.Pharm.Pharmacol., 16 (1964) 250.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Highly sensitive test for LSD detection",
+          "instruction_ar": "اختبار عالي الحساسية للكشف عن LSD",
+          "safety_warning": "Concentrated hydrochloric acid requires caution",
+          "safety_warning_ar": "حمض الهيدروكلوريك المركز يتطلب الحذر",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Blue",
+          "color_result_ar": "أزرق",
+          "color_hex": "#0000FF",
+          "possible_substance": "LSD, Ergot alkaloids",
+          "possible_substance_ar": "LSD، قلويدات الإرغوت",
+          "confidence_level": "very_high"
+        }
+      ]
+    },
+    {
+      "id": "erlich-test",
+      "method_name": "Erlich Test",
+      "method_name_ar": "اختبار إيرليش",
+      "description": "For detecting indole alkaloids including LSD",
+      "description_ar": "للكشف عن قلويدات الإندول بما في ذلك LSD",
+      "category": "specialized",
+      "safety_level": "medium",
+      "preparation_time": 7,
+      "icon": "BeakerIcon",
+      "color_primary": "#0000FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "p-Dimethylaminobenzaldehyde",
+          "name_ar": "بارا-ثنائي ميثيل أمينو بنزالدهيد"
+        },
+        {
+          "name": "Concentrated Hydrochloric Acid",
+          "name_ar": "حمض الهيدروكلوريك المركز"
+        },
+        {
+          "name": "Absolute Ethanol",
+          "name_ar": "إيثانول مطلق"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material in a test tube.\n2. Add five drops of reagent 17 (Dissolve 1 g of p-dimethylaminobenzaldehyde in 10 ml of concentrated hydrochloric acid and 90 ml of absolute ethanol).\n3. Shake the test tube for a few seconds and allow the mixture to stand for 10-15 minutes.\n4. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف خمس قطرات من الكاشف 17 (أذب 1 جرام من بارا-ثنائي ميثيل أمينو بنزالديهايد في 10 مل من حمض الهيدروكلوريك المركز و 90 مل من الإيثانول المطلق).\n3. رج أنبوب الاختبار لبضع ثوان واترك الخليط يقف لمدة 10-15 دقيقة.\n4. راقب تغير اللون.",
+      "test_type": "F/L",
+      "test_number": "Test 17",
+      "reference": "Erlich, P.. Ber.dtsch.chem.Ges., 44 (1911) 3737. Genest, K., Farmilo, C.G.. J.Pharm.Pharmacol., 16 (1964) 250.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Classic test for indole-containing compounds",
+          "instruction_ar": "اختبار كلاسيكي للمركبات المحتوية على الإندول",
+          "safety_warning": "Not specific to LSD - other indoles react similarly",
+          "safety_warning_ar": "غير محدد لـ LSD - الإندولات الأخرى تتفاعل بشكل مماثل",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Purple-blue",
+          "color_result_ar": "أزرق بنفسجي",
+          "color_hex": "#0000FF",
+          "possible_substance": "LSD, Psilocybin, Psilocin, DMT",
+          "possible_substance_ar": "LSD، سيلوسيبين، سيلوسين، DMT",
+          "confidence_level": "high"
+        }
+      ]
+    },
+    {
+      "id": "mandelin-test",
+      "method_name": "Mandelin Test",
+      "method_name_ar": "اختبار مانديلين",
+      "description": "General alkaloid screening test",
+      "description_ar": "اختبار فحص عام للقلويدات",
+      "category": "basic",
+      "safety_level": "high",
+      "preparation_time": 4,
+      "icon": "BeakerIcon",
+      "color_primary": "#FF8C00",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Ammonium Vanadate",
+          "name_ar": "فانادات الأمونيوم"
+        },
+        {
+          "name": "Concentrated Sulfuric Acid",
+          "name_ar": "حمض الكبريتيك المركز"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 18 (Dissolve 1 g of ammonium vanadate in 100 ml of concentrated sulfuric acid).\n3. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها على لوحة موضعية.\n2. أضف قطرة واحدة من الكاشف 18 (أذب 1 جرام من فانادات الأمونيوم في 100 مل من حمض الكبريتيك المركز).\n3. راقب تغير اللون.",
+      "test_type": "L",
+      "test_number": "Test 18",
+      "reference": "Mandelin, A.. Pharm.Zentralh., 24 (1883) 419. Clarke, E.G.C.. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969), p. 802.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear full protective equipment",
+          "instruction_ar": "ارتدِ المعدات الواقية الكاملة",
+          "safety_warning": "Concentrated sulfuric acid is extremely corrosive",
+          "safety_warning_ar": "حمض الكبريتيك المركز شديد التآكل",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Green",
+          "color_result_ar": "أخضر",
+          "color_hex": "#008000",
+          "possible_substance": "Morphine, Codeine",
+          "possible_substance_ar": "مورفين، كودايين",
+          "confidence_level": "medium"
+        },
+        {
+          "color_result": "Orange to red",
+          "color_result_ar": "برتقالي إلى أحمر",
+          "color_hex": "#FF8C00",
+          "possible_substance": "Amphetamine, Methamphetamine",
+          "possible_substance_ar": "أمفيتامين، ميثامفيتامين",
+          "confidence_level": "medium"
+        },
+        {
+          "color_result": "Blue to violet",
+          "color_result_ar": "أزرق إلى بنفسجي",
+          "color_hex": "#8B5CF6",
+          "possible_substance": "LSD, Psilocybin",
+          "possible_substance_ar": "LSD، سيلوسيبين",
+          "confidence_level": "medium"
+        }
+      ]
+    }
+  ]
+}

@@ -454,7 +454,19 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
                   icon={safetyIcons.dropper}
                   text={lang === 'ar' ? 'استخدم قطارة زجاجية نظيفة' : 'Use a clean glass dropper'}
                 />
-                {testData && (
+                {/* عرض تحذيرات السلامة الخاصة من قاعدة البيانات */}
+                {testData?.instructions && testData.instructions.length > 0 && (
+                  testData.instructions.map((instruction: any, index: number) => (
+                    <EnhancedBulletPoint
+                      key={index}
+                      icon={safetyIcons.warning}
+                      text={lang === 'ar' ? instruction.safety_warning_ar : instruction.safety_warning}
+                    />
+                  ))
+                )}
+
+                {/* تحذير عام إذا لم توجد تحذيرات خاصة */}
+                {(!testData?.instructions || testData.instructions.length === 0) && testData && (
                   <EnhancedBulletPoint
                     icon={safetyIcons.warning}
                     text={testData ? (lang === 'ar' ? `تحذير خاص: كاشف ${testData.method_name_ar} يتطلب احتياطات إضافية` : `Special Warning: ${testData.method_name} reagent requires additional precautions`) : ''}
@@ -472,23 +484,52 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
           variant="chemicals"
         >
           <div className="space-y-4">
-            <EnhancedBulletPoint
-              icon={chemicalIcons.chemical}
-              text={testData ? (lang === 'ar' ? `كاشف ${testData.method_name_ar}` : `${testData.method_name} Reagent`) : (lang === 'ar' ? 'الكاشف الكيميائي' : 'Chemical Reagent')}
-            />
-            <EnhancedBulletPoint
-              icon={chemicalIcons.water}
-              text={lang === 'ar' ? 'الماء المقطر' : 'Distilled Water'}
-            />
+            {/* عرض المكونات الكيميائية من قاعدة البيانات */}
+            {testData?.chemical_components && testData.chemical_components.length > 0 ? (
+              testData.chemical_components.map((component: any, index: number) => (
+                <EnhancedBulletPoint
+                  key={index}
+                  icon={chemicalIcons.chemical}
+                  text={lang === 'ar' ? component.name_ar : component.name}
+                />
+              ))
+            ) : (
+              <>
+                <EnhancedBulletPoint
+                  icon={chemicalIcons.chemical}
+                  text={testData ? (lang === 'ar' ? `كاشف ${testData.method_name_ar}` : `${testData.method_name} Reagent`) : (lang === 'ar' ? 'الكاشف الكيميائي' : 'Chemical Reagent')}
+                />
+                <EnhancedBulletPoint
+                  icon={chemicalIcons.water}
+                  text={lang === 'ar' ? 'الماء المقطر' : 'Distilled Water'}
+                />
+              </>
+            )}
+
+            {/* إضافة طبق الاختبار دائماً */}
             <EnhancedBulletPoint
               icon={chemicalIcons.reagent}
               text={lang === 'ar' ? 'طبق اختبار نظيف' : 'Clean test plate'}
             />
-            {testData && (
-              <EnhancedBulletPoint
-                icon={chemicalIcons.chemical}
-                text={testData ? (lang === 'ar' ? `النتيجة المتوقعة: ${testData.color_result_ar || testData.color_result}` : `Expected Result: ${testData.color_result}`) : ''}
-              />
+
+            {/* عرض النتائج المتوقعة */}
+            {testData?.color_results && testData.color_results.length > 0 && (
+              <div className="mt-4 p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                <h4 className="font-semibold text-purple-800 dark:text-purple-200 mb-2">
+                  {lang === 'ar' ? 'النتائج اللونية المتوقعة:' : 'Expected Color Results:'}
+                </h4>
+                {testData.color_results.slice(0, 3).map((result: any, index: number) => (
+                  <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-1">
+                    <div
+                      className="w-4 h-4 rounded-full border border-gray-300"
+                      style={{ backgroundColor: result.color_hex }}
+                    ></div>
+                    <span className="text-sm text-purple-700 dark:text-purple-300">
+                      {lang === 'ar' ? result.color_result_ar : result.color_result} - {lang === 'ar' ? result.possible_substance_ar : result.possible_substance}
+                    </span>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </EnhancedInstructionFrame>

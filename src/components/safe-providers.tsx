@@ -1,6 +1,16 @@
 'use client';
 
 import { ReactNode } from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import AuthProvider to avoid SSR issues
+const AuthProvider = dynamic(
+  () => import('@/components/auth/AuthProvider').then(mod => ({ default: mod.AuthProvider })),
+  {
+    ssr: false,
+    loading: () => <div data-providers="loading">Loading...</div>
+  }
+);
 
 // Smart provider that uses real auth in browser, safe defaults during build
 export function Providers({ children }: { children: ReactNode }) {
@@ -10,13 +20,7 @@ export function Providers({ children }: { children: ReactNode }) {
   }
 
   // In browser, use real auth provider
-  try {
-    const { AuthProvider } = require('@/components/auth/AuthProvider');
-    return <AuthProvider>{children}</AuthProvider>;
-  } catch (error) {
-    console.warn('⚠️ Failed to load AuthProvider, using fallback:', error);
-    return <div data-providers="fallback">{children}</div>;
-  }
+  return <AuthProvider>{children}</AuthProvider>;
 }
 
 // Smart useAuth that uses real auth in browser, safe defaults during build

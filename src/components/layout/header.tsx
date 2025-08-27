@@ -102,20 +102,28 @@ export function Header({ lang }: HeaderProps) {
 
   const handleSignOut = async () => {
     try {
+      console.log('🔄 Starting logout process...');
+
       // إذا كان مدير، امسح جلسة المدير
       if (isAdmin) {
+        console.log('🔄 Clearing admin session...');
         localStorage.removeItem('admin_session');
         setIsAdmin(false);
       }
 
       // إذا كان مستخدم عادي، سجل خروج من Firebase
       if (user) {
+        console.log('🔄 Logging out user from Firebase...');
         await logout();
+        console.log('✅ User logged out successfully');
       }
 
+      // إعادة توجيه إلى الصفحة الرئيسية
       router.push(`/${lang}`);
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('❌ Error signing out:', error);
+      // حتى لو فشل تسجيل الخروج، أعد التوجيه إلى الصفحة الرئيسية
+      router.push(`/${lang}`);
     }
   };
 
@@ -211,16 +219,19 @@ export function Header({ lang }: HeaderProps) {
 
                   {user && !isAdmin && (
                     <>
+                      {/* Profile Button with enhanced visibility */}
                       <Button
                         variant="ghost"
                         size="sm"
                         asChild
-                        className="touch-manipulation"
+                        className="touch-manipulation bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/20 dark:hover:bg-primary-800/30"
                       >
                         <Link href={`/${lang}/profile`}>
                           <span className="flex items-center">
-                            <UserIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                            <span className="hidden xl:inline">{t('navigation.profile')}</span>
+                            <div className="w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center mr-2 rtl:ml-2 rtl:mr-0">
+                              <UserIcon className="h-3 w-3 text-white" />
+                            </div>
+                            <span className="hidden xl:inline text-primary-700 dark:text-primary-300 font-medium">{t('navigation.profile')}</span>
                           </span>
                         </Link>
                       </Button>
@@ -240,15 +251,18 @@ export function Header({ lang }: HeaderProps) {
                     </>
                   )}
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleSignOut}
-                    className="touch-manipulation"
-                  >
-                    <PowerIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                    <span className="hidden xl:inline">{t('navigation.logout')}</span>
-                  </Button>
+                  {/* Logout button - only show if user is logged in */}
+                  {(user || isAdmin) && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleSignOut}
+                      className="touch-manipulation"
+                    >
+                      <PowerIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                      <span className="hidden xl:inline">{t('navigation.logout')}</span>
+                    </Button>
+                  )}
                 </div>
               </div>
             ) : (
@@ -376,7 +390,7 @@ export function Header({ lang }: HeaderProps) {
               </div>
 
               {/* User Section */}
-              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
+              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
                 {user || isAdmin ? (
                   <div className="space-y-3">
                     {/* User Profile Card */}

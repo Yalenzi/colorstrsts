@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Language } from '@/types';
+import { useAuth } from '@/components/safe-providers';
 
 interface SimpleGoogleSignInProps {
   lang?: Language;
@@ -26,6 +27,7 @@ export function SimpleGoogleSignIn({
   fullWidth = true
 }: SimpleGoogleSignInProps) {
   const [loading, setLoading] = useState(false);
+  const { signInWithGoogle } = useAuth();
   const isRTL = lang === 'ar';
 
   const texts = {
@@ -36,46 +38,31 @@ export function SimpleGoogleSignIn({
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    
+
     try {
       console.log('🔄 Starting simple Google Sign-In...');
-      
-      // إنشاء URL للـ OAuth مباشرة
-      const clientId = '991442547146-lfjk8eg4rmi4q0veidfqqqgoq7l9ul0r.apps.googleusercontent.com'; // استبدل بـ client ID الفعلي
-      const redirectUri = `${window.location.origin}/${lang}/auth/google-callback`;
-      const scope = 'email profile';
-      const responseType = 'code';
-      const state = Math.random().toString(36).substring(2, 15);
-      
-      // حفظ state في localStorage للتحقق لاحقاً
-      localStorage.setItem('google_oauth_state', state);
-      localStorage.setItem('google_oauth_lang', lang);
-      
-      const googleAuthUrl = `https://accounts.google.com/oauth/authorize?` +
-        `client_id=${encodeURIComponent(clientId)}&` +
-        `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-        `scope=${encodeURIComponent(scope)}&` +
-        `response_type=${encodeURIComponent(responseType)}&` +
-        `state=${encodeURIComponent(state)}&` +
-        `access_type=offline&` +
-        `prompt=select_account`;
-      
-      console.log('🔄 Redirecting to Google OAuth...');
-      console.log('🔍 Redirect URI:', redirectUri);
-      
-      // إعادة توجيه مباشرة إلى Google
-      window.location.href = googleAuthUrl;
-      
+
+      // استخدام Firebase Auth للتسجيل بـ Google
+      const result = await signInWithGoogle();
+
+      console.log('✅ Google Sign-In successful');
+
+      if (onSuccess && result?.user) {
+        onSuccess(result.user);
+      }
+
     } catch (error: any) {
       console.error('❌ Simple Google Sign-In error:', error);
-      
+
       setLoading(false);
-      
+
       const errorMessage = error.message || texts.error;
-      
+
       if (onError) {
         onError(errorMessage);
       }
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
-import { getColorResultsLocal } from '@/lib/local-data-service';
+import { getColorResultsLocal, getTestById } from '@/lib/local-data-service';
 import { Button } from '@/components/ui/button';
 import { ImageColorAnalyzer } from '@/components/ui/image-color-analyzer';
 import {
@@ -98,10 +98,32 @@ export function ColorSelector({
         if (colorResults && colorResults.length > 0) {
           setAvailableColors(colorResults);
         } else {
-          // Otherwise load all color results and convert them
-          const allColors = getColorResultsLocal();
-          const convertedColors = allColors.map(convertColorResult);
-          setAvailableColors(convertedColors);
+          // Load colors from the specific test
+          const test = getTestById(testId);
+          if (test?.color_results && test.color_results.length > 0) {
+            // Convert test color results to ColorResult format
+            const testColors: ColorResult[] = test.color_results.map((result, index) => ({
+              id: `${testId}-${index}`,
+              test_id: testId,
+              hex_code: result.color_hex,
+              color_name: {
+                ar: result.color_result_ar,
+                en: result.color_result
+              },
+              substances: {
+                ar: [result.possible_substance_ar],
+                en: [result.possible_substance]
+              },
+              confidence: getConfidenceScore(result.confidence_level),
+              confidence_level: result.confidence_level
+            }));
+            setAvailableColors(testColors);
+          } else {
+            // Fallback to all color results
+            const allColors = getColorResultsLocal();
+            const convertedColors = allColors.map(convertColorResult);
+            setAvailableColors(convertedColors);
+          }
         }
       } catch (error) {
         console.error('Error loading colors:', error);
@@ -111,7 +133,7 @@ export function ColorSelector({
     };
 
     loadColors();
-  }, [colorResults]);
+  }, [colorResults, testId]);
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 85) return 'text-green-600 bg-green-50 border-green-200';

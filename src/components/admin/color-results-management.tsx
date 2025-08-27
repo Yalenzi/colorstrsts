@@ -67,17 +67,17 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
         colorResults = JSON.parse(savedResults);
         console.log('📦 Loaded color results from localStorage:', colorResults.length);
       } else {
-        // إنشاء بيانات تجريبية من الاختبارات
-        colorResults = testsData.slice(0, 10).flatMap((test, index) =>
-          test.color_results?.slice(0, 3).map((result, resultIndex) => ({
+        // إنشاء بيانات من الاختبارات الجديدة
+        colorResults = testsData.flatMap((test, index) =>
+          test.color_results?.map((result, resultIndex) => ({
             id: `${test.id}-${resultIndex}`,
             test_id: test.id,
-            color_result: result.color || 'Unknown',
-            color_result_ar: result.color_ar || result.color || 'غير معروف',
+            color_result: result.color_result || 'Unknown',
+            color_result_ar: result.color_result_ar || 'غير معروف',
             color_hex: result.color_hex || '#808080',
-            possible_substance: result.substance || 'Unknown substance',
-            possible_substance_ar: result.substance_ar || result.substance || 'مادة غير معروفة',
-            confidence_level: result.confidence || 'medium'
+            possible_substance: result.possible_substance || 'Unknown substance',
+            possible_substance_ar: result.possible_substance_ar || 'مادة غير معروفة',
+            confidence_level: result.confidence_level || 'medium'
           })) || []
         );
 
