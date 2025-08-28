@@ -190,22 +190,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const signInWithGoogle = async () => {
     try {
       console.log('🔄 Starting Google Sign-In...');
-      console.log('🔧 Current domain:', typeof window !== 'undefined' ? window.location.hostname : 'SSR');
-      console.log('🔧 Auth domain:', auth.app.options.authDomain);
 
       // التحقق من إعدادات Firebase
       if (!auth.app.options.apiKey) {
-        console.error('❌ Firebase API Key is missing');
-        throw new Error('Firebase API Key is missing. Please check your Firebase configuration.');
+        throw new Error('Firebase API Key is missing');
       }
-
-      if (!auth.app.options.projectId) {
-        console.error('❌ Firebase Project ID is missing');
-        throw new Error('Firebase Project ID is missing. Please check your Firebase configuration.');
-      }
-
-      console.log('✅ Firebase configuration is valid');
-      console.log('🔧 Project ID:', auth.app.options.projectId);
 
       const provider = new GoogleAuthProvider();
 
@@ -219,16 +208,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         access_type: 'offline'
       });
 
-      const FORCE_REDIRECT = process.env.NEXT_PUBLIC_AUTH_FORCE_REDIRECT === 'true';
-
-      // إذا كنا على colorstest.com ونريد تقليل مشاكل الـ popup، نستخدم redirect مباشرة
-      const isProductionHost = typeof window !== 'undefined' && /(^|\.)colorstest\.com$/i.test(window.location.hostname);
-      if (FORCE_REDIRECT && isProductionHost) {
-        const { signInWithRedirect } = await import('firebase/auth');
-        await signInWithRedirect(auth, provider);
-        return;
-      }
-
       console.log('🔄 Attempting popup sign-in...');
       console.log('Firebase Auth instance:', auth);
       console.log('Google Provider:', provider);
@@ -237,38 +216,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
       let result;
       try {
         result = await signInWithPopup(auth, provider);
-        // Create secure session cookie via Netlify Function
-        try {
-          const idToken = await result.user.getIdToken(true);
-          await fetch('/api/sessionLogin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ idToken })
-          });
-        } catch (e) {
-          console.warn('⚠️ Failed to create session cookie:', e);
-        }
       } catch (popupError: any) {
         console.warn('⚠️ Popup failed, trying redirect...', popupError);
 
-        // قائمة الأخطاء التي تستدعي استخدام redirect
-        const redirectErrors = [
-          'auth/popup-blocked',
-          'auth/popup-closed-by-user',
-          'auth/cancelled-popup-request',
-          'auth/internal-error', // إضافة internal-error للـ fallback
-          'auth/unauthorized-domain',
-          'auth/network-request-failed'
-        ];
-
-        if (redirectErrors.includes(popupError.code)) {
-          console.log('🔄 Switching to redirect authentication...');
+        if (popupError.code === 'auth/popup-blocked' ||
+            popupError.code === 'auth/popup-closed-by-user' ||
+            popupError.code === 'auth/cancelled-popup-request') {
           // استخدام redirect كبديل
           const { signInWithRedirect } = await import('firebase/auth');
           await signInWithRedirect(auth, provider);
           return; // سيتم إعادة التوجيه
+        } else {
+          throw popupError;
         }
-        throw popupError;
       }
 
       // التحقق من نجاح العملية
@@ -289,30 +249,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('Error details:', {
         code: error.code,
         message: error.message,
-        stack: error.stack,
-        currentDomain: typeof window !== 'undefined' ? window.location.hostname : 'SSR',
-        authDomain: auth.app.options.authDomain,
-        projectId: auth.app.options.projectId
+        stack: error.stack
       });
-
-      // إضافة معلومات تشخيصية للأخطاء الشائعة
-      if (error.code === 'auth/unauthorized-domain') {
-        console.error('🚨 UNAUTHORIZED DOMAIN ERROR:');
-        console.error('Current domain:', typeof window !== 'undefined' ? window.location.hostname : 'Unknown');
-        console.error('Auth domain:', auth.app.options.authDomain);
-        console.error('Solution: Add this domain to Firebase Console > Authentication > Settings > Authorized domains');
-      }
-
-      if (error.code === 'auth/popup-blocked') {
-        console.error('🚨 POPUP BLOCKED ERROR:');
-        console.error('Solution: Allow popups in browser or the system will automatically try redirect method');
-      }
-
-      if (error.code === 'auth/internal-error') {
-        console.error('🚨 INTERNAL ERROR:');
-        console.error('This might be due to configuration issues or network problems');
-        console.error('Check Firebase configuration and network connectivity');
-      }
 
       // معالجة أخطاء محددة مع رسائل واضحة
       const errorMessage = getGoogleSignInErrorMessage(error.code);

@@ -512,25 +512,7 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
               text={lang === 'ar' ? 'طبق اختبار نظيف' : 'Clean test plate'}
             />
 
-            {/* عرض النتائج المتوقعة */}
-            {testData?.color_results && testData.color_results.length > 0 && (
-              <div className="mt-4 p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-                <h4 className="font-semibold text-purple-800 dark:text-purple-200 mb-2">
-                  {lang === 'ar' ? 'النتائج اللونية المتوقعة:' : 'Expected Color Results:'}
-                </h4>
-                {testData.color_results.slice(0, 3).map((result: any, index: number) => (
-                  <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-1">
-                    <div
-                      className="w-4 h-4 rounded-full border border-gray-300"
-                      style={{ backgroundColor: result.color_hex }}
-                    ></div>
-                    <span className="text-sm text-purple-700 dark:text-purple-300">
-                      {lang === 'ar' ? result.color_result_ar : result.color_result} - {lang === 'ar' ? result.possible_substance_ar : result.possible_substance}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
+
           </div>
         </EnhancedInstructionFrame>
 

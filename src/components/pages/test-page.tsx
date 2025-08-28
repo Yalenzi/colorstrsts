@@ -163,28 +163,32 @@ export function TestPage({ lang, testId }: TestPageProps) {
 
         console.log('🔥 Loaded test data from local storage');
 
-        // Create default color results and instructions (since they're not in Firebase yet)
-        const colorResultsData = createDefaultColorResults(testId);
-        const instructionsData: TestInstruction[] = [
-          {
-            id: `${testId}-inst-1`,
-            test_id: testId,
-            step_number: 1,
-            instruction_ar: 'ضع عينة صغيرة من المادة في أنبوب الاختبار',
-            instruction_en: 'Place a small sample of the substance in the test tube',
-            safety_note_ar: 'استخدم القفازات والنظارات الواقية',
-            safety_note_en: 'Use gloves and safety goggles'
+        // Convert color results from test data to ColorResult format
+        const colorResultsData: ColorResult[] = testData.color_results?.map((result, index) => ({
+          id: `${testId}-color-${index + 1}`,
+          test_id: testId,
+          hex_code: result.color_hex || '#808080',
+          color_name: {
+            ar: result.color_result_ar || 'لون غير محدد',
+            en: result.color_result || 'Undefined color'
           },
-          {
-            id: `${testId}-inst-2`,
-            test_id: testId,
-            step_number: 2,
-            instruction_ar: 'أضف 2-3 قطرات من الكاشف',
-            instruction_en: 'Add 2-3 drops of reagent',
-            safety_note_ar: 'تجنب ملامسة الكاشف للجلد',
-            safety_note_en: 'Avoid reagent contact with skin'
-          }
-        ];
+          substance_name: {
+            ar: result.possible_substance_ar || 'مادة غير محددة',
+            en: result.possible_substance || 'Undefined substance'
+          },
+          confidence_level: result.confidence_level || 'medium'
+        })) || [];
+
+        // Convert instructions from test data
+        const instructionsData: TestInstruction[] = testData.instructions?.map((inst, index) => ({
+          id: `${testId}-inst-${index + 1}`,
+          test_id: testId,
+          step_number: inst.step_number || index + 1,
+          instruction_ar: inst.instruction_ar || 'تعليمات غير متوفرة',
+          instruction_en: inst.instruction || 'Instructions not available',
+          safety_note_ar: inst.safety_warning_ar || 'لا توجد تحذيرات خاصة',
+          safety_note_en: inst.safety_warning || 'No specific warnings'
+        })) || [];
 
         setTest(testData);
         setColorResults(colorResultsData);
