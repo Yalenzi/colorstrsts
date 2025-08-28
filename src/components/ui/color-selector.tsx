@@ -6,6 +6,7 @@ import { getTranslationsSync } from '@/lib/translations';
 import { getColorResultsLocal, getTestById } from '@/lib/local-data-service';
 import { Button } from '@/components/ui/button';
 import { ImageColorAnalyzer } from '@/components/ui/image-color-analyzer';
+import { useTestCompletion, createTestCompletionData, useTestTimer } from '@/hooks/useTestCompletion';
 import {
   EyeIcon,
   CheckCircleIcon,
@@ -87,7 +88,18 @@ export function ColorSelector({
   const [availableColors, setAvailableColors] = useState<ColorResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [showImageAnalyzer, setShowImageAnalyzer] = useState(false);
+  const [testStartTime, setTestStartTime] = useState<number | null>(null);
   const t = getTranslationsSync(lang);
+
+  // Test completion hooks
+  const { completeTest, isUserLoggedIn } = useTestCompletion();
+  const { startTest, getTestDuration } = useTestTimer();
+
+  // Start test timer when component mounts
+  useEffect(() => {
+    const startTime = startTest();
+    setTestStartTime(startTime);
+  }, [startTest]);
 
   useEffect(() => {
     const loadColors = async () => {
@@ -293,7 +305,7 @@ export function ColorSelector({
               {/* Color Name */}
               <div className="text-center">
                 <h3 className="font-semibold text-foreground text-sm">
-                  {lang === 'ar' ? color.color_name.ar : color.color_name.en}
+                  {lang === 'ar' ? color.color_name?.ar || 'لون غير محدد' : color.color_name?.en || 'Undefined color'}
                 </h3>
                 <p className="text-xs text-muted-foreground mt-1">
                   {color.hex_code}
@@ -333,7 +345,7 @@ export function ColorSelector({
                 />
                 <div>
                   <h4 className="font-medium text-foreground">
-                    {lang === 'ar' ? selectedColorResult.color_name.ar : selectedColorResult.color_name.en}
+                    {lang === 'ar' ? selectedColorResult.color_name?.ar || 'لون غير محدد' : selectedColorResult.color_name?.en || 'Undefined color'}
                   </h4>
                   <p className="text-sm text-muted-foreground">
                     {selectedColorResult.hex_code}
@@ -409,9 +421,30 @@ export function ColorSelector({
         </div>
 
         <Button
-          onClick={() => {
+          onClick={async () => {
             console.log('View Results clicked, selectedColorResult:', selectedColorResult);
             if (selectedColorResult) {
+              // Save test result if user is logged in
+              if (isUserLoggedIn && testStartTime) {
+                try {
+                  const test = getTestById(testId);
+                  if (test) {
+                    const testCompletionData = createTestCompletionData(
+                      testId,
+                      test.method_name || 'Unknown Test',
+                      test.method_name_ar || 'اختبار غير معروف',
+                      selectedColorResult,
+                      testStartTime
+                    );
+
+                    await completeTest(testCompletionData);
+                  }
+                } catch (error) {
+                  console.error('❌ Error saving test result:', error);
+                }
+              }
+
+              // Call the original onComplete
               onComplete();
             }
           }}

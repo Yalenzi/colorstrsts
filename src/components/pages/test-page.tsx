@@ -254,9 +254,15 @@ export function TestPage({ lang, testId }: TestPageProps) {
   }, [user, test, testId, visitStartTime]);
 
   const handleStepComplete = (step: TestStep) => {
+    // Scroll to top smoothly when transitioning between steps
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     switch (step) {
       case 'instructions':
-        setCurrentStep('color-selection');
+        // Small delay to ensure smooth transition
+        setTimeout(() => {
+          setCurrentStep('color-selection');
+        }, 300);
         break;
       case 'color-selection':
         if (selectedColorResult && session) {

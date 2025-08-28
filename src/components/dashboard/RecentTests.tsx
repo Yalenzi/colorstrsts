@@ -6,6 +6,7 @@ import { Language } from '@/types';
 import { useAuth } from '@/components/safe-providers';
 import { getTranslationsSync } from '@/lib/translations';
 import { Button } from '@/components/ui/button';
+import { getRecentTestsForDashboard, UserTestResult } from '@/lib/user-test-history';
 import {
   BeakerIcon,
   EyeIcon,
@@ -20,71 +21,33 @@ interface RecentTestsProps {
   lang: Language;
 }
 
-interface TestResult {
-  id: string;
-  testType: string;
-  color: string;
-  result: 'positive' | 'negative' | 'inconclusive';
-  date: string;
-  substances?: string[];
-}
-
 export function RecentTests({ lang }: RecentTestsProps) {
   const { user } = useAuth();
   const t = getTranslationsSync(lang);
-  const [tests, setTests] = useState<TestResult[]>([]);
+  const [tests, setTests] = useState<UserTestResult[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // هنا يمكن جلب الاختبارات الفعلية من قاعدة البيانات
-    // مؤقتاً سنستخدم بيانات تجريبية
-    const mockTests: TestResult[] = [
-      {
-        id: '1',
-        testType: 'Marquis',
-        color: '#8B4513',
-        result: 'positive',
-        date: '2024-01-15T10:30:00Z',
-        substances: ['MDMA', 'Amphetamine']
-      },
-      {
-        id: '2',
-        testType: 'Mecke',
-        color: '#000080',
-        result: 'negative',
-        date: '2024-01-14T15:45:00Z',
-        substances: []
-      },
-      {
-        id: '3',
-        testType: 'Liebermann',
-        color: '#FFD700',
-        result: 'inconclusive',
-        date: '2024-01-13T09:15:00Z',
-        substances: ['Unknown']
-      },
-      {
-        id: '4',
-        testType: 'Simon',
-        color: '#4169E1',
-        result: 'positive',
-        date: '2024-01-12T14:20:00Z',
-        substances: ['MDMA']
-      },
-      {
-        id: '5',
-        testType: 'Marquis',
-        color: '#32CD32',
-        result: 'negative',
-        date: '2024-01-11T11:10:00Z',
-        substances: []
+    const loadRecentTests = async () => {
+      if (!user?.uid) {
+        setLoading(false);
+        return;
       }
-    ];
-    
-    setTimeout(() => {
-      setTests(mockTests);
-      setLoading(false);
-    }, 1000);
+
+      try {
+        console.log('🔄 Loading recent tests for user:', user.uid);
+        const recentTests = await getRecentTestsForDashboard(user.uid);
+        setTests(recentTests);
+        console.log('✅ Loaded recent tests:', recentTests.length);
+      } catch (error) {
+        console.error('❌ Error loading recent tests:', error);
+        setTests([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRecentTests();
   }, [user]);
 
   const formatDate = (dateString: string) => {
@@ -104,17 +67,22 @@ export function RecentTests({ lang }: RecentTestsProps) {
     });
   };
 
-  const getResultIcon = (result: string) => {
-    switch (result) {
-      case 'positive':
-        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
-      case 'negative':
-        return <XCircleIcon className="h-5 w-5 text-red-500" />;
-      case 'inconclusive':
-        return <ExclamationTriangleIcon className="h-5 w-5 text-yellow-500" />;
-      default:
-        return <BeakerIcon className="h-5 w-5 text-gray-500" />;
+  const getResultIcon = (confidence: string) => {
+    const confidenceNum = parseFloat(confidence);
+    if (confidenceNum >= 80) {
+      return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+    } else if (confidenceNum >= 50) {
+      return <ExclamationTriangleIcon className="h-5 w-5 text-yellow-500" />;
+    } else {
+      return <XCircleIcon className="h-5 w-5 text-red-500" />;
     }
+  };
+
+  const getConfidenceColor = (confidence: string) => {
+    const confidenceNum = parseFloat(confidence);
+    if (confidenceNum >= 80) return 'text-green-600 bg-green-50';
+    if (confidenceNum >= 50) return 'text-yellow-600 bg-yellow-50';
+    return 'text-red-600 bg-red-50';
   };
 
   const getResultText = (result: string) => {
@@ -220,8 +188,8 @@ export function RecentTests({ lang }: RecentTestsProps) {
               <div className="flex-shrink-0">
                 <div
                   className="w-12 h-12 rounded-lg border-2 border-gray-300 dark:border-gray-600"
-                  style={{ backgroundColor: test.color }}
-                  title={`Color: ${test.color}`}
+                  style={{ backgroundColor: test.selectedColor.hex_code }}
+                  title={`Color: ${test.selectedColor.hex_code}`}
                 />
               </div>
 
@@ -229,46 +197,46 @@ export function RecentTests({ lang }: RecentTestsProps) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 rtl:space-x-reverse mb-1">
                   <h3 className="text-lg font-semibold text-foreground">
-                    {test.testType}
+                    {lang === 'ar' ? test.testNameAr : test.testName}
                   </h3>
-                  {getResultIcon(test.result)}
+                  {getResultIcon(test.result.confidence)}
                 </div>
-                
+
                 <div className="flex items-center space-x-4 rtl:space-x-reverse text-sm text-muted-foreground">
                   <div className="flex items-center space-x-1 rtl:space-x-reverse">
                     <CalendarIcon className="h-4 w-4" />
-                    <span>{formatDate(test.date)}</span>
+                    <span>{formatDate(test.completedAt)}</span>
                   </div>
                   <div className="flex items-center space-x-1 rtl:space-x-reverse">
                     <ClockIcon className="h-4 w-4" />
-                    <span>{formatTime(test.date)}</span>
+                    <span>{formatTime(test.completedAt)}</span>
                   </div>
                 </div>
 
-                {test.substances && test.substances.length > 0 && (
+                {test.result.substance && (
                   <div className="mt-2">
                     <div className="flex flex-wrap gap-1">
-                      {test.substances.map((substance, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/20 dark:text-primary-300"
-                        >
-                          {substance}
-                        </span>
-                      ))}
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/20 dark:text-primary-300">
+                        {lang === 'ar' ? test.result.substanceAr : test.result.substance}
+                      </span>
                     </div>
                   </div>
                 )}
+
+                {/* Color name */}
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {lang === 'ar' ? test.selectedColor.color_name?.ar : test.selectedColor.color_name?.en}
+                </div>
               </div>
 
               {/* النتيجة والإجراءات */}
               <div className="flex-shrink-0 text-right rtl:text-left">
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getResultColor(test.result)}`}>
-                  {getResultText(test.result)}
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getConfidenceColor(test.result.confidence)}`}>
+                  {test.result.confidence}% {lang === 'ar' ? 'ثقة' : 'confidence'}
                 </span>
                 <div className="mt-2">
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/${lang}/results/${test.id}`}>
+                    <Link href={`/${lang}/tests/${test.testId}`}>
                       <EyeIcon className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
                       {lang === 'ar' ? 'عرض' : 'View'}
                     </Link>

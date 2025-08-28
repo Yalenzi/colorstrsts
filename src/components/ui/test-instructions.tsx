@@ -397,187 +397,274 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
   const chemicalIcons = ChemicalIcons();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-gray-800">
-      <div className="max-w-6xl mx-auto p-4 sm:p-8">
-        {/* Enhanced Header */}
-        <EnhancedHeader
-          title={testData ? (lang === 'ar' ? testData.method_name_ar : testData.method_name) : (lang === 'ar' ? 'اختبار كيميائي' : 'Chemical Test')}
-          subtitle={testData?.method_name || (lang === 'ar' ? 'اختبار كيميائي متقدم للكشف عن المواد' : 'Advanced Chemical Detection Test')}
-          onBack={onCancel}
-        />
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 ${lang === 'ar' ? 'rtl' : 'ltr'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Center the entire Safety Instructions Card horizontally */}
+      <div className="flex justify-center min-h-screen py-8">
+        <div className="w-full max-w-4xl px-4 space-y-6">
 
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+              {testData ? (lang === 'ar' ? testData.method_name_ar : testData.method_name) : (lang === 'ar' ? 'اختبار كيميائي' : 'Chemical Test')}
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              {lang === 'ar' ? 'تعليمات السلامة والإجراءات' : 'Safety Instructions and Procedures'}
+            </p>
+          </div>
 
-
-        {/* إطار تعليمات السلامة المحسن */}
-        <EnhancedInstructionFrame
-          title={lang === 'ar' ? 'تعليمات السلامة' : 'Safety Instructions'}
-          icon={<ShieldCheckIcon className="w-7 h-7" />}
-          variant="safety"
-        >
-          <div className="space-y-6">
-            <div>
-              <h4 className="text-xl font-bold text-foreground mb-4 flex items-center">
-                <EyeIcon className="w-6 h-6 mr-3 rtl:ml-3 rtl:mr-0 text-red-600" />
-                {lang === 'ar' ? 'المعدات المطلوبة:' : 'Required Equipment:'}
-              </h4>
-              <div className="space-y-2">
-                <EnhancedBulletPoint
-                  icon={safetyIcons.goggles}
-                  text={lang === 'ar' ? 'نظارات أمان واقية' : 'Protective safety goggles'}
-                />
-                <EnhancedBulletPoint
-                  icon={safetyIcons.gloves}
-                  text={lang === 'ar' ? 'قفازات مقاومة للمواد الكيميائية' : 'Chemical-resistant gloves'}
-                />
-                <EnhancedBulletPoint
-                  icon={safetyIcons.ventilation}
-                  text={lang === 'ar' ? 'تهوية ممتازة في المكان' : 'Excellent ventilation in the area'}
-                />
+          {/* Required Equipment Section */}
+          {/* Title Card */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="flex items-center space-x-3 rtl:space-x-reverse">
+              <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                <EyeDropperIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                {lang === 'ar' ? 'المعدات المطلوبة' : 'Required Equipment'}
+              </h2>
             </div>
+          </div>
 
-            <div>
-              <h4 className="text-xl font-bold text-foreground mb-4 flex items-center">
-                <HandRaisedIcon className="w-6 h-6 mr-3 rtl:ml-3 rtl:mr-0 text-red-600" />
-                {lang === 'ar' ? 'إجراءات التعامل:' : 'Handling Procedures:'}
-              </h4>
-              <div className="space-y-2">
-                <EnhancedBulletPoint
-                  icon={safetyIcons.testPlate}
-                  text={lang === 'ar' ? 'استخدم طبق اختبار نظيف' : 'Use a clean test plate'}
-                />
-                <EnhancedBulletPoint
-                  icon={safetyIcons.warning}
-                  text={lang === 'ar' ? 'تجنب ملامسة الجلد' : 'Avoid skin contact'}
-                />
-                <EnhancedBulletPoint
-                  icon={safetyIcons.dropper}
-                  text={lang === 'ar' ? 'استخدم قطارة زجاجية نظيفة' : 'Use a clean glass dropper'}
-                />
-                {/* عرض تحذيرات السلامة الخاصة من قاعدة البيانات */}
-                {testData?.instructions && testData.instructions.length > 0 && (
-                  testData.instructions.map((instruction: any, index: number) => (
-                    <EnhancedBulletPoint
-                      key={index}
-                      icon={safetyIcons.warning}
-                      text={lang === 'ar' ? instruction.safety_warning_ar : instruction.safety_warning}
-                    />
-                  ))
-                )}
-
-                {/* تحذير عام إذا لم توجد تحذيرات خاصة */}
-                {(!testData?.instructions || testData.instructions.length === 0) && testData && (
-                  <EnhancedBulletPoint
-                    icon={safetyIcons.warning}
-                    text={testData ? (lang === 'ar' ? `تحذير خاص: كاشف ${testData.method_name_ar} يتطلب احتياطات إضافية` : `Special Warning: ${testData.method_name} reagent requires additional precautions`) : ''}
-                  />
-                )}
+          {/* Equipment List Card */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                  <EyeIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'نظارات أمان واقية' : 'Protective safety goggles'}</span>
+              </div>
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                  <ShieldCheckIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'قفازات مقاومة للمواد الكيميائية' : 'Chemical-resistant gloves'}</span>
+              </div>
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                  <EyeDropperIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'قطارة زجاجية نظيفة' : 'Clean glass dropper'}</span>
+              </div>
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                  <CubeIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'طبق نقطي' : 'Spot plate'}</span>
               </div>
             </div>
           </div>
-        </EnhancedInstructionFrame>
 
-        {/* إطار المكونات الكيميائية المحسن */}
-        <EnhancedInstructionFrame
-          title={lang === 'ar' ? 'المكونات الكيميائية' : 'Chemical Components'}
-          icon={<CubeIcon className="w-7 h-7" />}
-          variant="chemicals"
-        >
-          <div className="space-y-4">
-            {/* عرض المكونات الكيميائية من قاعدة البيانات */}
-            {testData?.chemical_components && testData.chemical_components.length > 0 ? (
-              testData.chemical_components.map((component: any, index: number) => (
-                <EnhancedBulletPoint
-                  key={index}
-                  icon={chemicalIcons.chemical}
-                  text={lang === 'ar' ? component.name_ar : component.name}
-                />
-              ))
-            ) : (
-              <>
-                <EnhancedBulletPoint
-                  icon={chemicalIcons.chemical}
-                  text={testData ? (lang === 'ar' ? `كاشف ${testData.method_name_ar}` : `${testData.method_name} Reagent`) : (lang === 'ar' ? 'الكاشف الكيميائي' : 'Chemical Reagent')}
-                />
-                <EnhancedBulletPoint
-                  icon={chemicalIcons.water}
-                  text={lang === 'ar' ? 'الماء المقطر' : 'Distilled Water'}
-                />
-              </>
-            )}
+          {/* Handling Procedures Section - Title and Content in Single Card */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="flex items-center space-x-3 rtl:space-x-reverse mb-6">
+              <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                <HandRaisedIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                {lang === 'ar' ? 'إجراءات التعامل' : 'Handling Procedures'}
+              </h2>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                  <ShieldCheckIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'ارتدِ القفازات المقاومة للمواد الكيميائية' : 'Wear chemical-resistant gloves'}</span>
+              </div>
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                  <EyeIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'استخدم نظارات الأمان الواقية' : 'Use protective safety goggles'}</span>
+              </div>
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                  <ExclamationTriangleIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'تأكد من التهوية الجيدة' : 'Ensure proper ventilation'}</span>
+              </div>
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                  <ExclamationTriangleIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">{lang === 'ar' ? 'تجنب ملامسة الجلد' : 'Avoid skin contact'}</span>
+              </div>
+              {/* Display safety warnings from database */}
+              {testData?.instructions && testData.instructions.length > 0 && (
+                testData.instructions.map((instruction: any, index: number) => (
+                  <div key={index} className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mt-1">
+                      <ExclamationTriangleIcon className="w-4 h-4 text-red-600 dark:text-red-400" />
+                    </div>
+                    <span className="text-red-700 dark:text-red-300 font-medium">
+                      {lang === 'ar' ? instruction.safety_warning_ar : instruction.safety_warning}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
 
-            {/* إضافة طبق الاختبار دائماً */}
-            <EnhancedBulletPoint
-              icon={chemicalIcons.reagent}
-              text={lang === 'ar' ? 'طبق اختبار نظيف' : 'Clean test plate'}
+          {/* Chemical Components Section */}
+          {/* Title Card */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="flex items-center space-x-3 rtl:space-x-reverse">
+              <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                <CubeIcon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                {lang === 'ar' ? 'المكونات الكيميائية' : 'Chemical Components'}
+              </h2>
+            </div>
+          </div>
+
+          {/* Components List Card */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="space-y-4">
+              {/* Display chemical components from database */}
+              {testData?.chemical_components && testData.chemical_components.length > 0 ? (
+                testData.chemical_components.map((component: any, index: number) => (
+                  <div key={index} className="flex items-center space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                      <BeakerIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100">
+                      {lang === 'ar' ? component.name_ar : component.name}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                      <BeakerIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100">
+                      {testData ? (lang === 'ar' ? `كاشف ${testData.method_name_ar}` : `${testData.method_name} Reagent`) : (lang === 'ar' ? 'الكاشف الكيميائي' : 'Chemical Reagent')}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                      <BeakerIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100">
+                      {lang === 'ar' ? 'الماء المقطر' : 'Distilled Water'}
+                    </span>
+                  </div>
+                </>
+              )}
+
+              {/* Always add test plate */}
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                  <CubeIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                </div>
+                <span className="text-gray-900 dark:text-gray-100">
+                  {lang === 'ar' ? 'طبق اختبار نظيف' : 'Clean test plate'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Test Instructions Section */}
+          {/* Title Card */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="flex items-center space-x-3 rtl:space-x-reverse">
+              <div className="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center">
+                <DocumentTextIcon className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                {lang === 'ar' ? 'تعليمات الاختبار' : 'Test Instructions'}
+              </h2>
+            </div>
+          </div>
+
+          {/* Instructions List Card */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="space-y-4">
+              {prepareSteps.length > 0 ? (
+                prepareSteps.map((step, index) => (
+                  <div key={index} className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">{index + 1}</span>
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100 leading-relaxed">{step}</span>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">1</span>
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100 leading-relaxed">
+                      {lang === 'ar' ? 'ضع عينة صغيرة على طبق الاختبار' : 'Place a small sample on the test plate'}
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">2</span>
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100 leading-relaxed">
+                      {lang === 'ar' ? 'أضف ثلاث قطرات من الماء واخلط' : 'Add three drops of water and mix'}
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">3</span>
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100 leading-relaxed">
+                      {lang === 'ar' ? 'انقل القطرة إلى تجويف آخر' : 'Transfer the drop to another cavity'}
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">4</span>
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100 leading-relaxed">
+                      {testData ? (lang === 'ar' ? `أضف قطرة من كاشف ${testData.method_name_ar}` : `Add one drop of ${testData.method_name} reagent`) : (lang === 'ar' ? 'أضف قطرة من الكاشف الكيميائي' : 'Add one drop of chemical reagent')}
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-sm font-bold text-orange-600 dark:text-orange-400">5</span>
+                    </div>
+                    <span className="text-gray-900 dark:text-gray-100 leading-relaxed">
+                      {testData ? (lang === 'ar' ? `راقب تغير اللون - ${testData.color_result_ar || 'انتظر النتيجة'}` : `Observe color change - ${testData.color_result || 'wait for result'}`) : (lang === 'ar' ? 'راقب تغير اللون' : 'Observe color change')}
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Safety Acknowledgment Section */}
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+            <div className="flex items-center space-x-3 rtl:space-x-reverse mb-6">
+              <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                <CheckCircleIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                {lang === 'ar' ? 'إقرار السلامة' : 'Safety Acknowledgment'}
+              </h2>
+            </div>
+
+            <EnhancedSafetyAcknowledgment
+              checked={safetyAcknowledged}
+              onChange={handleSafetyAcknowledgment}
+              text={lang === 'ar'
+                ? 'لقد قرأت وفهمت جميع تعليمات السلامة وسأتبع إجراءات السلامة المناسبة أثناء تنفيذ الاختبار'
+                : 'I have read and understand all safety instructions and will follow proper safety procedures during test execution'
+              }
+              buttonText={safetyAcknowledged
+                ? (lang === 'ar' ? 'بدء التحليل' : 'Start Analysis')
+                : (lang === 'ar' ? 'مطلوب إقرار السلامة' : 'Safety Acknowledgment Required')
+              }
+              onSubmit={handleFinish}
             />
-
-
           </div>
-        </EnhancedInstructionFrame>
-
-        {/* إطار تعليمات الاختبار المحسن */}
-        <EnhancedInstructionFrame
-          title={lang === 'ar' ? 'تعليمات الاختبار' : 'Test Instructions'}
-          icon={<DocumentTextIcon className="w-7 h-7" />}
-          variant="instructions"
-        >
-          <div className="space-y-5">
-            {prepareSteps.length > 0 ? (
-              prepareSteps.map((step, index) => (
-                <EnhancedNumberedStep
-                  key={index}
-                  number={index + 1}
-                  text={step}
-                />
-              ))
-            ) : (
-              <>
-                <EnhancedNumberedStep
-                  number={1}
-                  text={lang === 'ar' ? 'ضع عينة صغيرة على طبق الاختبار' : 'Place a small sample on the test plate'}
-                />
-                <EnhancedNumberedStep
-                  number={2}
-                  text={lang === 'ar' ? 'أضف ثلاث قطرات من الماء واخلط' : 'Add three drops of water and mix'}
-                />
-                <EnhancedNumberedStep
-                  number={3}
-                  text={lang === 'ar' ? 'انقل القطرة إلى تجويف آخر' : 'Transfer the drop to another cavity'}
-                />
-                <EnhancedNumberedStep
-                  number={4}
-                  text={testData ? (lang === 'ar' ? `أضف قطرة من كاشف ${testData.method_name_ar}` : `Add one drop of ${testData.method_name} reagent`) : (lang === 'ar' ? 'أضف قطرة من الكاشف الكيميائي' : 'Add one drop of chemical reagent')}
-                />
-                <EnhancedNumberedStep
-                  number={5}
-                  text={testData ? (lang === 'ar' ? `راقب تغير اللون - ${testData.color_result_ar || 'انتظر النتيجة'}` : `Observe color change - ${testData.color_result || 'wait for result'}`) : (lang === 'ar' ? 'راقب تغير اللون' : 'Observe color change')}
-                />
-              </>
-            )}
-          </div>
-        </EnhancedInstructionFrame>
-
-        {/* إطار إقرار السلامة المحسن */}
-        <EnhancedInstructionFrame
-          title={lang === 'ar' ? 'إقرار السلامة' : 'Safety Acknowledgment'}
-          icon={<CheckCircleIcon className="w-7 h-7" />}
-          variant="acknowledgment"
-        >
-          <EnhancedSafetyAcknowledgment
-            checked={safetyAcknowledged}
-            onChange={handleSafetyAcknowledgment}
-            text={lang === 'ar'
-              ? 'لقد قرأت وفهمت جميع تعليمات السلامة وسأتبع إجراءات السلامة المناسبة أثناء تنفيذ الاختبار'
-              : 'I have read and understand all safety instructions and will follow proper safety procedures during test execution'
-            }
-            buttonText={safetyAcknowledged
-              ? (lang === 'ar' ? 'بدء التحليل' : 'Start Analysis')
-              : (lang === 'ar' ? 'مطلوب إقرار السلامة' : 'Safety Acknowledgment Required')
-            }
-            onSubmit={handleFinish}
-          />
-        </EnhancedInstructionFrame>
+        </div>
       </div>
     </div>
   );

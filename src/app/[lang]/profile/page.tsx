@@ -13,13 +13,13 @@ export async function generateStaticParams() {
 }
 
 interface PageProps {
-  params: Promise<{
+  params: {
     lang: Language;
-  }>;
+  };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { lang } = await params;
+  const { lang } = params;
 
   return {
     title: lang === 'ar' ? 'الملف الشخصي' : 'Profile',
@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function ProfilePage({ params }: PageProps) {
-  const { lang } = await params;
+export default function ProfilePage({ params }: PageProps) {
+  const { lang } = params;
 
   // Validate language
   if (!['ar', 'en'].includes(lang)) {
