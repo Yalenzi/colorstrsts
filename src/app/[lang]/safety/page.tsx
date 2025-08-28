@@ -13,17 +13,17 @@ export async function generateStaticParams() {
 }
 
 interface SafetyPageProps {
-  params: Promise<{
+  params: {
     lang: Language;
-  }>;
+  };
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }): Promise<Metadata> {
-  const { lang } = await params;
+  const { lang } = params;
 
   return {
     title: lang === 'ar' ? 'إرشادات السلامة' : 'Safety Guidelines',
@@ -33,8 +33,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Safety({ params }: SafetyPageProps) {
-  const { lang } = await params;
+export default function Safety({ params }: SafetyPageProps) {
+  const { lang } = params;
 
   const safetyRules = [
     {

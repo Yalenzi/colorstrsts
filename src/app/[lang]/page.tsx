@@ -13,15 +13,15 @@ export async function generateStaticParams() {
 }
 
 interface HomePageProps {
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }): Promise<Metadata> {
-  const { lang } = await params;
+  const { lang } = params;
   const t = await getTranslations(lang);
 
   return {
@@ -30,8 +30,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Home({ params }: HomePageProps) {
-  const { lang } = await params;
+export default function Home({ params }: HomePageProps) {
+  const { lang } = params;
   return (
     <AuthGuard lang={lang} requireAuth={true}>
       <HomePage lang={lang} />

@@ -8,18 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface TestValidationPageProps {
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }
 
 export default function TestValidationPage({ params }: TestValidationPageProps) {
-  const [lang, setLang] = useState<Language>('ar');
+  const lang = params.lang;
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [testResults, setTestResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    params.then(({ lang }) => setLang(lang));
-  }, [params]);
 
   const runValidation = () => {
     setLoading(true);

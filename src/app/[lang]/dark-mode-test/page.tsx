@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Language } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,16 +17,12 @@ import {
 } from '@heroicons/react/24/outline';
 
 interface DarkModeTestPageProps {
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }
 
 export default function DarkModeTestPage({ params }: DarkModeTestPageProps) {
-  const [lang, setLang] = useState<Language>('en');
+  const lang = params.lang;
   const [inputValue, setInputValue] = useState('');
-
-  React.useEffect(() => {
-    params.then(({ lang }) => setLang(lang));
-  }, [params]);
 
   const isRTL = lang === 'ar';
 

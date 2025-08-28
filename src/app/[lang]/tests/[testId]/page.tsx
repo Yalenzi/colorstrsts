@@ -74,18 +74,18 @@ export async function generateStaticParams() {
 }
 
 interface TestPageProps {
-  params: Promise<{
+  params: {
     lang: Language;
     testId: string;
-  }>;
+  };
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ lang: Language; testId: string }>;
+  params: { lang: Language; testId: string };
 }): Promise<Metadata> {
-  const { lang, testId } = await params;
+  const { lang, testId } = params;
 
   try {
     // Try to get test data from local storage for accurate metadata

@@ -15,17 +15,17 @@ export async function generateStaticParams() {
 }
 
 interface DashboardPageProps {
-  params: Promise<{
+  params: {
     lang: Language;
-  }>;
+  };
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }): Promise<Metadata> {
-  const { lang } = await params;
+  const { lang } = params;
 
   return {
     title: lang === 'ar' ? 'لوحة التحكم' : 'Dashboard',

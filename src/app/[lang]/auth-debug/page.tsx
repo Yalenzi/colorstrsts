@@ -6,16 +6,12 @@ import { GoogleAuthDiagnostic } from '@/components/auth/GoogleAuthDiagnostic';
 import { useAuth } from '@/components/safe-providers';
 
 interface AuthDebugPageProps {
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }
 
 export default function AuthDebugPage({ params }: AuthDebugPageProps) {
-  const [lang, setLang] = useState<Language>('en');
+  const lang = params.lang;
   const { user, loading } = useAuth();
-
-  useEffect(() => {
-    params.then(({ lang }) => setLang(lang));
-  }, [params]);
 
   const isRTL = lang === 'ar';
 
