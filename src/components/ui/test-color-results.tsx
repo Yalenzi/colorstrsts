@@ -113,10 +113,10 @@ export function TestColorResults({ lang }: TestColorResultsProps) {
 
   const getConfidenceColor = (level: string) => {
     switch (level?.toLowerCase()) {
-      case 'high': return 'bg-green-100 text-green-800 border-green-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'high': return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-700';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-300 dark:border-yellow-700';
+      case 'low': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-300 dark:border-red-700';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600';
     }
   };
 
@@ -154,16 +154,16 @@ export function TestColorResults({ lang }: TestColorResultsProps) {
   return (
     <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.title}</h2>
-        <p className="text-gray-600">{t.description}</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t.title}</h2>
+        <p className="text-gray-600 dark:text-gray-400">{t.description}</p>
       </div>
 
       {tests.map((test) => (
         <Card key={test.id} className="overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
             <div className="flex items-center space-x-3 rtl:space-x-reverse">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <BeakerIcon className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
+                <BeakerIcon className="h-6 w-6 text-blue-600 dark:text-blue-300" />
               </div>
               <div>
                 <CardTitle className="text-xl">
@@ -179,14 +179,14 @@ export function TestColorResults({ lang }: TestColorResultsProps) {
           <CardContent className="p-6">
             {/* Chemical Components */}
             {test.chemical_components && test.chemical_components.length > 0 && (
-              <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-                <h3 className="font-semibold text-purple-800 mb-3 flex items-center">
+              <div className="mb-6 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg">
+                <h3 className="font-semibold text-purple-800 dark:text-purple-300 mb-3 flex items-center">
                   <BeakerIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
                   {t.chemicalComponents}
                 </h3>
                 <ul className="space-y-2">
                   {test.chemical_components.map((component, index) => (
-                    <li key={index} className="text-purple-700">
+                    <li key={index} className="text-purple-700 dark:text-purple-300">
                       • {isRTL ? component.name_ar : component.name}
                     </li>
                   ))}
