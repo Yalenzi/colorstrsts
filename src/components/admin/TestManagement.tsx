@@ -374,6 +374,11 @@ export function TestManagement({ lang }: TestManagementProps) {
     setIsCreating(false);
   };
 
+  const handlePreviewTest = (test: ChemicalTest) => {
+    setSelectedTest(test);
+    setShowPreview(true);
+  };
+
   const filteredTests = tests.filter(test =>
     test.method_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     test.method_name_ar.includes(searchTerm) ||
@@ -412,6 +417,274 @@ export function TestManagement({ lang }: TestManagementProps) {
           className="w-full"
         />
       </div>
+
+      {/* Edit/Create Form */}
+      {isEditing && selectedTest && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>{isCreating ? t.addNewTest : t.editTest}</span>
+              <Button variant="outline" size="sm" onClick={handleCancelEdit}>
+                <XMarkIcon className="h-4 w-4" />
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Basic Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.testName} *</label>
+                <Input
+                  value={selectedTest.method_name || ''}
+                  onChange={(e) => setSelectedTest(prev => prev ? { ...prev, method_name: e.target.value } : null)}
+                  placeholder="Marquis Test"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.testNameAr} *</label>
+                <Input
+                  value={selectedTest.method_name_ar || ''}
+                  onChange={(e) => setSelectedTest(prev => prev ? { ...prev, method_name_ar: e.target.value } : null)}
+                  placeholder="اختبار ماركيز"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.description}</label>
+                <Textarea
+                  value={selectedTest.description || ''}
+                  onChange={(e) => setSelectedTest(prev => prev ? { ...prev, description: e.target.value } : null)}
+                  placeholder="Test description..."
+                  rows={3}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">{t.descriptionAr}</label>
+                <Textarea
+                  value={selectedTest.description_ar || ''}
+                  onChange={(e) => setSelectedTest(prev => prev ? { ...prev, description_ar: e.target.value } : null)}
+                  placeholder="وصف الاختبار..."
+                  rows={3}
+                />
+              </div>
+            </div>
+
+            {/* Safety Instructions */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <ShieldCheckIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                {t.safetyInstructions}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.safetyInstructions}</label>
+                  {selectedTest.safety_instructions?.map((instruction, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={instruction}
+                        onChange={(e) => {
+                          const newInstructions = [...(selectedTest.safety_instructions || [])];
+                          newInstructions[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, safety_instructions: newInstructions } : null);
+                        }}
+                        placeholder="Safety instruction..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newInstructions = selectedTest.safety_instructions?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, safety_instructions: newInstructions } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newInstructions = [...(selectedTest.safety_instructions || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, safety_instructions: newInstructions } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    Add
+                  </Button>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.safetyInstructionsAr}</label>
+                  {selectedTest.safety_instructions_ar?.map((instruction, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={instruction}
+                        onChange={(e) => {
+                          const newInstructions = [...(selectedTest.safety_instructions_ar || [])];
+                          newInstructions[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, safety_instructions_ar: newInstructions } : null);
+                        }}
+                        placeholder="تعليمات السلامة..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newInstructions = selectedTest.safety_instructions_ar?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, safety_instructions_ar: newInstructions } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newInstructions = [...(selectedTest.safety_instructions_ar || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, safety_instructions_ar: newInstructions } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    إضافة
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end space-x-4 rtl:space-x-reverse pt-6 border-t">
+              <Button variant="outline" onClick={handleCancelEdit}>
+                {t.cancel}
+              </Button>
+              <Button onClick={handleSaveTest}>
+                {t.save}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Preview Modal */}
+      {showPreview && selectedTest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>{t.previewTest}: {lang === 'ar' ? selectedTest.method_name_ar : selectedTest.method_name}</span>
+                <Button variant="outline" size="sm" onClick={() => setShowPreview(false)}>
+                  <XMarkIcon className="h-4 w-4" />
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Test Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold mb-2">{t.testName}</h4>
+                  <p className="text-gray-600 dark:text-gray-400">{selectedTest.method_name}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">{t.testNameAr}</h4>
+                  <p className="text-gray-600 dark:text-gray-400">{selectedTest.method_name_ar}</p>
+                </div>
+              </div>
+
+              {selectedTest.description && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">{t.description}</h4>
+                    <p className="text-gray-600 dark:text-gray-400">{selectedTest.description}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">{t.descriptionAr}</h4>
+                    <p className="text-gray-600 dark:text-gray-400">{selectedTest.description_ar}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Safety Instructions */}
+              {selectedTest.safety_instructions && selectedTest.safety_instructions.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center">
+                    <ShieldCheckIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                    {t.safetyInstructions}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 className="font-medium mb-2">English</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        {selectedTest.safety_instructions.map((instruction, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{instruction}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">العربية</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        {selectedTest.safety_instructions_ar?.map((instruction, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{instruction}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Chemical Components */}
+              {selectedTest.chemical_components && selectedTest.chemical_components.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center">
+                    <CubeIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                    {t.chemicalComponents}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {selectedTest.chemical_components.map((component, index) => (
+                      <div key={index} className="border rounded-lg p-3">
+                        <h5 className="font-medium">{component.name}</h5>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{component.name_ar}</p>
+                        {component.formula && (
+                          <p className="text-sm font-mono">{component.formula}</p>
+                        )}
+                        {component.concentration && (
+                          <p className="text-sm text-blue-600 dark:text-blue-400">{component.concentration}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Color Results */}
+              {selectedTest.color_results && selectedTest.color_results.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-2">{t.colorResults}</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {selectedTest.color_results.map((result, index) => (
+                      <div key={index} className="border rounded-lg p-3 flex items-center space-x-3 rtl:space-x-reverse">
+                        <div
+                          className="w-8 h-8 rounded-full border-2 border-gray-300"
+                          style={{ backgroundColor: result.color_hex }}
+                        />
+                        <div>
+                          <p className="font-medium">{result.color_result}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{result.color_result_ar}</p>
+                          <p className="text-xs text-gray-500">{result.possible_substance}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Tests List */}
       {!isEditing && (
@@ -481,7 +754,7 @@ export function TestManagement({ lang }: TestManagementProps) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setShowPreview(true)}
+                        onClick={() => handlePreviewTest(test)}
                       >
                         <EyeIcon className="h-4 w-4" />
                       </Button>
