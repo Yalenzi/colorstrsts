@@ -554,16 +554,6 @@ export function TestInstructions({ testId, lang, onComplete, onCancel }: TestIns
                   </div>
                 </>
               )}
-
-              {/* Always add test plate */}
-              <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
-                  <CubeIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                </div>
-                <span className="text-gray-900 dark:text-gray-100">
-                  {lang === 'ar' ? 'طبق اختبار نظيف' : 'Clean test plate'}
-                </span>
-              </div>
             </div>
           </div>
 

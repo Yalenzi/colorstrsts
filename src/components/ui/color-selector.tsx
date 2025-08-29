@@ -117,17 +117,17 @@ export function ColorSelector({
             const testColors: ColorResult[] = test.color_results.map((result, index) => ({
               id: `${testId}-${index}`,
               test_id: testId,
-              hex_code: result.color_hex,
+              hex_code: result.color_hex || '#000000',
               color_name: {
-                ar: result.color_result_ar,
-                en: result.color_result
+                ar: result.color_result_ar || 'لون غير محدد',
+                en: result.color_result || 'Unknown'
               },
               substances: {
-                ar: [result.possible_substance_ar],
-                en: [result.possible_substance]
+                ar: [result.possible_substance_ar || 'غير محدد'],
+                en: [result.possible_substance || 'Unknown']
               },
-              confidence: getConfidenceScore(result.confidence_level),
-              confidence_level: result.confidence_level
+              confidence: getConfidenceScore(result.confidence_level || 'medium'),
+              confidence_level: result.confidence_level || 'medium'
             }));
             setAvailableColors(testColors);
           } else {
