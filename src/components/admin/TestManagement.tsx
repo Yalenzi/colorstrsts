@@ -21,6 +21,9 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import { databaseColorTestService } from '@/lib/database-color-test-service';
+import { getChemicalTestsLocal } from '@/lib/local-data-service';
+import { AdminErrorBoundary } from './AdminErrorBoundary';
 
 interface TestManagementProps {
   lang: Language;
@@ -221,21 +224,46 @@ export function TestManagement({ lang }: TestManagementProps) {
   const loadTests = async () => {
     setLoading(true);
     try {
-      // Load from localStorage first
+      console.log('🔄 Loading tests for admin management...');
+
+      // Try to load from the database service first (same as other components)
+      try {
+        const testsFromService = await databaseColorTestService.getAllTests();
+        if (testsFromService && testsFromService.length > 0) {
+          console.log(`✅ تم تحميل ${testsFromService.length} اختبار بنجاح من خدمة قاعدة البيانات`);
+          setTests(testsFromService);
+          return;
+        }
+      } catch (serviceError) {
+        console.warn('⚠️ Could not load from database service, trying local data service');
+      }
+
+      // Fallback to local data service (same as other components)
+      try {
+        const localTests = getChemicalTestsLocal();
+        if (localTests && localTests.length > 0) {
+          console.log(`✅ تم تحميل ${localTests.length} اختبار بنجاح من الخدمة المحلية`);
+          setTests(localTests);
+          return;
+        }
+      } catch (localError) {
+        console.warn('⚠️ Could not load from local data service');
+      }
+
+      // Load from localStorage as last resort
       const savedTests = localStorage.getItem('chemical_tests_db');
       if (savedTests) {
-        setTests(JSON.parse(savedTests));
+        const parsedTests = JSON.parse(savedTests);
+        console.log(`✅ تم تحميل ${parsedTests.length} اختبار من التخزين المحلي`);
+        setTests(parsedTests);
       } else {
-        // Load from Db.json if no localStorage data
-        const response = await fetch('/api/tests');
-        if (response.ok) {
-          const data = await response.json();
-          setTests(data.tests || []);
-        }
+        console.warn('⚠️ No tests found in any data source');
+        setTests([]);
       }
     } catch (error) {
-      console.error('Error loading tests:', error);
+      console.error('❌ Error loading tests:', error);
       toast.error(t.loadError);
+      setTests([]);
     } finally {
       setLoading(false);
     }
@@ -243,11 +271,18 @@ export function TestManagement({ lang }: TestManagementProps) {
 
   const saveTestsToStorage = (updatedTests: ChemicalTest[]) => {
     try {
+      // Save to multiple storage locations for consistency
       localStorage.setItem('chemical_tests_db', JSON.stringify(updatedTests));
-      // Here you would also sync with Db.json file
+      localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: updatedTests }));
+      localStorage.setItem('database_color_tests', JSON.stringify(updatedTests));
+
+      console.log(`💾 تم حفظ ${updatedTests.length} اختبار في التخزين المحلي`);
+
+      // Here you would also sync with the actual database file
+      // This would require a backend API endpoint to update Db.json
       // await syncWithDatabase(updatedTests);
     } catch (error) {
-      console.error('Error saving tests:', error);
+      console.error('❌ Error saving tests:', error);
       throw error;
     }
   };
@@ -279,17 +314,20 @@ export function TestManagement({ lang }: TestManagementProps) {
   };
 
   const handleSaveTest = async () => {
-    if (!selectedTest) return;
+    if (!selectedTest) {
+      console.error('❌ No test selected for saving');
+      return;
+    }
 
     // Validation
-    if (!selectedTest.method_name.trim() || !selectedTest.method_name_ar.trim()) {
+    if (!selectedTest.method_name?.trim() || !selectedTest.method_name_ar?.trim()) {
       toast.error(t.requiredField);
       return;
     }
 
     try {
       let updatedTests: ChemicalTest[];
-      
+
       if (isCreating) {
         // Generate new ID
         const newId = `test-${Date.now()}`;
@@ -300,15 +338,23 @@ export function TestManagement({ lang }: TestManagementProps) {
           updated_at: new Date().toISOString()
         };
         updatedTests = [...tests, newTest];
+        console.log(`✅ إنشاء اختبار جديد: ${newTest.method_name}`);
       } else {
-        // Update existing test
+        // Update existing test - with null check
+        if (!selectedTest.id) {
+          console.error('❌ Selected test has no ID');
+          toast.error(t.saveError);
+          return;
+        }
+
         const updatedTest = {
           ...selectedTest,
           updated_at: new Date().toISOString()
         };
-        updatedTests = tests.map(test => 
+        updatedTests = tests.map(test =>
           test.id === selectedTest.id ? updatedTest : test
         );
+        console.log(`✅ تحديث اختبار موجود: ${updatedTest.method_name}`);
       }
 
       setTests(updatedTests);
@@ -344,17 +390,18 @@ export function TestManagement({ lang }: TestManagementProps) {
   }
 
   return (
-    <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">{t.description}</p>
+    <AdminErrorBoundary lang={lang}>
+      <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">{t.description}</p>
+          </div>
+          <Button onClick={handleCreateTest} className="flex items-center space-x-2 rtl:space-x-reverse">
+            <PlusIcon className="h-4 w-4" />
+            <span>{t.addNewTest}</span>
+          </Button>
         </div>
-        <Button onClick={handleCreateTest} className="flex items-center space-x-2 rtl:space-x-reverse">
-          <PlusIcon className="h-4 w-4" />
-          <span>{t.addNewTest}</span>
-        </Button>
-      </div>
 
       {/* Search */}
       <div className="max-w-md">
@@ -458,6 +505,7 @@ export function TestManagement({ lang }: TestManagementProps) {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </AdminErrorBoundary>
   );
 }

@@ -23,6 +23,7 @@ import {
   CogIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import { AdminErrorBoundary } from './AdminErrorBoundary';
 
 interface AdminSettingsProps {
   lang: Language;
@@ -376,11 +377,12 @@ export function AdminSettings({ lang }: AdminSettingsProps) {
   }
 
   return (
-    <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">{t.description}</p>
-      </div>
+    <AdminErrorBoundary lang={lang}>
+      <div className={`space-y-6 ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t.title}</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">{t.description}</p>
+        </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
@@ -1190,6 +1192,7 @@ export function AdminSettings({ lang }: AdminSettingsProps) {
           </Button>
         </div>
       </Tabs>
-    </div>
+      </div>
+    </AdminErrorBoundary>
   );
 }
