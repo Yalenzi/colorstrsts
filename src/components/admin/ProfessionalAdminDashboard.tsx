@@ -29,6 +29,8 @@ import {
   PlusIcon,
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
+import { AdminSettings } from './AdminSettings';
+import { TestManagement } from './TestManagement';
 
 // Import existing admin components
 import { EnhancedTestsManagement } from './EnhancedTestsManagement';
@@ -134,6 +136,11 @@ export function ProfessionalAdminDashboard({ lang }: ProfessionalAdminDashboardP
       badge: '12'
     },
     {
+      id: 'test-management',
+      label: lang === 'ar' ? 'إدارة الاختبارات' : 'Test Management',
+      icon: BeakerIcon
+    },
+    {
       id: 'color-results',
       label: t.colorResults,
       icon: ChartBarIcon,
@@ -169,6 +176,11 @@ export function ProfessionalAdminDashboard({ lang }: ProfessionalAdminDashboardP
           id: 'settings',
           label: t.settings,
           icon: ServerIcon
+        },
+        {
+          id: 'admin-settings',
+          label: lang === 'ar' ? 'إعدادات الإدارة' : 'Admin Settings',
+          icon: Cog6ToothIcon
         }
       ]
     }
@@ -435,12 +447,16 @@ export function ProfessionalAdminDashboard({ lang }: ProfessionalAdminDashboardP
         return <ComprehensiveUserManagement lang={lang} />;
       case 'tests':
         return <EnhancedTestsManagement lang={lang} />;
+      case 'test-management':
+        return <TestManagement lang={lang} />;
       case 'color-results':
         return <ColorResultsManagement lang={lang} />;
       case 'subscriptions':
         return <SubscriptionManagement lang={lang} />;
       case 'reports':
         return <EnhancedCharts lang={lang} />;
+      case 'admin-settings':
+        return <AdminSettings lang={lang} />;
       case 'settings':
       case 'database':
       case 'security':

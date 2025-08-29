@@ -45,11 +45,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       // Simple admin check
-      if (email === 'admin@colortest.com' && password === 'admin123') {
+      if (email === 'aburakan4551@gmail.com' && password === 'admin123') {
         const adminUser: User = {
           id: 'admin-001',
           uid: 'admin-001',
-          email: 'admin@colortest.com',
+          email: 'aburakan4551@gmail.com',
           displayName: 'Administrator',
           role: 'admin',
         };

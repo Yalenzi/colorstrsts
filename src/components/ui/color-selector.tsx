@@ -364,9 +364,9 @@ export function ColorSelector({
               <h4 className="font-medium text-foreground mb-2">
                 {lang === 'ar' ? 'المواد المحتملة' : 'Possible Substances'}
               </h4>
-              {selectedColorResult.substances[lang]?.length > 0 ? (
+              {selectedColorResult.substances?.[lang]?.length > 0 ? (
                 <div className="space-y-1">
-                  {selectedColorResult.substances[lang].map((substance, index) => (
+                  {selectedColorResult.substances[lang]?.map((substance, index) => (
                     <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse text-sm">
                       <div className="w-2 h-2 rounded-full bg-primary-500" />
                       <span className="text-muted-foreground">{substance}</span>
