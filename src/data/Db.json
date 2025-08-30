@@ -1346,6 +1346,1052 @@
       ],
       "reference": "• Fulton, C.C. Modern Microcrystal Tests for Drugs. Wiley-Interscience, New York (1969).\n• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).",
       "reference_ar": "• فولتون، س.س. اختبارات البلورات الدقيقة الحديثة للأدوية. وايلي-إنترساينس، نيويورك (1969).\n• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007)."
+    },
+    {
+      "id": "nitric-acid-heroin-test",
+      "method_name": "Nitric Acid Test for Heroin",
+      "method_name_ar": "اختبار حمض النيتريك للهيروين",
+      "description": "A specific nitric acid test for detecting heroin and its derivatives",
+      "description_ar": "اختبار حمض النيتريك المحدد للكشف عن الهيروين ومشتقاته",
+      "category": "opiates",
+      "safety_level": "high",
+      "preparation_time": 3,
+      "chemical_components": [
+        {
+          "name": "Concentrated nitric acid",
+          "name_ar": "حمض النيتريك المركز",
+          "formula": "HNO₃",
+          "concentration": "70%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of concentrated nitric acid\n3. Observe immediate color change\n4. Note any color changes after 2-3 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من حمض النيتريك المركز\n3. لاحظ تغير اللون الفوري\n4. لاحظ أي تغيرات لونية بعد 2-3 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Concentrated nitric acid is highly corrosive and oxidizing",
+          "safety_warning_ar": "خطر: حمض النيتريك المركز شديد التآكل والأكسدة"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Reaction produces toxic nitrogen oxides",
+          "safety_warning_ar": "ينتج عن التفاعل أكاسيد النيتروجين السامة"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FFA500",
+          "color_name": "Orange",
+          "color_name_ar": "برتقالي",
+          "possible_substance": "Heroin",
+          "possible_substance_ar": "هيروين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FF4500",
+          "color_name": "Orange Red",
+          "color_name_ar": "أحمر برتقالي",
+          "possible_substance": "Diacetylmorphine",
+          "possible_substance_ar": "ثنائي أسيتيل المورفين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FFD700",
+          "color_name": "Gold",
+          "color_name_ar": "ذهبي",
+          "possible_substance": "6-Monoacetylmorphine",
+          "possible_substance_ar": "6-أحادي أسيتيل المورفين",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).\n• United Nations Office on Drugs and Crime. Recommended Methods for Testing Heroin. UN (2018).",
+      "reference_ar": "• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).\n• مكتب الأمم المتحدة المعني بالمخدرات والجريمة. الطرق الموصى بها لاختبار الهيروين. الأمم المتحدة (2018).",
+      "test_type": "F/L",
+      "test_number": "Test 24",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "nitric-acid-codeine-test",
+      "method_name": "Nitric Acid Test for Codeine",
+      "method_name_ar": "اختبار حمض النيتريك للكودايين",
+      "description": "A specific nitric acid test for detecting codeine and related compounds",
+      "description_ar": "اختبار حمض النيتريك المحدد للكشف عن الكودايين والمركبات ذات الصلة",
+      "category": "opiates",
+      "safety_level": "high",
+      "preparation_time": 3,
+      "chemical_components": [
+        {
+          "name": "Concentrated nitric acid",
+          "name_ar": "حمض النيتريك المركز",
+          "formula": "HNO₃",
+          "concentration": "70%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of concentrated nitric acid\n3. Observe immediate color change\n4. Note color development over 5 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من حمض النيتريك المركز\n3. لاحظ تغير اللون الفوري\n4. لاحظ تطور اللون خلال 5 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Concentrated nitric acid is highly corrosive",
+          "safety_warning_ar": "خطر: حمض النيتريك المركز شديد التآكل"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Avoid inhalation of acid vapors",
+          "safety_warning_ar": "تجنب استنشاق أبخرة الحمض"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FFFF00",
+          "color_name": "Yellow",
+          "color_name_ar": "أصفر",
+          "possible_substance": "Codeine",
+          "possible_substance_ar": "كودايين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FFD700",
+          "color_name": "Gold",
+          "color_name_ar": "ذهبي",
+          "possible_substance": "Codeine phosphate",
+          "possible_substance_ar": "فوسفات الكودايين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FFA500",
+          "color_name": "Orange",
+          "color_name_ar": "برتقالي",
+          "possible_substance": "Dihydrocodeine",
+          "possible_substance_ar": "ثنائي هيدرو الكودايين",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).",
+      "reference_ar": "• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).",
+      "test_type": "F/L",
+      "test_number": "Test 25",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "nitric-acid-morphine-test",
+      "method_name": "Nitric Acid Test for Morphine",
+      "method_name_ar": "اختبار حمض النيتريك للمورفين",
+      "description": "A specific nitric acid test for detecting morphine and its salts",
+      "description_ar": "اختبار حمض النيتريك المحدد للكشف عن المورفين وأملاحه",
+      "category": "opiates",
+      "safety_level": "high",
+      "preparation_time": 3,
+      "chemical_components": [
+        {
+          "name": "Concentrated nitric acid",
+          "name_ar": "حمض النيتريك المركز",
+          "formula": "HNO₃",
+          "concentration": "70%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of concentrated nitric acid\n3. Observe immediate color change\n4. Heat gently if no immediate reaction\n5. Note final color after cooling",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من حمض النيتريك المركز\n3. لاحظ تغير اللون الفوري\n4. سخن بلطف إذا لم يحدث تفاعل فوري\n5. لاحظ اللون النهائي بعد التبريد",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Concentrated nitric acid is highly corrosive and oxidizing",
+          "safety_warning_ar": "خطر: حمض النيتريك المركز شديد التآكل والأكسدة"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Heating may produce toxic nitrogen oxides",
+          "safety_warning_ar": "قد ينتج عن التسخين أكاسيد النيتروجين السامة"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FF0000",
+          "color_name": "Red",
+          "color_name_ar": "أحمر",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#8B0000",
+          "color_name": "Dark Red",
+          "color_name_ar": "أحمر داكن",
+          "possible_substance": "Morphine sulfate",
+          "possible_substance_ar": "كبريتات المورفين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#DC143C",
+          "color_name": "Crimson",
+          "color_name_ar": "قرمزي",
+          "possible_substance": "Morphine hydrochloride",
+          "possible_substance_ar": "هيدروكلوريد المورفين",
+          "confidence_level": "high"
+        }
+      ],
+      "reference": "• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).\n• United Nations Office on Drugs and Crime. Recommended Methods for Testing Opium, Morphine and Heroin. UN (2018).",
+      "reference_ar": "• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).\n• مكتب الأمم المتحدة المعني بالمخدرات والجريمة. الطرق الموصى بها لاختبار الأفيون والمورفين والهيروين. الأمم المتحدة (2018).",
+      "test_type": "F/L",
+      "test_number": "Test 26",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "dinitrobenzene-12-test",
+      "method_name": "1,2-Dinitrobenzene Test",
+      "method_name_ar": "اختبار ثنائي نيترو بنزين 1,2",
+      "description": "A color test using 1,2-dinitrobenzene for detecting various drugs",
+      "description_ar": "اختبار لوني باستخدام ثنائي نيترو بنزين 1,2 للكشف عن الأدوية المختلفة",
+      "category": "general",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "chemical_components": [
+        {
+          "name": "1,2-Dinitrobenzene",
+          "name_ar": "ثنائي نيترو بنزين 1,2",
+          "formula": "C₆H₄(NO₂)₂",
+          "concentration": "1%"
+        },
+        {
+          "name": "Potassium hydroxide",
+          "name_ar": "هيدروكسيد البوتاسيوم",
+          "formula": "KOH",
+          "concentration": "10%"
+        },
+        {
+          "name": "Ethanol",
+          "name_ar": "إيثانول",
+          "formula": "C₂H₅OH",
+          "concentration": "95%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of 1,2-dinitrobenzene solution in ethanol\n3. Add 1 drop of potassium hydroxide solution\n4. Observe color change within 2-3 minutes\n5. Heat gently if no immediate reaction",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول ثنائي نيترو بنزين 1,2 في الإيثانول\n3. أضف قطرة واحدة من محلول هيدروكسيد البوتاسيوم\n4. لاحظ تغير اللون خلال 2-3 دقائق\n5. سخن بلطف إذا لم يحدث تفاعل فوري",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Dinitrobenzene is toxic and potentially explosive",
+          "safety_warning_ar": "خطر: ثنائي نيترو البنزين سام ومتفجر محتمل"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Avoid skin contact and inhalation",
+          "safety_warning_ar": "تجنب ملامسة الجلد والاستنشاق"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Barbiturates",
+          "possible_substance_ar": "الباربيتورات",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#0000FF",
+          "color_name": "Blue",
+          "color_name_ar": "أزرق",
+          "possible_substance": "Phenothiazines",
+          "possible_substance_ar": "الفينوثيازينات",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#008000",
+          "color_name": "Green",
+          "color_name_ar": "أخضر",
+          "possible_substance": "Amphetamines",
+          "possible_substance_ar": "الأمفيتامينات",
+          "confidence_level": "low"
+        }
+      ],
+      "reference": "• Fulton, C.C. Modern Microcrystal Tests for Drugs. Wiley-Interscience, New York (1969).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• فولتون، س.س. اختبارات البلورات الدقيقة الحديثة للأدوية. وايلي-إنترساينس، نيويورك (1969).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 27",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "dinitrobenzene-14-test",
+      "method_name": "1,4-Dinitrobenzene Test",
+      "method_name_ar": "اختبار ثنائي نيترو بنزين 1,4",
+      "description": "A color test using 1,4-dinitrobenzene for detecting drugs and alkaloids",
+      "description_ar": "اختبار لوني باستخدام ثنائي نيترو بنزين 1,4 للكشف عن الأدوية والقلويدات",
+      "category": "general",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "chemical_components": [
+        {
+          "name": "1,4-Dinitrobenzene",
+          "name_ar": "ثنائي نيترو بنزين 1,4",
+          "formula": "C₆H₄(NO₂)₂",
+          "concentration": "1%"
+        },
+        {
+          "name": "Sodium hydroxide",
+          "name_ar": "هيدروكسيد الصوديوم",
+          "formula": "NaOH",
+          "concentration": "10%"
+        },
+        {
+          "name": "Methanol",
+          "name_ar": "ميثانول",
+          "formula": "CH₃OH",
+          "concentration": "95%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of 1,4-dinitrobenzene solution in methanol\n3. Add 1 drop of sodium hydroxide solution\n4. Observe color change within 1-2 minutes\n5. Note any color changes after 5 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول ثنائي نيترو بنزين 1,4 في الميثانول\n3. أضف قطرة واحدة من محلول هيدروكسيد الصوديوم\n4. لاحظ تغير اللون خلال 1-2 دقيقة\n5. لاحظ أي تغيرات لونية بعد 5 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Dinitrobenzene is toxic and potentially carcinogenic",
+          "safety_warning_ar": "خطر: ثنائي نيترو البنزين سام ومسرطن محتمل"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Methanol vapors are toxic and flammable",
+          "safety_warning_ar": "أبخرة الميثانول سامة وقابلة للاشتعال"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FF0000",
+          "color_name": "Red",
+          "color_name_ar": "أحمر",
+          "possible_substance": "Cocaine",
+          "possible_substance_ar": "كوكايين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#0000FF",
+          "color_name": "Blue",
+          "color_name_ar": "أزرق",
+          "possible_substance": "Amphetamine",
+          "possible_substance_ar": "أمفيتامين",
+          "confidence_level": "low"
+        }
+      ],
+      "reference": "• Fulton, C.C. Modern Microcrystal Tests for Drugs. Wiley-Interscience, New York (1969).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• فولتون، س.س. اختبارات البلورات الدقيقة الحديثة للأدوية. وايلي-إنترساينس، نيويورك (1969).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 28",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "dinitrobenzene-13-test",
+      "method_name": "1,3-Dinitrobenzene Test",
+      "method_name_ar": "اختبار ثنائي نيترو بنزين 1,3",
+      "description": "A color test using 1,3-dinitrobenzene for detecting various psychoactive substances",
+      "description_ar": "اختبار لوني باستخدام ثنائي نيترو بنزين 1,3 للكشف عن المواد النفسية المختلفة",
+      "category": "general",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "chemical_components": [
+        {
+          "name": "1,3-Dinitrobenzene",
+          "name_ar": "ثنائي نيترو بنزين 1,3",
+          "formula": "C₆H₄(NO₂)₂",
+          "concentration": "1%"
+        },
+        {
+          "name": "Potassium hydroxide",
+          "name_ar": "هيدروكسيد البوتاسيوم",
+          "formula": "KOH",
+          "concentration": "10%"
+        },
+        {
+          "name": "Dimethyl sulfoxide",
+          "name_ar": "ثنائي ميثيل سلفوكسيد",
+          "formula": "C₂H₆OS",
+          "concentration": "100%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of 1,3-dinitrobenzene solution in DMSO\n3. Add 1 drop of potassium hydroxide solution\n4. Mix gently and observe color change\n5. Note color development over 3-5 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول ثنائي نيترو بنزين 1,3 في DMSO\n3. أضف قطرة واحدة من محلول هيدروكسيد البوتاسيوم\n4. امزج بلطف ولاحظ تغير اللون\n5. لاحظ تطور اللون خلال 3-5 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Dinitrobenzene is highly toxic and explosive",
+          "safety_warning_ar": "خطر: ثنائي نيترو البنزين شديد السمية والانفجار"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "DMSO can penetrate skin and carry toxins into the body",
+          "safety_warning_ar": "يمكن لـ DMSO اختراق الجلد وحمل السموم إلى الجسم"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#8B0000",
+          "color_name": "Dark Red",
+          "color_name_ar": "أحمر داكن",
+          "possible_substance": "Heroin",
+          "possible_substance_ar": "هيروين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#4B0082",
+          "color_name": "Indigo",
+          "color_name_ar": "نيلي",
+          "possible_substance": "LSD",
+          "possible_substance_ar": "إل إس دي",
+          "confidence_level": "low"
+        },
+        {
+          "hex_code": "#008000",
+          "color_name": "Green",
+          "color_name_ar": "أخضر",
+          "possible_substance": "Cannabis compounds",
+          "possible_substance_ar": "مركبات الحشيش",
+          "confidence_level": "low"
+        }
+      ],
+      "reference": "• Fulton, C.C. Modern Microcrystal Tests for Drugs. Wiley-Interscience, New York (1969).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• فولتون، س.س. اختبارات البلورات الدقيقة الحديثة للأدوية. وايلي-إنترساينس، نيويورك (1969).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 29",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "zimmermann-pemoline-test",
+      "method_name": "Zimmermann Test for Pemoline",
+      "method_name_ar": "اختبار زيمرمان للبيمولين",
+      "description": "A specialized Zimmermann test for detecting pemoline and related compounds",
+      "description_ar": "اختبار زيمرمان المتخصص للكشف عن البيمولين والمركبات ذات الصلة",
+      "category": "stimulants",
+      "safety_level": "medium",
+      "preparation_time": 4,
+      "chemical_components": [
+        {
+          "name": "Dinitrobenzene",
+          "name_ar": "ثنائي نيترو البنزين",
+          "formula": "C₆H₄(NO₂)₂",
+          "concentration": "1%"
+        },
+        {
+          "name": "Potassium hydroxide",
+          "name_ar": "هيدروكسيد البوتاسيوم",
+          "formula": "KOH",
+          "concentration": "20%"
+        },
+        {
+          "name": "Ethanol",
+          "name_ar": "إيثانول",
+          "formula": "C₂H₅OH",
+          "concentration": "95%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 2-3 drops of dinitrobenzene solution in ethanol\n3. Add 1-2 drops of potassium hydroxide solution\n4. Heat gently for 30 seconds\n5. Observe color change after cooling",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 2-3 قطرات من محلول ثنائي نيترو البنزين في الإيثانول\n3. أضف 1-2 قطرة من محلول هيدروكسيد البوتاسيوم\n4. سخن بلطف لمدة 30 ثانية\n5. لاحظ تغير اللون بعد التبريد",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective gloves and safety goggles",
+          "instruction_ar": "ارتدِ القفازات الواقية ونظارات الأمان",
+          "safety_warning": "Dinitrobenzene is toxic - avoid skin contact",
+          "safety_warning_ar": "ثنائي نيترو البنزين سام - تجنب ملامسة الجلد"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Heat gently and avoid overheating",
+          "instruction_ar": "سخن بلطف وتجنب الإفراط في التسخين",
+          "safety_warning": "Overheating may cause decomposition",
+          "safety_warning_ar": "الإفراط في التسخين قد يسبب التحلل"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Pemoline",
+          "possible_substance_ar": "بيمولين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4B0082",
+          "color_name": "Indigo",
+          "color_name_ar": "نيلي",
+          "possible_substance": "Phenmetrazine",
+          "possible_substance_ar": "فينميترازين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#8B008B",
+          "color_name": "Dark Magenta",
+          "color_name_ar": "أرجواني داكن",
+          "possible_substance": "Methylphenidate",
+          "possible_substance_ar": "ميثيل فينيديت",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Zimmermann, W. Hoppe-Seyler's Z. Physiol. Chem., 233 (1935) 257.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• زيمرمان، و. هوبي-سايلر ز. فيزيول. شيم.، 233 (1935) 257.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 30",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "liebermann-mescaline-test",
+      "method_name": "Liebermann Test for Mescaline",
+      "method_name_ar": "اختبار ليبرمان للميسكالين",
+      "description": "A specialized Liebermann test for detecting mescaline and related phenethylamines",
+      "description_ar": "اختبار ليبرمان المتخصص للكشف عن الميسكالين والفينيثيل أمينات ذات الصلة",
+      "category": "hallucinogens",
+      "safety_level": "high",
+      "preparation_time": 3,
+      "chemical_components": [
+        {
+          "name": "Potassium nitrite",
+          "name_ar": "نتريت البوتاسيوم",
+          "formula": "KNO₂",
+          "concentration": "5%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1 drop of potassium nitrite solution\n3. Add 1 drop of concentrated sulfuric acid\n4. Observe immediate color change\n5. Note color development over 2-3 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف قطرة واحدة من محلول نتريت البوتاسيوم\n3. أضف قطرة واحدة من حمض الكبريتيك المركز\n4. لاحظ تغير اللون الفوري\n5. لاحظ تطور اللون خلال 2-3 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Concentrated sulfuric acid is highly corrosive",
+          "safety_warning_ar": "خطر: حمض الكبريتيك المركز شديد التآكل"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Reaction may produce toxic nitrogen oxides",
+          "safety_warning_ar": "قد ينتج عن التفاعل أكاسيد النيتروجين السامة"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FF0000",
+          "color_name": "Red",
+          "color_name_ar": "أحمر",
+          "possible_substance": "Mescaline",
+          "possible_substance_ar": "ميسكالين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FFA500",
+          "color_name": "Orange",
+          "color_name_ar": "برتقالي",
+          "possible_substance": "2C-B",
+          "possible_substance_ar": "2C-B",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "DOM",
+          "possible_substance_ar": "DOM",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Liebermann, C. Ber. dtsch. chem. Ges., 7 (1874) 247.\n• Shulgin, A. & Shulgin, A. PiHKAL: A Chemical Love Story. Transform Press (1991).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• ليبرمان، س. بير. دتش. شيم. جيس.، 7 (1874) 247.\n• شولجين، أ. وشولجين، أ. PiHKAL: قصة حب كيميائية. ترانسفورم برس (1991).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 31",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "cobalt-thiocyanate-methaqualone-test",
+      "method_name": "Cobalt Thiocyanate Test for Methaqualone",
+      "method_name_ar": "اختبار ثيوسيانات الكوبالت للميثاكوالون",
+      "description": "A specialized cobalt thiocyanate test for detecting methaqualone and related sedatives",
+      "description_ar": "اختبار ثيوسيانات الكوبالت المتخصص للكشف عن الميثاكوالون والمهدئات ذات الصلة",
+      "category": "sedatives",
+      "safety_level": "medium",
+      "preparation_time": 4,
+      "chemical_components": [
+        {
+          "name": "Cobalt thiocyanate",
+          "name_ar": "ثيوسيانات الكوبالت",
+          "formula": "Co(SCN)₂",
+          "concentration": "2%"
+        },
+        {
+          "name": "Acetone",
+          "name_ar": "أسيتون",
+          "formula": "C₃H₆O",
+          "concentration": "100%"
+        },
+        {
+          "name": "Hydrochloric acid",
+          "name_ar": "حمض الهيدروكلوريك",
+          "formula": "HCl",
+          "concentration": "10%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 2-3 drops of cobalt thiocyanate solution\n3. Add 1 drop of acetone\n4. Add 1 drop of hydrochloric acid\n5. Observe color change within 1-2 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 2-3 قطرات من محلول ثيوسيانات الكوبالت\n3. أضف قطرة واحدة من الأسيتون\n4. أضف قطرة واحدة من حمض الهيدروكلوريك\n5. لاحظ تغير اللون خلال 1-2 دقيقة",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective gloves and safety goggles",
+          "instruction_ar": "ارتدِ القفازات الواقية ونظارات الأمان",
+          "safety_warning": "Acetone is flammable - keep away from heat sources",
+          "safety_warning_ar": "الأسيتون قابل للاشتعال - أبعده عن مصادر الحرارة"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية",
+          "safety_warning": "Avoid inhalation of acetone vapors",
+          "safety_warning_ar": "تجنب استنشاق أبخرة الأسيتون"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#0000FF",
+          "color_name": "Blue",
+          "color_name_ar": "أزرق",
+          "possible_substance": "Methaqualone",
+          "possible_substance_ar": "ميثاكوالون",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4169E1",
+          "color_name": "Royal Blue",
+          "color_name_ar": "أزرق ملكي",
+          "possible_substance": "Mecloqualone",
+          "possible_substance_ar": "ميكلوكوالون",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#87CEEB",
+          "color_name": "Sky Blue",
+          "color_name_ar": "أزرق سماوي",
+          "possible_substance": "Diphenylmethane derivatives",
+          "possible_substance_ar": "مشتقات ثنائي فينيل الميثان",
+          "confidence_level": "low"
+        }
+      ],
+      "reference": "• Scott, W.T. J. Assoc. Off. Anal. Chem., 56 (1973) 1452.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• سكوت، و.ت. ج. جمعية المحللين الرسميين الكيميائيين، 56 (1973) 1452.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 32",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "vitali-morin-test",
+      "method_name": "Vitali-Morin Test",
+      "method_name_ar": "اختبار فيتالي-مورين",
+      "description": "A color test for detecting tropane alkaloids like atropine and scopolamine",
+      "description_ar": "اختبار لوني للكشف عن قلويدات التروبان مثل الأتروبين والسكوبولامين",
+      "category": "alkaloids",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "chemical_components": [
+        {
+          "name": "Fuming nitric acid",
+          "name_ar": "حمض النيتريك المدخن",
+          "formula": "HNO₃",
+          "concentration": "100%"
+        },
+        {
+          "name": "Potassium hydroxide",
+          "name_ar": "هيدروكسيد البوتاسيوم",
+          "formula": "KOH",
+          "concentration": "40%"
+        },
+        {
+          "name": "Acetone",
+          "name_ar": "أسيتون",
+          "formula": "C₃H₆O",
+          "concentration": "100%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1 drop of fuming nitric acid\n3. Evaporate to dryness carefully\n4. Add 1 drop of acetone\n5. Add 1 drop of potassium hydroxide solution\n6. Observe color change",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف قطرة واحدة من حمض النيتريك المدخن\n3. تبخر حتى الجفاف بحذر\n4. أضف قطرة واحدة من الأسيتون\n5. أضف قطرة واحدة من محلول هيدروكسيد البوتاسيوم\n6. لاحظ تغير اللون",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "EXTREME DANGER: Fuming nitric acid is extremely corrosive",
+          "safety_warning_ar": "خطر شديد: حمض النيتريك المدخن شديد التآكل للغاية"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated fume hood",
+          "instruction_ar": "اعمل تحت شفاط أبخرة جيد التهوية",
+          "safety_warning": "Produces highly toxic nitrogen oxide fumes",
+          "safety_warning_ar": "ينتج أبخرة أكاسيد النيتروجين شديدة السمية"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Atropine",
+          "possible_substance_ar": "أتروبين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4B0082",
+          "color_name": "Indigo",
+          "color_name_ar": "نيلي",
+          "possible_substance": "Scopolamine",
+          "possible_substance_ar": "سكوبولامين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#8B008B",
+          "color_name": "Dark Magenta",
+          "color_name_ar": "أرجواني داكن",
+          "possible_substance": "Hyoscyamine",
+          "possible_substance_ar": "هيوسيامين",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Vitali, D. Ann. Chim. Appl., 1 (1925) 63.\n• Morin, P. Bull. Soc. Chim. Fr., 37 (1925) 1266.\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• فيتالي، د. آن. شيم. أبل.، 1 (1925) 63.\n• مورين، ب. بول. سوك. شيم. فر.، 37 (1925) 1266.\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 33",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "hydrochloric-acid-diazepam-test",
+      "method_name": "Hydrochloric Acid Test for Diazepam",
+      "method_name_ar": "اختبار حمض الهيدروكلوريك للديازيبام",
+      "description": "A specific test for detecting diazepam and related benzodiazepines",
+      "description_ar": "اختبار محدد للكشف عن الديازيبام والبنزوديازيبينات ذات الصلة",
+      "category": "benzodiazepines",
+      "safety_level": "medium",
+      "preparation_time": 3,
+      "chemical_components": [
+        {
+          "name": "Concentrated hydrochloric acid",
+          "name_ar": "حمض الهيدروكلوريك المركز",
+          "formula": "HCl",
+          "concentration": "37%"
+        },
+        {
+          "name": "Zinc powder",
+          "name_ar": "مسحوق الزنك",
+          "formula": "Zn",
+          "concentration": "100%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add a pinch of zinc powder\n3. Add 2-3 drops of concentrated hydrochloric acid\n4. Heat gently for 1-2 minutes\n5. Observe color change after cooling",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف رشة من مسحوق الزنك\n3. أضف 2-3 قطرات من حمض الهيدروكلوريك المركز\n4. سخن بلطف لمدة 1-2 دقيقة\n5. لاحظ تغير اللون بعد التبريد",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective gloves and safety goggles",
+          "instruction_ar": "ارتدِ القفازات الواقية ونظارات الأمان",
+          "safety_warning": "Concentrated HCl is corrosive and produces fumes",
+          "safety_warning_ar": "حمض الهيدروكلوريك المركز مُتآكل وينتج أبخرة"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Reaction produces hydrogen gas - avoid sparks",
+          "safety_warning_ar": "ينتج عن التفاعل غاز الهيدروجين - تجنب الشرر"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FFFF00",
+          "color_name": "Yellow",
+          "color_name_ar": "أصفر",
+          "possible_substance": "Diazepam",
+          "possible_substance_ar": "ديازيبام",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FFA500",
+          "color_name": "Orange",
+          "color_name_ar": "برتقالي",
+          "possible_substance": "Chlordiazepoxide",
+          "possible_substance_ar": "كلورديازيبوكسيد",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#FFD700",
+          "color_name": "Gold",
+          "color_name_ar": "ذهبي",
+          "possible_substance": "Oxazepam",
+          "possible_substance_ar": "أوكسازيبام",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).\n• United Nations Office on Drugs and Crime. Recommended Methods for Testing Benzodiazepines. UN (2012).",
+      "reference_ar": "• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).\n• مكتب الأمم المتحدة المعني بالمخدرات والجريمة. الطرق الموصى بها لاختبار البنزوديازيبينات. الأمم المتحدة (2012).",
+      "test_type": "F/L",
+      "test_number": "Test 34",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "mecke-pcp-test",
+      "method_name": "Mecke Test for PCP",
+      "method_name_ar": "اختبار ميكي للـ PCP",
+      "description": "A specialized Mecke test for detecting PCP (phencyclidine) and related compounds",
+      "description_ar": "اختبار ميكي المتخصص للكشف عن الـ PCP (فينسيكليدين) والمركبات ذات الصلة",
+      "category": "dissociatives",
+      "safety_level": "high",
+      "preparation_time": 3,
+      "chemical_components": [
+        {
+          "name": "Selenious acid",
+          "name_ar": "حمض السيلينيوز",
+          "formula": "H₂SeO₃",
+          "concentration": "1%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of Mecke reagent (selenious acid in sulfuric acid)\n3. Observe immediate color change\n4. Note color development over 2-3 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من كاشف ميكي (حمض السيلينيوز في حمض الكبريتيك)\n3. لاحظ تغير اللون الفوري\n4. لاحظ تطور اللون خلال 2-3 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Contains concentrated sulfuric acid and selenium compounds",
+          "safety_warning_ar": "خطر: يحتوي على حمض الكبريتيك المركز ومركبات السيلينيوم"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Selenium compounds are highly toxic",
+          "safety_warning_ar": "مركبات السيلينيوم شديدة السمية"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#008000",
+          "color_name": "Green",
+          "color_name_ar": "أخضر",
+          "possible_substance": "PCP (Phencyclidine)",
+          "possible_substance_ar": "PCP (فينسيكليدين)",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#006400",
+          "color_name": "Dark Green",
+          "color_name_ar": "أخضر داكن",
+          "possible_substance": "PCE (Eticyclidine)",
+          "possible_substance_ar": "PCE (إيتيسيكليدين)",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#228B22",
+          "color_name": "Forest Green",
+          "color_name_ar": "أخضر غابات",
+          "possible_substance": "TCP (Tenocyclidine)",
+          "possible_substance_ar": "TCP (تينوسيكليدين)",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Mecke, R. Arch. Pharm., 270 (1932) 675.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• ميكي، ر. أرش. فارم.، 270 (1932) 675.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 35",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "scott-pcp-test",
+      "method_name": "Scott Test for PCP",
+      "method_name_ar": "اختبار سكوت للـ PCP",
+      "description": "A specialized Scott test for detecting PCP and related dissociative drugs",
+      "description_ar": "اختبار سكوت المتخصص للكشف عن الـ PCP والأدوية التفكيكية ذات الصلة",
+      "category": "dissociatives",
+      "safety_level": "medium",
+      "preparation_time": 4,
+      "chemical_components": [
+        {
+          "name": "Cobalt thiocyanate",
+          "name_ar": "ثيوسيانات الكوبالت",
+          "formula": "Co(SCN)₂",
+          "concentration": "2%"
+        },
+        {
+          "name": "Glycerine",
+          "name_ar": "جليسرين",
+          "formula": "C₃H₈O₃",
+          "concentration": "100%"
+        },
+        {
+          "name": "Hydrochloric acid",
+          "name_ar": "حمض الهيدروكلوريك",
+          "formula": "HCl",
+          "concentration": "10%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of cobalt thiocyanate solution\n3. Add 1 drop of glycerine\n4. Add 1 drop of hydrochloric acid\n5. Observe color change within 1-2 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول ثيوسيانات الكوبالت\n3. أضف قطرة واحدة من الجليسرين\n4. أضف قطرة واحدة من حمض الهيدروكلوريك\n5. لاحظ تغير اللون خلال 1-2 دقيقة",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective gloves and safety goggles",
+          "instruction_ar": "ارتدِ القفازات الواقية ونظارات الأمان",
+          "safety_warning": "Handle all chemicals with care",
+          "safety_warning_ar": "تعامل مع جميع المواد الكيميائية بحذر"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية",
+          "safety_warning": "Avoid inhalation of acid vapors",
+          "safety_warning_ar": "تجنب استنشاق أبخرة الحمض"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FF69B4",
+          "color_name": "Hot Pink",
+          "color_name_ar": "وردي ساخن",
+          "possible_substance": "PCP (Phencyclidine)",
+          "possible_substance_ar": "PCP (فينسيكليدين)",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FF1493",
+          "color_name": "Deep Pink",
+          "color_name_ar": "وردي عميق",
+          "possible_substance": "PCE (Eticyclidine)",
+          "possible_substance_ar": "PCE (إيتيسيكليدين)",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#DC143C",
+          "color_name": "Crimson",
+          "color_name_ar": "قرمزي",
+          "possible_substance": "Ketamine",
+          "possible_substance_ar": "كيتامين",
+          "confidence_level": "low"
+        }
+      ],
+      "reference": "• Scott, W.T. J. Assoc. Off. Anal. Chem., 56 (1973) 1452.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• سكوت، و.ت. ج. جمعية المحللين الرسميين الكيميائيين، 56 (1973) 1452.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 36",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "marquis-psilocybine-test",
+      "method_name": "Marquis Test for Psilocybine",
+      "method_name_ar": "اختبار ماركيز للسيلوسيبين",
+      "description": "A specialized Marquis test for detecting psilocybine and related tryptamines",
+      "description_ar": "اختبار ماركيز المتخصص للكشف عن السيلوسيبين والتريبتامينات ذات الصلة",
+      "category": "hallucinogens",
+      "safety_level": "high",
+      "preparation_time": 3,
+      "chemical_components": [
+        {
+          "name": "Formaldehyde Solution (37%)",
+          "name_ar": "محلول الفورمالديهايد (37%)",
+          "formula": "HCHO",
+          "concentration": "37%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1 drop of formaldehyde solution\n3. Add 1-2 drops of concentrated sulfuric acid\n4. Observe immediate color change\n5. Note color development over 2-3 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف قطرة واحدة من محلول الفورمالديهايد\n3. أضف 1-2 قطرة من حمض الكبريتيك المركز\n4. لاحظ تغير اللون الفوري\n5. لاحظ تطور اللون خلال 2-3 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Concentrated sulfuric acid is highly corrosive",
+          "safety_warning_ar": "خطر: حمض الكبريتيك المركز شديد التآكل"
+        },
+        {
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Formaldehyde is carcinogenic - avoid inhalation",
+          "safety_warning_ar": "الفورمالديهايد مسرطن - تجنب الاستنشاق"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Psilocybine",
+          "possible_substance_ar": "سيلوسيبين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4B0082",
+          "color_name": "Indigo",
+          "color_name_ar": "نيلي",
+          "possible_substance": "Psilocin",
+          "possible_substance_ar": "سيلوسين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#8B008B",
+          "color_name": "Dark Magenta",
+          "color_name_ar": "أرجواني داكن",
+          "possible_substance": "DMT",
+          "possible_substance_ar": "دي إم تي",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Marquis, E. J. Pharm. Chim., 6 (1896) 385.\n• Hofmann, A. LSD: My Problem Child. McGraw-Hill (1980).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• ماركيز، إ. ج. فارم. شيم.، 6 (1896) 385.\n• هوفمان، أ. إل إس دي: طفلي المشكلة. ماكجرو-هيل (1980).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 37",
+      "created_at": "2025-01-01T00:00:00Z"
     }
   ]
 }

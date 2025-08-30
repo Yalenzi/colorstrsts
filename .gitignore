@@ -121,3 +121,14 @@ workbox-*.js
 .jest/
 test-results/
 coverage/
+src/components/admin/admin-dashboard - Copy.tsx
+src/app/globals.css
+src/app/globals - Copy.css
+src/app/\[lang\]/safety/page.tsx
+src/components/admin/admin-dashboard.tsx
+src/app/\[lang\]/help/page - Copy.tsx
+src/app/\[lang\]/help/page.tsx
+src/app/\[lang\]/safety/page - Copy.tsx
+src/app/\[lang\]/safety/page.tsx
+src/app/\[lang\]/help/page.tsx
+src/app/\[lang\]/safety/page.tsx
