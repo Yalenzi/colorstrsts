@@ -294,9 +294,47 @@ export function TestManagement({ lang }: TestManagementProps) {
   };
 
   const handleEditTest = (test: ChemicalTest) => {
-    setSelectedTest({ ...test });
+    // Ensure all arrays exist for editing, even if empty
+    const editableTest = {
+      ...test,
+      safety_instructions: test.safety_instructions && test.safety_instructions.length > 0
+        ? test.safety_instructions
+        : [''],
+      safety_instructions_ar: test.safety_instructions_ar && test.safety_instructions_ar.length > 0
+        ? test.safety_instructions_ar
+        : [''],
+      required_equipment: test.required_equipment && test.required_equipment.length > 0
+        ? test.required_equipment
+        : [''],
+      required_equipment_ar: test.required_equipment_ar && test.required_equipment_ar.length > 0
+        ? test.required_equipment_ar
+        : [''],
+      handling_procedures: test.handling_procedures && test.handling_procedures.length > 0
+        ? test.handling_procedures
+        : [''],
+      handling_procedures_ar: test.handling_procedures_ar && test.handling_procedures_ar.length > 0
+        ? test.handling_procedures_ar
+        : [''],
+      test_instructions: test.test_instructions && test.test_instructions.length > 0
+        ? test.test_instructions
+        : [''],
+      test_instructions_ar: test.test_instructions_ar && test.test_instructions_ar.length > 0
+        ? test.test_instructions_ar
+        : [''],
+      chemical_components: test.chemical_components && test.chemical_components.length > 0
+        ? test.chemical_components
+        : [{
+            name: '',
+            name_ar: '',
+            formula: '',
+            concentration: ''
+          }]
+    };
+
+    setSelectedTest(editableTest);
     setIsCreating(false);
     setIsEditing(true);
+    console.log('🔧 تحرير الاختبار:', editableTest.method_name);
   };
 
   const handleDeleteTest = async (testId: string) => {
@@ -557,6 +595,347 @@ export function TestManagement({ lang }: TestManagementProps) {
               </div>
             </div>
 
+            {/* Required Equipment */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <CubeIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                {t.requiredEquipment}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.requiredEquipment}</label>
+                  {selectedTest.required_equipment?.map((equipment, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={equipment}
+                        onChange={(e) => {
+                          const newEquipment = [...(selectedTest.required_equipment || [])];
+                          newEquipment[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, required_equipment: newEquipment } : null);
+                        }}
+                        placeholder="Required equipment..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newEquipment = selectedTest.required_equipment?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, required_equipment: newEquipment } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newEquipment = [...(selectedTest.required_equipment || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, required_equipment: newEquipment } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    Add
+                  </Button>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.requiredEquipmentAr}</label>
+                  {selectedTest.required_equipment_ar?.map((equipment, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={equipment}
+                        onChange={(e) => {
+                          const newEquipment = [...(selectedTest.required_equipment_ar || [])];
+                          newEquipment[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, required_equipment_ar: newEquipment } : null);
+                        }}
+                        placeholder="المعدات المطلوبة..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newEquipment = selectedTest.required_equipment_ar?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, required_equipment_ar: newEquipment } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newEquipment = [...(selectedTest.required_equipment_ar || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, required_equipment_ar: newEquipment } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    إضافة
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Handling Procedures */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <DocumentTextIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                {t.handlingProcedures}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.handlingProcedures}</label>
+                  {selectedTest.handling_procedures?.map((procedure, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={procedure}
+                        onChange={(e) => {
+                          const newProcedures = [...(selectedTest.handling_procedures || [])];
+                          newProcedures[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, handling_procedures: newProcedures } : null);
+                        }}
+                        placeholder="Handling procedure..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newProcedures = selectedTest.handling_procedures?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, handling_procedures: newProcedures } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newProcedures = [...(selectedTest.handling_procedures || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, handling_procedures: newProcedures } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    Add
+                  </Button>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.handlingProceduresAr}</label>
+                  {selectedTest.handling_procedures_ar?.map((procedure, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={procedure}
+                        onChange={(e) => {
+                          const newProcedures = [...(selectedTest.handling_procedures_ar || [])];
+                          newProcedures[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, handling_procedures_ar: newProcedures } : null);
+                        }}
+                        placeholder="إجراءات التعامل..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newProcedures = selectedTest.handling_procedures_ar?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, handling_procedures_ar: newProcedures } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newProcedures = [...(selectedTest.handling_procedures_ar || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, handling_procedures_ar: newProcedures } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    إضافة
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Chemical Components */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <BeakerIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                {t.chemicalComponents}
+              </h3>
+              {selectedTest.chemical_components?.map((component, index) => (
+                <Card key={index} className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">{t.componentName}</label>
+                      <Input
+                        value={component.name}
+                        onChange={(e) => {
+                          const newComponents = [...(selectedTest.chemical_components || [])];
+                          newComponents[index] = { ...newComponents[index], name: e.target.value };
+                          setSelectedTest(prev => prev ? { ...prev, chemical_components: newComponents } : null);
+                        }}
+                        placeholder="Sulfuric Acid"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">{t.componentNameAr}</label>
+                      <Input
+                        value={component.name_ar}
+                        onChange={(e) => {
+                          const newComponents = [...(selectedTest.chemical_components || [])];
+                          newComponents[index] = { ...newComponents[index], name_ar: e.target.value };
+                          setSelectedTest(prev => prev ? { ...prev, chemical_components: newComponents } : null);
+                        }}
+                        placeholder="حمض الكبريتيك"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">{t.formula}</label>
+                      <Input
+                        value={component.formula || ''}
+                        onChange={(e) => {
+                          const newComponents = [...(selectedTest.chemical_components || [])];
+                          newComponents[index] = { ...newComponents[index], formula: e.target.value };
+                          setSelectedTest(prev => prev ? { ...prev, chemical_components: newComponents } : null);
+                        }}
+                        placeholder="H₂SO₄"
+                      />
+                    </div>
+                    <div className="flex items-end space-x-2 rtl:space-x-reverse">
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium mb-2">{t.concentration}</label>
+                        <Input
+                          value={component.concentration || ''}
+                          onChange={(e) => {
+                            const newComponents = [...(selectedTest.chemical_components || [])];
+                            newComponents[index] = { ...newComponents[index], concentration: e.target.value };
+                            setSelectedTest(prev => prev ? { ...prev, chemical_components: newComponents } : null);
+                          }}
+                          placeholder="98%"
+                        />
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newComponents = selectedTest.chemical_components?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, chemical_components: newComponents } : null);
+                        }}
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+              <Button
+                variant="outline"
+                onClick={() => {
+                  const newComponents = [...(selectedTest.chemical_components || []), {
+                    name: '',
+                    name_ar: '',
+                    formula: '',
+                    concentration: ''
+                  }];
+                  setSelectedTest(prev => prev ? { ...prev, chemical_components: newComponents } : null);
+                }}
+              >
+                <PlusIcon className="h-4 w-4 mr-2" />
+                {t.addComponent}
+              </Button>
+            </div>
+
+            {/* Test Instructions */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold flex items-center">
+                <DocumentTextIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                {t.testInstructions}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.testInstructions}</label>
+                  {selectedTest.test_instructions?.map((instruction, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={instruction}
+                        onChange={(e) => {
+                          const newInstructions = [...(selectedTest.test_instructions || [])];
+                          newInstructions[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, test_instructions: newInstructions } : null);
+                        }}
+                        placeholder="Test instruction step..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newInstructions = selectedTest.test_instructions?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, test_instructions: newInstructions } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newInstructions = [...(selectedTest.test_instructions || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, test_instructions: newInstructions } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    Add Step
+                  </Button>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.testInstructionsAr}</label>
+                  {selectedTest.test_instructions_ar?.map((instruction, index) => (
+                    <div key={index} className="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                      <Input
+                        value={instruction}
+                        onChange={(e) => {
+                          const newInstructions = [...(selectedTest.test_instructions_ar || [])];
+                          newInstructions[index] = e.target.value;
+                          setSelectedTest(prev => prev ? { ...prev, test_instructions_ar: newInstructions } : null);
+                        }}
+                        placeholder="خطوة تعليمات الاختبار..."
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newInstructions = selectedTest.test_instructions_ar?.filter((_, i) => i !== index) || [];
+                          setSelectedTest(prev => prev ? { ...prev, test_instructions_ar: newInstructions } : null);
+                        }}
+                      >
+                        <XMarkIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const newInstructions = [...(selectedTest.test_instructions_ar || []), ''];
+                      setSelectedTest(prev => prev ? { ...prev, test_instructions_ar: newInstructions } : null);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-1" />
+                    إضافة خطوة
+                  </Button>
+                </div>
+              </div>
+            </div>
+
             {/* Action Buttons */}
             <div className="flex justify-end space-x-4 rtl:space-x-reverse pt-6 border-t">
               <Button variant="outline" onClick={handleCancelEdit}>
@@ -572,15 +951,28 @@ export function TestManagement({ lang }: TestManagementProps) {
 
       {/* Preview Modal */}
       {showPreview && selectedTest && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <CardHeader>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowPreview(false)}>
+          <Card className="w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <CardHeader className="border-b border-gray-200 dark:border-gray-700">
               <CardTitle className="flex items-center justify-between">
-                <span>{t.previewTest}: {lang === 'ar' ? selectedTest.method_name_ar : selectedTest.method_name}</span>
-                <Button variant="outline" size="sm" onClick={() => setShowPreview(false)}>
+                <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                  <EyeIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <span className="text-xl">{t.previewTest}</span>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => setShowPreview(false)} className="hover:bg-gray-100 dark:hover:bg-gray-800">
                   <XMarkIcon className="h-4 w-4" />
                 </Button>
               </CardTitle>
+              <div className="mt-2">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {lang === 'ar' ? selectedTest.method_name_ar : selectedTest.method_name}
+                </h2>
+                {selectedTest.description && (
+                  <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    {lang === 'ar' ? selectedTest.description_ar : selectedTest.description}
+                  </p>
+                )}
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Test Information */}
@@ -636,6 +1028,62 @@ export function TestManagement({ lang }: TestManagementProps) {
                 </div>
               )}
 
+              {/* Required Equipment */}
+              {selectedTest.required_equipment && selectedTest.required_equipment.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center">
+                    <CubeIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                    {t.requiredEquipment}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 className="font-medium mb-2">English</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        {selectedTest.required_equipment.map((equipment, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{equipment}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">العربية</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        {selectedTest.required_equipment_ar?.map((equipment, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{equipment}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Handling Procedures */}
+              {selectedTest.handling_procedures && selectedTest.handling_procedures.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center">
+                    <DocumentTextIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                    {t.handlingProcedures}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 className="font-medium mb-2">English</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        {selectedTest.handling_procedures.map((procedure, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{procedure}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">العربية</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        {selectedTest.handling_procedures_ar?.map((procedure, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{procedure}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Chemical Components */}
               {selectedTest.chemical_components && selectedTest.chemical_components.length > 0 && (
                 <div>
@@ -656,6 +1104,34 @@ export function TestManagement({ lang }: TestManagementProps) {
                         )}
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Test Instructions */}
+              {selectedTest.test_instructions && selectedTest.test_instructions.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center">
+                    <DocumentTextIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                    {t.testInstructions}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h5 className="font-medium mb-2">English</h5>
+                      <ol className="list-decimal list-inside space-y-1">
+                        {selectedTest.test_instructions.map((instruction, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{instruction}</li>
+                        ))}
+                      </ol>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">العربية</h5>
+                      <ol className="list-decimal list-inside space-y-1">
+                        {selectedTest.test_instructions_ar?.map((instruction, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">{instruction}</li>
+                        ))}
+                      </ol>
+                    </div>
                   </div>
                 </div>
               )}
