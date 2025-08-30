@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
 import { getChemicalTestsLocal, initializeLocalStorage } from '@/lib/local-data-service';
@@ -109,6 +109,74 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
 
+  // Load real statistics from database and localStorage
+  const loadRealStats = useCallback(async () => {
+    try {
+      console.log('🔄 Loading real dashboard statistics...');
+
+      // Get real test data from database
+      const testsData = getChemicalTestsLocal();
+      const totalTests = testsData.length;
+
+      // Get total colors from all tests
+      const totalColors = testsData.reduce((total, test) => {
+        return total + (test.color_results?.length || 0);
+      }, 0);
+
+      // Get user test results from localStorage
+      const userTestResults = JSON.parse(localStorage.getItem('user_test_results') || '[]');
+      const testResults = JSON.parse(localStorage.getItem('test_results') || '[]');
+      const allResults = [...userTestResults, ...testResults];
+
+      // Calculate real statistics
+      const totalSessions = allResults.length;
+
+      // Get recent activity (last 10 test results)
+      const recentActivity = allResults
+        .sort((a, b) => new Date(b.completedAt || b.timestamp || 0).getTime() - new Date(a.completedAt || a.timestamp || 0).getTime())
+        .slice(0, 10)
+        .map(result => ({
+          testId: result.testId || 'unknown',
+          timestamp: result.completedAt || result.timestamp || new Date().toISOString(),
+          userId: result.userId || 'anonymous'
+        }));
+
+      // Calculate popular tests
+      const testCounts = allResults.reduce((counts: any, result) => {
+        const testId = result.testId || 'unknown';
+        counts[testId] = (counts[testId] || 0) + 1;
+        return counts;
+      }, {});
+
+      const popularTests = Object.entries(testCounts)
+        .sort(([,a], [,b]) => (b as number) - (a as number))
+        .slice(0, 5)
+        .map(([testId, count]) => ({ testId, count }));
+
+      const realStats: DashboardStats = {
+        totalTests,
+        totalColors,
+        totalSessions,
+        recentActivity,
+        popularTests,
+        systemHealth: totalSessions > 0 ? 'good' : 'warning'
+      };
+
+      console.log('✅ Real statistics loaded:', realStats);
+      setStats(realStats);
+
+    } catch (error) {
+      console.error('❌ Error loading real statistics:', error);
+      // Fallback to basic real data
+      const testsData = getChemicalTestsLocal();
+      setStats(prev => ({
+        ...prev,
+        totalTests: testsData.length,
+        totalColors: testsData.reduce((total, test) => total + (test.color_results?.length || 0), 0)
+      }));
+    }
+  }, []);
+
   // Safe translations access with fallback
   let t: any = {};
   try {
@@ -150,6 +218,9 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
           setLoading(false);
           return;
         }
+
+        // Load real statistics
+        await loadRealStats();
 
         // Load basic stats from local storage
         let tests: any[] = [];
@@ -751,10 +822,10 @@ export function AdminDashboard({ lang }: AdminDashboardProps) {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">
-              {lang === 'ar' ? 'مرحباً بك في لوحة الإدارة' : 'Welcome to Admin Dashboard'}
+              {lang === 'ar' ? 'لوحة التحكم الإدارية' : 'Administrative Control Panel'}
             </h1>
             <p className="text-cyan-100">
-              {lang === 'ar' ? 'إدارة شاملة لنظام اختبارات الألوان' : 'Comprehensive management for color testing system'}
+              {lang === 'ar' ? 'إدارة شاملة لنظام اختبارات الألوان الكيميائية' : 'Comprehensive management for chemical color testing system'}
             </p>
           </div>
           <div className="hidden md:block">

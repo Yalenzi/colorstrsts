@@ -294,33 +294,26 @@ export function TestManagement({ lang }: TestManagementProps) {
   };
 
   const handleEditTest = (test: ChemicalTest) => {
-    // Ensure all arrays exist for editing, even if empty
+    // Convert real database structure to editable format
     const editableTest = {
       ...test,
-      safety_instructions: test.safety_instructions && test.safety_instructions.length > 0
-        ? test.safety_instructions
-        : [''],
-      safety_instructions_ar: test.safety_instructions_ar && test.safety_instructions_ar.length > 0
-        ? test.safety_instructions_ar
-        : [''],
-      required_equipment: test.required_equipment && test.required_equipment.length > 0
-        ? test.required_equipment
-        : [''],
-      required_equipment_ar: test.required_equipment_ar && test.required_equipment_ar.length > 0
-        ? test.required_equipment_ar
-        : [''],
-      handling_procedures: test.handling_procedures && test.handling_procedures.length > 0
-        ? test.handling_procedures
-        : [''],
-      handling_procedures_ar: test.handling_procedures_ar && test.handling_procedures_ar.length > 0
-        ? test.handling_procedures_ar
-        : [''],
-      test_instructions: test.test_instructions && test.test_instructions.length > 0
-        ? test.test_instructions
-        : [''],
-      test_instructions_ar: test.test_instructions_ar && test.test_instructions_ar.length > 0
-        ? test.test_instructions_ar
-        : [''],
+      // Extract safety instructions from instructions array
+      safety_instructions: test.instructions?.map(inst => inst.instruction) || [''],
+      safety_instructions_ar: test.instructions?.map(inst => inst.instruction_ar) || [''],
+
+      // Extract equipment from chemical_components (as equipment info)
+      required_equipment: test.chemical_components?.map(comp => comp.name) || [''],
+      required_equipment_ar: test.chemical_components?.map(comp => comp.name_ar) || [''],
+
+      // Extract handling procedures from prepare field
+      handling_procedures: test.prepare ? test.prepare.split('\n').filter(step => step.trim()) : [''],
+      handling_procedures_ar: test.prepare_ar ? test.prepare_ar.split('\n').filter(step => step.trim()) : [''],
+
+      // Extract test instructions from prepare field (same as handling for now)
+      test_instructions: test.prepare ? test.prepare.split('\n').filter(step => step.trim()) : [''],
+      test_instructions_ar: test.prepare_ar ? test.prepare_ar.split('\n').filter(step => step.trim()) : [''],
+
+      // Keep existing chemical components
       chemical_components: test.chemical_components && test.chemical_components.length > 0
         ? test.chemical_components
         : [{
@@ -335,6 +328,12 @@ export function TestManagement({ lang }: TestManagementProps) {
     setIsCreating(false);
     setIsEditing(true);
     console.log('🔧 تحرير الاختبار:', editableTest.method_name);
+    console.log('📊 البيانات المحملة:', {
+      safety_instructions: editableTest.safety_instructions.length,
+      required_equipment: editableTest.required_equipment.length,
+      handling_procedures: editableTest.handling_procedures.length,
+      chemical_components: editableTest.chemical_components.length
+    });
   };
 
   const handleDeleteTest = async (testId: string) => {
@@ -1001,7 +1000,7 @@ export function TestManagement({ lang }: TestManagementProps) {
               )}
 
               {/* Safety Instructions */}
-              {selectedTest.safety_instructions && selectedTest.safety_instructions.length > 0 && (
+              {selectedTest.instructions && selectedTest.instructions.length > 0 && (
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center">
                     <ShieldCheckIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
@@ -1011,16 +1010,30 @@ export function TestManagement({ lang }: TestManagementProps) {
                     <div>
                       <h5 className="font-medium mb-2">English</h5>
                       <ul className="list-disc list-inside space-y-1">
-                        {selectedTest.safety_instructions.map((instruction, index) => (
-                          <li key={index} className="text-gray-600 dark:text-gray-400">{instruction}</li>
+                        {selectedTest.instructions.map((instruction, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">
+                            <strong>{instruction.instruction}</strong>
+                            {instruction.safety_warning && (
+                              <div className="text-red-600 dark:text-red-400 text-sm mt-1">
+                                ⚠️ {instruction.safety_warning}
+                              </div>
+                            )}
+                          </li>
                         ))}
                       </ul>
                     </div>
                     <div>
                       <h5 className="font-medium mb-2">العربية</h5>
                       <ul className="list-disc list-inside space-y-1">
-                        {selectedTest.safety_instructions_ar?.map((instruction, index) => (
-                          <li key={index} className="text-gray-600 dark:text-gray-400">{instruction}</li>
+                        {selectedTest.instructions.map((instruction, index) => (
+                          <li key={index} className="text-gray-600 dark:text-gray-400">
+                            <strong>{instruction.instruction_ar}</strong>
+                            {instruction.safety_warning_ar && (
+                              <div className="text-red-600 dark:text-red-400 text-sm mt-1">
+                                ⚠️ {instruction.safety_warning_ar}
+                              </div>
+                            )}
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -1028,57 +1041,53 @@ export function TestManagement({ lang }: TestManagementProps) {
                 </div>
               )}
 
-              {/* Required Equipment */}
-              {selectedTest.required_equipment && selectedTest.required_equipment.length > 0 && (
+              {/* Chemical Components (Equipment) */}
+              {selectedTest.chemical_components && selectedTest.chemical_components.length > 0 && (
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center">
                     <CubeIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
-                    {t.requiredEquipment}
+                    {t.chemicalComponents}
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h5 className="font-medium mb-2">English</h5>
-                      <ul className="list-disc list-inside space-y-1">
-                        {selectedTest.required_equipment.map((equipment, index) => (
-                          <li key={index} className="text-gray-600 dark:text-gray-400">{equipment}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="font-medium mb-2">العربية</h5>
-                      <ul className="list-disc list-inside space-y-1">
-                        {selectedTest.required_equipment_ar?.map((equipment, index) => (
-                          <li key={index} className="text-gray-600 dark:text-gray-400">{equipment}</li>
-                        ))}
-                      </ul>
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {selectedTest.chemical_components.map((component, index) => (
+                      <div key={index} className="border rounded-lg p-3 bg-gray-50 dark:bg-gray-700">
+                        <h5 className="font-medium text-gray-900 dark:text-gray-100">{component.name}</h5>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{component.name_ar}</p>
+                        {component.formula && (
+                          <p className="text-sm font-mono text-blue-600 dark:text-blue-400">{component.formula}</p>
+                        )}
+                        {component.concentration && (
+                          <p className="text-sm text-green-600 dark:text-green-400">{component.concentration}</p>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
 
-              {/* Handling Procedures */}
-              {selectedTest.handling_procedures && selectedTest.handling_procedures.length > 0 && (
+              {/* Test Procedures */}
+              {(selectedTest.prepare || selectedTest.prepare_ar) && (
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center">
                     <DocumentTextIcon className="h-5 w-5 mr-2 rtl:ml-2 rtl:mr-0" />
-                    {t.handlingProcedures}
+                    {t.testInstructions}
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <h5 className="font-medium mb-2">English</h5>
-                      <ul className="list-disc list-inside space-y-1">
-                        {selectedTest.handling_procedures.map((procedure, index) => (
-                          <li key={index} className="text-gray-600 dark:text-gray-400">{procedure}</li>
-                        ))}
-                      </ul>
+                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-sans">
+                          {selectedTest.prepare}
+                        </pre>
+                      </div>
                     </div>
                     <div>
                       <h5 className="font-medium mb-2">العربية</h5>
-                      <ul className="list-disc list-inside space-y-1">
-                        {selectedTest.handling_procedures_ar?.map((procedure, index) => (
-                          <li key={index} className="text-gray-600 dark:text-gray-400">{procedure}</li>
-                        ))}
-                      </ul>
+                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-sans">
+                          {selectedTest.prepare_ar}
+                        </pre>
+                      </div>
                     </div>
                   </div>
                 </div>
