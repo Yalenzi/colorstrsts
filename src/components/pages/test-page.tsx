@@ -13,6 +13,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ColorSelector } from '@/components/ui/color-selector';
 import { TestInstructions } from '@/components/ui/test-instructions';
 import { TestResults } from '@/components/ui/test-results';
+import { ScientificReferences } from '@/components/ui/scientific-references';
 import { 
   ArrowLeftIcon,
   BeakerIcon,
@@ -477,16 +478,29 @@ export function TestPage({ lang, testId }: TestPageProps) {
           )}
 
           {currentStep === 'results' && selectedColorResult && (
-            <TestResults
-              testId={testId}
-              selectedColor={selectedColorResult.hex_code}
-              lang={lang}
-              onBack={() => setCurrentStep('color-selection')}
-              onNewTest={() => {
-                console.log('New test requested - navigating to tests page');
-                router.push(`/${lang}/tests`);
-              }}
-            />
+            <>
+              <TestResults
+                testId={testId}
+                selectedColor={selectedColorResult.hex_code}
+                lang={lang}
+                onBack={() => setCurrentStep('color-selection')}
+                onNewTest={() => {
+                  console.log('New test requested - navigating to tests page');
+                  router.push(`/${lang}/tests`);
+                }}
+              />
+
+              {/* Scientific References */}
+              <div className="mt-8">
+                <ScientificReferences
+                  reference={test?.reference}
+                  reference_ar={test?.reference_ar}
+                  lang={lang}
+                  testName={test?.method_name}
+                  testName_ar={test?.method_name_ar}
+                />
+              </div>
+            </>
           )}
         </div>
       </div>

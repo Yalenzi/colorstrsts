@@ -46,9 +46,22 @@ export interface UserTestStats {
 // Save a completed test result
 export async function saveUserTestResult(testResult: Omit<UserTestResult, 'id' | 'timestamp' | 'completedAt'>): Promise<string> {
   try {
+    // Check if Firebase is available
+    if (!db) {
+      console.error('❌ Firebase database not initialized');
+      throw new Error('Database not available');
+    }
+
+    console.log('🔄 Attempting to save test result to Firebase...');
+    console.log('📊 Test result data:', {
+      userId: testResult.userId,
+      testId: testResult.testId,
+      testName: testResult.testName
+    });
+
     const userTestsRef = ref(db, 'userTestResults');
     const newTestRef = push(userTestsRef);
-    
+
     const completeTestResult: UserTestResult = {
       ...testResult,
       timestamp: Date.now(),
@@ -56,12 +69,44 @@ export async function saveUserTestResult(testResult: Omit<UserTestResult, 'id' |
     };
 
     await set(newTestRef, completeTestResult);
-    
-    console.log('✅ Test result saved successfully:', newTestRef.key);
+
+    console.log('✅ Test result saved successfully to Firebase:', newTestRef.key);
+
+    // Also save to localStorage as backup
+    try {
+      const localResults = JSON.parse(localStorage.getItem('user_test_results') || '[]');
+      localResults.push({ ...completeTestResult, id: newTestRef.key });
+      localStorage.setItem('user_test_results', JSON.stringify(localResults));
+      console.log('💾 Test result also saved to localStorage as backup');
+    } catch (localError) {
+      console.warn('⚠️ Failed to save to localStorage:', localError);
+    }
+
     return newTestRef.key!;
   } catch (error) {
-    console.error('❌ Error saving test result:', error);
-    throw error;
+    console.error('❌ Error saving test result to Firebase:', error);
+
+    // Fallback to localStorage if Firebase fails
+    try {
+      console.log('🔄 Attempting fallback save to localStorage...');
+      const fallbackId = `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const completeTestResult: UserTestResult = {
+        ...testResult,
+        id: fallbackId,
+        timestamp: Date.now(),
+        completedAt: new Date().toISOString(),
+      };
+
+      const localResults = JSON.parse(localStorage.getItem('user_test_results') || '[]');
+      localResults.push(completeTestResult);
+      localStorage.setItem('user_test_results', JSON.stringify(localResults));
+
+      console.log('✅ Test result saved to localStorage as fallback:', fallbackId);
+      return fallbackId;
+    } catch (fallbackError) {
+      console.error('❌ Fallback save to localStorage also failed:', fallbackError);
+      throw new Error(`Failed to save test result: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 }
 

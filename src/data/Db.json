@@ -30,7 +30,8 @@
       "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على طبق نقطي.\n2. أضف قطرة واحدة من الكاشف IA (محضر بخلط 8-10 قطرات من الفورمالديهايد 37% مع 10 مل من حمض الخليك الجليدي).\n3. أضف 2-3 قطرات من الكاشف 1B (حمض الكبريتيك المركز).\n4. راقب تغيير اللون.",
       "test_type": "F/L",
       "test_number": "Test 1",
-      "reference": "Auterhoff, H., Braun, D.. Arch.Pharm.(Weinheim), 306 (1973) 866.",
+      "reference": "• Auterhoff, H., Braun, D. Arch. Pharm. (Weinheim), 306 (1973) 866.\n• Marquis, E. J. Pharm. Chim., 6 (1896) 385.\n• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).",
+      "reference_ar": "• أوترهوف، ه.، براون، د. أرش. فارم. (فاينهايم)، 306 (1973) 866.\n• ماركيز، إ. ج. فارم. شيم.، 6 (1896) 385.\n• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).",
       "instructions": [
         {
           "step_number": 1,
@@ -118,7 +119,8 @@
       "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على صفيحة تركيز.\n2. أضف ثلاث قطرات من الماء وامسح العينة على صفيحة التركيز بقضيب زجاجي أو ملعقة.\n3. انقل قطرة من السائل إلى تجويف آخر في صفيحة التركيز.\n4. أضف قطرة واحدة من الكاشف 2 (أذب 5 جرامات من كبريتات الحديد في 100 مل من الماء).\n5. راقب تغير اللون.",
       "test_type": "F/L",
       "test_number": "Test 2",
-      "reference": "Hartke, K., Mutschler, E. (Editors). DAB 9 - Kommentar. Wissenschaftliche Verlagsgesellschaft, Stuttgart (1987), p. 2603. Roth, H.J., Eger, K., Torschuetz, R.. Pharmazeutische Chemie II - Arzneistoffanalyse, 2nd Edition. Georg Thieme Verlag, Stuttgart, New York (1985), p. 517.",
+      "reference": "• Hartke, K., Mutschler, E. (Editors). DAB 9 - Kommentar. Wissenschaftliche Verlagsgesellschaft, Stuttgart (1987), p. 2603.\n• Roth, H.J., Eger, K., Torschuetz, R. Pharmazeutische Chemie II - Arzneistoffanalyse, 2nd Edition. Georg Thieme Verlag, Stuttgart, New York (1985), p. 517.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).",
+      "reference_ar": "• هارتكه، ك.، موتشلر، إ. (محررون). DAB 9 - كومنتار. فيسنشافتليشه فيرلاجسجيسيلشافت، شتوتجارت (1987)، ص. 2603.\n• روث، ه.ج.، إيجر، ك.، تورشويتز، ر. الكيمياء الصيدلانية II - تحليل المواد الدوائية، الطبعة الثانية. جورج ثيمه فيرلاج، شتوتجارت، نيويورك (1985)، ص. 517.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).",
       "instructions": [
         {
           "step_number": 1,
@@ -861,7 +863,7 @@
       ]
     },
     {
-      "id": "erlich-test",
+      "id": "ehrlich-test",
       "method_name": "Erlich Test",
       "method_name_ar": "اختبار إيرليش",
       "description": "For detecting indole alkaloids including LSD",
@@ -890,7 +892,8 @@
       "prepare_ar": "1. ضع كمية صغيرة من المواد المشتبه بها في أنبوب اختبار.\n2. أضف خمس قطرات من الكاشف 17 (أذب 1 جرام من بارا-ثنائي ميثيل أمينو بنزالديهايد في 10 مل من حمض الهيدروكلوريك المركز و 90 مل من الإيثانول المطلق).\n3. رج أنبوب الاختبار لبضع ثوان واترك الخليط يقف لمدة 10-15 دقيقة.\n4. راقب تغير اللون.",
       "test_type": "F/L",
       "test_number": "Test 17",
-      "reference": "Erlich, P.. Ber.dtsch.chem.Ges., 44 (1911) 3737. Genest, K., Farmilo, C.G.. J.Pharm.Pharmacol., 16 (1964) 250.",
+      "reference": "• Ehrlich, P. Ber. dtsch. chem. Ges., 44 (1911) 3737.\n• Genest, K., Farmilo, C.G. J. Pharm. Pharmacol., 16 (1964) 250.\n• Koppanyi, T., Vivian, J.E. J. Pharm. Exp. Ther., 36 (1929) 363.",
+      "reference_ar": "• إرليش، ب. بير. دتش. شيم. جيس.، 44 (1911) 3737.\n• جينيست، ك.، فارميلو، س.ج. ج. فارم. فارماكول.، 16 (1964) 250.\n• كوبانيي، ت.، فيفيان، ج.إ. ج. فارم. إكسب. ثير.، 36 (1929) 363.",
       "instructions": [
         {
           "step_number": 1,

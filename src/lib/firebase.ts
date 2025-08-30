@@ -72,8 +72,13 @@ export const db = getFirestore(app);
 // Initialize Realtime Database and get a reference to the service with error handling
 let database: any = null;
 try {
-  database = getDatabase(app);
-  console.log('✅ Firebase Realtime Database initialized successfully');
+  if (firebaseConfig.databaseURL) {
+    database = getDatabase(app);
+    console.log('✅ Firebase Realtime Database initialized successfully');
+    console.log('🔗 Database URL:', firebaseConfig.databaseURL);
+  } else {
+    console.warn('⚠️ Firebase Realtime Database URL not configured');
+  }
 } catch (error) {
   console.error('❌ Failed to initialize Firebase Realtime Database:', error);
   console.error('Database URL:', firebaseConfig.databaseURL);
