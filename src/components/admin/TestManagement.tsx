@@ -269,18 +269,38 @@ export function TestManagement({ lang }: TestManagementProps) {
     }
   };
 
-  const saveTestsToStorage = (updatedTests: ChemicalTest[]) => {
+  const saveTestsToStorage = async (updatedTests: ChemicalTest[]) => {
     try {
-      // Save to multiple storage locations for consistency
+      // Save to localStorage first for immediate UI updates
       localStorage.setItem('chemical_tests_db', JSON.stringify(updatedTests));
       localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: updatedTests }));
       localStorage.setItem('database_color_tests', JSON.stringify(updatedTests));
 
       console.log(`💾 تم حفظ ${updatedTests.length} اختبار في التخزين المحلي`);
 
-      // Here you would also sync with the actual database file
-      // This would require a backend API endpoint to update Db.json
-      // await syncWithDatabase(updatedTests);
+      // Save to database files via API
+      try {
+        const response = await fetch('/api/save-tests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ tests: updatedTests }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to save to database files');
+        }
+
+        const result = await response.json();
+        console.log(`✅ تم حفظ ${result.count} اختبار في ملفات قاعدة البيانات`);
+
+      } catch (apiError) {
+        console.warn('⚠️ فشل في حفظ البيانات في ملفات قاعدة البيانات:', apiError);
+        // Don't throw here - localStorage save was successful
+        // The user can still work with the data, just the files won't be updated
+      }
     } catch (error) {
       console.error('❌ Error saving tests:', error);
       throw error;
@@ -374,7 +394,7 @@ export function TestManagement({ lang }: TestManagementProps) {
     try {
       const updatedTests = tests.filter(test => test.id !== testId);
       setTests(updatedTests);
-      saveTestsToStorage(updatedTests);
+      await saveTestsToStorage(updatedTests);
       toast.success(t.deleteSuccess);
     } catch (error) {
       console.error('Error deleting test:', error);
@@ -427,7 +447,7 @@ export function TestManagement({ lang }: TestManagementProps) {
       }
 
       setTests(updatedTests);
-      saveTestsToStorage(updatedTests);
+      await saveTestsToStorage(updatedTests);
       setIsEditing(false);
       setSelectedTest(null);
       toast.success(t.saveSuccess);

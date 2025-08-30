@@ -139,13 +139,15 @@ export function TestPage({ lang, testId }: TestPageProps) {
           return;
         }
 
-        // Try to load test data from new database service first
+        // Force reload from database files to get latest data
         let testData = null;
         try {
+          // Force reload from JSON files
+          await databaseColorTestService.forceReload();
           testData = await databaseColorTestService.getTestById(testId);
-          console.log('🔥 Loaded test data from new database service');
+          console.log('🔥 Loaded test data from database files (latest)');
         } catch (error) {
-          console.warn('⚠️ Could not load from new database service, trying fallback');
+          console.warn('⚠️ Could not load from database files, trying local storage');
         }
 
         // Fallback to local storage

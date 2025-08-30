@@ -82,7 +82,7 @@ class DatabaseColorTestService {
 
       // Import the JSON data directly
       try {
-        const data = await import('@/data/Databsecolorstest.json');
+        const data = await import('@/data/Db.json');
         this.tests = data.chemical_tests || [];
         localStorage.setItem('chemical_tests_data', JSON.stringify(data));
         console.log(`📦 Loaded ${this.tests.length} chemical tests from JSON file`);
@@ -306,7 +306,7 @@ class DatabaseColorTestService {
 
     // Force reload from JSON file
     try {
-      const data = await import('@/data/Databsecolorstest.json');
+      const data = await import('@/data/Db.json');
       this.tests = data.chemical_tests || [];
       localStorage.setItem('chemical_tests_data', JSON.stringify(data));
       console.log(`🔄 Force reloaded ${this.tests.length} tests from JSON`);
