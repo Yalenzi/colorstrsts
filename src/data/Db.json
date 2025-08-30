@@ -2392,6 +2392,122 @@
       "test_type": "F/L",
       "test_number": "Test 37",
       "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "dille-koppanyi-diazepam-test",
+      "method_name": "Dille-Koppanyi Test (Diazepam)",
+      "method_name_ar": "اختبار ديل-كوبانيي (ديازيبام)",
+      "description": "A specialized Dille-Koppanyi test for detecting diazepam and benzodiazepines",
+      "description_ar": "اختبار ديل-كوبانيي المتخصص للكشف عن الديازيبام والبنزوديازيبينات",
+      "category": "benzodiazepines",
+      "safety_level": "medium",
+      "preparation_time": 4,
+      "chemical_components": [
+        {
+          "name": "Vanillin",
+          "name_ar": "فانيلين",
+          "formula": "C₈H₈O₃",
+          "concentration": "1%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of vanillin solution\n3. Add 1-2 drops of concentrated sulfuric acid\n4. Observe color change within 2-3 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول الفانيلين\n3. أضف 1-2 قطرة من حمض الكبريتيك المركز\n4. لاحظ تغير اللون خلال 2-3 دقائق",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective gloves and safety goggles",
+          "instruction_ar": "ارتدِ القفازات الواقية ونظارات الأمان",
+          "safety_warning": "Concentrated sulfuric acid is highly corrosive",
+          "safety_warning_ar": "حمض الكبريتيك المركز شديد التآكل"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Diazepam",
+          "possible_substance_ar": "ديازيبام",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4B0082",
+          "color_name": "Indigo",
+          "color_name_ar": "نيلي",
+          "possible_substance": "Chlordiazepoxide",
+          "possible_substance_ar": "كلورديازيبوكسيد",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Dille, J.M., Koppanyi, T. J. Am. Pharm. Assoc., 47 (1958) 471.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• ديل، ج.م.، كوبانيي، ت. ج. أم. فارم. أسوك.، 47 (1958) 471.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 38",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "zimmermann-diazepam-test",
+      "method_name": "Zimmermann Test (Diazepam)",
+      "method_name_ar": "اختبار زيمرمان (ديازيبام)",
+      "description": "A specialized Zimmermann test for detecting diazepam and related compounds",
+      "description_ar": "اختبار زيمرمان المتخصص للكشف عن الديازيبام والمركبات ذات الصلة",
+      "category": "benzodiazepines",
+      "safety_level": "medium",
+      "preparation_time": 4,
+      "chemical_components": [
+        {
+          "name": "Dinitrobenzene",
+          "name_ar": "ثنائي نيترو البنزين",
+          "formula": "C₆H₄(NO₂)₂",
+          "concentration": "1%"
+        },
+        {
+          "name": "Potassium hydroxide",
+          "name_ar": "هيدروكسيد البوتاسيوم",
+          "formula": "KOH",
+          "concentration": "20%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 2-3 drops of dinitrobenzene solution\n3. Add 1-2 drops of potassium hydroxide solution\n4. Heat gently for 30 seconds\n5. Observe color change",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 2-3 قطرات من محلول ثنائي نيترو البنزين\n3. أضف 1-2 قطرة من محلول هيدروكسيد البوتاسيوم\n4. سخن بلطف لمدة 30 ثانية\n5. لاحظ تغير اللون",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective gloves and safety goggles",
+          "instruction_ar": "ارتدِ القفازات الواقية ونظارات الأمان",
+          "safety_warning": "Dinitrobenzene is toxic - avoid skin contact",
+          "safety_warning_ar": "ثنائي نيترو البنزين سام - تجنب ملامسة الجلد"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Diazepam",
+          "possible_substance_ar": "ديازيبام",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4B0082",
+          "color_name": "Indigo",
+          "color_name_ar": "نيلي",
+          "possible_substance": "Oxazepam",
+          "possible_substance_ar": "أوكسازيبام",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Zimmermann, W. Hoppe-Seyler's Z. Physiol. Chem., 233 (1935) 257.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• زيمرمان، و. هوبي-سايلر ز. فيزيول. شيم.، 233 (1935) 257.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).",
+      "test_type": "F/L",
+      "test_number": "Test 39",
+      "created_at": "2025-01-01T00:00:00Z"
     }
   ]
 }

@@ -198,18 +198,51 @@ export function getChemicalTestsLocal(): ChemicalTest[] {
   }
 }
 
+// Test ID mapping for different naming conventions
+const testIdMapping: Record<string, string> = {
+  // Alternative naming patterns
+  'nitric-acid-test-heroin': 'nitric-acid-heroin-test',
+  'nitric-acid-test-morphine': 'nitric-acid-morphine-test',
+  'nitric-acid-test-codeine': 'nitric-acid-codeine-test',
+  'modified-cobalt-thiocyanate': 'modified-cobalt-thiocyanate-test',
+  'scott-test': 'modified-scott-test',
+  'simon-test-acetone': 'simon-acetone-test',
+  'zimmermann-test-pemoline': 'zimmermann-pemoline-test',
+  '12-dinitrobenzene-test': 'dinitrobenzene-12-test',
+  '13-dinitrobenzene-test': 'dinitrobenzene-13-test',
+  '14-dinitrobenzene-test': 'dinitrobenzene-14-test',
+  'zimmermann-test-diazepam': 'zimmermann-diazepam-test',
+  'hydrochloric-acid-test-diazepam': 'hydrochloric-acid-diazepam-test',
+  'cobalt-thiocyanate-test-methaqualone': 'cobalt-thiocyanate-methaqualone-test',
+  'liebermann-test-mescaline': 'liebermann-mescaline-test',
+  'marquis-test-psilocybine': 'marquis-psilocybine-test',
+  'cobalt-thiocyanate-test-pcp': 'scott-pcp-test',
+  'mecke-test-pcp': 'mecke-pcp-test'
+};
+
 /**
- * Get a specific test by ID
- * الحصول على اختبار محدد بالمعرف
+ * Get a specific test by ID with smart matching
+ * الحصول على اختبار محدد بالمعرف مع المطابقة الذكية
  */
 export function getTestById(testId: string): ChemicalTest | null {
   try {
     const tests = getChemicalTestsLocal();
-    const test = tests.find(t => t.id === testId);
+
+    // Try direct match first
+    let test = tests.find(t => t.id === testId);
 
     if (test) {
       console.log(`🔍 Found test: ${test.method_name} (${testId})`);
       return test;
+    }
+
+    // Try mapped ID
+    if (testIdMapping[testId]) {
+      test = tests.find(t => t.id === testIdMapping[testId]);
+      if (test) {
+        console.log(`🔍 Found test via mapping: ${test.method_name} (${testId} → ${test.id})`);
+        return test;
+      }
     }
 
     // Try alternative ID formats to prevent infinite loops
@@ -225,6 +258,7 @@ export function getTestById(testId: string): ChemicalTest | null {
     }
 
     console.warn(`⚠️ Test not found: ${testId} (searched ${tests.length} tests)`);
+    console.log('Available test IDs:', tests.slice(0, 10).map(t => t.id));
     return null;
 
   } catch (error) {

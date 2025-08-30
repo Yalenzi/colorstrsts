@@ -422,6 +422,36 @@ class DatabaseColorTestService {
         return test;
       }
 
+      // Test ID mapping for different naming conventions
+      const testIdMapping: Record<string, string> = {
+        'nitric-acid-test-heroin': 'nitric-acid-heroin-test',
+        'nitric-acid-test-morphine': 'nitric-acid-morphine-test',
+        'nitric-acid-test-codeine': 'nitric-acid-codeine-test',
+        'modified-cobalt-thiocyanate': 'modified-cobalt-thiocyanate-test',
+        'scott-test': 'modified-scott-test',
+        'simon-test-acetone': 'simon-acetone-test',
+        'zimmermann-test-pemoline': 'zimmermann-pemoline-test',
+        '12-dinitrobenzene-test': 'dinitrobenzene-12-test',
+        '13-dinitrobenzene-test': 'dinitrobenzene-13-test',
+        '14-dinitrobenzene-test': 'dinitrobenzene-14-test',
+        'zimmermann-test-diazepam': 'zimmermann-diazepam-test',
+        'hydrochloric-acid-test-diazepam': 'hydrochloric-acid-diazepam-test',
+        'cobalt-thiocyanate-test-methaqualone': 'cobalt-thiocyanate-methaqualone-test',
+        'liebermann-test-mescaline': 'liebermann-mescaline-test',
+        'marquis-test-psilocybine': 'marquis-psilocybine-test',
+        'cobalt-thiocyanate-test-pcp': 'scott-pcp-test',
+        'mecke-test-pcp': 'mecke-pcp-test'
+      };
+
+      // Try mapped ID
+      if (testIdMapping[testId]) {
+        test = tests.find(test => test.id === testIdMapping[testId]);
+        if (test) {
+          console.log(`🔍 Found test via mapping: ${test.method_name} (${testId} → ${test.id})`);
+          return test;
+        }
+      }
+
       // Try alternative matching to prevent infinite loops
       test = tests.find(test =>
         test.id.includes(testId) ||
