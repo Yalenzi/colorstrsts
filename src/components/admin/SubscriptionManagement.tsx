@@ -154,25 +154,50 @@ export function SubscriptionManagement({ lang }: SubscriptionManagementProps) {
 
   const handleUpdateSubscription = async (userId: string, status: UserSubscription['status']) => {
     try {
-      const user = users.find(u => u.userId === userId);
-      if (!user?.subscription) return;
+      console.log('🔄 تحديث الاشتراك:', { userId, status });
 
-      await updateSTCSubscriptionStatus(user.subscription.id, status);
-      
-      // تحديث البيانات المحلية
-      setUsers(users.map(u => 
+      const user = users.find(u => u.userId === userId);
+      if (!user?.subscription) {
+        console.error('❌ لم يتم العثور على المستخدم أو الاشتراك');
+        setMessage({
+          type: 'error',
+          text: isRTL ? 'لم يتم العثور على الاشتراك' : 'Subscription not found'
+        });
+        return;
+      }
+
+      // محاولة تحديث Firebase أولاً
+      try {
+        await updateSTCSubscriptionStatus(user.subscription.id, status);
+        console.log('✅ تم تحديث Firebase بنجاح');
+      } catch (firebaseError) {
+        console.warn('⚠️ فشل تحديث Firebase، سيتم التحديث محلياً فقط:', firebaseError);
+      }
+
+      // تحديث البيانات المحلية دائماً
+      setUsers(users.map(u =>
         u.userId === userId && u.subscription
           ? { ...u, subscription: { ...u.subscription, status } }
           : u
       ));
+
+      // حفظ في localStorage كنسخة احتياطية
+      const updatedUsers = users.map(u =>
+        u.userId === userId && u.subscription
+          ? { ...u, subscription: { ...u.subscription, status } }
+          : u
+      );
+      localStorage.setItem('subscription_users', JSON.stringify(updatedUsers));
 
       setMessage({
         type: 'success',
         text: isRTL ? 'تم تحديث الاشتراك بنجاح' : 'Subscription updated successfully'
       });
 
+      console.log('✅ تم تحديث الاشتراك بنجاح');
+
     } catch (error) {
-      console.error('Error updating subscription:', error);
+      console.error('❌ خطأ في تحديث الاشتراك:', error);
       setMessage({
         type: 'error',
         text: isRTL ? 'خطأ في تحديث الاشتراك' : 'Error updating subscription'

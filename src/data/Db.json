@@ -978,6 +978,374 @@
           "confidence_level": "medium"
         }
       ]
+    },
+    {
+      "id": "liebermann-test",
+      "method_name": "Liebermann Test",
+      "method_name_ar": "اختبار ليبرمان",
+      "description": "A color test for detecting alkaloids and other organic compounds",
+      "description_ar": "اختبار لوني للكشف عن القلويدات والمركبات العضوية الأخرى",
+      "chemical_components": [
+        {
+          "name": "Potassium nitrite",
+          "name_ar": "نتريت البوتاسيوم",
+          "formula": "KNO₂",
+          "concentration": "5%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of potassium nitrite solution\n3. Add 1-2 drops of concentrated sulfuric acid\n4. Observe color change immediately",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول نتريت البوتاسيوم\n3. أضف 1-2 قطرة من حمض الكبريتيك المركز\n4. لاحظ تغير اللون فوراً",
+      "instructions": [
+        {
+          "instruction": "Wear protective equipment including gloves and safety goggles",
+          "instruction_ar": "ارتد معدات الحماية بما في ذلك القفازات ونظارات الأمان",
+          "safety_warning": "Concentrated sulfuric acid is highly corrosive",
+          "safety_warning_ar": "حمض الكبريتيك المركز شديد التآكل"
+        },
+        {
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Reaction may produce toxic fumes",
+          "safety_warning_ar": "قد ينتج عن التفاعل أبخرة سامة"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#8B0000",
+          "color_name": "Dark Red",
+          "color_name_ar": "أحمر داكن",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FF4500",
+          "color_name": "Orange Red",
+          "color_name_ar": "أحمر برتقالي",
+          "possible_substance": "Codeine",
+          "possible_substance_ar": "كودايين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Heroin",
+          "possible_substance_ar": "هيروين",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Liebermann, C. Ber. dtsch. chem. Ges., 7 (1874) 247.\n• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• ليبرمان، س. بير. دتش. شيم. جيس.، 7 (1874) 247.\n• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011)."
+    },
+    {
+      "id": "potassium-dichromate-test",
+      "method_name": "Potassium Dichromate Test",
+      "method_name_ar": "اختبار ثنائي كرومات البوتاسيوم",
+      "description": "A color test for detecting various organic compounds and drugs",
+      "description_ar": "اختبار لوني للكشف عن المركبات العضوية والأدوية المختلفة",
+      "chemical_components": [
+        {
+          "name": "Potassium dichromate",
+          "name_ar": "ثنائي كرومات البوتاسيوم",
+          "formula": "K₂Cr₂O₇",
+          "concentration": "10%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of potassium dichromate solution\n3. Add 1-2 drops of concentrated sulfuric acid\n4. Observe color change within 2-3 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول ثنائي كرومات البوتاسيوم\n3. أضف 1-2 قطرة من حمض الكبريتيك المركز\n4. لاحظ تغير اللون خلال 2-3 دقائق",
+      "instructions": [
+        {
+          "instruction": "Wear protective equipment including gloves and safety goggles",
+          "instruction_ar": "ارتد معدات الحماية بما في ذلك القفازات ونظارات الأمان",
+          "safety_warning": "Potassium dichromate is carcinogenic and toxic",
+          "safety_warning_ar": "ثنائي كرومات البوتاسيوم مسرطن وسام"
+        },
+        {
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Avoid inhalation of fumes",
+          "safety_warning_ar": "تجنب استنشاق الأبخرة"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#006400",
+          "color_name": "Dark Green",
+          "color_name_ar": "أخضر داكن",
+          "possible_substance": "Amphetamine",
+          "possible_substance_ar": "أمفيتامين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#0000FF",
+          "color_name": "Blue",
+          "color_name_ar": "أزرق",
+          "possible_substance": "Methamphetamine",
+          "possible_substance_ar": "ميثامفيتامين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#8B4513",
+          "color_name": "Brown",
+          "color_name_ar": "بني",
+          "possible_substance": "Cocaine",
+          "possible_substance_ar": "كوكايين",
+          "confidence_level": "low"
+        }
+      ],
+      "reference": "• Fulton, C.C. Modern Microcrystal Tests for Drugs. Wiley-Interscience, New York (1969).\n• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).",
+      "reference_ar": "• فولتون، س.س. اختبارات البلورات الدقيقة الحديثة للأدوية. وايلي-إنترساينس، نيويورك (1969).\n• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007)."
+    },
+    {
+      "id": "nitric-sulfuric-test",
+      "method_name": "Nitric-Sulfuric Acid Test",
+      "method_name_ar": "اختبار حمض النيتريك-الكبريتيك",
+      "description": "A color test using nitric and sulfuric acids for drug identification",
+      "description_ar": "اختبار لوني باستخدام حمض النيتريك والكبريتيك لتحديد الأدوية",
+      "chemical_components": [
+        {
+          "name": "Concentrated nitric acid",
+          "name_ar": "حمض النيتريك المركز",
+          "formula": "HNO₃",
+          "concentration": "70%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1 drop of concentrated nitric acid\n3. Add 1 drop of concentrated sulfuric acid\n4. Observe color change immediately and after heating gently",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف قطرة واحدة من حمض النيتريك المركز\n3. أضف قطرة واحدة من حمض الكبريتيك المركز\n4. لاحظ تغير اللون فوراً وبعد التسخين اللطيف",
+      "instructions": [
+        {
+          "instruction": "Wear protective equipment including gloves and safety goggles",
+          "instruction_ar": "ارتد معدات الحماية بما في ذلك القفازات ونظارات الأمان",
+          "safety_warning": "Both acids are highly corrosive and dangerous",
+          "safety_warning_ar": "كلا الحمضين شديد التآكل والخطورة"
+        },
+        {
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو تحت شفاط الأبخرة",
+          "safety_warning": "Reaction produces toxic nitrogen oxides",
+          "safety_warning_ar": "ينتج عن التفاعل أكاسيد النيتروجين السامة"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#FFD700",
+          "color_name": "Golden Yellow",
+          "color_name_ar": "أصفر ذهبي",
+          "possible_substance": "Strychnine",
+          "possible_substance_ar": "ستريكنين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#FF0000",
+          "color_name": "Red",
+          "color_name_ar": "أحمر",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#FFA500",
+          "color_name": "Orange",
+          "color_name_ar": "برتقالي",
+          "possible_substance": "Heroin",
+          "possible_substance_ar": "هيروين",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Fulton, C.C. Modern Microcrystal Tests for Drugs. Wiley-Interscience, New York (1969).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).",
+      "reference_ar": "• فولتون، س.س. اختبارات البلورات الدقيقة الحديثة للأدوية. وايلي-إنترساينس، نيويورك (1969).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007)."
+    },
+    {
+      "id": "chen-kao-test",
+      "method_name": "Chen-Kao Test",
+      "method_name_ar": "اختبار تشين-كاو",
+      "description": "A specific color test for detecting primary amines and amphetamines",
+      "description_ar": "اختبار لوني محدد للكشف عن الأمينات الأولية والأمفيتامينات",
+      "chemical_components": [
+        {
+          "name": "Copper sulfate",
+          "name_ar": "كبريتات النحاس",
+          "formula": "CuSO₄·5H₂O",
+          "concentration": "2%"
+        },
+        {
+          "name": "Sodium hydroxide",
+          "name_ar": "هيدروكسيد الصوديوم",
+          "formula": "NaOH",
+          "concentration": "10%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 2-3 drops of copper sulfate solution\n3. Add 1-2 drops of sodium hydroxide solution\n4. Observe color change within 1-2 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 2-3 قطرات من محلول كبريتات النحاس\n3. أضف 1-2 قطرة من محلول هيدروكسيد الصوديوم\n4. لاحظ تغير اللون خلال 1-2 دقيقة",
+      "instructions": [
+        {
+          "instruction": "Wear protective equipment including gloves and safety goggles",
+          "instruction_ar": "ارتد معدات الحماية بما في ذلك القفازات ونظارات الأمان",
+          "safety_warning": "Sodium hydroxide is caustic and can cause burns",
+          "safety_warning_ar": "هيدروكسيد الصوديوم كاوي ويمكن أن يسبب حروق"
+        },
+        {
+          "instruction": "Handle copper sulfate with care",
+          "instruction_ar": "تعامل مع كبريتات النحاس بحذر",
+          "safety_warning": "Copper sulfate is toxic if ingested",
+          "safety_warning_ar": "كبريتات النحاس سامة إذا تم ابتلاعها"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#0000FF",
+          "color_name": "Blue",
+          "color_name_ar": "أزرق",
+          "possible_substance": "Amphetamine",
+          "possible_substance_ar": "أمفيتامين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4169E1",
+          "color_name": "Royal Blue",
+          "color_name_ar": "أزرق ملكي",
+          "possible_substance": "Methamphetamine",
+          "possible_substance_ar": "ميثامفيتامين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#87CEEB",
+          "color_name": "Light Blue",
+          "color_name_ar": "أزرق فاتح",
+          "possible_substance": "MDMA",
+          "possible_substance_ar": "إم دي إم إيه",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Chen, C.H., Kao, C.H. J. Forensic Sci., 27 (1982) 17.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• تشين، س.ه.، كاو، س.ه. ج. الطب الشرعي العلمي، 27 (1982) 17.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011)."
+    },
+    {
+      "id": "modified-scott-test",
+      "method_name": "Modified Scott Test",
+      "method_name_ar": "اختبار سكوت المعدل",
+      "description": "An enhanced version of the Scott test for cocaine detection",
+      "description_ar": "نسخة محسنة من اختبار سكوت للكشف عن الكوكايين",
+      "chemical_components": [
+        {
+          "name": "Cobalt thiocyanate",
+          "name_ar": "ثيوسيانات الكوبالت",
+          "formula": "Co(SCN)₂",
+          "concentration": "2%"
+        },
+        {
+          "name": "Glycerine",
+          "name_ar": "جليسرين",
+          "formula": "C₃H₈O₃",
+          "concentration": "100%"
+        },
+        {
+          "name": "Hydrochloric acid",
+          "name_ar": "حمض الهيدروكلوريك",
+          "formula": "HCl",
+          "concentration": "10%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1 drop of cobalt thiocyanate solution\n3. Add 1 drop of glycerine\n4. Add 1 drop of hydrochloric acid\n5. Observe color change",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف قطرة واحدة من محلول ثيوسيانات الكوبالت\n3. أضف قطرة واحدة من الجليسرين\n4. أضف قطرة واحدة من حمض الهيدروكلوريك\n5. لاحظ تغير اللون",
+      "instructions": [
+        {
+          "instruction": "Wear protective equipment including gloves and safety goggles",
+          "instruction_ar": "ارتد معدات الحماية بما في ذلك القفازات ونظارات الأمان",
+          "safety_warning": "Handle all chemicals with care",
+          "safety_warning_ar": "تعامل مع جميع المواد الكيميائية بحذر"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#0000FF",
+          "color_name": "Blue",
+          "color_name_ar": "أزرق",
+          "possible_substance": "Cocaine",
+          "possible_substance_ar": "كوكايين",
+          "confidence_level": "high"
+        },
+        {
+          "hex_code": "#4169E1",
+          "color_name": "Royal Blue",
+          "color_name_ar": "أزرق ملكي",
+          "possible_substance": "Cocaine HCl",
+          "possible_substance_ar": "كوكايين هيدروكلوريد",
+          "confidence_level": "high"
+        }
+      ],
+      "reference": "• Scott, W.T. J. Assoc. Off. Anal. Chem., 56 (1973) 1452.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).\n• Moffat, A.C. Clarke's Analysis of Drugs and Poisons, 4th Edition. Pharmaceutical Press (2011).",
+      "reference_ar": "• سكوت، و.ت. ج. جمعية المحللين الرسميين الكيميائيين، 56 (1973) 1452.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).\n• موفات، أ.س. تحليل كلارك للأدوية والسموم، الطبعة الرابعة. الصحافة الصيدلانية (2011)."
+    },
+    {
+      "id": "gallic-acid-test",
+      "method_name": "Gallic Acid Test",
+      "method_name_ar": "اختبار حمض الغاليك",
+      "description": "A color test using gallic acid for detecting various alkaloids",
+      "description_ar": "اختبار لوني باستخدام حمض الغاليك للكشف عن القلويدات المختلفة",
+      "chemical_components": [
+        {
+          "name": "Gallic acid",
+          "name_ar": "حمض الغاليك",
+          "formula": "C₇H₆O₅",
+          "concentration": "1%"
+        },
+        {
+          "name": "Concentrated sulfuric acid",
+          "name_ar": "حمض الكبريتيك المركز",
+          "formula": "H₂SO₄",
+          "concentration": "98%"
+        }
+      ],
+      "prepare": "1. Add a small amount of sample to a spot plate\n2. Add 1-2 drops of gallic acid solution\n3. Add 1 drop of concentrated sulfuric acid\n4. Observe color change within 2-3 minutes",
+      "prepare_ar": "1. أضف كمية صغيرة من العينة إلى طبق نقطي\n2. أضف 1-2 قطرة من محلول حمض الغاليك\n3. أضف قطرة واحدة من حمض الكبريتيك المركز\n4. لاحظ تغير اللون خلال 2-3 دقائق",
+      "instructions": [
+        {
+          "instruction": "Wear protective equipment including gloves and safety goggles",
+          "instruction_ar": "ارتد معدات الحماية بما في ذلك القفازات ونظارات الأمان",
+          "safety_warning": "Concentrated sulfuric acid is highly corrosive",
+          "safety_warning_ar": "حمض الكبريتيك المركز شديد التآكل"
+        }
+      ],
+      "color_results": [
+        {
+          "hex_code": "#8B0000",
+          "color_name": "Dark Red",
+          "color_name_ar": "أحمر داكن",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "medium"
+        },
+        {
+          "hex_code": "#800080",
+          "color_name": "Purple",
+          "color_name_ar": "بنفسجي",
+          "possible_substance": "Codeine",
+          "possible_substance_ar": "كودايين",
+          "confidence_level": "medium"
+        }
+      ],
+      "reference": "• Fulton, C.C. Modern Microcrystal Tests for Drugs. Wiley-Interscience, New York (1969).\n• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).",
+      "reference_ar": "• فولتون، س.س. اختبارات البلورات الدقيقة الحديثة للأدوية. وايلي-إنترساينس، نيويورك (1969).\n• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007)."
     }
   ]
 }

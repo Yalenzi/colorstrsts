@@ -425,15 +425,44 @@ interface ColorResultModalProps {
 
 function ColorResultModal({ lang, result, tests, onSave, onClose }: ColorResultModalProps) {
   const [formData, setFormData] = useState<ColorResult>({
-    id: result?.id || '',
-    test_id: result?.test_id || '',
-    color_result: result?.color_result || '',
-    color_result_ar: result?.color_result_ar || '',
-    color_hex: result?.color_hex || '#FFFFFF',
-    possible_substance: result?.possible_substance || '',
-    possible_substance_ar: result?.possible_substance_ar || '',
-    confidence_level: result?.confidence_level || 'medium'
+    id: '',
+    test_id: '',
+    color_result: '',
+    color_result_ar: '',
+    color_hex: '#FFFFFF',
+    possible_substance: '',
+    possible_substance_ar: '',
+    confidence_level: 'medium'
   });
+
+  // تحديث البيانات عند تغيير النتيجة المُحررة
+  useEffect(() => {
+    if (result) {
+      console.log('🔧 تحميل بيانات النتيجة للتحرير:', result);
+      setFormData({
+        id: result.id || '',
+        test_id: result.test_id || '',
+        color_result: result.color_result || '',
+        color_result_ar: result.color_result_ar || '',
+        color_hex: result.color_hex || '#FFFFFF',
+        possible_substance: result.possible_substance || '',
+        possible_substance_ar: result.possible_substance_ar || '',
+        confidence_level: result.confidence_level || 'medium'
+      });
+    } else {
+      // إعادة تعيين النموذج للإضافة الجديدة
+      setFormData({
+        id: '',
+        test_id: '',
+        color_result: '',
+        color_result_ar: '',
+        color_hex: '#FFFFFF',
+        possible_substance: '',
+        possible_substance_ar: '',
+        confidence_level: 'medium'
+      });
+    }
+  }, [result]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

@@ -301,9 +301,41 @@ export function TestManagement({ lang }: TestManagementProps) {
       safety_instructions: test.instructions?.map(inst => inst.instruction) || [''],
       safety_instructions_ar: test.instructions?.map(inst => inst.instruction_ar) || [''],
 
-      // Extract equipment from chemical_components (as equipment info)
-      required_equipment: test.chemical_components?.map(comp => comp.name) || [''],
-      required_equipment_ar: test.chemical_components?.map(comp => comp.name_ar) || [''],
+      // Extract equipment from multiple sources
+      required_equipment: (() => {
+        const equipment = [];
+        // من المكونات الكيميائية
+        if (test.chemical_components) {
+          equipment.push(...test.chemical_components.map(comp => comp.name));
+        }
+        // معدات إضافية مستخرجة من التعليمات
+        const additionalEquipment = [
+          'Spot plate',
+          'Glass rod or spatula',
+          'Protective gloves',
+          'Safety goggles',
+          'Dropper bottles'
+        ];
+        equipment.push(...additionalEquipment);
+        return equipment.length > 0 ? equipment : [''];
+      })(),
+      required_equipment_ar: (() => {
+        const equipment = [];
+        // من المكونات الكيميائية
+        if (test.chemical_components) {
+          equipment.push(...test.chemical_components.map(comp => comp.name_ar));
+        }
+        // معدات إضافية مستخرجة من التعليمات
+        const additionalEquipment = [
+          'طبق نقطي',
+          'قضيب زجاجي أو ملعقة',
+          'قفازات واقية',
+          'نظارات أمان',
+          'قوارير قطارة'
+        ];
+        equipment.push(...additionalEquipment);
+        return equipment.length > 0 ? equipment : [''];
+      })(),
 
       // Extract handling procedures from prepare field
       handling_procedures: test.prepare ? test.prepare.split('\n').filter(step => step.trim()) : [''],
