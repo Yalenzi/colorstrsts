@@ -79,7 +79,15 @@
       "advanced": "Advanced Tests",
       "specialized": "Specialized Tests",
       "undefined": "Undefined",
-      "unknown": "Unknown"
+      "unknown": "Unknown",
+      "opiates": "Opiates",
+      "general": "General",
+      "stimulants": "Stimulants",
+      "hallucinogens": "Hallucinogens",
+      "sedatives": "Sedatives",
+      "alkaloids": "Alkaloids",
+      "benzodiazepines": "Benzodiazepines",
+      "dissociatives": "Dissociatives"
     },
     "test_names": {
       "marquis": "Marquis Test",

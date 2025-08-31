@@ -79,7 +79,15 @@
       "advanced": "الاختبارات المتقدمة",
       "specialized": "الاختبارات المتخصصة",
       "undefined": "غير محدد",
-      "unknown": "غير معروف"
+      "unknown": "غير معروف",
+      "opiates": "الأفيونات",
+      "general": "عام",
+      "stimulants": "المنشطات",
+      "hallucinogens": "المهلوسات",
+      "sedatives": "المهدئات",
+      "alkaloids": "القلويدات",
+      "benzodiazepines": "البنزوديازيبينات",
+      "dissociatives": "المفككات"
     },
     "test_names": {
       "marquis": "اختبار ماركيز",
