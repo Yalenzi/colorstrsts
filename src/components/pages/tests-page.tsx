@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
-import { getChemicalTestsLocal, ChemicalTest, initializeLocalStorage } from '@/lib/local-data-service';
+import { getChemicalTestsLocal, ChemicalTest, initializeLocalStorage, forceReloadLocalStorage } from '@/lib/local-data-service';
 import { databaseColorTestService } from '@/lib/database-color-test-service';
 import { Button } from '@/components/ui/button';
 import { TestCard } from '@/components/ui/test-card';
@@ -116,22 +116,27 @@ function TestsPageContent({ lang }: TestsPageProps) {
           return;
         }
 
-        // Try to load from the new database service first (35 tests)
+        // Force reload from database files to get latest data
         try {
+          console.log('🔄 Force reloading database service...');
+          await databaseColorTestService.forceReload();
           const newTests = await databaseColorTestService.getAllTests();
-          console.log('🔥 Loaded chemical tests from new database service', newTests.length);
+          console.log('🔥 Loaded chemical tests from database service', newTests.length);
 
           if (newTests && newTests.length > 0) {
             setTests(newTests);
             setFilteredTests(newTests);
+            console.log('✅ Successfully loaded tests from database service');
             return; // Exit early if successful
           }
         } catch (dbError) {
-          console.warn('⚠️ Could not load from new database service, trying fallback');
+          console.warn('⚠️ Could not load from database service, trying local storage fallback');
+          console.error('Database service error:', dbError);
         }
 
-        // Fallback to old local storage method
-        initializeLocalStorage();
+        // Fallback to local storage with force reload
+        console.log('🔄 Force reloading local storage...');
+        forceReloadLocalStorage();
         const localTests = getChemicalTestsLocal();
         console.log('🔥 Loaded chemical tests from local storage (fallback)', localTests.length);
 

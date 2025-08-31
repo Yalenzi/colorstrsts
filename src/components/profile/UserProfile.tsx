@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 // import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'react-hot-toast';
 // import {
 //   Select,
 //   SelectContent,
@@ -24,12 +25,12 @@ import { Badge } from '@/components/ui/badge';
 //   SelectTrigger,
 //   SelectValue,
 // } from '@/components/ui/select';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Briefcase, 
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Briefcase,
   Calendar,
   Settings,
   TestTube,
@@ -190,11 +191,38 @@ export default function UserProfile({ translations, isRTL, lang }: UserProfilePr
     }
   };
 
+  // Check if user is authenticated
+  if (!user) {
+    return (
+      <div className="text-center py-12">
+        <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
+          <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <h3 className="text-lg font-medium text-gray-900 mb-2 dark:text-white">
+          {lang === 'ar' ? 'يجب تسجيل الدخول' : 'Authentication Required'}
+        </h3>
+        <p className="text-gray-600 mb-4 dark:text-gray-400">
+          {lang === 'ar' ? 'يجب تسجيل الدخول للوصول إلى الملف الشخصي' : 'You need to sign in to access your profile'}
+        </p>
+        <Button
+          onClick={() => window.location.href = `/${lang}/auth/signin`}
+          className="mx-auto"
+        >
+          {lang === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
+        </Button>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-2">Loading...</span>
+        <span className="ml-2 dark:text-white">
+          {lang === 'ar' ? 'جاري التحميل...' : 'Loading...'}
+        </span>
       </div>
     );
   }
@@ -203,9 +231,16 @@ export default function UserProfile({ translations, isRTL, lang }: UserProfilePr
     return (
       <div className="text-center py-12">
         <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
-          {translations.messages.loadError}
+        <h3 className="text-lg font-medium text-gray-900 mb-2 dark:text-white">
+          {translations.messages?.loadError || (lang === 'ar' ? 'خطأ في تحميل الملف الشخصي' : 'Error loading profile')}
         </h3>
+        <Button
+          onClick={loadProfile}
+          variant="outline"
+          className="mt-4"
+        >
+          {lang === 'ar' ? 'إعادة المحاولة' : 'Try Again'}
+        </Button>
       </div>
     );
   }

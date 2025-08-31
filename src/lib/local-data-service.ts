@@ -76,45 +76,58 @@ const STORAGE_KEYS = {
  * Initialize local storage with data from JSON file
  * تهيئة التخزين المحلي بالبيانات من ملف JSON
  */
-export function initializeLocalStorage(): void {
+export function initializeLocalStorage(forceReload: boolean = false): void {
   try {
     console.log('🔄 Initializing local storage with JSON data...');
-    
+
     // Check if data already exists
     const existingData = localStorage.getItem(STORAGE_KEYS.CHEMICAL_TESTS);
     const lastUpdated = localStorage.getItem(STORAGE_KEYS.LAST_UPDATED);
-    
-    // If no data exists or data is old, load from JSON
-    if (!existingData || !lastUpdated) {
-      console.log('📥 Loading fresh data from JSON file...');
-      
+
+    // If no data exists, data is old, or force reload is requested
+    if (!existingData || !lastUpdated || forceReload) {
+      if (forceReload) {
+        console.log('🔄 Force reloading data from JSON file...');
+      } else {
+        console.log('📥 Loading fresh data from JSON file...');
+      }
+
       // Process and enhance the data
       const processedTests = localDatabase.chemical_tests.map(test => ({
         ...test,
         // Add compatibility fields
-        color_result: test.color_results?.[0]?.color_result || 'Variable',
-        color_result_ar: test.color_results?.[0]?.color_result_ar || 'متغير',
-        possible_substance: test.color_results?.[0]?.possible_substance || 'Various substances',
-        possible_substance_ar: test.color_results?.[0]?.possible_substance_ar || 'مواد متنوعة',
+        color_result: (test.color_results?.[0] as any)?.color_result || 'Variable',
+        color_result_ar: (test.color_results?.[0] as any)?.color_result_ar || 'متغير',
+        possible_substance: (test.color_results?.[0] as any)?.possible_substance || 'Various substances',
+        possible_substance_ar: (test.color_results?.[0] as any)?.possible_substance_ar || 'مواد متنوعة',
         reagents: extractReagents(test.prepare),
         expected_time: `${test.preparation_time || 5} minutes`
       }));
-      
+
       // Save to localStorage
       localStorage.setItem(STORAGE_KEYS.CHEMICAL_TESTS, JSON.stringify(processedTests));
       localStorage.setItem(STORAGE_KEYS.LAST_UPDATED, new Date().toISOString());
-      
+
       console.log(`✅ Loaded ${processedTests.length} tests to localStorage`);
     } else {
       console.log('✅ Local storage already initialized');
     }
-    
+
     // Initialize default subscription settings
     initializeSubscriptionSettings();
-    
+
   } catch (error) {
     console.error('❌ Error initializing local storage:', error);
   }
+}
+
+/**
+ * Force reload local storage data
+ * إجبار إعادة تحميل بيانات التخزين المحلي
+ */
+export function forceReloadLocalStorage(): void {
+  console.log('🔄 Force reloading local storage...');
+  initializeLocalStorage(true);
 }
 
 /**

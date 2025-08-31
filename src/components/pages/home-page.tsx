@@ -33,16 +33,18 @@ export function HomePage({ lang }: HomePageProps) {
     accuracy: '100%'
   });
 
-  // Load real statistics
+  // Load real statistics with force reload
   useEffect(() => {
     const loadStats = async () => {
       try {
+        console.log('🔄 Force reloading database service for homepage stats...');
+        await databaseColorTestService.forceReload();
         const tests = await databaseColorTestService.getAllTests();
         const statistics = await databaseColorTestService.getTestsStatistics();
 
         setStats({
-          totalTests: tests.length || 35,
-          totalResults: statistics.total_results || 150,
+          totalTests: tests.length || 39,
+          totalResults: statistics.total_results || 200,
           languages: 2,
           accuracy: '100%'
         });
@@ -50,7 +52,13 @@ export function HomePage({ lang }: HomePageProps) {
         console.log(`📊 Homepage stats loaded: ${tests.length} tests, ${statistics.total_results} results`);
       } catch (error) {
         console.error('Error loading homepage statistics:', error);
-        // Keep default values on error
+        // Keep updated default values on error
+        setStats({
+          totalTests: 39,
+          totalResults: 200,
+          languages: 2,
+          accuracy: '100%'
+        });
       }
     };
 
