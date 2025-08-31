@@ -280,6 +280,8 @@ export function TestManagement({ lang }: TestManagementProps) {
 
       // Save to database files via API
       try {
+        console.log('🔄 Attempting to save to API...', { testsCount: updatedTests.length });
+
         const response = await fetch('/api/save-tests', {
           method: 'POST',
           headers: {
@@ -288,16 +290,28 @@ export function TestManagement({ lang }: TestManagementProps) {
           body: JSON.stringify({ tests: updatedTests }),
         });
 
+        console.log('📡 API Response status:', response.status);
+
         if (!response.ok) {
           const errorData = await response.json();
+          console.error('❌ API Error:', errorData);
           throw new Error(errorData.error || 'Failed to save to database files');
         }
 
         const result = await response.json();
         console.log(`✅ تم حفظ ${result.count} اختبار في ملفات قاعدة البيانات`);
 
+        // Force reload of data services
+        try {
+          await databaseColorTestService.forceReload();
+          console.log('🔄 تم إعادة تحميل خدمة قاعدة البيانات');
+        } catch (reloadError) {
+          console.warn('⚠️ فشل في إعادة تحميل خدمة قاعدة البيانات:', reloadError);
+        }
+
       } catch (apiError) {
-        console.warn('⚠️ فشل في حفظ البيانات في ملفات قاعدة البيانات:', apiError);
+        console.error('❌ فشل في حفظ البيانات في ملفات قاعدة البيانات:', apiError);
+        toast.error('فشل في حفظ البيانات في ملفات قاعدة البيانات');
         // Don't throw here - localStorage save was successful
         // The user can still work with the data, just the files won't be updated
       }

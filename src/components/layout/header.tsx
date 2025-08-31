@@ -251,7 +251,11 @@ export function Header({ lang }: HeaderProps) {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setIsUserDropdownOpen(!isUserDropdownOpen);
+                          }}
                           className="touch-manipulation bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/20 dark:hover:bg-primary-800/30 border border-primary-200 dark:border-primary-700"
                         >
                           <span className="flex items-center space-x-2 rtl:space-x-reverse">
