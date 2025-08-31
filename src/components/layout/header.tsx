@@ -16,7 +16,8 @@ import {
   UserIcon,
   Cog6ToothIcon,
   PowerIcon,
-  PhotoIcon
+  PhotoIcon,
+  ChevronDownIcon
 } from '@heroicons/react/24/outline';
 import { TestTubeIcon } from '@/components/ui/icons/TestTubeIcon';
 
@@ -28,6 +29,7 @@ export function Header({ lang }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [adminKeySequence, setAdminKeySequence] = useState('');
   const [showImageAnalyzer, setShowImageAnalyzer] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const { user, logout } = useAuth();
   const pathname = usePathname();
@@ -66,6 +68,31 @@ export function Header({ lang }: HeaderProps) {
 
   // Secure logo interaction (development only)
   const [logoClickCount, setLogoClickCount] = useState(0);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+
+      // Close mobile menu if clicking outside
+      if (isMenuOpen && !target.closest('[data-mobile-menu]')) {
+        setIsMenuOpen(false);
+      }
+
+      // Close user dropdown if clicking outside
+      if (isUserDropdownOpen && !target.closest('[data-user-dropdown]')) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+
+    if (isMenuOpen || isUserDropdownOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isMenuOpen, isUserDropdownOpen]);
   const [logoClickTimer, setLogoClickTimer] = useState<NodeJS.Timeout | null>(null);
 
   const handleLogoClick = () => {
@@ -219,50 +246,91 @@ export function Header({ lang }: HeaderProps) {
 
                   {user && !isAdmin && (
                     <>
-                      {/* Profile Button with enhanced visibility */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        asChild
-                        className="touch-manipulation bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/20 dark:hover:bg-primary-800/30"
-                      >
-                        <Link href={`/${lang}/profile`}>
-                          <span className="flex items-center">
-                            <div className="w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center mr-2 rtl:ml-2 rtl:mr-0">
-                              <UserIcon className="h-3 w-3 text-white" />
+                      {/* User Dropdown Menu */}
+                      <div className="relative" data-user-dropdown>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                          className="touch-manipulation bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/20 dark:hover:bg-primary-800/30 border border-primary-200 dark:border-primary-700"
+                        >
+                          <span className="flex items-center space-x-2 rtl:space-x-reverse">
+                            <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center shadow-sm">
+                              <UserIcon className="h-4 w-4 text-white" />
                             </div>
-                            <span className="hidden xl:inline text-primary-700 dark:text-primary-300 font-medium">{t('navigation.profile')}</span>
+                            <div className="hidden lg:flex flex-col items-start rtl:items-end">
+                              <span className="text-xs font-medium text-primary-700 dark:text-primary-300 leading-tight">
+                                {user?.displayName || user?.email?.split('@')[0] || t('navigation.user')}
+                              </span>
+                              <span className="text-xs text-primary-600 dark:text-primary-400 leading-tight">
+                                {t('navigation.profile')}
+                              </span>
+                            </div>
+                            <span className="lg:hidden text-primary-700 dark:text-primary-300 font-medium">
+                              {t('navigation.profile')}
+                            </span>
+                            <ChevronDownIcon className={`h-3 w-3 text-primary-600 dark:text-primary-400 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
                           </span>
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        asChild
-                        className="touch-manipulation"
-                      >
-                        <Link href={`/${lang}/dashboard`}>
-                          <span className="flex items-center">
-                            <Cog6ToothIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                            <span className="hidden xl:inline">{lang === 'ar' ? 'لوحة التحكم' : 'Dashboard'}</span>
-                          </span>
-                        </Link>
-                      </Button>
+                        </Button>
+
+                        {/* Dropdown Menu */}
+                        {isUserDropdownOpen && (
+                          <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                                <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center">
+                                  <UserIcon className="h-5 w-5 text-white" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                    {user?.displayName || user?.email?.split('@')[0] || t('navigation.user')}
+                                  </p>
+                                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                    {user?.email}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="py-2">
+                              <Link
+                                href={`/${lang}/profile`}
+                                className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-700 dark:hover:text-primary-300"
+                                onClick={() => setIsUserDropdownOpen(false)}
+                              >
+                                <UserIcon className="h-4 w-4 mr-3 rtl:ml-3 rtl:mr-0" />
+                                {t('navigation.profile')}
+                              </Link>
+
+                              <Link
+                                href={`/${lang}/dashboard`}
+                                className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                onClick={() => setIsUserDropdownOpen(false)}
+                              >
+                                <Cog6ToothIcon className="h-4 w-4 mr-3 rtl:ml-3 rtl:mr-0" />
+                                {lang === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+                              </Link>
+
+                              <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                              <button
+                                onClick={() => {
+                                  handleSignOut();
+                                  setIsUserDropdownOpen(false);
+                                }}
+                                className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              >
+                                <PowerIcon className="h-4 w-4 mr-3 rtl:ml-3 rtl:mr-0" />
+                                {t('navigation.logout')}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </>
                   )}
 
-                  {/* Logout button - only show if user is logged in */}
-                  {(user || isAdmin) && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleSignOut}
-                      className="touch-manipulation"
-                    >
-                      <PowerIcon className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                      <span className="hidden xl:inline">{t('navigation.logout')}</span>
-                    </Button>
-                  )}
+
                 </div>
               </div>
             ) : (
@@ -311,6 +379,7 @@ export function Header({ lang }: HeaderProps) {
           className={`fixed inset-0 z-50 transform ${
             isMenuOpen ? 'translate-x-0' : lang === 'ar' ? 'translate-x-full' : '-translate-x-full'
           } transition-transform duration-300 ease-in-out lg:hidden`}
+          data-mobile-menu
         >
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
@@ -434,14 +503,24 @@ export function Header({ lang }: HeaderProps) {
                         </>
                       ) : (
                         <>
+                          {/* Enhanced Profile Link */}
                           <Link
                             href={`/${lang}/profile`}
-                            className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
+                            className="flex items-center px-4 py-3 text-base font-medium text-primary-700 hover:text-primary-900 hover:bg-primary-50 rounded-lg transition-colors touch-manipulation dark:text-primary-300 dark:hover:text-primary-100 dark:hover:bg-primary-900/20 border border-primary-200 dark:border-primary-700"
                             onClick={() => setIsMenuOpen(false)}
                           >
-                            <UserIcon className="w-5 h-5 mr-3 rtl:ml-3 rtl:mr-0" />
-                            <span className="flex-1">{t('navigation.profile')}</span>
+                            <div className="w-6 h-6 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center mr-3 rtl:ml-3 rtl:mr-0">
+                              <UserIcon className="w-3 h-3 text-white" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-semibold">{t('navigation.profile')}</div>
+                              <div className="text-xs text-primary-600 dark:text-primary-400">
+                                {lang === 'ar' ? 'إدارة معلوماتك الشخصية' : 'Manage your personal information'}
+                              </div>
+                            </div>
                           </Link>
+
+                          {/* Dashboard Link */}
                           <Link
                             href={`/${lang}/dashboard`}
                             className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800"
