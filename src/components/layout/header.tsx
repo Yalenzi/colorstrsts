@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
-import { useAuth } from '@/components/auth/EnhancedAuthProvider';
+import { useAuth } from '@/components/providers';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/ui/language-switcher';
 import { ThemeToggle } from '@/components/ui/theme-toggle';

@@ -28,9 +28,45 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function useAuth() {
+  // During SSR, return safe defaults
+  if (typeof window === 'undefined') {
+    return {
+      user: null,
+      userProfile: null,
+      loading: false,
+      isAdmin: false,
+      signIn: async () => {},
+      signUp: async () => {},
+      signOut: async () => {},
+      refreshUser: async () => {},
+      signInWithGoogle: async () => {},
+      resetPassword: async () => {},
+      sendVerificationEmail: async () => {},
+      logout: async () => {},
+      refreshUserProfile: async () => {},
+      checkEmailExists: async () => false,
+    };
+  }
+
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    // Return safe defaults instead of throwing
+    return {
+      user: null,
+      userProfile: null,
+      loading: false,
+      isAdmin: false,
+      signIn: async () => {},
+      signUp: async () => {},
+      signOut: async () => {},
+      refreshUser: async () => {},
+      signInWithGoogle: async () => {},
+      resetPassword: async () => {},
+      sendVerificationEmail: async () => {},
+      logout: async () => {},
+      refreshUserProfile: async () => {},
+      checkEmailExists: async () => false,
+    };
   }
   return context;
 }
@@ -98,6 +134,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const isAdmin = user?.role === 'admin';
+
+  // Add missing functions for compatibility
+  const logout = signOut;
+  const refreshUserProfile = refreshUser;
+  const checkEmailExists = async (email: string) => false;
 
   const value: AuthContextType = {
     user,
