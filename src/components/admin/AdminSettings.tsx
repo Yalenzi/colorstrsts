@@ -8,14 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { 
-  ShieldCheckIcon, 
-  DatabaseIcon, 
-  BellIcon, 
+import {
+  ShieldCheckIcon,
+  CircleStackIcon as DatabaseIcon,
+  BellIcon,
   ChartBarIcon,
   KeyIcon,
   ServerIcon,
-  MailIcon,
+  EnvelopeIcon as MailIcon,
   DevicePhoneMobileIcon,
   ClockIcon,
   UserGroupIcon,

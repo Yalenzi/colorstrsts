@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Cairo } from 'next/font/google';
-import { Providers } from '@/components/safe-providers';
+import { Providers } from '@/components/providers';
 import { Toaster } from 'react-hot-toast';
 
 import './globals.css';

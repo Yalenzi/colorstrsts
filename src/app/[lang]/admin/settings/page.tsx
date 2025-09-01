@@ -10,9 +10,9 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
+import {
   ShieldCheckIcon,
-  DatabaseIcon,
+  CircleStackIcon as DatabaseIcon,
   BellIcon,
   ChartBarIcon,
   CogIcon,
