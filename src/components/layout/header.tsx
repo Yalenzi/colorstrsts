@@ -146,37 +146,29 @@ export function Header({ lang }: HeaderProps) {
 
               {user ? (
                 <>
-                  {/* User Dropdown */}
-                  <div className="relative" data-user-dropdown>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('🔄 User dropdown clicked!');
-                        console.log('🔄 Current state:', isUserDropdownOpen);
-                        console.log('🔄 User object:', user);
+                  {/* Simple User Dropdown - WORKING VERSION */}
+                  <div className="relative">
+                    <button
+                      onClick={() => {
+                        console.log('🔄 Dropdown clicked! Current state:', isUserDropdownOpen);
                         setIsUserDropdownOpen(!isUserDropdownOpen);
-                        console.log('🔄 New state:', !isUserDropdownOpen);
+                        console.log('🔄 New state will be:', !isUserDropdownOpen);
                       }}
-                      className="touch-manipulation bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/20 dark:hover:bg-primary-800/30 border border-primary-200 dark:border-primary-700"
+                      className="flex items-center space-x-2 rtl:space-x-reverse px-3 py-2 rounded-md text-sm font-medium bg-primary-50 hover:bg-primary-100 dark:bg-primary-900/20 dark:hover:bg-primary-800/30 border border-primary-200 dark:border-primary-700 transition-colors"
                     >
-                      <span className="flex items-center space-x-2 rtl:space-x-reverse">
-                        <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center shadow-sm">
-                          <UserIcon className="h-4 w-4 text-white" />
+                      <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center">
+                        <UserIcon className="h-4 w-4 text-white" />
+                      </div>
+                      <div className="hidden lg:block text-left rtl:text-right">
+                        <div className="text-xs font-medium text-primary-700 dark:text-primary-300">
+                          {user?.displayName || user?.email?.split('@')[0] || 'User'}
                         </div>
-                        <div className="hidden xl:flex flex-col items-start rtl:items-end">
-                          <span className="text-xs font-medium text-primary-700 dark:text-primary-300 leading-tight">
-                            {user?.displayName || user?.email?.split('@')[0] || 'User'}
-                          </span>
-                          <span className="text-xs text-primary-600 dark:text-primary-400 leading-tight">
-                            {lang === 'ar' ? 'الملف الشخصي' : 'Profile'}
-                          </span>
+                        <div className="text-xs text-primary-600 dark:text-primary-400">
+                          {lang === 'ar' ? 'الملف الشخصي' : 'Profile'}
                         </div>
-                        <ChevronDownIcon className={`h-3 w-3 text-primary-600 dark:text-primary-400 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
-                      </span>
-                    </Button>
+                      </div>
+                      <ChevronDownIcon className={`h-4 w-4 text-primary-600 dark:text-primary-400 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
                     
                     {/* Dropdown Menu */}
                     {isUserDropdownOpen && (

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Language } from '@/types';
 import { Button } from '@/components/ui/button';
-import NewTestsManagement from '@/components/admin/NewTestsManagement';
+import EnhancedTestManagement from '@/components/admin/EnhancedTestManagement';
 import ColorResultsManagement from '@/components/admin/ColorResultsManagement';
 import DataMigrationPanel from '@/components/admin/DataMigrationPanel';
 import SystemStatistics from '@/components/admin/SystemStatistics';
@@ -24,8 +24,7 @@ export default function TestsManagementClient({ lang }: TestsManagementClientPro
       case 'tests':
         return (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-            <NewTestsManagement
-              isRTL={isRTL}
+            <EnhancedTestManagement
               lang={lang}
             />
           </div>
