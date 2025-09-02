@@ -319,6 +319,14 @@ class DatabaseColorTestService {
   }
 
   /**
+   * إجبار إعادة التحميل - اختصار لـ reloadData
+   * Force reload - shortcut for reloadData
+   */
+  async forceReload(): Promise<void> {
+    return this.reloadData();
+  }
+
+  /**
    * إضافة اختبار جديد
    * Add new test
    */

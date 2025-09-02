@@ -117,20 +117,35 @@ export function Header({ lang }: HeaderProps) {
 
   const handleSignOut = async () => {
     try {
+      console.log('🔄 Starting sign out process...');
+
       // إذا كان مدير، امسح جلسة المدير
       if (isAdmin) {
         localStorage.removeItem('admin_session');
         setIsAdmin(false);
+        console.log('✅ Admin session cleared');
       }
 
       // إذا كان مستخدم عادي، سجل خروج من Firebase
-      if (user) {
+      if (user && logout && typeof logout === 'function') {
+        console.log('🔄 Signing out from Firebase...');
         await logout();
+        console.log('✅ Firebase sign out successful');
+      } else if (user) {
+        // Fallback: استخدام signOut مباشرة من Firebase
+        console.log('🔄 Using direct Firebase signOut...');
+        const { signOut } = await import('firebase/auth');
+        const { auth } = await import('@/lib/firebase');
+        await signOut(auth);
+        console.log('✅ Direct Firebase sign out successful');
       }
 
+      console.log('🔄 Redirecting to home...');
       router.push(`/${lang}`);
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('❌ Error signing out:', error);
+      // حتى لو فشل تسجيل الخروج، اذهب للصفحة الرئيسية
+      router.push(`/${lang}`);
     }
   };
 

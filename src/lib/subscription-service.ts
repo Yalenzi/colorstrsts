@@ -424,12 +424,11 @@ export async function createSTCSubscription(subscription: any): Promise<string> 
  */
 export async function getUserSTCSubscription(userId: string): Promise<any | null> {
   try {
+    // استعلام مبسط لتجنب مشكلة الفهرس
     const q = query(
       collection(db, 'stc_subscriptions'),
       where('userId', '==', userId),
-      where('status', '==', 'active'),
-      orderBy('createdAt', 'desc'),
-      limit(1)
+      limit(10) // جلب آخر 10 اشتراكات وفلترة محلياً
     );
 
     const querySnapshot = await getDocs(q);
@@ -438,15 +437,28 @@ export async function getUserSTCSubscription(userId: string): Promise<any | null
       return null;
     }
 
-    const docData = querySnapshot.docs[0];
-    const data = docData.data();
+    // فلترة الاشتراكات النشطة وترتيبها محلياً
+    const activeSubscriptions = querySnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(sub => sub.status === 'active')
+      .sort((a, b) => {
+        const aTime = a.createdAt?.seconds || 0;
+        const bTime = b.createdAt?.seconds || 0;
+        return bTime - aTime; // ترتيب تنازلي
+      });
+
+    if (activeSubscriptions.length === 0) {
+      return null;
+    }
+
+    const data = activeSubscriptions[0];
 
     return {
       ...data,
-      startDate: data.startDate.toDate(),
-      endDate: data.endDate.toDate(),
-      createdAt: data.createdAt.toDate(),
-      updatedAt: data.updatedAt.toDate()
+      startDate: data.startDate?.toDate?.() || new Date(data.startDate),
+      endDate: data.endDate?.toDate?.() || new Date(data.endDate),
+      createdAt: data.createdAt?.toDate?.() || new Date(data.createdAt),
+      updatedAt: data.updatedAt?.toDate?.() || new Date(data.updatedAt)
     };
   } catch (error) {
     console.error('Error getting user STC subscription:', error);

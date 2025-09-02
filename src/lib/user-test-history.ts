@@ -113,37 +113,98 @@ export async function saveUserTestResult(testResult: Omit<UserTestResult, 'id' |
 // Get user's test history
 export async function getUserTestHistory(userId: string, limit: number = 10): Promise<UserTestResult[]> {
   try {
-    const userTestsRef = ref(db, 'userTestResults');
-    const userTestsQuery = query(
-      userTestsRef,
-      orderByChild('userId'),
-      equalTo(userId),
-      limitToLast(limit)
-    );
+    // التحقق من وجود قاعدة البيانات
+    if (!db) {
+      console.warn('⚠️ Firebase database not available, returning empty history');
+      return [];
+    }
 
-    const snapshot = await get(userTestsQuery);
-    
+    console.log('🔄 Loading test history for user:', userId);
+
+    // إنشاء مرجع آمن
+    let userTestsRef;
+    try {
+      userTestsRef = ref(db, 'userTestResults');
+    } catch (refError) {
+      console.error('❌ Error creating database reference:', refError);
+      return [];
+    }
+
+    // إنشاء استعلام آمن
+    let userTestsQuery;
+    try {
+      userTestsQuery = query(
+        userTestsRef,
+        orderByChild('userId'),
+        equalTo(userId),
+        limitToLast(limit)
+      );
+    } catch (queryError) {
+      console.error('❌ Error creating query:', queryError);
+      return [];
+    }
+
+    // تنفيذ الاستعلام مع معالجة الأخطاء
+    let snapshot;
+    try {
+      snapshot = await get(userTestsQuery);
+    } catch (getError) {
+      console.error('❌ Error executing query:', getError);
+      // إذا فشل الاستعلام، حاول جلب البيانات من localStorage
+      return getTestHistoryFromLocalStorage(userId, limit);
+    }
+
     if (!snapshot.exists()) {
       console.log('ℹ️ No test history found for user:', userId);
       return [];
     }
 
     const tests: UserTestResult[] = [];
-    snapshot.forEach((childSnapshot) => {
-      const testData = childSnapshot.val();
-      tests.push({
-        id: childSnapshot.key!,
-        ...testData
+    try {
+      snapshot.forEach((childSnapshot) => {
+        const testData = childSnapshot.val();
+        if (testData && testData.userId === userId) {
+          tests.push({
+            id: childSnapshot.key!,
+            ...testData
+          });
+        }
       });
-    });
+    } catch (forEachError) {
+      console.error('❌ Error processing snapshot data:', forEachError);
+      return getTestHistoryFromLocalStorage(userId, limit);
+    }
 
     // Sort by timestamp descending (most recent first)
-    tests.sort((a, b) => b.timestamp - a.timestamp);
-    
+    tests.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
     console.log(`✅ Loaded ${tests.length} test results for user:`, userId);
-    return tests;
+    return tests.slice(0, limit);
   } catch (error) {
     console.error('❌ Error loading user test history:', error);
+    // Fallback to localStorage
+    return getTestHistoryFromLocalStorage(userId, limit);
+  }
+}
+
+// Fallback function to get test history from localStorage
+function getTestHistoryFromLocalStorage(userId: string, limit: number): UserTestResult[] {
+  try {
+    const savedResults = localStorage.getItem('test_results');
+    if (!savedResults) {
+      return [];
+    }
+
+    const allResults = JSON.parse(savedResults);
+    const userResults = allResults
+      .filter((result: any) => result.userId === userId)
+      .sort((a: any, b: any) => (b.timestamp || 0) - (a.timestamp || 0))
+      .slice(0, limit);
+
+    console.log(`📱 Loaded ${userResults.length} test results from localStorage for user:`, userId);
+    return userResults;
+  } catch (error) {
+    console.error('❌ Error loading from localStorage:', error);
     return [];
   }
 }
