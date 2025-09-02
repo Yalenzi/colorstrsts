@@ -16,7 +16,9 @@ import {
   UserIcon,
   Cog6ToothIcon,
   PowerIcon,
-  PhotoIcon
+  PhotoIcon,
+  ChevronDownIcon,
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import { TestTubeIcon } from '@/components/ui/icons/TestTubeIcon';
 
@@ -26,6 +28,7 @@ interface HeaderProps {
 
 export function Header({ lang }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [adminKeySequence, setAdminKeySequence] = useState('');
   const [showImageAnalyzer, setShowImageAnalyzer] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -63,6 +66,18 @@ export function Header({ lang }: HeaderProps) {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [lang, router]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isUserDropdownOpen) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isUserDropdownOpen]);
 
   // Secure logo interaction (development only)
   const [logoClickCount, setLogoClickCount] = useState(0);
@@ -159,15 +174,94 @@ export function Header({ lang }: HeaderProps) {
 
             {user || isAdmin ? (
               <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse">
-                {/* عرض اسم المستخدم - Responsive */}
-                <div className="hidden md:flex items-center space-x-2 rtl:space-x-reverse bg-primary-50 dark:bg-primary-900/20 px-3 py-1.5 rounded-full">
-                  <div className="w-6 h-6 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center">
-                    <UserIcon className="h-3 w-3 text-primary-600 dark:text-primary-400" />
-                  </div>
-                  <span className="text-sm font-medium text-primary-700 dark:text-primary-300 max-w-24 truncate">
-                    {isAdmin ? (lang === 'ar' ? 'المدير' : 'Admin') :
-                     (user?.displayName || user?.email?.split('@')[0] || t('navigation.user'))}
-                  </span>
+                {/* User Profile Dropdown - Desktop */}
+                <div className="hidden md:block relative">
+                  <button
+                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                    className="flex items-center space-x-2 rtl:space-x-reverse bg-primary-50 dark:bg-primary-900/20 px-3 py-1.5 rounded-full hover:bg-primary-100 dark:hover:bg-primary-800/30 transition-colors"
+                  >
+                    <div className="w-6 h-6 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center">
+                      <UserIcon className="h-3 w-3 text-primary-600 dark:text-primary-400" />
+                    </div>
+                    <span className="text-sm font-medium text-primary-700 dark:text-primary-300 max-w-24 truncate">
+                      {isAdmin ? (lang === 'ar' ? 'المدير' : 'Admin') :
+                       (user?.displayName || user?.email?.split('@')[0] || t('navigation.user'))}
+                    </span>
+                    <ChevronDownIcon className={`h-3 w-3 text-primary-600 dark:text-primary-400 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isUserDropdownOpen && (
+                    <div
+                      className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-[9999]"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                          <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center">
+                            <UserIcon className="h-4 w-4 text-white" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                              {isAdmin ? (lang === 'ar' ? 'المدير' : 'Admin') :
+                               (user?.displayName || user?.email?.split('@')[0] || t('navigation.user'))}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                              {user?.email}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="py-1">
+                        {!isAdmin && (
+                          <>
+                            <Link
+                              href={`/${lang}/profile`}
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-700 dark:hover:text-primary-300"
+                              onClick={() => setIsUserDropdownOpen(false)}
+                            >
+                              <UserIcon className="h-4 w-4 mr-3 rtl:ml-3 rtl:mr-0" />
+                              {lang === 'ar' ? 'الملف الشخصي' : 'Profile'}
+                            </Link>
+
+                            <Link
+                              href={`/${lang}/dashboard`}
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                              onClick={() => setIsUserDropdownOpen(false)}
+                            >
+                              <Cog6ToothIcon className="h-4 w-4 mr-3 rtl:ml-3 rtl:mr-0" />
+                              {lang === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+                            </Link>
+                          </>
+                        )}
+
+                        {isAdmin && (
+                          <Link
+                            href={`/${lang}/admin`}
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                            onClick={() => setIsUserDropdownOpen(false)}
+                          >
+                            <Cog6ToothIcon className="h-4 w-4 mr-3 rtl:ml-3 rtl:mr-0" />
+                            {lang === 'ar' ? 'لوحة الإدارة' : 'Admin Panel'}
+                          </Link>
+                        )}
+
+                        <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+
+                        <button
+                          onClick={() => {
+                            handleSignOut();
+                            setIsUserDropdownOpen(false);
+                          }}
+                          className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        >
+                          <ArrowRightOnRectangleIcon className="h-4 w-4 mr-3 rtl:ml-3 rtl:mr-0" />
+                          {lang === 'ar' ? 'تسجيل الخروج' : 'Sign Out'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Mobile user indicator */}

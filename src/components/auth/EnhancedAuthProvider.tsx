@@ -164,9 +164,18 @@ export function EnhancedAuthProvider({ children }: AuthProviderProps) {
     try {
       console.log('🔄 Starting Google Sign-In...', useRedirect ? '(Redirect)' : '(Popup)');
 
+      // التحقق من إعدادات Firebase
+      if (!auth.app.options.apiKey) {
+        throw new Error('Firebase API Key is missing');
+      }
+
       const provider = new GoogleAuthProvider();
+
+      // إعداد النطاقات المطلوبة
       provider.addScope('email');
       provider.addScope('profile');
+
+      // إعداد معاملات مخصصة
       provider.setCustomParameters({
         prompt: 'select_account',
         access_type: 'offline'
@@ -176,36 +185,69 @@ export function EnhancedAuthProvider({ children }: AuthProviderProps) {
 
       if (useRedirect) {
         // استخدام Redirect
+        console.log('🔄 Using redirect method...');
         await signInWithRedirect(auth, provider);
         return; // سيتم إعادة التوجيه
       } else {
         // استخدام Popup
+        console.log('🔄 Using popup method...');
         result = await signInWithPopup(auth, provider);
       }
 
       if (result) {
         console.log('✅ Google Sign-In successful:', result.user.email);
-        
+        console.log('User details:', {
+          uid: result.user.uid,
+          displayName: result.user.displayName,
+          email: result.user.email,
+          photoURL: result.user.photoURL
+        });
+
         // إنشاء أو تحديث ملف المستخدم
         await createOrUpdateUserProfile(result.user);
-        
+
         toast.success('تم تسجيل الدخول بـ Google بنجاح');
       }
 
     } catch (error: any) {
       console.error('❌ Google Sign-In error:', error);
-      
-      // إذا فشل Popup، جرب Redirect
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        stack: error.stack
+      });
+
+      // معالجة أخطاء محددة
       if (!useRedirect && (
         error.code === 'auth/popup-blocked' ||
         error.code === 'auth/popup-closed-by-user' ||
         error.code === 'auth/cancelled-popup-request'
       )) {
         console.log('🔄 Popup failed, trying redirect...');
+        toast.info('النافذة المنبثقة محجوبة، سيتم إعادة التوجيه...');
         return signInWithGoogle(true);
       }
 
-      const errorMessage = getFirebaseErrorMessage(error.code);
+      // معالجة أخطاء أخرى
+      let errorMessage = 'حدث خطأ في تسجيل الدخول بـ Google';
+
+      switch (error.code) {
+        case 'auth/network-request-failed':
+          errorMessage = 'خطأ في الاتصال بالإنترنت';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'تم تجاوز عدد المحاولات المسموح، حاول لاحقاً';
+          break;
+        case 'auth/user-disabled':
+          errorMessage = 'تم تعطيل هذا الحساب';
+          break;
+        case 'auth/operation-not-allowed':
+          errorMessage = 'تسجيل الدخول بـ Google غير مفعل';
+          break;
+        default:
+          errorMessage = getFirebaseErrorMessage(error.code) || errorMessage;
+      }
+
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }

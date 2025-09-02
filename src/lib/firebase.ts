@@ -33,7 +33,7 @@ const getFirebaseConfig = () => {
     console.log('⚠️ Using fallback Firebase config');
     return {
       apiKey: "AIzaSyBCTEmastiOgvmTDu1EHxA0bkDAws00bIU",
-      authDomain: "colorstests-573ef.firebaseapp.com", // العودة للقيمة الأصلية
+      authDomain: "colorstests-573ef.firebaseapp.com",
       databaseURL: "https://colorstests-573ef-default-rtdb.firebaseio.com",
       projectId: "colorstests-573ef",
       storageBucket: "colorstests-573ef.firebasestorage.app",
