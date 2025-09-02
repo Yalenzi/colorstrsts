@@ -470,7 +470,7 @@ export function Header({ lang }: HeaderProps) {
               </div>
 
               {/* User Section */}
-              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
+              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
                 {user || isAdmin ? (
                   <div className="space-y-3">
                     {/* User Profile Card */}
@@ -589,9 +589,6 @@ export function Header({ lang }: HeaderProps) {
           </div>
         </div>
       </div>
-
-      {/* Global Image Color Analyzer Modal */}
-
     </div>
   );
 }

@@ -3,9 +3,9 @@
 import { ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 
-// Dynamically import AuthProvider to avoid SSR issues
+// Dynamically import EnhancedAuthProvider to avoid SSR issues
 const AuthProvider = dynamic(
-  () => import('@/components/auth/AuthProvider').then(mod => ({ default: mod.AuthProvider })),
+  () => import('@/components/auth/EnhancedAuthProvider').then(mod => ({ default: mod.EnhancedAuthProvider })),
   {
     ssr: false,
     loading: () => <div data-providers="loading">Loading...</div>
@@ -59,7 +59,7 @@ export function useAuth() {
 
   // In browser, use real auth hook
   try {
-    const { useAuth: useRealAuth } = require('@/components/auth/AuthProvider');
+    const { useAuth: useRealAuth } = require('@/components/auth/EnhancedAuthProvider');
     return useRealAuth();
   } catch (error) {
     console.warn('⚠️ Failed to load real useAuth, using fallback:', error);
