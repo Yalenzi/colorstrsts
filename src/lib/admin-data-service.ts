@@ -66,63 +66,95 @@ class AdminDataService {
   }
 
   /**
-   * تحميل الاختبارات الكيميائية
-   * Load chemical tests
+   * تحميل الاختبارات الكيميائية من Db.json
+   * Load chemical tests from Db.json
    */
   private async loadChemicalTests(): Promise<void> {
     try {
+      console.log('🔄 Loading chemical tests for admin dashboard...');
+
       // Check if we're in browser environment
       if (typeof window === 'undefined') {
         this.chemicalTests = this.getFallbackChemicalTests();
         return;
       }
 
-      // Try to load from Firebase Realtime Database first
-      try {
-        const { getChemicalTests } = await import('./firebase-realtime');
-        this.chemicalTests = await getChemicalTests();
-        console.log('🔥 Loaded chemical tests from Firebase Realtime Database');
-        return;
-      } catch (firebaseError) {
-        console.warn('⚠️ Could not load from Firebase, trying localStorage fallback');
-      }
-
-      // Fallback to localStorage if Firebase fails
+      // Try to load from localStorage first (for performance)
       const savedTests = localStorage.getItem('chemical_tests_admin');
       if (savedTests) {
-        this.chemicalTests = JSON.parse(savedTests);
-        console.log('📦 Loaded chemical tests from localStorage (fallback)');
-        return;
+        try {
+          const data = JSON.parse(savedTests);
+          this.chemicalTests = data.chemical_tests || data;
+          console.log(`📦 Loaded ${this.chemicalTests.length} chemical tests from localStorage`);
+          return;
+        } catch (parseError) {
+          console.warn('⚠️ Failed to parse localStorage data, clearing...');
+          localStorage.removeItem('chemical_tests_admin');
+        }
       }
 
-      // Try to load from multiple paths as last resort
+      // Try to load from API endpoint first
+      try {
+        const response = await fetch('/api/tests/load-from-db');
+        if (response.ok) {
+          const result = await response.json();
+          this.chemicalTests = result.tests || [];
+
+          // Save to localStorage
+          localStorage.setItem('chemical_tests_admin', JSON.stringify({ chemical_tests: this.chemicalTests }));
+          console.log(`✅ Loaded ${this.chemicalTests.length} chemical tests from API`);
+          return;
+        }
+      } catch (apiError) {
+        console.warn('⚠️ Could not load from API, trying direct import...');
+      }
+
+      // Try to import JSON data directly
+      try {
+        const data = await import('@/data/Db.json');
+        this.chemicalTests = data.chemical_tests || [];
+
+        // Save to localStorage
+        localStorage.setItem('chemical_tests_admin', JSON.stringify(data));
+        console.log(`✅ Loaded ${this.chemicalTests.length} chemical tests from Db.json`);
+        return;
+      } catch (importError) {
+        console.warn('⚠️ Could not import Db.json directly, trying fetch...');
+      }
+
+      // Try to load from public paths as fallback
       const paths = [
-        '/data/chemical-tests.json',
-        '/src/data/chemical-tests.json'
+        '/data/Db.json',
+        '/src/data/Db.json',
+        '/data/Databsecolorstest.json'
       ];
 
       for (const path of paths) {
         try {
+          console.log(`🔄 Trying to fetch from ${path}...`);
           const response = await fetch(path);
           if (response.ok) {
             const data = await response.json();
-            this.chemicalTests = data;
+            this.chemicalTests = data.chemical_tests || data;
+
+            // Save to localStorage
             localStorage.setItem('chemical_tests_admin', JSON.stringify(data));
-            console.log(`📦 Loaded chemical tests from ${path}`);
+            console.log(`✅ Loaded ${this.chemicalTests.length} chemical tests from ${path}`);
             return;
           }
         } catch (e) {
-          console.warn(`⚠️ Could not load from ${path}`);
+          console.warn(`⚠️ Could not load from ${path}:`, e.message);
         }
       }
 
       // If all paths fail, use fallback data
+      console.warn('⚠️ All data sources failed, using fallback data');
       this.chemicalTests = this.getFallbackChemicalTests();
-      localStorage.setItem('chemical_tests_admin', JSON.stringify(this.chemicalTests));
-      console.log('📦 Using fallback chemical tests data');
+      localStorage.setItem('chemical_tests_admin', JSON.stringify({ chemical_tests: this.chemicalTests }));
+      console.log(`📦 Using ${this.chemicalTests.length} fallback chemical tests`);
 
     } catch (error) {
-      console.error('Error loading chemical tests:', error);
+      console.error('❌ Error loading chemical tests:', error);
       this.chemicalTests = this.getFallbackChemicalTests();
     }
   }

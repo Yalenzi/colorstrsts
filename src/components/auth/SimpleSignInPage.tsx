@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { DirectGoogleAuth } from '@/components/auth/DirectGoogleAuth';
+import { GoogleAuth404Fix } from '@/components/auth/GoogleAuth404Fix';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -111,15 +112,27 @@ export function SimpleSignInPage({ lang }: SimpleSignInPageProps) {
               </Alert>
             )}
 
-            {/* Google Sign In */}
-            <DirectGoogleAuth
-              lang={lang}
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              variant="outline"
-              size="default"
-              className="w-full"
-            />
+            {/* Google Sign In with 404 Fix */}
+            <div className="space-y-4">
+              <DirectGoogleAuth
+                lang={lang}
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                variant="outline"
+                size="default"
+                className="w-full"
+              />
+
+              {error && error.includes('404') && (
+                <div className="mt-4">
+                  <GoogleAuth404Fix
+                    lang={lang}
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                  />
+                </div>
+              )}
+            </div>
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

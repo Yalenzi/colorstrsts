@@ -66,60 +66,74 @@ class DatabaseColorTestService {
   }
 
   /**
-   * تحميل الاختبارات من Databsecolorstest.json
-   * Load tests from Databsecolorstest.json
+   * تحميل الاختبارات من Db.json
+   * Load tests from Db.json
    */
   private async loadTests(): Promise<void> {
     try {
-      // Try to load from localStorage first
+      console.log('🔄 Loading chemical tests from Db.json...');
+
+      // Try to load from localStorage first (for performance)
       const savedTests = localStorage.getItem('chemical_tests_data');
       if (savedTests) {
-        const data = JSON.parse(savedTests);
-        this.tests = data.chemical_tests || data;
-        console.log(`📦 Loaded ${this.tests.length} chemical tests from localStorage`);
-        return;
+        try {
+          const data = JSON.parse(savedTests);
+          this.tests = data.chemical_tests || data;
+          console.log(`📦 Loaded ${this.tests.length} chemical tests from localStorage`);
+          return;
+        } catch (parseError) {
+          console.warn('⚠️ Failed to parse localStorage data, clearing...');
+          localStorage.removeItem('chemical_tests_data');
+        }
       }
 
-      // Import the JSON data directly
+      // Import the JSON data directly from src/data/Db.json
       try {
         const data = await import('@/data/Db.json');
         this.tests = data.chemical_tests || [];
+
+        // Save to localStorage for future use
         localStorage.setItem('chemical_tests_data', JSON.stringify(data));
-        console.log(`📦 Loaded ${this.tests.length} chemical tests from JSON file`);
+        console.log(`✅ Loaded ${this.tests.length} chemical tests from Db.json`);
         return;
       } catch (importError) {
-        console.warn('⚠️ Could not import JSON file directly, trying fetch...');
+        console.warn('⚠️ Could not import Db.json directly, trying fetch...');
       }
 
-      // Try to load from multiple paths as fallback
+      // Try to load from public paths as fallback
       const paths = [
+        '/data/Db.json',
+        '/src/data/Db.json',
         '/data/Databsecolorstest.json',
-        './data/Databsecolorstest.json',
         '/src/data/Databsecolorstest.json'
       ];
 
       for (const path of paths) {
         try {
+          console.log(`🔄 Trying to fetch from ${path}...`);
           const response = await fetch(path);
           if (response.ok) {
             const data = await response.json();
             this.tests = data.chemical_tests || data;
+
+            // Save to localStorage
             localStorage.setItem('chemical_tests_data', JSON.stringify(data));
-            console.log(`📦 Loaded ${this.tests.length} chemical tests from ${path}`);
+            console.log(`✅ Loaded ${this.tests.length} chemical tests from ${path}`);
             return;
           }
         } catch (e) {
-          console.warn(`⚠️ Could not load from ${path}`);
+          console.warn(`⚠️ Could not load from ${path}:`, e.message);
         }
       }
 
       // If all paths fail, use fallback data
+      console.warn('⚠️ All data sources failed, using fallback data');
       this.tests = this.getFallbackTests();
-      localStorage.setItem('database_color_tests', JSON.stringify(this.tests));
-      console.log('📦 Using fallback database color tests data');
+      localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: this.tests }));
+      console.log(`📦 Using ${this.tests.length} fallback chemical tests`);
 
     } catch (error) {
-      console.error('Error loading database color tests:', error);
+      console.error('❌ Error loading database color tests:', error);
       this.tests = this.getFallbackTests();
     }
   }
