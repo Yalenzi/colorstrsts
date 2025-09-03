@@ -11,6 +11,7 @@ import { databaseColorTestService } from '@/lib/database-color-test-service';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { ColorSelector } from '@/components/ui/color-selector';
+import { FixedColorSelector } from '@/components/ui/FixedColorSelector';
 import { TestInstructions } from '@/components/ui/test-instructions';
 import { TestResults } from '@/components/ui/test-results';
 import { 
@@ -466,15 +467,14 @@ export function TestPage({ lang, testId }: TestPageProps) {
           )}
 
           {currentStep === 'color-selection' && (
-            <ColorSelector
-              colorResults={colorResults}
+            <FixedColorSelector
+              testId={testId}
               lang={lang}
               selectedColorResult={selectedColorResult}
               onColorSelect={handleColorSelect}
               onComplete={() => handleStepComplete('color-selection')}
               notes={notes}
               onNotesChange={setNotes}
-              testId={testId}
             />
           )}
 

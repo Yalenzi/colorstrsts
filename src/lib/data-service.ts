@@ -155,15 +155,28 @@ export class DataService {
     }
   }
 
-  // Helper method to convert confidence level to number
-  private static getConfidenceNumber(level: string): number {
-    switch (level.toLowerCase()) {
-      case 'very_high': return 95;
-      case 'high': return 85;
-      case 'medium': return 75;
-      case 'low': return 60;
-      case 'very_low': return 40;
-      default: return 50;
+  // Helper method to convert confidence level to number (safe)
+  private static getConfidenceNumber(level: any): number {
+    if (level === null || level === undefined) {
+      return 50;
+    }
+
+    try {
+      const levelStr = String(level).toLowerCase();
+      switch (levelStr) {
+        case 'very_high': return 95;
+        case 'high': return 85;
+        case 'medium': return 75;
+        case 'low': return 60;
+        case 'very_low': return 40;
+        default:
+          // محاولة تحويل رقمي
+          const num = parseFloat(levelStr);
+          return isNaN(num) ? 50 : Math.min(100, Math.max(0, num));
+      }
+    } catch (error) {
+      console.warn('⚠️ Error converting confidence level:', error);
+      return 50;
     }
   }
 

@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { SaveTestsButton } from './SaveTestsButton';
 import { UnifiedTestEditForm } from './UnifiedTestEditForm';
+import { FixTestDataButton } from './FixTestDataButton';
 import { toast } from 'sonner';
 import { Language } from '@/types';
 import chemicalTestsData from '@/data/chemical-tests.json';
@@ -404,7 +405,7 @@ ${isRTL ? 'تاريخ الإنشاء:' : 'Created:'} ${new Date(test.created_at)
         </div>
 
         {/* Save Tests Button */}
-        <div className="mt-4">
+        <div className="mt-4 space-y-4">
           <SaveTestsButton
             tests={tests}
             onSaveSuccess={() => {
@@ -414,6 +415,15 @@ ${isRTL ? 'تاريخ الإنشاء:' : 'Created:'} ${new Date(test.created_at)
               toast.error(isRTL ? `فشل في حفظ الاختبارات: ${error}` : `Failed to save tests: ${error}`);
             }}
             lang={lang}
+          />
+
+          {/* Fix Test Data Button */}
+          <FixTestDataButton
+            lang={lang}
+            onFixComplete={() => {
+              toast.success(isRTL ? 'تم إصلاح البيانات بنجاح' : 'Data fixed successfully');
+              loadTests(); // إعادة تحميل البيانات
+            }}
           />
         </div>
       </div>

@@ -6,6 +6,7 @@ import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
 import { getTestById, initializeLocalStorage } from '@/lib/local-data-service';
 import { databaseColorTestService } from '@/lib/database-color-test-service';
+import { safeToLowerCase, safeToString, isValidString, extractSubstances } from '@/lib/safe-string-utils';
 import { DataService } from '@/lib/data-service';
 import { Button } from '@/components/ui/button';
 import {
@@ -78,21 +79,26 @@ export function TestResults({ testId, selectedColor, lang, onBack, onNewTest }: 
         // Try to get color results from localStorage or use test's color_results
         let colorResult = null;
 
-        // Check if we have color_results in the test data
+        // Check if we have color_results in the test data - SAFE VERSION
         if (test.color_results && test.color_results.length > 0) {
           // Find matching color result by hex code
-          colorResult = test.color_results.find(cr =>
-            cr.color_hex.toLowerCase() === selectedColor.toLowerCase()
-          );
+          colorResult = test.color_results.find((cr: any) => {
+            const crHex = safeToString(cr.color_hex || cr.hex_code);
+            const selectedHex = safeToString(selectedColor);
+            return safeToLowerCase(crHex) === safeToLowerCase(selectedHex);
+          });
         }
 
-        // If no exact match, try to find from localStorage color_results_admin
+        // If no exact match, try to find from localStorage color_results_admin - SAFE VERSION
         if (!colorResult) {
           try {
             const adminColorResults = JSON.parse(localStorage.getItem('color_results_admin') || '[]');
-            colorResult = adminColorResults.find((cr: any) =>
-              cr.test_id === testId && cr.hex_code.toLowerCase() === selectedColor.toLowerCase()
-            );
+            colorResult = adminColorResults.find((cr: any) => {
+              const crTestId = safeToString(cr.test_id);
+              const crHex = safeToString(cr.hex_code || cr.color_hex);
+              const selectedHex = safeToString(selectedColor);
+              return crTestId === testId && safeToLowerCase(crHex) === safeToLowerCase(selectedHex);
+            });
           } catch (error) {
             console.warn('Could not load admin color results:', error);
           }
@@ -112,11 +118,9 @@ export function TestResults({ testId, selectedColor, lang, onBack, onNewTest }: 
           }
         };
 
-        // Parse substances (handle comma-separated values)
-        const parseSubstances = (substanceText: string | string[]): string[] => {
-          if (!substanceText) return [];
-          if (Array.isArray(substanceText)) return substanceText;
-          return substanceText.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        // Parse substances (handle comma-separated values) - SAFE VERSION
+        const parseSubstances = (substanceText: any): string[] => {
+          return extractSubstances(substanceText);
         };
 
         // Get substances based on color result or test data

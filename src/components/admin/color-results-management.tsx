@@ -5,6 +5,7 @@ import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
 import { Button } from '@/components/ui/button';
 import { UnifiedColorResults, convertToUnifiedColorResult, UnifiedColorResult } from '@/components/shared/UnifiedColorResults';
+import { ColorResultEditModal } from './ColorResultEditModal';
 import {
   PlusIcon,
   PencilIcon,
@@ -408,262 +409,23 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
         </div>
       </div>
 
-      {/* Color Result Modal */}
+      {/* Color Result Edit Modal */}
       {showModal && (
-        <ColorResultModal
+        <ColorResultEditModal
+          colorResult={editingResult}
           lang={lang}
-          result={editingResult}
           tests={tests}
           onSave={handleSaveResult}
           onClose={() => {
             setShowModal(false);
             setEditingResult(null);
           }}
+          isCreating={!editingResult}
         />
       )}
     </div>
   );
 }
 
-// Color Result Modal Component
-interface ColorResultModalProps {
-  lang: Language;
-  result: ColorResult | null;
-  tests: ChemicalTest[];
-  onSave: (result: ColorResult) => void;
-  onClose: () => void;
-}
-
-function ColorResultModal({ lang, result, tests, onSave, onClose }: ColorResultModalProps) {
-  const [formData, setFormData] = useState<ColorResult>({
-    id: '',
-    test_id: '',
-    color_result: '',
-    color_result_ar: '',
-    color_hex: '#FFFFFF',
-    possible_substance: '',
-    possible_substance_ar: '',
-    confidence_level: 'medium'
-  });
-
-  // تحديث البيانات عند تغيير النتيجة المُحررة
-  useEffect(() => {
-    if (result) {
-      console.log('🔧 تحميل بيانات النتيجة للتحرير:', result);
-      setFormData({
-        id: result.id || '',
-        test_id: result.test_id || '',
-        color_result: result.color_result || '',
-        color_result_ar: result.color_result_ar || '',
-        color_hex: result.color_hex || '#FFFFFF',
-        possible_substance: result.possible_substance || '',
-        possible_substance_ar: result.possible_substance_ar || '',
-        confidence_level: result.confidence_level || 'medium'
-      });
-    } else {
-      // إعادة تعيين النموذج للإضافة الجديدة
-      setFormData({
-        id: '',
-        test_id: '',
-        color_result: '',
-        color_result_ar: '',
-        color_hex: '#FFFFFF',
-        possible_substance: '',
-        possible_substance_ar: '',
-        confidence_level: 'medium'
-      });
-    }
-  }, [result]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Generate ID if new result
-    if (!result) {
-      const id = `${formData.test_id}-${formData.color_result.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
-      formData.id = id;
-    }
-
-    onSave(formData);
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-foreground">
-              {result
-                ? (lang === 'ar' ? 'تحرير النتيجة اللونية' : 'Edit Color Result')
-                : (lang === 'ar' ? 'إضافة نتيجة لونية جديدة' : 'Add New Color Result')
-              }
-            </h3>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Test Selection */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                {lang === 'ar' ? 'الاختبار' : 'Test'}
-              </label>
-              <select
-                name="test_id"
-                value={formData.test_id}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500"
-              >
-                <option value="">{lang === 'ar' ? 'اختر الاختبار' : 'Select Test'}</option>
-                {tests.map(test => (
-                  <option key={test.id} value={test.id}>
-                    {lang === 'ar' ? test.method_name_ar : test.method_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Color Result */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  {lang === 'ar' ? 'نتيجة اللون (إنجليزي)' : 'Color Result (English)'}
-                </label>
-                <input
-                  type="text"
-                  name="color_result"
-                  value={formData.color_result}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500"
-                  placeholder="Purple to violet"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  {lang === 'ar' ? 'نتيجة اللون (عربي)' : 'Color Result (Arabic)'}
-                </label>
-                <input
-                  type="text"
-                  name="color_result_ar"
-                  value={formData.color_result_ar}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500"
-                  placeholder="بنفسجي إلى بنفسجي داكن"
-                />
-              </div>
-            </div>
-
-            {/* Color Hex */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                {lang === 'ar' ? 'كود اللون' : 'Color Hex Code'}
-              </label>
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <input
-                  type="color"
-                  name="color_hex"
-                  value={formData.color_hex}
-                  onChange={handleInputChange}
-                  className="w-12 h-10 border border-border rounded cursor-pointer"
-                />
-                <input
-                  type="text"
-                  name="color_hex"
-                  value={formData.color_hex}
-                  onChange={handleInputChange}
-                  required
-                  className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500"
-                  placeholder="#8B5CF6"
-                />
-              </div>
-            </div>
-
-            {/* Possible Substance */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  {lang === 'ar' ? 'المادة المحتملة (إنجليزي)' : 'Possible Substance (English)'}
-                </label>
-                <input
-                  type="text"
-                  name="possible_substance"
-                  value={formData.possible_substance}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500"
-                  placeholder="Opium, Morphine, Heroin"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  {lang === 'ar' ? 'المادة المحتملة (عربي)' : 'Possible Substance (Arabic)'}
-                </label>
-                <input
-                  type="text"
-                  name="possible_substance_ar"
-                  value={formData.possible_substance_ar}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500"
-                  placeholder="الأفيون، المورفين، الهيروين"
-                />
-              </div>
-            </div>
-
-            {/* Confidence Level */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                {lang === 'ar' ? 'مستوى الثقة' : 'Confidence Level'}
-              </label>
-              <select
-                name="confidence_level"
-                value={formData.confidence_level}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary-500"
-              >
-                <option value="very_high">{lang === 'ar' ? 'عالي جداً' : 'Very High'}</option>
-                <option value="high">{lang === 'ar' ? 'عالي' : 'High'}</option>
-                <option value="medium">{lang === 'ar' ? 'متوسط' : 'Medium'}</option>
-                <option value="low">{lang === 'ar' ? 'منخفض' : 'Low'}</option>
-              </select>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end space-x-4 rtl:space-x-reverse pt-6 border-t border-border">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-              >
-                {lang === 'ar' ? 'إلغاء' : 'Cancel'}
-              </Button>
-              <Button type="submit">
-                {result
-                  ? (lang === 'ar' ? 'تحديث النتيجة' : 'Update Result')
-                  : (lang === 'ar' ? 'إضافة النتيجة' : 'Add Result')
-                }
-              </Button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
+// تم استبدال ColorResultModal بـ ColorResultEditModal المحسن
+// Old ColorResultModal removed - using enhanced ColorResultEditModal instead

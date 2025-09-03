@@ -2,6 +2,7 @@
 
 import { db } from '@/lib/firebase';
 import { ref, push, set, get, query, orderByChild, equalTo, limitToLast } from 'firebase/database';
+import { saveUserTestResultSafe } from '@/lib/firebase-safe-service';
 
 export interface UserTestResult {
   id?: string;
@@ -43,21 +44,40 @@ export interface UserTestStats {
   testsByMonth: { [month: string]: number };
 }
 
-// Save a completed test result
+// Save a completed test result with safe Firebase handling
 export async function saveUserTestResult(testResult: Omit<UserTestResult, 'id' | 'timestamp' | 'completedAt'>): Promise<string> {
   try {
-    // Check if Firebase is available
-    if (!db) {
-      console.error('❌ Firebase database not initialized');
-      throw new Error('Database not available');
-    }
-
-    console.log('🔄 Attempting to save test result to Firebase...');
+    console.log('🔄 Attempting to save test result safely...');
     console.log('📊 Test result data:', {
       userId: testResult.userId,
       testId: testResult.testId,
       testName: testResult.testName
     });
+
+    // محاولة الحفظ الآمن أولاً
+    try {
+      const safeResult = await saveUserTestResultSafe({
+        userId: testResult.userId,
+        testId: testResult.testId,
+        testName: testResult.testName,
+        colorId: testResult.selectedColor.hex_code,
+        colorName: testResult.selectedColor.color_name.en,
+        confidence: testResult.result.accuracy,
+        notes: testResult.notes,
+        duration: testResult.duration,
+        timestamp: serverTimestamp()
+      });
+
+      console.log('✅ Test result saved safely:', safeResult);
+      return safeResult;
+    } catch (safeError) {
+      console.warn('⚠️ Safe Firebase service failed, trying direct Firebase...');
+    }
+
+    // Fallback إلى Firebase المباشر
+    if (!db) {
+      throw new Error('Firebase database not initialized');
+    }
 
     const userTestsRef = ref(db, 'userTestResults');
     const newTestRef = push(userTestsRef);
