@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { SaveTestsButton } from './SaveTestsButton';
+import { UnifiedTestEditForm } from './UnifiedTestEditForm';
 import { toast } from 'sonner';
 import { Language } from '@/types';
 import chemicalTestsData from '@/data/chemical-tests.json';
@@ -96,6 +97,8 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editingTest, setEditingTest] = useState<ChemicalTest | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
@@ -180,21 +183,55 @@ export function EnhancedTestsManagement({ lang }: EnhancedTestsManagementProps) 
 
   // تعديل اختبار
   const handleEditTest = (test: ChemicalTest) => {
-    const newName = prompt(
-      isRTL ? 'تعديل اسم الاختبار:' : 'Edit test name:',
-      test.method_name
-    );
+    console.log('🔧 Opening edit form for test:', test);
+    console.log('📊 Test data:', {
+      id: test.id,
+      name: test.method_name,
+      name_ar: test.method_name_ar,
+      description: test.description,
+      category: test.category,
+      results: test.results?.length || 0,
+      components: test.chemical_components?.length || 0
+    });
 
-    if (newName && newName.trim()) {
+    setEditingTest(test);
+    setShowEditForm(true);
+  };
+
+  // حفظ الاختبار المحرر
+  const handleSaveEditedTest = async (updatedTest: any) => {
+    try {
+      console.log('💾 Saving edited test:', updatedTest);
+
       const updatedTests = tests.map(t =>
-        t.id === test.id
-          ? { ...t, method_name: newName.trim(), method_name_ar: isRTL ? newName.trim() : t.method_name_ar }
-          : t
+        t.id === updatedTest.id ? { ...t, ...updatedTest } : t
       );
+
       setTests(updatedTests);
-      localStorage.setItem('chemical_tests_admin', JSON.stringify(updatedTests));
+
+      // حفظ في localStorage مع التركيب الصحيح
+      const dataToSave = {
+        chemical_tests: updatedTests,
+        last_updated: new Date().toISOString(),
+        version: "1.0.0",
+        total_tests: updatedTests.length
+      };
+      localStorage.setItem('chemical_tests_admin', JSON.stringify(dataToSave));
+
+      setShowEditForm(false);
+      setEditingTest(null);
+
       toast.success(isRTL ? 'تم تحديث الاختبار بنجاح' : 'Test updated successfully');
+    } catch (error) {
+      console.error('❌ Error saving edited test:', error);
+      toast.error(isRTL ? 'فشل في حفظ الاختبار' : 'Failed to save test');
     }
+  };
+
+  // إلغاء التحرير
+  const handleCancelEdit = () => {
+    setShowEditForm(false);
+    setEditingTest(null);
   };
 
   // عرض تفاصيل الاختبار
@@ -616,6 +653,21 @@ ${isRTL ? 'تاريخ الإنشاء:' : 'Created:'} ${new Date(test.created_at)
           )}
         </CardContent>
       </Card>
+
+      {/* Edit Form Modal */}
+      {showEditForm && editingTest && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-6xl w-full max-h-[95vh] overflow-y-auto">
+            <UnifiedTestEditForm
+              test={editingTest}
+              lang={lang}
+              onSave={handleSaveEditedTest}
+              onCancel={handleCancelEdit}
+              isCreating={false}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

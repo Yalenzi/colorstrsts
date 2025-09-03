@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Language } from '@/types';
 import { getTranslationsSync } from '@/lib/translations';
 import { Button } from '@/components/ui/button';
+import { UnifiedColorResults, convertToUnifiedColorResult, UnifiedColorResult } from '@/components/shared/UnifiedColorResults';
 import {
   PlusIcon,
   PencilIcon,
@@ -67,17 +68,27 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
         colorResults = JSON.parse(savedResults);
         console.log('📦 Loaded color results from localStorage:', colorResults.length);
       } else {
-        // إنشاء بيانات من الاختبارات الجديدة
+        // إنشاء بيانات من الاختبارات الجديدة مع التركيب الصحيح
         colorResults = testsData.flatMap((test, index) =>
-          test.color_results?.map((result, resultIndex) => ({
+          test.results?.map((result, resultIndex) => ({
             id: `${test.id}-${resultIndex}`,
             test_id: test.id,
-            color_result: result.color_result || 'Unknown',
-            color_result_ar: result.color_result_ar || 'غير معروف',
-            color_hex: result.color_hex || '#808080',
-            possible_substance: result.possible_substance || 'Unknown substance',
-            possible_substance_ar: result.possible_substance_ar || 'مادة غير معروفة',
-            confidence_level: result.confidence_level || 'medium'
+            test_name: test.method_name,
+            test_name_ar: test.method_name_ar,
+            color_result: result.color || result.color_result || 'Unknown',
+            color_result_ar: result.color_ar || result.color_result_ar || 'غير معروف',
+            color_hex: result.hex_code || result.color_hex || '#808080',
+            possible_substance: result.substance || result.possible_substance || 'Unknown substance',
+            possible_substance_ar: result.substance_ar || result.possible_substance_ar || 'مادة غير معروفة',
+            confidence_level: typeof result.confidence === 'number' ? result.confidence :
+                            result.confidence_level === 'very_high' ? 95 :
+                            result.confidence_level === 'high' ? 85 :
+                            result.confidence_level === 'medium' ? 75 :
+                            result.confidence_level === 'low' ? 60 : 50,
+            category: test.category,
+            reference: test.reference,
+            created_at: test.created_at,
+            updated_at: test.updated_at || new Date().toISOString()
           })) || []
         );
 
