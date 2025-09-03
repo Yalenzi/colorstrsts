@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { SaveTestsButton } from './SaveTestsButton';
 import { toast } from 'sonner';
 import { Language } from '@/types';
 import chemicalTestsData from '@/data/chemical-tests.json';
@@ -226,7 +227,16 @@ ${isRTL ? 'تاريخ الإنشاء:' : 'Created:'} ${new Date(test.created_at)
     if (confirm(confirmMessage)) {
       const updatedTests = tests.filter(test => test.id !== testId);
       setTests(updatedTests);
-      localStorage.setItem('chemical_tests_admin', JSON.stringify(updatedTests));
+
+      // حفظ في localStorage مع التركيب الصحيح
+      const dataToSave = {
+        chemical_tests: updatedTests,
+        last_updated: new Date().toISOString(),
+        version: "1.0.0",
+        total_tests: updatedTests.length
+      };
+      localStorage.setItem('chemical_tests_admin', JSON.stringify(dataToSave));
+
       toast.success(isRTL ? 'تم حذف الاختبار بنجاح' : 'Test deleted successfully');
     }
   };
@@ -354,6 +364,20 @@ ${isRTL ? 'تاريخ الإنشاء:' : 'Created:'} ${new Date(test.created_at)
             <Download className="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" />
             {isRTL ? 'تصدير' : 'Export'}
           </Button>
+        </div>
+
+        {/* Save Tests Button */}
+        <div className="mt-4">
+          <SaveTestsButton
+            tests={tests}
+            onSaveSuccess={() => {
+              toast.success(isRTL ? 'تم حفظ الاختبارات بنجاح في قاعدة البيانات' : 'Tests saved successfully to database');
+            }}
+            onSaveError={(error) => {
+              toast.error(isRTL ? `فشل في حفظ الاختبارات: ${error}` : `Failed to save tests: ${error}`);
+            }}
+            lang={lang}
+          />
         </div>
       </div>
 

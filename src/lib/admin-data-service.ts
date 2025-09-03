@@ -247,12 +247,65 @@ class AdminDataService {
   }
 
   /**
+   * حفظ جميع الاختبارات الكيميائية
+   * Save all chemical tests
+   */
+  async saveAllChemicalTests(): Promise<boolean> {
+    try {
+      console.log(`🔄 Saving ${this.chemicalTests.length} chemical tests...`);
+
+      // حفظ في localStorage أولاً
+      const dataToSave = {
+        chemical_tests: this.chemicalTests,
+        last_updated: new Date().toISOString(),
+        version: "1.0.0",
+        total_tests: this.chemicalTests.length,
+        saved_by: 'admin_panel'
+      };
+
+      localStorage.setItem('chemical_tests_admin', JSON.stringify(dataToSave));
+      console.log('✅ Saved to localStorage');
+
+      // حفظ عبر API
+      try {
+        const response = await fetch('/api/save-tests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ tests: this.chemicalTests }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('✅ Saved to database files via API:', result);
+          return true;
+        } else {
+          const error = await response.json();
+          console.error('❌ API save failed:', error);
+          return false;
+        }
+      } catch (apiError) {
+        console.error('❌ API save error:', apiError);
+        return false;
+      }
+
+    } catch (error) {
+      console.error('❌ Error saving chemical tests:', error);
+      return false;
+    }
+  }
+
+  /**
    * إضافة اختبار كيميائي جديد
    * Add new chemical test
    */
   async addChemicalTest(test: ChemicalTest): Promise<void> {
     this.chemicalTests.push(test);
-    localStorage.setItem('chemical_tests_admin', JSON.stringify(this.chemicalTests));
+    localStorage.setItem('chemical_tests_admin', JSON.stringify({ chemical_tests: this.chemicalTests }));
+
+    // حفظ في قاعدة البيانات
+    await this.saveAllChemicalTests();
   }
 
   /**
@@ -263,7 +316,10 @@ class AdminDataService {
     const index = this.chemicalTests.findIndex(t => t.id === test.id);
     if (index !== -1) {
       this.chemicalTests[index] = test;
-      localStorage.setItem('chemical_tests_admin', JSON.stringify(this.chemicalTests));
+      localStorage.setItem('chemical_tests_admin', JSON.stringify({ chemical_tests: this.chemicalTests }));
+
+      // حفظ في قاعدة البيانات
+      await this.saveAllChemicalTests();
     }
   }
 
@@ -273,7 +329,10 @@ class AdminDataService {
    */
   async deleteChemicalTest(testId: string): Promise<void> {
     this.chemicalTests = this.chemicalTests.filter(t => t.id !== testId);
-    localStorage.setItem('chemical_tests_admin', JSON.stringify(this.chemicalTests));
+    localStorage.setItem('chemical_tests_admin', JSON.stringify({ chemical_tests: this.chemicalTests }));
+
+    // حفظ في قاعدة البيانات
+    await this.saveAllChemicalTests();
   }
 
   /**

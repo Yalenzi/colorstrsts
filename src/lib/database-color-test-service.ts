@@ -333,6 +333,152 @@ class DatabaseColorTestService {
   }
 
   /**
+   * حفظ الاختبارات إلى قاعدة البيانات
+   * Save tests to database
+   */
+  async saveTests(tests: DatabaseColorTest[]): Promise<boolean> {
+    try {
+      console.log(`🔄 Saving ${tests.length} tests to database...`);
+
+      // حفظ في localStorage أولاً
+      const dataToSave = {
+        chemical_tests: tests,
+        last_updated: new Date().toISOString(),
+        version: "1.0.0",
+        total_tests: tests.length
+      };
+
+      localStorage.setItem('chemical_tests_data', JSON.stringify(dataToSave));
+      console.log('✅ Saved to localStorage');
+
+      // حفظ عبر API
+      try {
+        const response = await fetch('/api/tests/save-to-db', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ tests }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('✅ Saved to database files via API:', result);
+
+          // تحديث البيانات المحلية
+          this.tests = tests;
+          this.groupedTests = this.groupTestsByMethod(tests);
+
+          return true;
+        } else {
+          const error = await response.json();
+          console.error('❌ API save failed:', error);
+          throw new Error(error.error || 'Failed to save via API');
+        }
+      } catch (apiError) {
+        console.error('❌ API save error:', apiError);
+        // حتى لو فشل API، البيانات محفوظة في localStorage
+        this.tests = tests;
+        this.groupedTests = this.groupTestsByMethod(tests);
+        return false;
+      }
+
+    } catch (error) {
+      console.error('❌ Error saving tests:', error);
+      return false;
+    }
+  }
+
+  /**
+   * إضافة اختبار جديد
+   * Add new test
+   */
+  async addTest(test: Omit<DatabaseColorTest, 'id'>): Promise<string> {
+    try {
+      const newTest: DatabaseColorTest = {
+        ...test,
+        id: `test-${Date.now()}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      const updatedTests = [...this.tests, newTest];
+      const success = await this.saveTests(updatedTests);
+
+      if (success) {
+        console.log(`✅ Added new test: ${newTest.method_name}`);
+        return newTest.id;
+      } else {
+        throw new Error('Failed to save new test');
+      }
+    } catch (error) {
+      console.error('❌ Error adding test:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * تحديث اختبار موجود
+   * Update existing test
+   */
+  async updateTest(updatedTest: DatabaseColorTest): Promise<boolean> {
+    try {
+      const testIndex = this.tests.findIndex(test => test.id === updatedTest.id);
+
+      if (testIndex === -1) {
+        throw new Error('Test not found');
+      }
+
+      const updatedTestWithTimestamp = {
+        ...updatedTest,
+        updated_at: new Date().toISOString()
+      };
+
+      const updatedTests = [...this.tests];
+      updatedTests[testIndex] = updatedTestWithTimestamp;
+
+      const success = await this.saveTests(updatedTests);
+
+      if (success) {
+        console.log(`✅ Updated test: ${updatedTest.method_name}`);
+        return true;
+      } else {
+        throw new Error('Failed to save updated test');
+      }
+    } catch (error) {
+      console.error('❌ Error updating test:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * حذف اختبار
+   * Delete test
+   */
+  async deleteTest(testId: string): Promise<boolean> {
+    try {
+      const testIndex = this.tests.findIndex(test => test.id === testId);
+
+      if (testIndex === -1) {
+        throw new Error('Test not found');
+      }
+
+      const updatedTests = this.tests.filter(test => test.id !== testId);
+      const success = await this.saveTests(updatedTests);
+
+      if (success) {
+        console.log(`✅ Deleted test: ${testId}`);
+        return true;
+      } else {
+        throw new Error('Failed to save after deletion');
+      }
+    } catch (error) {
+      console.error('❌ Error deleting test:', error);
+      throw error;
+    }
+  }
+
+  /**
    * إجبار إعادة التحميل - اختصار لـ reloadData
    * Force reload - shortcut for reloadData
    */
