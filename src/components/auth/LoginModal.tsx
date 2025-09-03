@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/components/safe-providers';
-import GoogleSignInButton from './GoogleSignInButton';
+import { DirectGoogleAuth } from './DirectGoogleAuth';
 import { X, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 interface LoginModalProps {
@@ -221,12 +221,16 @@ export function LoginModal({ isOpen, onClose, onSwitchToSignup }: LoginModalProp
                 </div>
               </div>
 
-              <GoogleSignInButton
-                onSuccess={onClose}
-                onError={(error) => setError(error)}
-                disabled={loading}
-                className="mt-4 w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center justify-center"
-              />
+              <div className="mt-4">
+                <DirectGoogleAuth
+                  lang="ar"
+                  onSuccess={onClose}
+                  onError={(error) => setError(error)}
+                  variant="default"
+                  size="default"
+                  className="w-full bg-red-600 text-white hover:bg-red-700"
+                />
+              </div>
             </div>
 
             <div className="mt-4 text-center space-y-2">

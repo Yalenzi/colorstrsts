@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { Language } from '@/types';
 import { i18nConfig, getTextDirection, getFontFamily } from '@/lib/i18n';
 import { Providers } from '@/components/safe-providers';
-import { SimpleHeader as Header } from '@/components/layout/simple-header';
+import { EnhancedHeader as Header } from '@/components/layout/EnhancedHeader';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 

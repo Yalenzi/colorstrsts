@@ -20,7 +20,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { Language } from '@/types';
-import { SimpleGoogleSignIn } from '@/components/auth/SimpleGoogleSignIn';
+import { DirectGoogleAuth } from '@/components/auth/DirectGoogleAuth';
 
 interface EnhancedLoginFormProps {
   lang: Language;
@@ -383,20 +383,18 @@ export function EnhancedLoginForm({ lang, onSuccess, redirectTo }: EnhancedLogin
                 </div>
               </div>
 
-              <SimpleGoogleSignIn
+              <DirectGoogleAuth
                 lang={lang}
-                onSuccess={(user) => {
-                  console.log('✅ Google Sign-In successful:', user);
+                onSuccess={() => {
+                  console.log('✅ Google Sign-In successful');
                   if (onSuccess) onSuccess();
                   if (redirectTo) router.push(redirectTo);
                 }}
                 onError={(error) => setError(error)}
                 variant="outline"
                 size="default"
-                fullWidth={true}
-              >
-                {currentTexts.googleButton}
-              </SimpleGoogleSignIn>
+                className="w-full"
+              />
             </>
           )}
 
