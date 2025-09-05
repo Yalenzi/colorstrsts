@@ -45,14 +45,28 @@ interface ColorSelectorProps {
 }
 
 // Convert local ColorResult to ColorSelector ColorResult
-const convertColorResult = (localColor: any): ColorResult => {
+const convertColorResult = (localColor: any): ColorResult | null => {
+  // Skip invalid colors without proper hex codes
+  if (!localColor.color_hex && !localColor.hex_code) {
+    console.warn('Skipping color result without hex code:', localColor);
+    return null;
+  }
+
+  const hexCode = localColor.color_hex || localColor.hex_code;
+
+  // Skip if hex code is invalid or default black
+  if (!hexCode || hexCode === '#000000' || hexCode === '#000') {
+    console.warn('Skipping invalid or default black color:', localColor);
+    return null;
+  }
+
   return {
-    id: localColor.id || Math.random().toString(36).substr(2, 9),
+    id: localColor.id || `color-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
     test_id: localColor.test_id || '',
-    hex_code: localColor.color_hex || '#000000',
+    hex_code: hexCode,
     color_name: {
-      ar: localColor.color_result_ar || 'غير محدد',
-      en: localColor.color_result || 'Unknown'
+      ar: localColor.color_result_ar || localColor.color_name_ar || 'لون غير محدد',
+      en: localColor.color_result || localColor.color_name || 'Unknown'
     },
     substances: {
       ar: [localColor.possible_substance_ar || 'غير محدد'],
@@ -89,19 +103,30 @@ export function ColorSelector({
   const [loading, setLoading] = useState(true);
   const [showImageAnalyzer, setShowImageAnalyzer] = useState(false);
   const [testStartTime, setTestStartTime] = useState<number | null>(null);
+  const [isClient, setIsClient] = useState(false);
   const t = getTranslationsSync(lang);
 
   // Test completion hooks
   const { completeTest, isUserLoggedIn } = useTestCompletion();
   const { startTest, getTestDuration } = useTestTimer();
 
+  // Check if we're on the client side to prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Start test timer when component mounts
   useEffect(() => {
-    const startTime = startTest();
-    setTestStartTime(startTime);
-  }, [startTest]);
+    if (isClient) {
+      const startTime = startTest();
+      setTestStartTime(startTime);
+    }
+  }, [startTest, isClient]);
 
   useEffect(() => {
+    // Only load colors on client side to prevent hydration mismatch
+    if (!isClient) return;
+
     const loadColors = async () => {
       try {
         setLoading(true);
@@ -113,27 +138,41 @@ export function ColorSelector({
           // Load colors from the specific test
           const test = getTestById(testId);
           if (test?.color_results && test.color_results.length > 0) {
-            // Convert test color results to ColorResult format
-            const testColors: ColorResult[] = test.color_results.map((result, index) => ({
-              id: `${testId}-${index}`,
-              test_id: testId,
-              hex_code: result.color_hex || '#000000',
-              color_name: {
-                ar: result.color_result_ar || 'لون غير محدد',
-                en: result.color_result || 'Unknown'
-              },
-              substances: {
-                ar: [result.possible_substance_ar || 'غير محدد'],
-                en: [result.possible_substance || 'Unknown']
-              },
-              confidence: getConfidenceScore(result.confidence_level || 'medium'),
-              confidence_level: result.confidence_level || 'medium'
-            }));
+            // Convert test color results to ColorResult format, filtering out invalid colors
+            const testColors: ColorResult[] = test.color_results
+              .map((result, index) => {
+                // Skip colors without proper hex codes
+                const hexCode = result.color_hex || result.hex_code;
+                if (!hexCode || hexCode === '#000000' || hexCode === '#000') {
+                  console.warn('Skipping invalid color in test:', result);
+                  return null;
+                }
+
+                return {
+                  id: `${testId}-${index}`,
+                  test_id: testId,
+                  hex_code: hexCode,
+                  color_name: {
+                    ar: result.color_result_ar || result.color_name_ar || 'لون غير محدد',
+                    en: result.color_result || result.color_name || 'Unknown'
+                  },
+                  substances: {
+                    ar: [result.possible_substance_ar || 'غير محدد'],
+                    en: [result.possible_substance || 'Unknown']
+                  },
+                  confidence: getConfidenceScore(result.confidence_level || 'medium'),
+                  confidence_level: result.confidence_level || 'medium'
+                };
+              })
+              .filter((color): color is ColorResult => color !== null); // Remove null values
+
             setAvailableColors(testColors);
           } else {
             // Fallback to all color results
             const allColors = getColorResultsLocal();
-            const convertedColors = allColors.map(convertColorResult);
+            const convertedColors = allColors
+              .map(convertColorResult)
+              .filter((color): color is ColorResult => color !== null); // Remove null values
             setAvailableColors(convertedColors);
           }
         }
@@ -145,7 +184,7 @@ export function ColorSelector({
     };
 
     loadColors();
-  }, [colorResults, testId]);
+  }, [colorResults, testId, isClient]);
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 85) return 'text-green-600 bg-green-50 border-green-200';
@@ -229,7 +268,7 @@ export function ColorSelector({
     } : null;
   };
 
-  if (loading) {
+  if (loading || !isClient) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
@@ -283,7 +322,7 @@ export function ColorSelector({
 
       {/* Color Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-        {availableColors.map((color) => (
+        {isClient && availableColors.map((color) => (
           <div
             key={color.id}
             onClick={() => onColorSelect(color)}
@@ -326,6 +365,24 @@ export function ColorSelector({
             </div>
           </div>
         ))}
+
+        {/* No colors available message */}
+        {isClient && availableColors.length === 0 && (
+          <div className="col-span-full text-center py-8">
+            <div className="text-muted-foreground">
+              <SwatchIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p className="text-lg mb-2">
+                {lang === 'ar' ? 'لا توجد ألوان متاحة' : 'No colors available'}
+              </p>
+              <p className="text-sm">
+                {lang === 'ar'
+                  ? 'يرجى المحاولة مرة أخرى أو استخدام تحليل الصورة'
+                  : 'Please try again or use image analysis'
+                }
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Selected Color Details */}
