@@ -55,11 +55,24 @@ export function throttle<T extends (...args: any[]) => any>(
 }
 
 export function generateId(length = 8): string {
+  // Use crypto.getRandomValues if available (browser), fallback to Math.random
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+
+  if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+    // Use cryptographically secure random values
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(array[i] % chars.length);
+    }
+  } else {
+    // Fallback to Math.random (for server-side or older browsers)
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
   }
+
   return result;
 }
 

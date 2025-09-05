@@ -129,8 +129,15 @@ export function PrecisionAnalysis({ isAnalyzing, progress, className }: Precisio
 // Floating particles for scientific ambiance
 export function ScientificParticles({ count = 20, className }: { count?: number; className?: string }) {
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; delay: number }>>([]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     const newParticles = Array.from({ length: count }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
@@ -138,7 +145,7 @@ export function ScientificParticles({ count = 20, className }: { count?: number;
       delay: Math.random() * 5
     }));
     setParticles(newParticles);
-  }, [count]);
+  }, [count, isClient]);
 
   return (
     <div className={cn("absolute inset-0 pointer-events-none overflow-hidden", className)}>

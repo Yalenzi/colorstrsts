@@ -46,7 +46,16 @@ export function PasswordRecovery({ lang, onBack, onRecoverySuccess }: PasswordRe
 
   const generateSecureCode = () => {
     // إنشاء رمز من 6 أرقام آمن
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+      // Use cryptographically secure random values
+      const array = new Uint32Array(1);
+      window.crypto.getRandomValues(array);
+      const randomValue = array[0] % 900000 + 100000;
+      return randomValue.toString();
+    } else {
+      // Fallback to Math.random
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
   };
 
   const startCountdown = () => {

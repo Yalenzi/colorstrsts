@@ -18,11 +18,19 @@ export type Breakpoint = keyof typeof BREAKPOINTS;
 // Hook for responsive behavior
 export function useResponsive() {
   const [windowSize, setWindowSize] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 1024,
-    height: typeof window !== 'undefined' ? window.innerHeight : 768
+    width: 1024, // Default to desktop size to prevent hydration mismatch
+    height: 768
   });
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    // Set client flag and initial window size
+    setIsClient(true);
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+
     function handleResize() {
       setWindowSize({
         width: window.innerWidth,

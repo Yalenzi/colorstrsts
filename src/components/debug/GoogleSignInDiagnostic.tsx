@@ -5,8 +5,15 @@ import { auth } from '@/lib/firebase';
 
 export function GoogleSignInDiagnostic() {
   const [diagnostics, setDiagnostics] = useState<any>({});
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     const runDiagnostics = () => {
       const results = {
         // Firebase Configuration
@@ -23,11 +30,12 @@ export function GoogleSignInDiagnostic() {
 
         // Browser Environment
         browser: {
-          userAgent: navigator.userAgent,
-          cookiesEnabled: navigator.cookieEnabled ? '✅ Enabled' : '❌ Disabled',
+          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A',
+          cookiesEnabled: typeof navigator !== 'undefined' && navigator.cookieEnabled ? '✅ Enabled' : '❌ Disabled',
           localStorage: typeof Storage !== 'undefined' ? '✅ Available' : '❌ Not Available',
           popupSupport: (() => {
             try {
+              if (typeof window === 'undefined') return '❌ Server-side';
               const popup = window.open('', '_blank', 'width=1,height=1');
               if (popup) {
                 popup.close();
@@ -38,7 +46,7 @@ export function GoogleSignInDiagnostic() {
               return '❌ Not Supported';
             }
           })(),
-          thirdPartyCookies: document.cookie ? '✅ Enabled' : '⚠️ May be disabled'
+          thirdPartyCookies: typeof document !== 'undefined' && document.cookie ? '✅ Enabled' : '⚠️ May be disabled'
         },
 
         // Network & Security
@@ -73,6 +81,7 @@ export function GoogleSignInDiagnostic() {
             issue: 'Popup Blocked',
             check: (() => {
               try {
+                if (typeof window === 'undefined') return '❌ Server-side';
                 const popup = window.open('', '_blank', 'width=1,height=1');
                 if (popup) {
                   popup.close();
@@ -87,7 +96,7 @@ export function GoogleSignInDiagnostic() {
           },
           {
             issue: 'Third-party cookies',
-            check: document.cookie ? '✅ OK' : '⚠️ May be disabled',
+            check: typeof document !== 'undefined' && document.cookie ? '✅ OK' : '⚠️ May be disabled',
             solution: 'Enable third-party cookies or use redirect method'
           },
           {
@@ -118,7 +127,7 @@ export function GoogleSignInDiagnostic() {
     };
 
     runDiagnostics();
-  }, []);
+  }, [isClient]);
 
   if (process.env.NODE_ENV !== 'development') {
     return null;

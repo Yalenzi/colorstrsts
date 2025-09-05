@@ -28,6 +28,7 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(defaultTheme);
   const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light');
+  const [isClient, setIsClient] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Initialize theme on mount

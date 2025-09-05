@@ -206,7 +206,19 @@ export class DataService {
 
   // Generate unique ID
   static generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    // Use a more predictable approach for server-side rendering
+    const timestamp = Date.now().toString(36);
+
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+      // Use cryptographically secure random values on client
+      const array = new Uint8Array(4);
+      window.crypto.getRandomValues(array);
+      const randomPart = Array.from(array, byte => byte.toString(36)).join('');
+      return timestamp + randomPart;
+    } else {
+      // Fallback for server-side or older browsers
+      return timestamp + Math.random().toString(36).substr(2);
+    }
   }
 
   // Local Storage Operations
