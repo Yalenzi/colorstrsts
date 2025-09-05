@@ -351,7 +351,7 @@ class DatabaseColorTestService {
       localStorage.setItem('chemical_tests_data', JSON.stringify(dataToSave));
       console.log('✅ Saved to localStorage');
 
-      // حفظ عبر API
+      // حفظ عبر API (إذا كان متاحاً)
       try {
         const response = await fetch('/api/tests/save-to-db', {
           method: 'POST',
@@ -360,6 +360,18 @@ class DatabaseColorTestService {
           },
           body: JSON.stringify({ tests }),
         });
+
+        // Check if response is JSON (API available) or HTML (404 page)
+        const contentType = response.headers.get('content-type');
+        const isJsonResponse = contentType && contentType.includes('application/json');
+
+        if (!isJsonResponse) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          // تحديث البيانات المحلية
+          this.tests = tests;
+          this.groupedTests = this.groupTestsByMethod(tests);
+          return true; // Consider localStorage save as success
+        }
 
         if (response.ok) {
           const result = await response.json();
@@ -375,8 +387,18 @@ class DatabaseColorTestService {
           console.error('❌ API save failed:', error);
           throw new Error(error.error || 'Failed to save via API');
         }
-      } catch (apiError) {
+      } catch (apiError: any) {
         console.error('❌ API save error:', apiError);
+
+        // Check if it's a JSON parsing error (HTML response)
+        if (apiError.message && apiError.message.includes('Unexpected token')) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          // تحديث البيانات المحلية
+          this.tests = tests;
+          this.groupedTests = this.groupTestsByMethod(tests);
+          return true; // Consider localStorage save as success
+        }
+
         // حتى لو فشل API، البيانات محفوظة في localStorage
         this.tests = tests;
         this.groupedTests = this.groupTestsByMethod(tests);

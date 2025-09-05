@@ -84,45 +84,91 @@ export function SaveTestsButton({
       localStorage.setItem('chemical_tests_admin', JSON.stringify(dataToSave));
       console.log('✅ Saved to localStorage');
 
-      // حفظ عبر API
-      const response = await fetch('/api/save-tests', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ tests }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('✅ Save API response:', result);
-
-        setSaveStatus({
-          success: true,
-          message: t.saveSuccess,
-          details: result
+      // حفظ عبر API (إذا كان متاحاً)
+      try {
+        const response = await fetch('/api/save-tests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ tests }),
         });
 
-        toast.success(`${t.saveSuccess} (${tests.length} ${t.testsCount.toLowerCase()})`);
+        // Check if response is JSON (API available) or HTML (404 page)
+        const contentType = response.headers.get('content-type');
+        const isJsonResponse = contentType && contentType.includes('application/json');
 
-        if (onSaveSuccess) {
-          onSaveSuccess();
+        if (!isJsonResponse) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          setSaveStatus({
+            success: true,
+            message: `${t.saveSuccess} (محلياً)`,
+            details: { mode: 'localStorage_only' }
+          });
+          toast.success(`${t.saveSuccess} (${tests.length} ${t.testsCount.toLowerCase()}) - محلياً`);
+          if (onSaveSuccess) {
+            onSaveSuccess();
+          }
+          return;
         }
 
-      } else {
-        const error = await response.json();
-        console.error('❌ Save API failed:', error);
+        if (response.ok) {
+          const result = await response.json();
+          console.log('✅ Save API response:', result);
 
-        setSaveStatus({
-          success: false,
-          message: t.saveError,
-          details: error
-        });
+          setSaveStatus({
+            success: true,
+            message: t.saveSuccess,
+            details: result
+          });
 
-        toast.error(`${t.saveError}: ${error.error || 'Unknown error'}`);
+          toast.success(`${t.saveSuccess} (${tests.length} ${t.testsCount.toLowerCase()})`);
 
-        if (onSaveError) {
-          onSaveError(error.error || 'Save failed');
+          if (onSaveSuccess) {
+            onSaveSuccess();
+          }
+
+        } else {
+          const error = await response.json();
+          console.error('❌ Save API failed:', error);
+
+          setSaveStatus({
+            success: false,
+            message: t.saveError,
+            details: error
+          });
+
+          toast.error(`${t.saveError}: ${error.error || 'Unknown error'}`);
+
+          if (onSaveError) {
+            onSaveError(error.error || 'Save failed');
+          }
+        }
+      } catch (apiError: any) {
+        console.error('❌ Save error:', apiError);
+
+        // Check if it's a JSON parsing error (HTML response)
+        if (apiError.message && apiError.message.includes('Unexpected token')) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          setSaveStatus({
+            success: true,
+            message: `${t.saveSuccess} (محلياً)`,
+            details: { mode: 'localStorage_only', error: apiError.message }
+          });
+          toast.success(`${t.saveSuccess} (${tests.length} ${t.testsCount.toLowerCase()}) - محلياً`);
+          if (onSaveSuccess) {
+            onSaveSuccess();
+          }
+        } else {
+          setSaveStatus({
+            success: false,
+            message: t.saveError,
+            details: { error: apiError.message }
+          });
+          toast.error(`${t.saveError}: ${apiError.message}`);
+          if (onSaveError) {
+            onSaveError(apiError.message || 'Save failed');
+          }
         }
       }
 

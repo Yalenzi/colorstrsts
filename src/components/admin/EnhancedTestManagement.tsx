@@ -107,7 +107,7 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
   const saveTestsToDB = async (updatedTests: ChemicalTest[]) => {
     try {
       console.log('🔄 Saving tests to DB.json...');
-      
+
       const response = await fetch('/api/tests/save-to-db', {
         method: 'POST',
         headers: {
@@ -116,24 +116,51 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
         body: JSON.stringify({ tests: updatedTests }),
       });
 
+      // Check if response is JSON (API available) or HTML (404 page)
+      const contentType = response.headers.get('content-type');
+      const isJsonResponse = contentType && contentType.includes('application/json');
+
+      if (!isJsonResponse) {
+        console.warn('⚠️ API not available (static export mode) - using localStorage only');
+        toast.success(
+          lang === 'ar'
+            ? `تم حفظ ${updatedTests.length} اختبار محلياً`
+            : `Saved ${updatedTests.length} tests locally`
+        );
+        return true;
+      }
+
       if (!response.ok) {
-        throw new Error('Failed to save tests to DB.json');
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save tests to DB.json');
       }
 
       const result = await response.json();
       console.log('✅ Saved tests to DB.json:', result);
-      
+
       toast.success(
-        lang === 'ar' 
+        lang === 'ar'
           ? `تم حفظ ${updatedTests.length} اختبار في قاعدة البيانات`
           : `Saved ${updatedTests.length} tests to database`
       );
-      
+
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Error saving tests:', error);
+
+      // Check if it's a JSON parsing error (HTML response)
+      if (error.message && error.message.includes('Unexpected token')) {
+        console.warn('⚠️ API not available (static export mode) - using localStorage only');
+        toast.success(
+          lang === 'ar'
+            ? `تم حفظ ${updatedTests.length} اختبار محلياً`
+            : `Saved ${updatedTests.length} tests locally`
+        );
+        return true;
+      }
+
       toast.error(
-        lang === 'ar' 
+        lang === 'ar'
           ? 'فشل في حفظ الاختبارات في قاعدة البيانات'
           : 'Failed to save tests to database'
       );

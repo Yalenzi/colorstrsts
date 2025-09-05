@@ -278,7 +278,7 @@ export function TestManagement({ lang }: TestManagementProps) {
 
       console.log(`💾 تم حفظ ${updatedTests.length} اختبار في التخزين المحلي`);
 
-      // Save to database files via API
+      // Try to save to database files via API (only if API is available)
       try {
         console.log('🔄 Attempting to save to API...', { testsCount: updatedTests.length });
 
@@ -291,6 +291,16 @@ export function TestManagement({ lang }: TestManagementProps) {
         });
 
         console.log('📡 API Response status:', response.status);
+
+        // Check if response is JSON (API available) or HTML (404 page)
+        const contentType = response.headers.get('content-type');
+        const isJsonResponse = contentType && contentType.includes('application/json');
+
+        if (!isJsonResponse) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
+          return;
+        }
 
         if (!response.ok) {
           const errorData = await response.json();
@@ -309,9 +319,19 @@ export function TestManagement({ lang }: TestManagementProps) {
           console.warn('⚠️ فشل في إعادة تحميل خدمة قاعدة البيانات:', reloadError);
         }
 
+        toast.success(`تم حفظ ${updatedTests.length} اختبار بنجاح`);
+
       } catch (apiError) {
-        console.error('❌ فشل في حفظ البيانات في ملفات قاعدة البيانات:', apiError);
-        toast.error('فشل في حفظ البيانات في ملفات قاعدة البيانات');
+        console.error('❌ Save error:', apiError);
+
+        // Check if it's a JSON parsing error (HTML response)
+        if (apiError.message && apiError.message.includes('Unexpected token')) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
+        } else {
+          console.error('❌ فشل في حفظ البيانات في ملفات قاعدة البيانات:', apiError);
+          toast.warning('تم الحفظ محلياً فقط - فشل في حفظ ملفات قاعدة البيانات');
+        }
         // Don't throw here - localStorage save was successful
         // The user can still work with the data, just the files won't be updated
       }

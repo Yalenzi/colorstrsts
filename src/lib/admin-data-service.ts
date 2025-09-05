@@ -266,7 +266,7 @@ class AdminDataService {
       localStorage.setItem('chemical_tests_admin', JSON.stringify(dataToSave));
       console.log('✅ Saved to localStorage');
 
-      // حفظ عبر API
+      // حفظ عبر API (إذا كان متاحاً)
       try {
         const response = await fetch('/api/save-tests', {
           method: 'POST',
@@ -275,6 +275,15 @@ class AdminDataService {
           },
           body: JSON.stringify({ tests: this.chemicalTests }),
         });
+
+        // Check if response is JSON (API available) or HTML (404 page)
+        const contentType = response.headers.get('content-type');
+        const isJsonResponse = contentType && contentType.includes('application/json');
+
+        if (!isJsonResponse) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          return true; // Consider localStorage save as success
+        }
 
         if (response.ok) {
           const result = await response.json();
@@ -285,8 +294,15 @@ class AdminDataService {
           console.error('❌ API save failed:', error);
           return false;
         }
-      } catch (apiError) {
+      } catch (apiError: any) {
         console.error('❌ API save error:', apiError);
+
+        // Check if it's a JSON parsing error (HTML response)
+        if (apiError.message && apiError.message.includes('Unexpected token')) {
+          console.warn('⚠️ API not available (static export mode) - using localStorage only');
+          return true; // Consider localStorage save as success
+        }
+
         return false;
       }
 
