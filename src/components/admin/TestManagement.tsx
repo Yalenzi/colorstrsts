@@ -271,23 +271,31 @@ export function TestManagement({ lang }: TestManagementProps) {
 
   const saveTestsToStorage = async (updatedTests: ChemicalTest[]) => {
     try {
-      // Save to localStorage first for immediate UI updates
+      // Create unified data structure for Db.json
+      const unifiedData = {
+        chemical_tests: updatedTests,
+        last_updated: new Date().toISOString(),
+        version: "1.0.0",
+        total_tests: updatedTests.length
+      };
+
+      // Save to localStorage with unified structure
       localStorage.setItem('chemical_tests_db', JSON.stringify(updatedTests));
-      localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: updatedTests }));
+      localStorage.setItem('chemical_tests_data', JSON.stringify(unifiedData));
       localStorage.setItem('database_color_tests', JSON.stringify(updatedTests));
 
       console.log(`💾 تم حفظ ${updatedTests.length} اختبار في التخزين المحلي`);
 
-      // Try to save to database files via API (only if API is available)
+      // Try to save to Db.json via API (only if API is available)
       try {
-        console.log('🔄 Attempting to save to API...', { testsCount: updatedTests.length });
+        console.log('🔄 Attempting to save to Db.json...', { testsCount: updatedTests.length });
 
-        const response = await fetch('/api/save-tests', {
+        const response = await fetch('/api/save-db', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ tests: updatedTests }),
+          body: JSON.stringify(unifiedData),
         });
 
         console.log('📡 API Response status:', response.status);
@@ -303,13 +311,13 @@ export function TestManagement({ lang }: TestManagementProps) {
         }
 
         if (!response.ok) {
-          const errorData = await response.json();
-          console.error('❌ API Error:', errorData);
-          throw new Error(errorData.error || 'Failed to save to database files');
+          console.warn('⚠️ API save failed, using localStorage only');
+          toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
+          return;
         }
 
         const result = await response.json();
-        console.log(`✅ تم حفظ ${result.count} اختبار في ملفات قاعدة البيانات`);
+        console.log(`✅ تم حفظ ${result.count || updatedTests.length} اختبار في Db.json`);
 
         // Force reload of data services
         try {

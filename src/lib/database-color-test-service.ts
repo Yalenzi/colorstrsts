@@ -103,9 +103,7 @@ class DatabaseColorTestService {
       // Try to load from public paths as fallback
       const paths = [
         '/data/Db.json',
-        '/src/data/Db.json',
-        '/data/Databsecolorstest.json',
-        '/src/data/Databsecolorstest.json'
+        '/src/data/Db.json'
       ];
 
       for (const path of paths) {

@@ -132,3 +132,4 @@ src/app/\[lang\]/safety/page - Copy.tsx
 src/app/\[lang\]/safety/page.tsx
 src/app/\[lang\]/help/page.tsx
 src/app/\[lang\]/safety/page.tsx
+src/data/chemical-tests.json

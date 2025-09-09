@@ -45,21 +45,65 @@ class TestDataExtractor {
 
   /**
    * تحميل النتائج اللونية
-   * Load color results
+   * Load color results from Db.json
    */
   async loadColorResults(): Promise<void> {
     try {
-      // Try to load from multiple paths
-      const paths = [
-        '/data/color-results.json',
-        '/src/data/color-results.json'
-      ];
+      // First try to import directly from Db.json
+      try {
+        const data = await import('@/data/Db.json');
+        // Extract color results from chemical tests
+        this.colorResults = [];
+        if (data.chemical_tests) {
+          data.chemical_tests.forEach((test: any) => {
+            if (test.color_results) {
+              test.color_results.forEach((result: any) => {
+                this.colorResults.push({
+                  id: result.id || `${test.id}-${Math.random().toString(36).substr(2, 9)}`,
+                  test_id: test.id,
+                  color_result: result.color_result,
+                  color_result_ar: result.color_result_ar,
+                  color_hex: result.color_hex,
+                  possible_substance: result.possible_substance,
+                  possible_substance_ar: result.possible_substance_ar,
+                  confidence_level: result.confidence_level
+                });
+              });
+            }
+          });
+        }
+        console.log(`✅ Loaded ${this.colorResults.length} color results from Db.json`);
+        return;
+      } catch (importError) {
+        console.warn('⚠️ Could not import Db.json directly, trying fetch...');
+      }
 
+      // Fallback to fetch from public paths
+      const paths = ['/data/Db.json'];
       for (const path of paths) {
         try {
           const response = await fetch(path);
           if (response.ok) {
-            this.colorResults = await response.json();
+            const data = await response.json();
+            this.colorResults = [];
+            if (data.chemical_tests) {
+              data.chemical_tests.forEach((test: any) => {
+                if (test.color_results) {
+                  test.color_results.forEach((result: any) => {
+                    this.colorResults.push({
+                      id: result.id || `${test.id}-${Math.random().toString(36).substr(2, 9)}`,
+                      test_id: test.id,
+                      color_result: result.color_result,
+                      color_result_ar: result.color_result_ar,
+                      color_hex: result.color_hex,
+                      possible_substance: result.possible_substance,
+                      possible_substance_ar: result.possible_substance_ar,
+                      confidence_level: result.confidence_level
+                    });
+                  });
+                }
+              });
+            }
             console.log(`✅ Loaded ${this.colorResults.length} color results from ${path}`);
             return;
           }

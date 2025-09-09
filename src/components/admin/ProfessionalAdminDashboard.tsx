@@ -130,15 +130,10 @@ export function ProfessionalAdminDashboard({ lang }: ProfessionalAdminDashboardP
       badge: '156'
     },
     {
-      id: 'tests',
-      label: t.tests,
-      icon: BeakerIcon,
-      badge: '12'
-    },
-    {
       id: 'test-management',
       label: lang === 'ar' ? 'إدارة الاختبارات' : 'Test Management',
-      icon: BeakerIcon
+      icon: BeakerIcon,
+      badge: '12'
     },
     {
       id: 'color-results',
@@ -445,8 +440,6 @@ export function ProfessionalAdminDashboard({ lang }: ProfessionalAdminDashboardP
         return renderDashboardOverview();
       case 'users':
         return <ComprehensiveUserManagement lang={lang} />;
-      case 'tests':
-        return <EnhancedTestsManagement lang={lang} />;
       case 'test-management':
         return <TestManagement lang={lang} />;
       case 'color-results':

@@ -61,42 +61,33 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
       const testsData = await getChemicalTestsLocal();
       setTests(testsData);
 
-      // تحميل نتائج الألوان من localStorage أو إنشاء بيانات تجريبية
-      const savedResults = localStorage.getItem('color_results_admin');
+      // تحميل نتائج الألوان من Db.json مباشرة
       let colorResults: ColorResult[] = [];
 
-      if (savedResults) {
-        colorResults = JSON.parse(savedResults);
-        console.log('📦 Loaded color results from localStorage:', colorResults.length);
-      } else {
-        // إنشاء بيانات من الاختبارات الجديدة مع التركيب الصحيح
-        colorResults = testsData.flatMap((test, index) =>
-          test.results?.map((result, resultIndex) => ({
-            id: `${test.id}-${resultIndex}`,
-            test_id: test.id,
-            test_name: test.method_name,
-            test_name_ar: test.method_name_ar,
-            color_result: result.color || result.color_result || 'Unknown',
-            color_result_ar: result.color_ar || result.color_result_ar || 'غير معروف',
-            color_hex: result.hex_code || result.color_hex || '#808080',
-            possible_substance: result.substance || result.possible_substance || 'Unknown substance',
-            possible_substance_ar: result.substance_ar || result.possible_substance_ar || 'مادة غير معروفة',
-            confidence_level: typeof result.confidence === 'number' ? result.confidence :
-                            result.confidence_level === 'very_high' ? 95 :
-                            result.confidence_level === 'high' ? 85 :
-                            result.confidence_level === 'medium' ? 75 :
-                            result.confidence_level === 'low' ? 60 : 50,
-            category: test.category,
-            reference: test.reference,
-            created_at: test.created_at,
-            updated_at: test.updated_at || new Date().toISOString()
-          })) || []
-        );
+      // استخراج نتائج الألوان من بيانات الاختبارات
+      colorResults = testsData.flatMap((test) =>
+        test.color_results?.map((result, resultIndex) => ({
+          id: result.id || `${test.id}-${resultIndex}`,
+          test_id: test.id,
+          test_name: test.method_name,
+          test_name_ar: test.method_name_ar,
+          color_result: result.color_result || 'Unknown',
+          color_result_ar: result.color_result_ar || 'غير معروف',
+          color_hex: result.color_hex || '#808080',
+          possible_substance: result.possible_substance || 'Unknown substance',
+          possible_substance_ar: result.possible_substance_ar || 'مادة غير معروفة',
+          confidence_level: result.confidence_level === 'very_high' ? 95 :
+                          result.confidence_level === 'high' ? 85 :
+                          result.confidence_level === 'medium' ? 75 :
+                          result.confidence_level === 'low' ? 60 : 50,
+          category: test.category,
+          reference: test.reference,
+          created_at: test.created_at,
+          updated_at: test.updated_at || new Date().toISOString()
+        })) || []
+      );
 
-        // حفظ البيانات التجريبية
-        localStorage.setItem('color_results_admin', JSON.stringify(colorResults));
-        console.log('🆕 Created sample color results:', colorResults.length);
-      }
+      console.log('✅ Extracted color results from Db.json:', colorResults.length);
 
       setColorResults(colorResults);
 
@@ -113,11 +104,39 @@ export function ColorResultsManagement({ lang }: ColorResultsManagementProps) {
     }
   };
 
-  const saveColorResults = (updatedResults: ColorResult[]) => {
-    setColorResults(updatedResults);
-    localStorage.setItem('color_results_admin', JSON.stringify(updatedResults));
-    console.log('💾 Color results saved to localStorage:', updatedResults.length);
-    toast.success('تم حفظ نتائج الألوان بنجاح');
+  const saveColorResults = async (updatedResults: ColorResult[]) => {
+    try {
+      setColorResults(updatedResults);
+
+      // Update the tests data with new color results
+      const updatedTests = tests.map(test => {
+        const testResults = updatedResults.filter(result => result.test_id === test.id);
+        return {
+          ...test,
+          color_results: testResults.map(result => ({
+            id: result.id,
+            color_result: result.color_result,
+            color_result_ar: result.color_result_ar,
+            color_hex: result.color_hex,
+            possible_substance: result.possible_substance,
+            possible_substance_ar: result.possible_substance_ar,
+            confidence_level: result.confidence_level >= 95 ? 'very_high' :
+                            result.confidence_level >= 85 ? 'high' :
+                            result.confidence_level >= 75 ? 'medium' : 'low'
+          }))
+        };
+      });
+
+      // Save to localStorage
+      localStorage.setItem('color_results_admin', JSON.stringify(updatedResults));
+      localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: updatedTests }));
+
+      console.log('💾 Color results saved successfully:', updatedResults.length);
+      toast.success('تم حفظ نتائج الألوان بنجاح');
+    } catch (error) {
+      console.error('❌ Error saving color results:', error);
+      toast.error('خطأ في حفظ نتائج الألوان');
+    }
   };
 
   const handleAddResult = () => {
