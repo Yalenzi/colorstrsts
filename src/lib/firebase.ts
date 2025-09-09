@@ -36,7 +36,7 @@ const getFirebaseConfig = () => {
       authDomain: "colorstests-573ef.firebaseapp.com",
       databaseURL: "https://colorstests-573ef-default-rtdb.firebaseio.com",
       projectId: "colorstests-573ef",
-      storageBucket: "colorstests-573ef.firebasestorage.app",
+      storageBucket: "colorstests-573ef.appspot.com",
       messagingSenderId: "94361461929",
       appId: "1:94361461929:web:b34ad287c782710415f5b8"
     };
