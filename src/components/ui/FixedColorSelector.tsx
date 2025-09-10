@@ -8,8 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { getTranslationsSync } from '@/lib/translations';
 import { getTestById } from '@/lib/data-service';
-import { useTestCompletion } from '@/hooks/useTestCompletion';
-import { useTestTimer } from '@/hooks/useTestTimer';
+import { useTestCompletion, useTestTimer } from '@/hooks/useTestCompletion';
 import { Language } from '@/types';
 import { Camera, CheckCircle, AlertTriangle } from 'lucide-react';
 
