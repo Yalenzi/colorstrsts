@@ -1,7 +1,7 @@
 'use client';
 
 import { db } from '@/lib/firebase';
-import { ref, push, set, get, query, orderByChild, equalTo, limitToLast } from 'firebase/database';
+import { ref, push, set, get, query, orderByChild, equalTo, limitToLast, serverTimestamp } from 'firebase/database';
 import { saveUserTestResultSafe } from '@/lib/firebase-safe-service';
 
 export interface UserTestResult {
@@ -44,17 +44,38 @@ export interface UserTestStats {
   testsByMonth: { [month: string]: number };
 }
 
-// Save a completed test result with safe Firebase handling
+// Save a completed test result with enhanced reliability
 export async function saveUserTestResult(testResult: Omit<UserTestResult, 'id' | 'timestamp' | 'completedAt'>): Promise<string> {
   try {
-    console.log('🔄 Attempting to save test result safely...');
+    console.log('🔄 Attempting to save test result with enhanced reliability...');
     console.log('📊 Test result data:', {
       userId: testResult.userId,
       testId: testResult.testId,
-      testName: testResult.testName
+      testName: testResult.testName,
+      selectedColor: testResult.selectedColor
     });
 
-    // محاولة الحفظ الآمن أولاً
+    const completeTestResult: UserTestResult = {
+      ...testResult,
+      timestamp: Date.now(),
+      completedAt: new Date().toISOString(),
+    };
+
+    // Generate a unique ID for this result
+    const resultId = `test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    completeTestResult.id = resultId;
+
+    // 1. Save to localStorage first (immediate backup)
+    try {
+      const localResults = JSON.parse(localStorage.getItem('user_test_results') || '[]');
+      localResults.push(completeTestResult);
+      localStorage.setItem('user_test_results', JSON.stringify(localResults));
+      console.log('💾 Test result saved to localStorage successfully');
+    } catch (localError) {
+      console.warn('⚠️ Failed to save to localStorage:', localError);
+    }
+
+    // 2. محاولة الحفظ الآمن أولاً
     try {
       const safeResult = await saveUserTestResultSafe({
         userId: testResult.userId,
@@ -68,65 +89,68 @@ export async function saveUserTestResult(testResult: Omit<UserTestResult, 'id' |
         timestamp: serverTimestamp()
       });
 
-      console.log('✅ Test result saved safely:', safeResult);
+      console.log('✅ Test result saved safely to Firebase:', safeResult);
       return safeResult;
     } catch (safeError) {
-      console.warn('⚠️ Safe Firebase service failed, trying direct Firebase...');
+      console.warn('⚠️ Safe Firebase service failed, trying direct Firebase...', safeError);
     }
 
-    // Fallback إلى Firebase المباشر
-    if (!db) {
-      throw new Error('Firebase database not initialized');
+    // 3. Fallback إلى Firebase المباشر
+    if (db) {
+      try {
+        const userTestsRef = ref(db, 'userTestResults');
+        const newTestRef = push(userTestsRef);
+
+        await set(newTestRef, completeTestResult);
+        console.log('✅ Test result saved successfully to Firebase:', newTestRef.key);
+
+        return newTestRef.key || resultId;
+      } catch (firebaseError) {
+        console.warn('⚠️ Direct Firebase save failed:', firebaseError);
+      }
     }
 
-    const userTestsRef = ref(db, 'userTestResults');
-    const newTestRef = push(userTestsRef);
+    // 4. If all else fails, at least we have localStorage
+    console.log('⚠️ Firebase unavailable, but test result saved locally');
+    return resultId;
 
-    const completeTestResult: UserTestResult = {
-      ...testResult,
-      timestamp: Date.now(),
-      completedAt: new Date().toISOString(),
-    };
-
-    await set(newTestRef, completeTestResult);
-
-    console.log('✅ Test result saved successfully to Firebase:', newTestRef.key);
-
-    // Also save to localStorage as backup
-    try {
-      const localResults = JSON.parse(localStorage.getItem('user_test_results') || '[]');
-      localResults.push({ ...completeTestResult, id: newTestRef.key });
-      localStorage.setItem('user_test_results', JSON.stringify(localResults));
-      console.log('💾 Test result also saved to localStorage as backup');
-    } catch (localError) {
-      console.warn('⚠️ Failed to save to localStorage:', localError);
-    }
-
-    return newTestRef.key!;
   } catch (error) {
-    console.error('❌ Error saving test result to Firebase:', error);
+    console.error('❌ Error saving test result:', error);
+    throw new Error(`Failed to save test result: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
 
-    // Fallback to localStorage if Firebase fails
-    try {
-      console.log('🔄 Attempting fallback save to localStorage...');
-      const fallbackId = `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const completeTestResult: UserTestResult = {
-        ...testResult,
-        id: fallbackId,
-        timestamp: Date.now(),
-        completedAt: new Date().toISOString(),
-      };
+// Get user's test results from localStorage
+export function getLocalUserTestResults(userId: string): UserTestResult[] {
+  try {
+    const localResults = JSON.parse(localStorage.getItem('user_test_results') || '[]');
+    return localResults.filter((result: UserTestResult) => result.userId === userId);
+  } catch (error) {
+    console.error('❌ Error reading local test results:', error);
+    return [];
+  }
+}
 
-      const localResults = JSON.parse(localStorage.getItem('user_test_results') || '[]');
-      localResults.push(completeTestResult);
-      localStorage.setItem('user_test_results', JSON.stringify(localResults));
+// Sync local results to Firebase when connection is available
+export async function syncLocalResultsToFirebase(userId: string): Promise<void> {
+  try {
+    const localResults = getLocalUserTestResults(userId);
+    const unsynced = localResults.filter(result => result.id?.startsWith('test_') || result.id?.startsWith('local-'));
 
-      console.log('✅ Test result saved to localStorage as fallback:', fallbackId);
-      return fallbackId;
-    } catch (fallbackError) {
-      console.error('❌ Fallback save to localStorage also failed:', fallbackError);
-      throw new Error(`Failed to save test result: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.log(`🔄 Syncing ${unsynced.length} local results to Firebase...`);
+
+    for (const result of unsynced) {
+      try {
+        // Remove the local ID and let Firebase generate a new one
+        const { id, ...resultWithoutId } = result;
+        await saveUserTestResult(resultWithoutId);
+        console.log(`✅ Synced result: ${result.testName}`);
+      } catch (error) {
+        console.warn(`⚠️ Failed to sync result: ${result.testName}`, error);
+      }
     }
+  } catch (error) {
+    console.error('❌ Error syncing local results:', error);
   }
 }
 

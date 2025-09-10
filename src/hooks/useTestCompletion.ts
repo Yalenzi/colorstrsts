@@ -90,13 +90,17 @@ export function createTestCompletionData(
   const endTime = Date.now();
   const duration = startTime ? Math.round((endTime - startTime) / 1000) : undefined;
 
-  // Extract substance information
-  const substance = selectedColorResult.possible_substance || 'Unknown';
-  const substanceAr = selectedColorResult.possible_substance_ar || 'غير معروف';
-  
-  // Calculate confidence and accuracy
-  const confidence = selectedColorResult.confidence_level || '0';
-  const confidenceNum = parseFloat(confidence);
+  // Extract substance information - handle both formats
+  const substance = selectedColorResult.possible_substance || selectedColorResult.substance || 'Unknown';
+  const substanceAr = selectedColorResult.possible_substance_ar || selectedColorResult.substance_ar || 'غير معروف';
+
+  // Extract color names - handle both formats
+  const colorNameEn = selectedColorResult.color_name || selectedColorResult.color_result || 'Undefined color';
+  const colorNameAr = selectedColorResult.color_name_ar || selectedColorResult.color_result_ar || 'لون غير محدد';
+
+  // Calculate confidence and accuracy - handle both formats
+  const confidence = selectedColorResult.confidence_level || selectedColorResult.confidence || '0';
+  const confidenceNum = typeof confidence === 'number' ? confidence : parseFloat(confidence) || 0;
   const accuracy = Math.min(100, Math.max(0, confidenceNum));
 
   return {
@@ -107,19 +111,19 @@ export function createTestCompletionData(
       id: selectedColorResult.id,
       hex_code: selectedColorResult.hex_code,
       color_name: {
-        ar: selectedColorResult.color_result_ar || 'لون غير محدد',
-        en: selectedColorResult.color_result || 'Undefined color'
+        ar: colorNameAr,
+        en: colorNameEn
       },
       substance_name: {
         ar: substanceAr,
         en: substance
       },
-      confidence_level: confidence
+      confidence_level: confidence.toString()
     },
     result: {
       substance,
       substanceAr,
-      confidence,
+      confidence: confidence.toString(),
       accuracy
     },
     duration
@@ -134,8 +138,12 @@ export function useTestTimer() {
     return startTime;
   }, []);
 
-  const getTestDuration = useCallback((startTime: number) => {
+  const getTestDuration = useCallback((startTime?: number) => {
     const endTime = Date.now();
+    if (!startTime) {
+      console.warn('⚠️ No start time provided for duration calculation');
+      return 0;
+    }
     const duration = Math.round((endTime - startTime) / 1000);
     console.log(`⏱️ Test completed in ${duration} seconds`);
     return duration;

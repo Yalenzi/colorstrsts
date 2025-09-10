@@ -7,8 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { getTranslationsSync } from '@/lib/translations';
-import { getTestById } from '@/lib/data-service';
-import { useTestCompletion, useTestTimer } from '@/hooks/useTestCompletion';
+import { getTestById } from '@/lib/local-data-service';
+import { useTestCompletion, useTestTimer, createTestCompletionData } from '@/hooks/useTestCompletion';
 import { Language } from '@/types';
 import { Camera, CheckCircle, AlertTriangle } from 'lucide-react';
 
@@ -190,16 +190,26 @@ export function FixedColorSelector({
     }
 
     try {
-      // حفظ النتيجة
-      const duration = testStartTime ? getTestDuration() : 0;
-      
-      await completeTest({
+      // الحصول على بيانات الاختبار
+      const test = getTestById(testId);
+      if (!test) {
+        throw new Error('Test not found');
+      }
+
+      // إنشاء بيانات إكمال الاختبار
+      const testCompletionData = createTestCompletionData(
         testId,
-        colorId: selectedColorResult.hex_code,
-        confidence: selectedColorResult.confidence,
-        notes,
-        duration
-      });
+        test.method_name || 'Unknown Test',
+        test.method_name_ar || 'اختبار غير معروف',
+        selectedColorResult,
+        testStartTime || undefined
+      );
+
+      // إضافة الملاحظات
+      testCompletionData.notes = notes;
+
+      // حفظ النتيجة
+      await completeTest(testCompletionData);
 
       onComplete();
     } catch (error: any) {
