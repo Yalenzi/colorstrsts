@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { 
-  PlusIcon, 
-  PencilIcon, 
-  TrashIcon, 
+import {
+  PlusIcon,
+  PencilIcon,
+  TrashIcon,
   EyeIcon,
   ArrowUpTrayIcon,
   ArrowDownTrayIcon,
@@ -21,6 +21,9 @@ import {
   FunnelIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 
 interface EnhancedTestManagementProps {
   lang: Language;
@@ -66,37 +69,63 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [editingTest, setEditingTest] = useState<ChemicalTest | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const [pendingImport, setPendingImport] = useState<ChemicalTest[]>([]);
+
 
   // Load tests from DB.json
   const loadTestsFromDB = async () => {
     try {
       setLoading(true);
-      console.log('🔄 Loading tests from DB.json...');
-      
-      // Import DB.json directly
-      const response = await fetch('/api/tests/load-from-db');
-      if (!response.ok) {
-        throw new Error('Failed to load tests from DB.json');
+      console.log('🔄 Loading tests from DB (API first, then Firestore)...');
+
+      // Try API
+      try {
+        const response = await fetch('/api/tests/load-from-db');
+        const contentType = response.headers.get('content-type') || '';
+        if (response.ok && contentType.includes('application/json')) {
+          const data = await response.json();
+          const loaded = Array.isArray(data?.tests) ? data.tests : (data?.chemical_tests || []);
+          if (loaded.length > 0) {
+            console.log('✅ Loaded tests via API:', loaded.length);
+            setTests(loaded);
+            toast.success(
+              lang === 'ar'
+                ? `تم تحميل ${loaded.length} اختبار من قاعدة البيانات`
+                : `Loaded ${loaded.length} tests from database`
+            );
+            return;
+          }
+        } else {
+          console.warn('⚠️ API not available or non-JSON, will try Firestore client');
+        }
+      } catch (apiErr) {
+        console.warn('⚠️ API load failed, trying Firestore client...', apiErr);
       }
-      
-      const data = await response.json();
-      console.log('✅ Loaded tests from DB.json:', data.tests.length);
-      
-      setTests(data.tests);
-      toast.success(
-        lang === 'ar' 
-          ? `تم تحميل ${data.tests.length} اختبار من قاعدة البيانات`
-          : `Loaded ${data.tests.length} tests from database`
-      );
-    } catch (error) {
-      console.error('❌ Error loading tests:', error);
-      toast.error(
-        lang === 'ar' 
-          ? 'فشل في تحميل الاختبارات من قاعدة البيانات'
-          : 'Failed to load tests from database'
-      );
-      
-      // Fallback to empty array
+
+      // Fallback: Firestore client (works on static hosting)
+      try {
+        const snap = await getDoc(doc(db, 'config', 'chemical_tests'));
+        if (snap.exists()) {
+          const data: any = snap.data();
+          const loaded = Array.isArray(data?.chemical_tests) ? data.chemical_tests : [];
+          if (loaded.length > 0) {
+            console.log('✅ Loaded tests via Firestore client:', loaded.length);
+            setTests(loaded);
+            toast.success(
+              lang === 'ar'
+                ? `تم تحميل ${loaded.length} اختبار من قاعدة البيانات`
+                : `Loaded ${loaded.length} tests from database`
+            );
+            return;
+          }
+        }
+      } catch (fsErr) {
+        console.warn('⚠️ Firestore client load failed:', fsErr);
+      }
+
+      // Final fallback
+      console.warn('⚠️ No tests found, falling back to empty list');
       setTests([]);
     } finally {
       setLoading(false);
@@ -106,59 +135,65 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
   // Save tests to DB.json
   const saveTestsToDB = async (updatedTests: ChemicalTest[]) => {
     try {
-      console.log('🔄 Saving tests to DB.json...');
+      console.log('🔄 Saving tests (API first, then Firestore client fallback)...');
 
-      const response = await fetch('/api/tests/save-to-db', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ tests: updatedTests }),
-      });
+      // Try API first
+      try {
+        const response = await fetch('/api/tests/save-to-db', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tests: updatedTests }),
+        });
 
-      // Check if response is JSON (API available) or HTML (404 page)
-      const contentType = response.headers.get('content-type');
-      const isJsonResponse = contentType && contentType.includes('application/json');
+        const contentType = response.headers.get('content-type') || '';
+        const isJsonResponse = contentType.includes('application/json');
 
-      if (!isJsonResponse) {
-        console.warn('⚠️ API not available (static export mode) - using localStorage only');
+        if (response.ok && isJsonResponse) {
+          const result = await response.json();
+          console.log('✅ Saved via API:', result);
+          toast.success(
+            lang === 'ar'
+              ? `تم حفظ ${updatedTests.length} اختبار في قاعدة البيانات`
+              : `Saved ${updatedTests.length} tests to database`
+          );
+          return true;
+        }
+        console.warn('⚠️ API not available or non-JSON. Will try Firestore client. Status:', response.status);
+      } catch (apiErr: any) {
+        console.warn('⚠️ API save failed, trying Firestore client...', apiErr?.message || apiErr);
+      }
+
+      // Fallback: save directly to Firestore from client (works on static hosting)
+      try {
+        const payload: any = {
+          chemical_tests: updatedTests,
+          last_updated: new Date().toISOString(),
+          version: '1.0.0',
+          total_tests: updatedTests.length,
+        };
+        await setDoc(doc(db, 'config', 'chemical_tests'), payload, { merge: true });
+        console.log('✅ Saved via Firestore client');
         toast.success(
           lang === 'ar'
-            ? `تم حفظ ${updatedTests.length} اختبار محلياً`
-            : `Saved ${updatedTests.length} tests locally`
+            ? `تم حفظ ${updatedTests.length} اختبار في قاعدة البيانات`
+            : `Saved ${updatedTests.length} tests to database`
         );
         return true;
+      } catch (fsErr) {
+        console.error('❌ Firestore client save failed:', fsErr);
       }
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to save tests to DB.json');
-      }
-
-      const result = await response.json();
-      console.log('✅ Saved tests to DB.json:', result);
-
+      // Final fallback to localStorage
+      console.warn('⚠️ Falling back to localStorage save');
+      localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: updatedTests }));
       toast.success(
         lang === 'ar'
-          ? `تم حفظ ${updatedTests.length} اختبار في قاعدة البيانات`
-          : `Saved ${updatedTests.length} tests to database`
+          ? `تم حفظ ${updatedTests.length} اختبار محلياً`
+          : `Saved ${updatedTests.length} tests locally`
       );
-
       return true;
     } catch (error: any) {
       console.error('❌ Error saving tests:', error);
-
-      // Check if it's a JSON parsing error (HTML response)
-      if (error.message && error.message.includes('Unexpected token')) {
-        console.warn('⚠️ API not available (static export mode) - using localStorage only');
-        toast.success(
-          lang === 'ar'
-            ? `تم حفظ ${updatedTests.length} اختبار محلياً`
-            : `Saved ${updatedTests.length} tests locally`
-        );
-        return true;
-      }
-
       toast.error(
         lang === 'ar'
           ? 'فشل في حفظ الاختبارات في قاعدة البيانات'
@@ -176,15 +211,15 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
 
     try {
       console.log('🗑️ Deleting test:', testId);
-      
+
       const updatedTests = tests.filter(test => test.id !== testId);
-      
+
       // Save to DB.json
       const saved = await saveTestsToDB(updatedTests);
       if (saved) {
         setTests(updatedTests);
         toast.success(
-          lang === 'ar' 
+          lang === 'ar'
             ? 'تم حذف الاختبار بنجاح'
             : 'Test deleted successfully'
         );
@@ -192,7 +227,7 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
     } catch (error) {
       console.error('❌ Error deleting test:', error);
       toast.error(
-        lang === 'ar' 
+        lang === 'ar'
           ? 'فشل في حذف الاختبار'
           : 'Failed to delete test'
       );
@@ -204,23 +239,23 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
     try {
       const dataStr = JSON.stringify(tests, null, 2);
       const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-      
+
       const exportFileDefaultName = `chemical-tests-${new Date().toISOString().split('T')[0]}.json`;
-      
+
       const linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
-      
+
       toast.success(
-        lang === 'ar' 
+        lang === 'ar'
           ? 'تم تصدير الاختبارات بنجاح'
           : 'Tests exported successfully'
       );
     } catch (error) {
       console.error('❌ Error exporting tests:', error);
       toast.error(
-        lang === 'ar' 
+        lang === 'ar'
           ? 'فشل في تصدير الاختبارات'
           : 'Failed to export tests'
       );
@@ -237,13 +272,13 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
       try {
         const content = e.target?.result as string;
         const importedTests = JSON.parse(content);
-        
+
         if (!Array.isArray(importedTests)) {
           throw new Error('Invalid file format');
         }
 
         // Validate test structure
-        const validTests = importedTests.filter(test => 
+        const validTests = importedTests.filter(test =>
           test.id && test.method_name && test.method_name_ar
         );
 
@@ -261,7 +296,7 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
         if (saved) {
           setTests(updatedTests);
           toast.success(
-            lang === 'ar' 
+            lang === 'ar'
               ? `تم استيراد ${newTests.length} اختبار جديد`
               : `Imported ${newTests.length} new tests`
           );
@@ -269,27 +304,27 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
       } catch (error) {
         console.error('❌ Error importing tests:', error);
         toast.error(
-          lang === 'ar' 
+          lang === 'ar'
             ? 'فشل في استيراد الاختبارات'
             : 'Failed to import tests'
         );
       }
     };
     reader.readAsText(file);
-    
+
     // Reset input
     event.target.value = '';
   };
 
   // Filter tests
   const filteredTests = tests.filter(test => {
-    const matchesSearch = 
+    const matchesSearch =
       test.method_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       test.method_name_ar.includes(searchTerm) ||
       test.id.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesCategory = selectedCategory === 'all' || test.category === selectedCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -320,29 +355,29 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
             {lang === 'ar' ? 'إدارة الاختبارات المحسنة' : 'Enhanced Test Management'}
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            {lang === 'ar' 
+            {lang === 'ar'
               ? `إدارة ${tests.length} اختبار كيميائي`
               : `Manage ${tests.length} chemical tests`
             }
           </p>
         </div>
-        
+
         <div className="flex flex-wrap gap-2">
           <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
             <PlusIcon className="h-4 w-4" />
             {lang === 'ar' ? 'إضافة اختبار' : 'Add Test'}
           </Button>
-          
+
           <Button onClick={exportTests} variant="outline" className="flex items-center gap-2">
             <ArrowDownTrayIcon className="h-4 w-4" />
             {lang === 'ar' ? 'تصدير' : 'Export'}
           </Button>
-          
+
           <label className="cursor-pointer">
             <Button variant="outline" className="flex items-center gap-2" asChild>
               <span>
                 <ArrowUpTrayIcon className="h-4 w-4" />
-                {lang === 'ar' ? 'استيراد' : 'Import'}
+                {lang === 'ar' ? 'استيراد ملف' : 'Import File'}
               </span>
             </Button>
             <input
@@ -352,13 +387,82 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
               className="hidden"
             />
           </label>
-          
+
+          <Button onClick={async () => {
+            try {
+              const res = await fetch('/data/Db.json', { cache: 'no-store' });
+              if (!res.ok) throw new Error('Failed to fetch Db.json');
+              const json = await res.json();
+              const list = Array.isArray(json?.chemical_tests) ? json.chemical_tests : (Array.isArray(json) ? json : []);
+              if (list.length === 0) throw new Error('No tests found in Db.json');
+              setPendingImport(list as ChemicalTest[]);
+              setImportOpen(true);
+            } catch (e: any) {
+              console.error('Import from Db.json failed', e);
+              toast.error(lang === 'ar' ? 'فشل استيراد Db.json' : 'Failed to import Db.json');
+            }
+          }} variant="outline" className="flex items-center gap-2">
+            <DocumentDuplicateIcon className="h-4 w-4" />
+            {lang === 'ar' ? 'استيراد من Db.json' : 'Import from Db.json'}
+          </Button>
+
           <Button onClick={loadTestsFromDB} variant="outline" className="flex items-center gap-2">
             <DocumentDuplicateIcon className="h-4 w-4" />
             {lang === 'ar' ? 'إعادة تحميل' : 'Reload'}
           </Button>
         </div>
       </div>
+
+
+      {/* Import Preview Dialog */}
+      <Dialog open={importOpen} onOpenChange={setImportOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {lang === 'ar' ? 'تأكيد الاستيراد من Db.json' : 'Confirm import from Db.json'}
+            </DialogTitle>
+            <DialogDescription>
+              {lang === 'ar'
+                ? `سيتم استيراد ${pendingImport.length} اختبار.`
+                : `You are about to import ${pendingImport.length} tests.`}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="max-h-60 overflow-auto text-sm space-y-2">
+            <div className="text-muted-foreground">
+              {lang === 'ar' ? 'معاينة أول العناصر:' : 'Preview of first items:'}
+            </div>
+            <ul className="list-disc pl-5 rtl:pl-0 rtl:pr-5">
+              {pendingImport.slice(0, 10).map((t: any, i: number) => (
+                <li key={t?.id || i}>
+                  {(lang === 'ar' ? (t?.method_name_ar || t?.method_name) : (t?.method_name || t?.method_name_ar)) || t?.id || (lang === 'ar' ? 'بدون اسم' : 'Untitled')}
+                </li>
+              ))}
+            </ul>
+            {pendingImport.length > 10 && (
+              <p className="text-xs text-gray-500">
+                {lang === 'ar' ? `و${pendingImport.length - 10} عنصر إضافي...` : `and ${pendingImport.length - 10} more...`}
+              </p>
+            )}
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setImportOpen(false)}>
+              {lang === 'ar' ? 'إلغاء' : 'Cancel'}
+            </Button>
+            <Button onClick={async () => {
+              const saved = await saveTestsToDB(pendingImport);
+              if (saved) {
+                setTests(pendingImport);
+                toast.success(lang === 'ar' ? `تم الاستيراد من Db.json (${pendingImport.length}) وحفظه` : `Imported from Db.json (${pendingImport.length}) and saved`);
+                setImportOpen(false);
+              }
+            }}>
+              {lang === 'ar' ? 'تأكيد الاستيراد والحفظ' : 'Confirm import & save'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Search and Filter */}
       <Card>
@@ -373,7 +477,7 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
                 className="pl-10 rtl:pr-10 rtl:pl-3"
               />
             </div>
-            
+
             <div className="flex items-center gap-2">
               <FunnelIcon className="h-4 w-4 text-gray-400" />
               <select
@@ -412,7 +516,7 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
                 )}
               </div>
             </CardHeader>
-            
+
             <CardContent>
               <div className="space-y-3">
                 {test.description && (
@@ -420,7 +524,7 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
                     {lang === 'ar' ? test.description_ar : test.description}
                   </p>
                 )}
-                
+
                 {test.chemical_components && test.chemical_components.length > 0 && (
                   <div>
                     <p className="text-xs font-medium text-gray-500 mb-1">
@@ -440,7 +544,7 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
                     </div>
                   </div>
                 )}
-                
+
                 <div className="flex justify-between items-center pt-2">
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" onClick={() => setEditingTest(test)}>
@@ -450,9 +554,9 @@ export default function EnhancedTestManagement({ lang }: EnhancedTestManagementP
                       <TrashIcon className="h-3 w-3" />
                     </Button>
                   </div>
-                  
+
                   {test.difficulty && (
-                    <Badge 
+                    <Badge
                       variant={
                         test.difficulty === 'basic' ? 'default' :
                         test.difficulty === 'intermediate' ? 'secondary' : 'destructive'

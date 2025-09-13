@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Language } from '@/types';
 import { Button } from '@/components/ui/button';
 import EnhancedTestManagement from '@/components/admin/EnhancedTestManagement';
@@ -9,6 +9,11 @@ import DataMigrationPanel from '@/components/admin/DataMigrationPanel';
 import SystemStatistics from '@/components/admin/SystemStatistics';
 import TextEditorModal from '@/components/admin/TextEditorModal';
 
+import { useRouter } from 'next/navigation';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { Badge } from '@/components/ui/badge';
 
 interface TestsManagementClientProps {
   lang: Language;
@@ -17,6 +22,32 @@ interface TestsManagementClientProps {
 export default function TestsManagementClient({ lang }: TestsManagementClientProps) {
   const isRTL = lang === 'ar';
   const [activeView, setActiveView] = useState<'overview' | 'tests' | 'results' | 'migration' | 'statistics'>('overview');
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [userRole, setUserRole] = useState<string>('');
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      setUserEmail(u?.email || '');
+      if (u?.uid) {
+        try {
+          const snap = await getDoc(doc(db, 'users', u.uid));
+          if (snap.exists()) {
+            const data: any = snap.data();
+            setUserRole(data?.role || '');
+          } else {
+            setUserRole('');
+          }
+        } catch (e) {
+          console.warn('Failed to load user role', e);
+          setUserRole('');
+        }
+      } else {
+        setUserRole('');
+      }
+    });
+    return () => unsub();
+  }, []);
 
 
   const renderContent = () => {
@@ -273,6 +304,33 @@ export default function TestsManagementClient({ lang }: TestsManagementClientPro
                   isRTL={isRTL}
                   lang={lang}
                 />
+                <div className="flex items-center gap-2 pl-2 border-l rtl:border-l-0 rtl:border-r border-gray-200 dark:border-gray-700 ml-2 rtl:ml-0 rtl:mr-2">
+                  {userEmail && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 dark:text-gray-400" title={userEmail}>
+                        {userEmail}
+                      </span>
+                      {userRole && (
+                        <Badge variant={userRole === 'super_admin' ? 'destructive' : 'secondary'}>
+                          {userRole === 'super_admin' ? (isRTL ? 'مشرف أعلى' : 'Super Admin') : (isRTL ? 'مشرف' : 'Admin')}
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                  <Button
+                    variant="outline"
+                    onClick={async () => {
+                      try {
+                        await signOut(auth);
+                        router.push(`/${lang}/admin/login`);
+                      } catch (e) {
+                        console.error('Logout error', e);
+                      }
+                    }}
+                  >
+                    {isRTL ? 'تسجيل الخروج' : 'Log out'}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

@@ -24,6 +24,8 @@ import toast from 'react-hot-toast';
 import { databaseColorTestService } from '@/lib/database-color-test-service';
 import { getChemicalTestsLocal } from '@/lib/local-data-service';
 import { AdminErrorBoundary } from './AdminErrorBoundary';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 interface TestManagementProps {
   lang: Language;
@@ -269,6 +271,22 @@ export function TestManagement({ lang }: TestManagementProps) {
         }
       }
 
+      // Try Firestore client before local service (works on static hosting)
+      try {
+        const snap = await getDoc(doc(db, 'config', 'chemical_tests'));
+        if (snap.exists()) {
+          const data: any = snap.data();
+          const fsTests = Array.isArray(data?.chemical_tests) ? data.chemical_tests : [];
+          if (fsTests.length > 0) {
+            console.log(`✅ تم تحميل ${fsTests.length} اختبار من Firestore (client)`);
+            setTests(fsTests);
+            return;
+          }
+        }
+      } catch (fsErr) {
+        console.warn('⚠️ Firestore client load failed', fsErr);
+      }
+
       // Fallback to local data service (same as other components)
       try {
         const localTests = getChemicalTestsLocal();
@@ -346,16 +364,15 @@ export function TestManagement({ lang }: TestManagementProps) {
         const contentType = response.headers.get('content-type');
         const isJsonResponse = contentType && contentType.includes('application/json');
 
-        if (!isJsonResponse) {
-          console.warn('⚠️ API not available (static export mode) - using localStorage only');
-          toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
-          return;
-        }
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-          console.warn('⚠️ API save failed:', errorData);
-          toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
+        if (!isJsonResponse || !response.ok) {
+          console.warn('⚠️ API not available or failed - trying Firestore client save');
+          try {
+            await setDoc(doc(db, 'config', 'chemical_tests'), unifiedData, { merge: true });
+            console.log(`✅ تم حفظ ${updatedTests.length} اختبار في Firestore (client)`);
+          } catch (fsErr) {
+            console.warn('⚠️ Firestore client save failed:', fsErr);
+            toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
+          }
           return;
         }
 
@@ -381,17 +398,16 @@ export function TestManagement({ lang }: TestManagementProps) {
 
       } catch (apiError: any) {
         console.error('❌ Save error:', apiError);
-
-        // Check if it's a JSON parsing error (HTML response)
-        if (apiError.message && apiError.message.includes('Unexpected token')) {
-          console.warn('⚠️ API not available (static export mode) - using localStorage only');
-          toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
-        } else {
-          console.error('❌ فشل في حفظ البيانات في ملفات قاعدة البيانات:', apiError);
-          toast.warning('تم الحفظ محلياً فقط - فشل في حفظ ملفات قاعدة البيانات');
+        // Attempt Firestore client save
+        try {
+          await setDoc(doc(db, 'config', 'chemical_tests'), unifiedData, { merge: true });
+          console.log(`✅ تم حفظ ${updatedTests.length} اختبار في Firestore (client)`);
+          toast.success(`تم حفظ ${updatedTests.length} اختبار بنجاح في قاعدة البيانات`);
+        } catch (fsErr) {
+          console.error('❌ Firestore client save failed:', fsErr);
+          toast.warning('تم الحفظ محلياً فقط - فشل في حفظ قاعدة البيانات');
         }
         // Don't throw here - localStorage save was successful
-        // The user can still work with the data, just the files won't be updated
       }
     } catch (error) {
       console.error('❌ Error saving tests:', error);

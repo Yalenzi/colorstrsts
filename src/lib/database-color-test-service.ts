@@ -149,7 +149,28 @@ class DatabaseColorTestService {
         }
       }
 
-      // If all paths fail, use fallback data
+      // Try Firestore client before final fallback (works on static hosting)
+      try {
+        if (typeof window !== 'undefined') {
+          const { db } = await import('@/lib/firebase');
+          const { getDoc, doc } = await import('firebase/firestore');
+          const snap = await getDoc(doc(db, 'config', 'chemical_tests'));
+          if (snap.exists()) {
+            const data: any = snap.data();
+            const fsTests = Array.isArray(data?.chemical_tests) ? data.chemical_tests : [];
+            if (fsTests.length > 0) {
+              this.tests = fsTests;
+              localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: fsTests }));
+              console.log(`✅ Loaded ${fsTests.length} chemical tests from Firestore client`);
+              return;
+            }
+          }
+        }
+      } catch (fsErr: any) {
+        console.warn('⚠️ Firestore client load failed:', fsErr?.message || fsErr);
+      }
+
+      // If all sources fail, use fallback data
       console.warn('⚠️ All data sources failed, using fallback data');
       this.tests = this.getFallbackTests();
       localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: this.tests }));

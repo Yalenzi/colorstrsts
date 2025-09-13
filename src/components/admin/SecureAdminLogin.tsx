@@ -9,14 +9,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  ShieldCheckIcon, 
-  EyeIcon, 
+import {
+  ShieldCheckIcon,
+  EyeIcon,
   EyeSlashIcon,
   ExclamationTriangleIcon,
   LockClosedIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth';
+import { auth, db } from '@/lib/firebase';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 // Add some animations and better UX
 const fadeIn = {
@@ -38,7 +41,7 @@ export default function SecureAdminLogin({ lang }: SecureAdminLoginProps) {
   const [attempts, setAttempts] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const [lockoutTime, setLockoutTime] = useState(0);
-  
+
   const router = useRouter();
   const isRTL = lang === 'ar';
 
@@ -78,7 +81,7 @@ export default function SecureAdminLogin({ lang }: SecureAdminLoginProps) {
   const checkLockoutStatus = () => {
     const lockoutEnd = localStorage.getItem('admin_lockout_time');
     const storedAttempts = localStorage.getItem('admin_attempts');
-    
+
     if (lockoutEnd) {
       const remaining = parseInt(lockoutEnd) - Date.now();
       if (remaining > 0) {
@@ -90,7 +93,7 @@ export default function SecureAdminLogin({ lang }: SecureAdminLoginProps) {
         localStorage.removeItem('admin_attempts');
       }
     }
-    
+
     if (storedAttempts) {
       setAttempts(parseInt(storedAttempts));
     }
@@ -98,7 +101,7 @@ export default function SecureAdminLogin({ lang }: SecureAdminLoginProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (isLocked) {
       setError(isRTL ? 'الحساب مقفل مؤقتاً' : 'Account temporarily locked');
       return;
@@ -114,32 +117,32 @@ export default function SecureAdminLogin({ lang }: SecureAdminLoginProps) {
 
     try {
       await signInAdmin(email, password);
-      
+
       // Clear attempts on successful login
       localStorage.removeItem('admin_attempts');
       localStorage.removeItem('admin_lockout_time');
       setAttempts(0);
-      
+
       toast.success(isRTL ? 'تم تسجيل الدخول بنجاح' : 'Login successful');
       router.push(`/${lang}/admin`);
-      
+
     } catch (error: any) {
       console.error('Admin login error:', error);
-      
+
       // Handle failed login
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
       localStorage.setItem('admin_attempts', newAttempts.toString());
-      
+
       const maxAttempts = 5;
-      
+
       if (newAttempts >= maxAttempts) {
         const lockoutDuration = 15 * 60 * 1000; // 15 minutes
         const lockoutEnd = Date.now() + lockoutDuration;
         localStorage.setItem('admin_lockout_time', lockoutEnd.toString());
         setIsLocked(true);
         setLockoutTime(Math.ceil(lockoutDuration / 1000));
-        
+
         setError(isRTL ? 'تم قفل الحساب لمدة 15 دقيقة بسبب المحاولات المتعددة' : 'Account locked for 15 minutes due to multiple failed attempts');
       } else {
         setError(error.message || (isRTL ? 'خطأ في تسجيل الدخول' : 'Login failed'));
@@ -171,6 +174,64 @@ export default function SecureAdminLogin({ lang }: SecureAdminLoginProps) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true);
+      setError('');
+
+      const provider = new GoogleAuthProvider();
+      provider.addScope('email');
+      provider.addScope('profile');
+      provider.setCustomParameters({ prompt: 'select_account' });
+
+      let result;
+      try {
+        result = await signInWithPopup(auth, provider);
+      } catch (popupError: any) {
+        // fallback to redirect on popup issues
+        if (
+          popupError.code === 'auth/popup-blocked' ||
+          popupError.code === 'auth/popup-closed-by-user' ||
+          popupError.code === 'auth/cancelled-popup-request'
+        ) {
+          await signInWithRedirect(auth, provider);
+          return;
+        }
+        throw popupError;
+      }
+
+      if (result && result.user) {
+        const u = result.user;
+        // Ensure admin profile in users collection for AdminAuthGuard
+        const allowedEmails = ['aburakan4551@gmail.com', 'admin@colorstest.com'];
+        const isSuper = allowedEmails.includes(u.email || '');
+        await setDoc(
+          doc(db, 'users', u.uid),
+          {
+            uid: u.uid,
+            email: u.email || '',
+            displayName: u.displayName || (u.email ? u.email.split('@')[0] : ''),
+            role: isSuper ? 'super_admin' : 'admin',
+            isActive: true,
+            emailVerified: true,
+            lastLoginAt: serverTimestamp(),
+            createdAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+
+        toast.success(isRTL ? 'تسجيل دخول Google ناجح' : 'Google Sign-In successful');
+        router.push(`/${lang}/admin/tests`);
+      }
+    } catch (err: any) {
+      console.error('Google Sign-In error:', err);
+      setError(err?.message || (isRTL ? 'فشل تسجيل دخول Google' : 'Google Sign-In failed'));
+      toast.error(isRTL ? 'فشل تسجيل دخول Google' : 'Google Sign-In failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -222,6 +283,18 @@ export default function SecureAdminLogin({ lang }: SecureAdminLoginProps) {
                 </AlertDescription>
               </Alert>
             )}
+
+            {/* Google Sign-In */}
+            <div className="mb-4">
+              <Button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={loading || isLocked}
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5"
+              >
+                {isRTL ? 'تسجيل دخول عبر Google' : 'Sign in with Google'}
+              </Button>
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Field */}
