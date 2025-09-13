@@ -226,7 +226,22 @@ export function TestManagement({ lang }: TestManagementProps) {
     try {
       console.log('🔄 Loading tests for admin management...');
 
-      // Force reload from database service to get latest data
+      // First try to load directly from Db.json
+      try {
+        const response = await fetch('/data/Db.json');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.chemical_tests && data.chemical_tests.length > 0) {
+            console.log(`✅ تم تحميل ${data.chemical_tests.length} اختبار من Db.json`);
+            setTests(data.chemical_tests);
+            return;
+          }
+        }
+      } catch (dbError) {
+        console.warn('⚠️ Could not load from Db.json, trying database service');
+      }
+
+      // Fallback to database service
       try {
         await databaseColorTestService.forceReload();
         const testsFromService = await databaseColorTestService.getAllTests();
@@ -493,6 +508,7 @@ export function TestManagement({ lang }: TestManagementProps) {
 
     try {
       let updatedTests: ChemicalTest[];
+      let savedTest: ChemicalTest;
 
       if (isCreating) {
         // Generate new ID
@@ -504,6 +520,7 @@ export function TestManagement({ lang }: TestManagementProps) {
           updated_at: new Date().toISOString()
         };
         updatedTests = [...tests, newTest];
+        savedTest = newTest;
         console.log(`✅ إنشاء اختبار جديد: ${newTest.method_name}`);
       } else {
         // Update existing test - with null check
@@ -520,6 +537,7 @@ export function TestManagement({ lang }: TestManagementProps) {
         updatedTests = tests.map(test =>
           test.id === selectedTest.id ? updatedTest : test
         );
+        savedTest = updatedTest;
         console.log(`✅ تحديث اختبار موجود: ${updatedTest.method_name}`);
       }
 
@@ -534,7 +552,7 @@ export function TestManagement({ lang }: TestManagementProps) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            testData: isCreating ? updatedTests[updatedTests.length - 1] : updatedTest
+            testData: savedTest
           }),
         });
 

@@ -45,6 +45,7 @@ interface SecuritySettings {
   // Authentication Policies
   authentication: {
     requireEmailVerification: boolean;
+    twoFactorEnabled: boolean;
     passwordMinLength: number;
     passwordRequireUppercase: boolean;
     passwordRequireLowercase: boolean;
@@ -130,6 +131,7 @@ export function SecuritySettings({ lang }: SecuritySettingsProps) {
   const [settings, setSettings] = useState<SecuritySettings>({
     authentication: {
       requireEmailVerification: true,
+      twoFactorEnabled: true,
       passwordMinLength: 8,
       passwordRequireUppercase: true,
       passwordRequireLowercase: true,
