@@ -33,37 +33,48 @@ interface PerformanceSettings {
   cacheDuration: number; // in seconds
   cacheSize: number; // in MB
   cacheType: 'memory' | 'disk' | 'hybrid';
-  
+  cacheStrategy: 'lru' | 'lfu' | 'fifo';
+
   // Database Optimization
   queryOptimization: boolean;
   indexOptimization: boolean;
   connectionPoolSize: number;
   queryTimeout: number;
-  
+  batchSize: number;
+
   // Image Optimization
   imageCompression: boolean;
   imageQuality: number; // 1-100
   imageResize: boolean;
   maxImageSize: number; // in MB
   supportedFormats: string[];
+  webpEnabled: boolean;
+  lazyLoading: boolean;
   
   // CDN Configuration
   cdnEnabled: boolean;
   cdnProvider: 'cloudflare' | 'aws' | 'custom';
   cdnUrl: string;
   cdnCacheControl: string;
-  
+
   // Performance Monitoring
   monitoringEnabled: boolean;
   performanceThreshold: number; // in ms
   alertsEnabled: boolean;
   reportingInterval: number; // in minutes
-  
+
   // Resource Limits
   maxConcurrentUsers: number;
   maxRequestsPerMinute: number;
   maxFileUploads: number;
   memoryLimit: number; // in MB
+
+  // Advanced Settings
+  compressionEnabled: boolean;
+  minifyEnabled: boolean;
+  preloadEnabled: boolean;
+  http2Enabled: boolean;
+  sslEnabled: boolean;
 }
 
 interface PerformanceSettingsProps {
@@ -76,15 +87,19 @@ export function PerformanceSettings({ lang }: PerformanceSettingsProps) {
     cacheDuration: 3600,
     cacheSize: 100,
     cacheType: 'hybrid',
+    cacheStrategy: 'lru',
     queryOptimization: true,
     indexOptimization: true,
     connectionPoolSize: 10,
     queryTimeout: 30,
+    batchSize: 100,
     imageCompression: true,
     imageQuality: 80,
     imageResize: true,
     maxImageSize: 5,
     supportedFormats: ['jpg', 'png', 'webp'],
+    webpEnabled: true,
+    lazyLoading: true,
     cdnEnabled: false,
     cdnProvider: 'cloudflare',
     cdnUrl: '',
@@ -96,7 +111,12 @@ export function PerformanceSettings({ lang }: PerformanceSettingsProps) {
     maxConcurrentUsers: 1000,
     maxRequestsPerMinute: 100,
     maxFileUploads: 10,
-    memoryLimit: 512
+    memoryLimit: 512,
+    compressionEnabled: true,
+    minifyEnabled: true,
+    preloadEnabled: false,
+    http2Enabled: true,
+    sslEnabled: true
   });
 
   const [loading, setLoading] = useState(false);

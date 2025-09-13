@@ -3,8 +3,8 @@
     "id": "marquis-step-1",
     "test_id": "marquis-test",
     "step_number": 1,
-    "instruction": "• Wear chemical-resistant gloves\n• Wear protective safety goggles\n• Ensure excellent ventilation\n• Remove flammable materials from area\n• Have first aid materials ready",
-    "instruction_ar": "• ارتدِ القفازات المقاومة للمواد الكيميائية\n• ارتدِ نظارات الأمان الواقية\n• تأكد من وجود تهوية ممتازة\n• أبعد المواد القابلة للاشتعال من المنطقة\n• تأكد من وجود مواد الإسعافات الأولية",
+    "instruction": "• Wear chemical-resistant gloves\n• Wear protective safety goggles\n• Ensure excellent ventilation\n• Remove flammable materials from area\n• Have first aid materials ready\n• Work in fume hood if available",
+    "instruction_ar": "• ارتدِ القفازات المقاومة للمواد الكيميائية\n• ارتدِ نظارات الأمان الواقية\n• تأكد من وجود تهوية ممتازة\n• أبعد المواد القابلة للاشتعال من المنطقة\n• تأكد من وجود مواد الإسعافات الأولية\n• اعمل في خزانة الأبخرة إن أمكن",
     "safety_warning": "DANGER: Marquis reagent contains concentrated sulfuric acid - may cause severe chemical burns",
     "safety_warning_ar": "خطر: كاشف ماركيز يحتوي على حمض الكبريتيك المركز - قد يسبب حروق كيميائية شديدة",
     "icon": "ShieldCheckIcon"
@@ -13,16 +13,6 @@
     "id": "marquis-step-2",
     "test_id": "marquis-test",
     "step_number": 2,
-    "instruction": "Ensure excellent ventilation and remove flammable materials from area",
-    "instruction_ar": "تأكد من وجود تهوية ممتازة وأبعد المواد القابلة للاشتعال من المنطقة",
-    "safety_warning": "Work in fume hood if available - never work in closed spaces",
-    "safety_warning_ar": "اعمل في خزانة الأبخرة إن أمكن - لا تعمل أبداً في أماكن مغلقة",
-    "icon": "ExclamationTriangleIcon"
-  },
-  {
-    "id": "marquis-step-3",
-    "test_id": "marquis-test",
-    "step_number": 3,
     "instruction": "Place rice grain-sized sample on clean white ceramic plate using tweezers",
     "instruction_ar": "ضع عينة بحجم حبة الأرز على طبق خزفي أبيض نظيف باستخدام ملقط",
     "safety_warning": "NEVER use plastic surfaces - they may react with reagents",
@@ -30,9 +20,9 @@
     "icon": "BeakerIcon"
   },
   {
-    "id": "marquis-step-4",
+    "id": "marquis-step-3",
     "test_id": "marquis-test",
-    "step_number": 4,
+    "step_number": 3,
     "instruction": "Add exactly ONE drop of Marquis reagent using clean glass dropper at 45-degree angle",
     "instruction_ar": "أضف قطرة واحدة بالضبط من كاشف ماركيز باستخدام قطارة زجاجية نظيفة بزاوية 45 درجة",
     "safety_warning": "MORE than one drop will affect accuracy - hold dropper steady",
@@ -40,11 +30,11 @@
     "icon": "EyeDropperIcon"
   },
   {
-    "id": "marquis-step-5",
+    "id": "marquis-step-4",
     "test_id": "marquis-test",
-    "step_number": 5,
-    "instruction": "Record INITIAL color change within first 15-30 seconds - do not wait longer",
-    "instruction_ar": "سجل تغيير اللون الأولي خلال أول 15-30 ثانية - لا تنتظر أكثر",
+    "step_number": 4,
+    "instruction": "Record INITIAL color change within first 15-30 seconds and compare with reference chart. Document findings immediately and take photo if possible for accurate documentation.",
+    "instruction_ar": "سجل تغيير اللون الأولي خلال أول 15-30 ثانية وقارن مع جدول المرجع. وثق النتائج فوراً والتقط صورة إن أمكن للتوثيق الدقيق.",
     "safety_warning": "IMPORTANT: Initial color is most accurate - later changes may be misleading",
     "safety_warning_ar": "مهم: اللون الأولي هو الأكثر دقة - التغيرات اللاحقة قد تكون مضللة",
     "icon": "EyeIcon"

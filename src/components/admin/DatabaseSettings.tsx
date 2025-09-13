@@ -38,6 +38,10 @@ interface DatabaseStats {
   readsToday: number;
   writesToday: number;
   deletesToday: number;
+  activeConnections: number;
+  avgResponseTime: number; // in ms
+  errorRate: number; // percentage
+  uptime: number; // in hours
 }
 
 interface BackupSettings {
@@ -47,6 +51,9 @@ interface BackupSettings {
   includeCollections: string[];
   compressionEnabled: boolean;
   encryptionEnabled: boolean;
+  autoBackup: boolean;
+  backupLocation: 'local' | 'cloud' | 'both';
+  maxBackupSize: number; // in MB
 }
 
 interface DatabaseSettings {
@@ -114,7 +121,10 @@ export function DatabaseSettings({ lang }: DatabaseSettingsProps) {
       retentionDays: 30,
       includeCollections: ['users', 'tests', 'results', 'subscriptions'],
       compressionEnabled: true,
-      encryptionEnabled: true
+      encryptionEnabled: true,
+      autoBackup: true,
+      backupLocation: 'both',
+      maxBackupSize: 500
     },
     monitoring: {
       enabled: true,
@@ -139,7 +149,11 @@ export function DatabaseSettings({ lang }: DatabaseSettingsProps) {
     storageLimit: 1024,
     readsToday: 0,
     writesToday: 0,
-    deletesToday: 0
+    deletesToday: 0,
+    activeConnections: 0,
+    avgResponseTime: 0,
+    errorRate: 0,
+    uptime: 0
   });
 
   const [loading, setLoading] = useState(false);
@@ -279,7 +293,11 @@ export function DatabaseSettings({ lang }: DatabaseSettingsProps) {
         storageLimit: 1024,
         readsToday: Math.floor(Math.random() * 5000) + 1000,
         writesToday: Math.floor(Math.random() * 500) + 100,
-        deletesToday: Math.floor(Math.random() * 50) + 10
+        deletesToday: Math.floor(Math.random() * 50) + 10,
+        activeConnections: Math.floor(Math.random() * 50) + 10,
+        avgResponseTime: Math.floor(Math.random() * 200) + 50,
+        errorRate: Math.floor(Math.random() * 5),
+        uptime: Math.floor(Math.random() * 720) + 24
       });
     } catch (error) {
       console.error('Error loading database stats:', error);

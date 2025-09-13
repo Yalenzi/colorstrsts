@@ -32,10 +32,15 @@ import {
 interface NotificationTemplate {
   id: string;
   name: string;
+  name_ar: string;
   subject: string;
+  subject_ar: string;
   content: string;
+  content_ar: string;
   type: 'email' | 'sms' | 'push';
   enabled: boolean;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  variables: string[];
 }
 
 interface NotificationSettings {
@@ -71,6 +76,10 @@ interface NotificationSettings {
     paymentFailure: boolean;
     systemMaintenance: boolean;
     securityAlert: boolean;
+    dataBackup: boolean;
+    systemError: boolean;
+    lowStorage: boolean;
+    highTraffic: boolean;
   };
   
   // Scheduling
@@ -123,7 +132,11 @@ export function NotificationSettings({ lang }: NotificationSettingsProps) {
       paymentSuccess: true,
       paymentFailure: true,
       systemMaintenance: true,
-      securityAlert: true
+      securityAlert: true,
+      dataBackup: true,
+      systemError: true,
+      lowStorage: false,
+      highTraffic: false
     },
     quietHours: {
       enabled: false,

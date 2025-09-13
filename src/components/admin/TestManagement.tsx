@@ -226,8 +226,9 @@ export function TestManagement({ lang }: TestManagementProps) {
     try {
       console.log('🔄 Loading tests for admin management...');
 
-      // Try to load from the database service first (same as other components)
+      // Force reload from database service to get latest data
       try {
+        await databaseColorTestService.forceReload();
         const testsFromService = await databaseColorTestService.getAllTests();
         if (testsFromService && testsFromService.length > 0) {
           console.log(`✅ تم تحميل ${testsFromService.length} اختبار بنجاح من خدمة قاعدة البيانات`);
@@ -235,7 +236,22 @@ export function TestManagement({ lang }: TestManagementProps) {
           return;
         }
       } catch (serviceError) {
-        console.warn('⚠️ Could not load from database service, trying local data service');
+        console.warn('⚠️ Could not load from database service, trying API fallback');
+
+        // Try to load from API as fallback
+        try {
+          const response = await fetch('/api/tests/load-from-db');
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.tests && data.tests.length > 0) {
+              console.log(`✅ تم تحميل ${data.tests.length} اختبار من API`);
+              setTests(data.tests);
+              return;
+            }
+          }
+        } catch (apiError) {
+          console.warn('⚠️ API fallback failed, trying local data service');
+        }
       }
 
       // Fallback to local data service (same as other components)
@@ -250,12 +266,22 @@ export function TestManagement({ lang }: TestManagementProps) {
         console.warn('⚠️ Could not load from local data service');
       }
 
-      // Load from localStorage as last resort
-      const savedTests = localStorage.getItem('chemical_tests_db');
-      if (savedTests) {
-        const parsedTests = JSON.parse(savedTests);
-        console.log(`✅ تم تحميل ${parsedTests.length} اختبار من التخزين المحلي`);
-        setTests(parsedTests);
+      // Final fallback to localStorage with multiple keys
+      const storedTests = localStorage.getItem('chemical_tests_admin') ||
+                         localStorage.getItem('chemical_tests_data') ||
+                         localStorage.getItem('chemical_tests_db') ||
+                         localStorage.getItem('database_color_tests');
+
+      if (storedTests) {
+        try {
+          const parsedData = JSON.parse(storedTests);
+          const testsArray = Array.isArray(parsedData) ? parsedData : parsedData.chemical_tests || [];
+          console.log(`✅ تم تحميل ${testsArray.length} اختبار من localStorage`);
+          setTests(testsArray);
+        } catch (parseError) {
+          console.error('❌ Error parsing stored tests:', parseError);
+          setTests([]);
+        }
       } else {
         console.warn('⚠️ No tests found in any data source');
         setTests([]);
@@ -279,10 +305,11 @@ export function TestManagement({ lang }: TestManagementProps) {
         total_tests: updatedTests.length
       };
 
-      // Save to localStorage with unified structure
+      // Save to localStorage with unified structure - multiple keys for compatibility
       localStorage.setItem('chemical_tests_db', JSON.stringify(updatedTests));
       localStorage.setItem('chemical_tests_data', JSON.stringify(unifiedData));
       localStorage.setItem('database_color_tests', JSON.stringify(updatedTests));
+      localStorage.setItem('chemical_tests_admin', JSON.stringify(unifiedData));
 
       console.log(`💾 تم حفظ ${updatedTests.length} اختبار في التخزين المحلي`);
 
@@ -311,7 +338,8 @@ export function TestManagement({ lang }: TestManagementProps) {
         }
 
         if (!response.ok) {
-          console.warn('⚠️ API save failed, using localStorage only');
+          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+          console.warn('⚠️ API save failed:', errorData);
           toast.success(`تم حفظ ${updatedTests.length} اختبار محلياً`);
           return;
         }
@@ -319,17 +347,24 @@ export function TestManagement({ lang }: TestManagementProps) {
         const result = await response.json();
         console.log(`✅ تم حفظ ${result.count || updatedTests.length} اختبار في Db.json`);
 
-        // Force reload of data services
+        // Force reload of data services to ensure sync
         try {
           await databaseColorTestService.forceReload();
           console.log('🔄 تم إعادة تحميل خدمة قاعدة البيانات');
+
+          // Also force reload of local data service
+          if (typeof window !== 'undefined') {
+            const { forceReloadLocalStorage } = await import('@/lib/local-data-service');
+            forceReloadLocalStorage();
+            console.log('🔄 تم إعادة تحميل الخدمة المحلية');
+          }
         } catch (reloadError) {
-          console.warn('⚠️ فشل في إعادة تحميل خدمة قاعدة البيانات:', reloadError);
+          console.warn('⚠️ فشل في إعادة تحميل خدمات البيانات:', reloadError);
         }
 
-        toast.success(`تم حفظ ${updatedTests.length} اختبار بنجاح`);
+        toast.success(`تم حفظ ${updatedTests.length} اختبار بنجاح في قاعدة البيانات`);
 
-      } catch (apiError) {
+      } catch (apiError: any) {
         console.error('❌ Save error:', apiError);
 
         // Check if it's a JSON parsing error (HTML response)
@@ -490,6 +525,26 @@ export function TestManagement({ lang }: TestManagementProps) {
 
       setTests(updatedTests);
       await saveTestsToStorage(updatedTests);
+
+      // Also save individual test via API for better reliability
+      try {
+        const response = await fetch('/api/test-save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            testData: isCreating ? updatedTests[updatedTests.length - 1] : updatedTest
+          }),
+        });
+
+        if (!response.ok) {
+          console.warn('API save failed, but localStorage save succeeded');
+        }
+      } catch (apiError) {
+        console.warn('API save error:', apiError);
+      }
+
       setIsEditing(false);
       setSelectedTest(null);
       toast.success(t.saveSuccess);
