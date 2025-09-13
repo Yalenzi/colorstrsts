@@ -73,7 +73,32 @@ class DatabaseColorTestService {
     try {
       console.log('🔄 Loading chemical tests from Db.json...');
 
-      // Try to load from localStorage first (for performance)
+      // Try API first to ensure live data across public and admin
+      try {
+        const apiRes = await fetch('/api/tests/load-from-db');
+        const contentType = apiRes.headers.get('content-type') || '';
+        const isJson = contentType.includes('application/json');
+        if (apiRes.ok && isJson) {
+          const apiData = await apiRes.json();
+          const apiTests = Array.isArray(apiData?.tests)
+            ? apiData.tests
+            : Array.isArray(apiData?.chemical_tests)
+            ? apiData.chemical_tests
+            : [];
+          if (apiTests.length > 0) {
+            this.tests = apiTests;
+            localStorage.setItem('chemical_tests_data', JSON.stringify({ chemical_tests: apiTests }));
+            console.log(`✅ Loaded ${apiTests.length} chemical tests from API`);
+            return;
+          }
+        } else {
+          console.warn('⚠️ API not available or non-JSON, will fallback to static sources');
+        }
+      } catch (apiError: any) {
+        console.warn('⚠️ API load failed, falling back to static sources:', apiError?.message || apiError);
+      }
+
+      // Try to load from localStorage next (for performance)
       const savedTests = localStorage.getItem('chemical_tests_data');
       if (savedTests) {
         try {
