@@ -1,0 +1,584 @@
+{
+  "chemical_tests": [
+    {
+      "id": "marquis-test",
+      "method_name": "Marquis Test",
+      "method_name_ar": "اختبار ماركيز",
+      "description": "For detecting opiates and amphetamines",
+      "description_ar": "للكشف عن الأفيونات والأمفيتامينات",
+      "category": "basic",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#8B5CF6",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Formaldehyde Solution (37%)",
+          "name_ar": "محلول الفورمالديهايد (37%)"
+        },
+        {
+          "name": "Glacial Acetic Acid",
+          "name_ar": "حمض الخليك الجليدي"
+        },
+        {
+          "name": "Concentrated Sulfuric Acid",
+          "name_ar": "حمض الكبريتيك المركز"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add three drops of water and smear the sample against the spot plate with a glass rod or spatula.\n3. Transfer a drop of the liquid to another depression of the spot plate.\n4. Add one drop of reagent 1A (Add 8-10 drops of 37% formaldehyde solution to 10 ml of glacial acetic acid).\n5. Add three drops of reagent 1B (Concentrated sulfuric acid).\n6. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على طبق نقطي.\n2. أضف قطرة واحدة من الكاشف IA (محضر بخلط 8-10 قطرات من الفورمالديهايد 37% مع 10 مل من حمض الخليك الجليدي).\n3. أضف 2-3 قطرات من الكاشف 1B (حمض الكبريتيك المركز).\n4. راقب تغيير اللون.",
+      "test_type": "F/L",
+      "test_number": "Test 1",
+      "reference": "• Auterhoff, H., Braun, D. Arch. Pharm. (Weinheim), 306 (1973) 866.\n• Marquis, E. J. Pharm. Chim., 6 (1896) 385.\n• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).",
+      "reference_ar": "• أوترهوف، ه.، براون، د. أرش. فارم. (فاينهايم)، 306 (1973) 866.\n• ماركيز، إ. ج. فارم. شيم.، 6 (1896) 385.\n• كلارك، إ.ج.س. عزل وتحديد الأدوية. الصحافة الصيدلانية، لندن (1969).",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves and protective safety goggles",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان الواقية",
+          "safety_warning": "DANGER: Marquis reagent contains concentrated sulfuric acid - may cause severe chemical burns",
+          "safety_warning_ar": "خطر: كاشف ماركيز يحتوي على حمض الكبريتيك المركز - قد يسبب حروق كيميائية شديدة",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Purple to violet",
+          "color_result_ar": "بنفسجي إلى بنفسجي داكن",
+          "color_hex": "#8B5CF6",
+          "possible_substance": "Opium, Morphine, Heroin",
+          "possible_substance_ar": "الأفيون، المورفين، الهيروين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange to brown",
+          "color_result_ar": "برتقالي إلى بني",
+          "color_hex": "#FF8C00",
+          "possible_substance": "Amphetamine, Methamphetamine",
+          "possible_substance_ar": "الأمفيتامين، الميثامفيتامين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Black",
+          "color_result_ar": "أسود",
+          "color_hex": "#000000",
+          "possible_substance": "MDA, MDMA, MDE, N-OH MDA",
+          "possible_substance_ar": "إم دي إيه، إم دي إم إيه، إم دي إي، إن-أوه إم دي إيه",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange",
+          "color_result_ar": "برتقالي",
+          "color_hex": "#FFA500",
+          "possible_substance": "Mescaline, Psilocybine",
+          "possible_substance_ar": "ميسكالين، سيلوسيبين",
+          "confidence_level": "medium"
+        },
+        {
+          "color_result": "Pink to violet",
+          "color_result_ar": "وردي إلى بنفسجي",
+          "color_hex": "#DA70D6",
+          "possible_substance": "Methadone",
+          "possible_substance_ar": "الميثادون",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Orange",
+          "color_result_ar": "برتقالي",
+          "color_hex": "#FFA500",
+          "possible_substance": "Pethidine, Fentanyl, alpha-Methylfentanyl",
+          "possible_substance_ar": "بيثيدين، فينتانيل، ألفا-ميثيلفنتانيل",
+          "confidence_level": "high"
+        }
+      ],
+      "steps": [
+        {
+          "id": "marquis-step-1",
+          "test_id": "marquis-test",
+          "step_number": 1,
+          "instruction": "• Wear chemical-resistant gloves\n• Wear protective safety goggles\n• Ensure excellent ventilation\n• Remove flammable materials from area\n• Have first aid materials ready\n• Work in fume hood if available",
+          "instruction_ar": "• ارتدِ القفازات المقاومة للمواد الكيميائية\n• ارتدِ نظارات الأمان الواقية\n• تأكد من وجود تهوية ممتازة\n• أبعد المواد القابلة للاشتعال من المنطقة\n• تأكد من وجود مواد الإسعافات الأولية\n• اعمل في خزانة الأبخرة إن أمكن",
+          "safety_warning": "DANGER: Marquis reagent contains concentrated sulfuric acid - may cause severe chemical burns",
+          "safety_warning_ar": "خطر: كاشف ماركيز يحتوي على حمض الكبريتيك المركز - قد يسبب حروق كيميائية شديدة",
+          "icon": "ShieldCheckIcon"
+        },
+        {
+          "id": "marquis-step-2",
+          "test_id": "marquis-test",
+          "step_number": 2,
+          "instruction": "Place rice grain-sized sample on clean white ceramic plate using tweezers",
+          "instruction_ar": "ضع عينة بحجم حبة الأرز على طبق خزفي أبيض نظيف باستخدام ملقط",
+          "safety_warning": "NEVER use plastic surfaces - they may react with reagents",
+          "safety_warning_ar": "لا تستخدم الأسطح البلاستيكية أبداً - قد تتفاعل مع الكواشف",
+          "icon": "BeakerIcon"
+        },
+        {
+          "id": "marquis-step-3",
+          "test_id": "marquis-test",
+          "step_number": 3,
+          "instruction": "Add exactly ONE drop of Marquis reagent using clean glass dropper at 45-degree angle",
+          "instruction_ar": "أضف قطرة واحدة بالضبط من كاشف ماركيز باستخدام قطارة زجاجية نظيفة بزاوية 45 درجة",
+          "safety_warning": "MORE than one drop will affect accuracy - hold dropper steady",
+          "safety_warning_ar": "أكثر من قطرة واحدة سيؤثر على الدقة - أمسك القطارة بثبات",
+          "icon": "EyeDropperIcon"
+        },
+        {
+          "id": "marquis-step-4",
+          "test_id": "marquis-test",
+          "step_number": 4,
+          "instruction": "Record INITIAL color change within first 15-30 seconds and compare with reference chart. Document findings immediately and take photo if possible for accurate documentation.",
+          "instruction_ar": "سجل تغيير اللون الأولي خلال أول 15-30 ثانية وقارن مع جدول المرجع. وثق النتائج فوراً والتقط صورة إن أمكن للتوثيق الدقيق.",
+          "safety_warning": "IMPORTANT: Initial color is most accurate - later changes may be misleading",
+          "safety_warning_ar": "مهم: اللون الأولي هو الأكثر دقة - التغيرات اللاحقة قد تكون مضللة",
+          "icon": "EyeIcon"
+        }
+      ]
+    },
+    {
+      "id": "ferric-sulfate-test",
+      "method_name": "Ferric Sulfate Test",
+      "method_name_ar": "اختبار كبريتات الحديد",
+      "description": "For detecting opium and morphine",
+      "description_ar": "للكشف عن الأفيون والمورفين",
+      "category": "basic",
+      "safety_level": "medium",
+      "preparation_time": 3,
+      "icon": "BeakerIcon",
+      "color_primary": "#8B4513",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Ferric Sulfate",
+          "name_ar": "كبريتات الحديديك"
+        },
+        {
+          "name": "Water",
+          "name_ar": "ماء"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add three drops of water and smear the sample against the spot plate with a glass rod or spatula.\n3. Transfer a drop of the liquid to another depression of the spot plate.\n4. Add one drop of reagent 2 (Dissolve 5 g of ferric sulfate in 100 ml of water).\n5. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على صفيحة تركيز.\n2. أضف ثلاث قطرات من الماء وامسح العينة على صفيحة التركيز بقضيب زجاجي أو ملعقة.\n3. انقل قطرة من السائل إلى تجويف آخر في صفيحة التركيز.\n4. أضف قطرة واحدة من الكاشف 2 (أذب 5 جرامات من كبريتات الحديد في 100 مل من الماء).\n5. راقب تغير اللون.",
+      "test_type": "F/L",
+      "test_number": "Test 2",
+      "reference": "• Hartke, K., Mutschler, E. (Editors). DAB 9 - Kommentar. Wissenschaftliche Verlagsgesellschaft, Stuttgart (1987), p. 2603.\n• Roth, H.J., Eger, K., Torschuetz, R. Pharmazeutische Chemie II - Arzneistoffanalyse, 2nd Edition. Georg Thieme Verlag, Stuttgart, New York (1985), p. 517.\n• Kovar, K.-A. Forensic Chemistry of Substance Misuse. Royal Society of Chemistry (2007).",
+      "reference_ar": "• هارتكه، ك.، موتشلر، إ. (محررون). DAB 9 - كومنتار. فيسنشافتليشه فيرلاجسجيسيلشافت، شتوتجارت (1987)، ص. 2603.\n• روث، ه.ج.، إيجر، ك.، تورشويتز، ر. الكيمياء الصيدلانية II - تحليل المواد الدوائية، الطبعة الثانية. جورج ثيمه فيرلاج، شتوتجارت، نيويork (1985)، ص. 517.\n• كوفار، ك.-أ. الكيمياء الجنائية لسوء استخدام المواد. الجمعية الملكية للكيمياء (2007).",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear appropriate protective gear",
+          "instruction_ar": "ارتدِ المعدات الواقية المناسبة",
+          "safety_warning": "Ferric sulfate can cause staining",
+          "safety_warning_ar": "كبريتات الحديد قد تسبب تلطيخاً",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Brownish purple",
+          "color_result_ar": "بنفسجي بني",
+          "color_hex": "#8B4513",
+          "possible_substance": "Opium",
+          "possible_substance_ar": "أفيون",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Red",
+          "color_result_ar": "أحمر",
+          "color_hex": "#FF0000",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "high"
+        }
+      ],
+      "steps": [
+        {
+          "id": "ferric-step-1",
+          "test_id": "ferric-sulfate-test",
+          "step_number": 1,
+          "instruction": "Wear appropriate protective gear",
+          "instruction_ar": "ارتدِ المعدات الواقية المناسبة",
+          "safety_warning": "Ferric sulfate can cause staining",
+          "safety_warning_ar": "كبريتات الحديد قد تسبب تلطيخاً",
+          "icon": "ShieldCheckIcon"
+        },
+        {
+          "id": "ferric-step-2",
+          "test_id": "ferric-sulfate-test",
+          "step_number": 2,
+          "instruction": "Prepare clean testing surface",
+          "instruction_ar": "حضر سطح اختبار نظيف",
+          "safety_warning": "Use white ceramic or glass plate",
+          "safety_warning_ar": "استخدم طبق خزفي أو زجاجي أبيض",
+          "icon": "BeakerIcon"
+        },
+        {
+          "id": "ferric-step-3",
+          "test_id": "ferric-sulfate-test",
+          "step_number": 3,
+          "instruction": "Place small amount of sample",
+          "instruction_ar": "ضع كمية صغيرة من العينة",
+          "safety_warning": "Sample size should be grain-sized",
+          "safety_warning_ar": "يجب أن يكون حجم العينة بحجم الحبة",
+          "icon": "BeakerIcon"
+        },
+        {
+          "id": "ferric-step-4",
+          "test_id": "ferric-sulfate-test",
+          "step_number": 4,
+          "instruction": "Add ferric sulfate solution dropwise",
+          "instruction_ar": "أضف محلول كبريتات الحديد قطرة قطرة",
+          "safety_warning": "Use only 1-2 drops",
+          "safety_warning_ar": "استخدم 1-2 قطرة فقط",
+          "icon": "EyeDropperIcon"
+        },
+        {
+          "id": "ferric-step-5",
+          "test_id": "ferric-sulfate-test",
+          "step_number": 5,
+          "instruction": "Observe immediate color reaction",
+          "instruction_ar": "لاحظ التفاعل اللوني الفوري",
+          "safety_warning": "Reaction occurs quickly",
+          "safety_warning_ar": "يحدث التفاعل بسرعة",
+          "icon": "EyeIcon"
+        }
+      ]
+    },
+    {
+      "id": "mecke-test",
+      "method_name": "Mecke Test",
+      "method_name_ar": "اختبار ميكي",
+      "description": "For detecting morphine, codeine and heroin",
+      "description_ar": "للكشف عن المورفين والكودايين والهيروين",
+      "category": "basic",
+      "safety_level": "high",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#0080FF",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Selenious Acid",
+          "name_ar": "حمض السيلينيوز"
+        },
+        {
+          "name": "Concentrated Sulfuric Acid",
+          "name_ar": "حمض الكبريتيك المركز"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 3 (Dissolve 1 g of selenious acid in 100 ml of concentrated sulfuric acid).\n3. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على لوحة البقعة. 2. أضف قطرة واحدة من الكاشف 3 (قم بإذابة 1 جرام من حمض السيلينيوم في 100 مل من حمض الكبريتيك المركز).",
+      "test_type": "L",
+      "test_number": "Test 3",
+      "reference": "Rehse, K.. Arch.Pharm.(Weinheim), 302 (1969) 487.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear protective equipment including gloves and goggles",
+          "instruction_ar": "ارتدِ المعدات الواقية بما في ذلك القفازات والنظارات",
+          "safety_warning": "Mecke reagent is corrosive",
+          "safety_warning_ar": "كاشف ميكي مادة أكالة",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Green to blue",
+          "color_result_ar": "أخضر إلى أزرق",
+          "color_hex": "#0080FF",
+          "possible_substance": "Morphine, Codeine, Heroin",
+          "possible_substance_ar": "مورفين، كودايين، هيروين",
+          "confidence_level": "high"
+        }
+      ],
+      "steps": [
+        {
+          "id": "mecke-step-1",
+          "test_id": "mecke-test",
+          "step_number": 1,
+          "instruction": "Wear protective equipment including gloves and goggles",
+          "instruction_ar": "ارتدِ المعدات الواقية بما في ذلك القفازات والنظارات",
+          "safety_warning": "Mecke reagent is corrosive",
+          "safety_warning_ar": "كاشف ميكي مادة أكالة",
+          "icon": "ShieldCheckIcon"
+        },
+        {
+          "id": "mecke-step-2",
+          "test_id": "mecke-test",
+          "step_number": 2,
+          "instruction": "Ensure adequate ventilation",
+          "instruction_ar": "تأكد من التهوية الكافية",
+          "safety_warning": "Work in fume hood if available",
+          "safety_warning_ar": "اعمل في خزانة الأبخرة إن أمكن",
+          "icon": "ExclamationTriangleIcon"
+        },
+        {
+          "id": "mecke-step-3",
+          "test_id": "mecke-test",
+          "step_number": 3,
+          "instruction": "Place sample on clean white surface",
+          "instruction_ar": "ضع العينة على سطح أبيض نظيف",
+          "safety_warning": "Use minimal sample amount",
+          "safety_warning_ar": "استخدم أقل كمية من العينة",
+          "icon": "BeakerIcon"
+        },
+        {
+          "id": "mecke-step-4",
+          "test_id": "mecke-test",
+          "step_number": 4,
+          "instruction": "Apply 1-2 drops of Mecke reagent",
+          "instruction_ar": "ضع 1-2 قطرة من كاشف ميكي",
+          "safety_warning": "Avoid skin contact",
+          "safety_warning_ar": "تجنب ملامسة الجلد",
+          "icon": "EyeDropperIcon"
+        },
+        {
+          "id": "mecke-step-5",
+          "test_id": "mecke-test",
+          "step_number": 5,
+          "instruction": "Record color change within 30 seconds",
+          "instruction_ar": "سجل تغيير اللون خلال 30 ثانية",
+          "safety_warning": "Color may continue to develop",
+          "safety_warning_ar": "قد يستمر اللون في التطور",
+          "icon": "ClockIcon"
+        }
+      ]
+    },
+    {
+      "id": "nitric-acid-test",
+      "method_name": "Nitric Acid Test",
+      "method_name_ar": "اختبار حمض النيتريك",
+      "description": "For detecting morphine and heroin",
+      "description_ar": "للكشف عن المورفين والهيروين",
+      "category": "basic",
+      "safety_level": "very-high",
+      "preparation_time": 5,
+      "icon": "BeakerIcon",
+      "color_primary": "#FF0000",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Nitric Acid (d=1.4)",
+          "name_ar": "حمض النيتريك (كثافة 1.4)"
+        }
+      ],
+      "prepare": "1. Place a small amount of the suspected material on a spot plate.\n2. Add one drop of reagent 4 (Nitric acid, d=1.4).\n3. Observe the color change.",
+      "prepare_ar": "1. ضع كمية صغيرة من المادة المشتبه بها على لوحة البقعة. 2. أضف قطرة واحدة من الكاشف 4 (حمض النيتريك، كثافة 1.4). 3. راقب تغير اللون.",
+      "test_type": "L",
+      "test_number": "Test 4",
+      "reference": "• Clarke, E.G.C. Isolation and Identification of Drugs. The Pharmaceutical Press, London (1969).\n• Roth, H.J., Eger, K., Torschuetz, R. Pharmazeutische Chemie II - Arzneistoffanalyse, 2nd Edition. Georg Thieme Verlag, Stuttgart, New York (1985), p. 517.",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Use extreme caution at all times",
+          "instruction_ar": "توخ الحذر الشديد في جميع الأوقات",
+          "safety_warning": "Nitric acid is extremely corrosive and dangerous",
+          "safety_warning_ar": "حمض النيتريك شديد التآكل والخطورة",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Yellow to orange",
+          "color_result_ar": "أصفر إلى برتقالي",
+          "color_hex": "#FFA500",
+          "possible_substance": "Morphine",
+          "possible_substance_ar": "مورفين",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "Yellow",
+          "color_result_ar": "أصفر",
+          "color_hex": "#FFFF00",
+          "possible_substance": "Heroin",
+          "possible_substance_ar": "هيروين",
+          "confidence_level": "high"
+        }
+      ],
+      "steps": [
+        {
+          "id": "nitric-step-1",
+          "test_id": "nitric-acid-test",
+          "step_number": 1,
+          "instruction": "• Use extreme caution at all times\n• Wear full protective equipment\n• Work only in fume hood\n• Have emergency shower/eyewash accessible\n• Never work alone with this chemical",
+          "instruction_ar": "• توخ الحذر الشديد في جميع الأوقات\n• ارتدِ المعدات الواقية الكاملة\n• اعمل فقط في خزانة الأبخرة\n• تأكد من إمكانية الوصول لدش الطوارئ وغسيل العيون\n• لا تعمل أبداً بمفردك مع هذه المادة الكيميائية",
+          "safety_warning": "Nitric acid is extremely corrosive and dangerous",
+          "safety_warning_ar": "حمض النيتريك شديد التآكل والخطورة",
+          "icon": "ExclamationTriangleIcon"
+        },
+        {
+          "id": "nitric-step-2",
+          "test_id": "nitric-acid-test",
+          "step_number": 2,
+          "instruction": "Work only in a fume hood with proper ventilation",
+          "instruction_ar": "اعمل فقط في خزانة الأبخرة مع التهوية المناسبة",
+          "safety_warning": "Never work with nitric acid in open air",
+          "safety_warning_ar": "لا تعمل أبداً مع حمض النيتريك في الهواء الطلق",
+          "icon": "ExclamationTriangleIcon"
+        },
+        {
+          "id": "nitric-step-3",
+          "test_id": "nitric-acid-test",
+          "step_number": 3,
+          "instruction": "Place minimal sample on acid-resistant surface",
+          "instruction_ar": "ضع عينة قليلة على سطح مقاوم للأحماض",
+          "safety_warning": "Use glass or ceramic, never metal",
+          "safety_warning_ar": "استخدم الزجاج أو الخزف، لا تستخدم المعدن أبداً",
+          "icon": "BeakerIcon"
+        },
+        {
+          "id": "nitric-step-4",
+          "test_id": "nitric-acid-test",
+          "step_number": 4,
+          "instruction": "Add one drop of diluted nitric acid using glass dropper",
+          "instruction_ar": "أضف قطرة واحدة من حمض النيتريك المخفف باستخدام قطارة زجاجية",
+          "safety_warning": "Use only diluted acid, never concentrated",
+          "safety_warning_ar": "استخدم الحمض المخفف فقط، لا تستخدم المركز أبداً",
+          "icon": "EyeDropperIcon"
+        },
+        {
+          "id": "nitric-step-5",
+          "test_id": "nitric-acid-test",
+          "step_number": 5,
+          "instruction": "Observe color change and dispose of materials safely",
+          "instruction_ar": "لاحظ تغيير اللون وتخلص من المواد بأمان",
+          "safety_warning": "Follow proper hazardous waste disposal procedures",
+          "safety_warning_ar": "اتبع إجراءات التخلص الآمن من النفايات الخطرة",
+          "icon": "EyeIcon"
+        }
+      ]
+    },
+    {
+      "id": "potassium-dichromate-test",
+      "method_name": "Potassium Dichromate Test",
+      "method_name_ar": "اختبار ثنائي كرومات البوتاسيوم",
+      "description": "For detecting methanol and ethanol",
+      "description_ar": "للكشف عن الميثانول والإيثانول",
+      "category": "alcohol",
+      "safety_level": "high",
+      "preparation_time": 10,
+      "icon": "BeakerIcon",
+      "color_primary": "#FF8C00",
+      "created_at": "2025-01-01T00:00:00Z",
+      "chemical_components": [
+        {
+          "name": "Potassium Dichromate (K₂Cr₂O₇)",
+          "name_ar": "ثنائي كرومات البوتاسيوم"
+        },
+        {
+          "name": "Concentrated Sulfuric Acid (H₂SO₄)",
+          "name_ar": "حمض الكبريتيك المركز"
+        },
+        {
+          "name": "Distilled Water",
+          "name_ar": "ماء مقطر"
+        }
+      ],
+      "prepare": "1. Dissolve 5g of potassium dichromate in 50ml of distilled water\n2. Slowly add 50ml of concentrated sulfuric acid while stirring continuously\n3. Allow to cool before use",
+      "prepare_ar": "1. أذب 5 جرام من ثنائي كرومات البوتاسيوم في 50 مل من الماء المقطر\n2. أضف 50 مل من حمض الكبريتيك المركز ببطء مع التحريك المستمر\n3. اتركه ليبرد قبل الاستخدام",
+      "test_type": "L",
+      "test_number": "Test 5",
+      "reference": "Standard alcohol detection test using oxidation-reduction reaction",
+      "instructions": [
+        {
+          "step_number": 1,
+          "instruction": "Wear chemical-resistant gloves, safety goggles and laboratory coat",
+          "instruction_ar": "ارتدِ القفازات المقاومة للمواد الكيميائية ونظارات الأمان ومعطف المختبر",
+          "safety_warning": "Concentrated sulfuric acid is extremely dangerous and corrosive",
+          "safety_warning_ar": "حمض الكبريتيك المركز خطير جداً ومسبب للتآكل",
+          "icon": "ShieldCheckIcon"
+        }
+      ],
+      "color_results": [
+        {
+          "color_result": "Orange to Green",
+          "color_result_ar": "من البرتقالي إلى الأخضر",
+          "color_hex": "#32CD32",
+          "possible_substance": "Ethanol, Methanol",
+          "possible_substance_ar": "إيثانول، ميثانول",
+          "confidence_level": "high"
+        },
+        {
+          "color_result": "No color change",
+          "color_result_ar": "لا يوجد تغيير في اللون",
+          "color_hex": "#FF8C00",
+          "possible_substance": "No alcohol present",
+          "possible_substance_ar": "لا يوجد كحول",
+          "confidence_level": "high"
+        }
+      ],
+      "steps": [
+        {
+          "id": "potassium-dichromate-step-1",
+          "test_id": "potassium-dichromate-test",
+          "step_number": 1,
+          "instruction": "• Wear chemical-resistant gloves\n• Wear safety goggles\n• Wear laboratory coat\n• Work in well-ventilated area or fume hood\n• Have emergency equipment accessible",
+          "instruction_ar": "• ارتدِ القفازات المقاومة للمواد الكيميائية\n• ارتدِ نظارات الأمان\n• ارتدِ معطف المختبر\n• اعمل في منطقة جيدة التهوية أو خزانة الأبخرة\n• تأكد من إمكانية الوصول لمعدات الطوارئ",
+          "safety_warning": "Concentrated sulfuric acid is extremely dangerous and corrosive",
+          "safety_warning_ar": "حمض الكبريتيك المركز خطير جداً ومسبب للتآكل",
+          "icon": "ShieldCheckIcon"
+        },
+        {
+          "id": "potassium-dichromate-step-2",
+          "test_id": "potassium-dichromate-test",
+          "step_number": 2,
+          "instruction": "Work in a well-ventilated area or fume hood",
+          "instruction_ar": "اعمل في منطقة جيدة التهوية أو خزانة الأبخرة",
+          "safety_warning": "Ensure proper ventilation to avoid inhaling vapors",
+          "safety_warning_ar": "تأكد من التهوية المناسبة لتجنب استنشاق الأبخرة",
+          "icon": "ExclamationTriangleIcon"
+        },
+        {
+          "id": "potassium-dichromate-step-3",
+          "test_id": "potassium-dichromate-test",
+          "step_number": 3,
+          "instruction": "Prepare reagent: Add 5g K₂Cr₂O₇ to distilled water, then add 50mL H₂SO₄",
+          "instruction_ar": "حضر الكاشف: أضف 5 جرام من ثنائي كرومات البوتاسيوم للماء المقطر، ثم أضف 50 مل من حمض الكبريتيك",
+          "safety_warning": "ALWAYS add acid to water, NEVER water to acid",
+          "safety_warning_ar": "أضف الحمض للماء دائماً، لا تضع الماء للحمض أبداً",
+          "icon": "BeakerIcon"
+        },
+        {
+          "id": "potassium-dichromate-step-4",
+          "test_id": "potassium-dichromate-test",
+          "step_number": 4,
+          "instruction": "Place a small sample of suspected alcohol on a clean glass surface",
+          "instruction_ar": "ضع عينة صغيرة من الكحول المشتبه به على سطح زجاجي نظيف",
+          "safety_warning": "Use only a small amount of sample for testing",
+          "safety_warning_ar": "استخدم كمية صغيرة فقط من العينة للاختبار",
+          "icon": "BeakerIcon"
+        },
+        {
+          "id": "potassium-dichromate-step-5",
+          "test_id": "potassium-dichromate-test",
+          "step_number": 5,
+          "instruction": "Add 2-3 drops of potassium dichromate reagent to the sample",
+          "instruction_ar": "أضف 2-3 قطرات من كاشف ثنائي كرومات البوتاسيوم للعينة",
+          "safety_warning": "Use glass dropper and avoid direct contact with reagent",
+          "safety_warning_ar": "استخدم قطارة زجاجية وتجنب الاتصال المباشر مع الكاشف",
+          "icon": "EyeDropperIcon"
+        },
+        {
+          "id": "potassium-dichromate-step-6",
+          "test_id": "potassium-dichromate-test",
+          "step_number": 6,
+          "instruction": "Observe color change: Orange to Green indicates alcohol presence",
+          "instruction_ar": "لاحظ تغيير اللون: التغيير من البرتقالي إلى الأخضر يشير لوجود الكحول",
+          "safety_warning": "Color change occurs within 1-2 minutes",
+          "safety_warning_ar": "يحدث تغيير اللون خلال 1-2 دقيقة",
+          "icon": "EyeIcon"
+        },
+        {
+          "id": "potassium-dichromate-step-7",
+          "test_id": "potassium-dichromate-test",
+          "step_number": 7,
+          "instruction": "Dispose of all materials according to hazardous waste protocols",
+          "instruction_ar": "تخلص من جميع المواد وفقاً لبروتوكولات النفايات الخطرة",
+          "safety_warning": "Never pour reagents down the drain - use proper disposal methods",
+          "safety_warning_ar": "لا تسكب الكواشف في المجاري أبداً - استخدم طرق التخلص المناسبة",
+          "icon": "ExclamationTriangleIcon"
+        }
+      ]
+    }
+  ]
+}
